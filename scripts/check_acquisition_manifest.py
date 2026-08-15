@@ -66,8 +66,13 @@ def main() -> int:
                 errors.append(f"line {line_no}: captured payload has no artifacts")
             if not HEX64.match(str(record["sha256"])):
                 errors.append(f"line {line_no}: captured payload lacks valid sha256")
-        elif record["sha256"]:
-            errors.append(f"line {line_no}: non-captured status claims sha256")
+            if record["first_party_contacted"] and record["closure_credit"] != "DIRECT_FIRST_PARTY_PAYLOAD":
+                errors.append(f"line {line_no}: direct captured payload lacks direct closure credit")
+        else:
+            if record["sha256"]:
+                errors.append(f"line {line_no}: non-captured status claims sha256")
+            if record["closure_credit"] not in {"ZERO_NO_PAYLOAD", "ZERO_FIXTURE_ONLY", "ZERO_LOCATOR_ONLY"}:
+                errors.append(f"line {line_no}: non-captured status claims semantic closure credit")
         for artifact in artifacts:
             if not isinstance(artifact, dict) or not HEX64.match(str(artifact.get("sha256", ""))):
                 errors.append(f"line {line_no}: invalid artifact sha256")
