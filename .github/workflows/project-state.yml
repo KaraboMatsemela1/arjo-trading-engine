@@ -1,0 +1,32 @@
+name: Project State
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened, edited, closed, reopened, assigned, unassigned]
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >-
+          python scripts/project_state.py
+          --output generated/project_state.json
+          --status-output generated/STATUS.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: project-state
+          path: generated/

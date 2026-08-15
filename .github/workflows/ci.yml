@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate canonical project state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >-
+          python scripts/project_state.py
+          --output /tmp/project_state.json
+          --status-output /tmp/STATUS.md
+      - name: Validate dependencies
+        run: python scripts/check_dependencies.py --state /tmp/project_state.json
+      - name: Validate claims
+        run: python scripts/check_claims.py --state /tmp/project_state.json
+      - name: Validate gate integrity
+        run: python scripts/check_gate_integrity.py --state /tmp/project_state.json
+      - name: Validate provenance
+        run: python scripts/check_provenance.py
+      - name: Validate SPEC_READY audit boundary
+        run: python scripts/check_spec_gate.py --state /tmp/project_state.json
