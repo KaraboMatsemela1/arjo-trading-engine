@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Arjo concept inventory record",
+  "type": "object",
+  "required": [
+    "CONCEPT_ID",
+    "FIRST_PARTY_DEFINITION",
+    "SOURCE_IDS",
+    "TIMESTAMPS",
+    "DEPENDENCIES",
+    "AMBIGUITIES",
+    "CONTRADICTIONS",
+    "DEFINITION_STATE",
+    "EXECUTABLE_RULE_CLAIMED"
+  ],
+  "properties": {
+    "CONCEPT_ID": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+    "FIRST_PARTY_DEFINITION": {"type": "string", "minLength": 1},
+    "SOURCE_IDS": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "TIMESTAMPS": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "DEPENDENCIES": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "AMBIGUITIES": {"type": "array", "items": {"type": "string"}},
+    "CONTRADICTIONS": {"type": "array", "items": {"type": "string"}},
+    "DEFINITION_STATE": {
+      "enum": [
+        "DIRECT",
+        "DIRECT_CONCEPT_PARTIAL_EXECUTION",
+        "DIRECT_EXAMPLE_PARTIAL",
+        "DIRECT_ALIAS_PARTIAL",
+        "STRONG_PARTIAL",
+        "CONTEXTUAL",
+        "NAMED_CONTEXTUAL",
+        "NAMED_UNRESOLVED"
+      ]
+    },
+    "EXECUTABLE_RULE_CLAIMED": {"const": false}
+  },
+  "additionalProperties": false
+}
