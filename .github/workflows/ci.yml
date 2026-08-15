@@ -32,3 +32,5 @@ jobs:
         run: python scripts/check_gate_integrity.py --state /tmp/project_state.json
       - name: Validate provenance
         run: python scripts/check_provenance.py
+      - name: Validate SPEC_READY audit boundary
+        run: python scripts/check_spec_gate.py --state /tmp/project_state.json
