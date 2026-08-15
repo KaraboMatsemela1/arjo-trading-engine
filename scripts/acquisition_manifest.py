@@ -47,7 +47,8 @@ def _suffix(content_type: str, fallback: str) -> str:
 
 def store_artifact(cache_root: Path, payload: bytes, kind: str, content_type: str, suffix: str = ".bin") -> dict[str, Any]:
     digest = hashlib.sha256(payload).hexdigest()
-    target = cache_root / digest[:2] / f"{digest}{_suffix(content_type, suffix)}"
+    relative = Path(digest[:2]) / f"{digest}{_suffix(content_type, suffix)}"
+    target = cache_root / relative
     target.parent.mkdir(parents=True, exist_ok=True)
     if not target.exists():
         target.write_bytes(payload)
@@ -56,7 +57,7 @@ def store_artifact(cache_root: Path, payload: bytes, kind: str, content_type: st
         "sha256": digest,
         "bytes": len(payload),
         "content_type": content_type,
-        "cache_path": target.as_posix(),
+        "content_address": relative.as_posix(),
     }
 
 
