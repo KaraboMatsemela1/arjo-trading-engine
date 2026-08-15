@@ -23,10 +23,20 @@ jobs:
         run: python scripts/test_acquisition_tooling.py
       - name: Run corpus acquisition orchestration tests
         run: python scripts/test_corpus_acquisition.py
+      - name: Run atomic evidence extraction smoke test
+        run: python scripts/test_evidence_registry.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Validate concept inventory provenance
         run: python scripts/check_concept_inventory.py
+      - name: Validate generated evidence registry when present
+        shell: bash
+        run: |
+          if [ -s research/evidence_registry.jsonl ] && [ -f research/evidence_coverage.json ]; then
+            python scripts/check_evidence_registry.py
+          else
+            echo "Evidence registry not generated yet; post-merge extraction gate remains pending."
+          fi
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
