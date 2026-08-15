@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "semantic_synthesis_performed": false,
+  "terms": [
+    {"concept_id":"MARKET_MAKER_MODELS","aliases":["MMXM","Market Maker Models","Market Maker Buy Models","Market Maker Sell Models","MMSM"],"discovery_source_ids":["TG_ARJOIOTRADING_585","TG_ARJOIOTRADING_499"],"lexical_hit_required":true},
+    {"concept_id":"RESISTANCE_LIQUIDITY_RUNS","aliases":["LRLR","HRLR","Low Resistance Liquidity Run"],"discovery_source_ids":["TG_ARJOIOTRADING_147"],"lexical_hit_required":true},
+    {"concept_id":"BISI_SIBI","aliases":["BISI","SIBI"],"discovery_source_ids":["TG_ARJOIOTRADING_132"],"lexical_hit_required":true},
+    {"concept_id":"FLOD_LLOD","aliases":["FLOD","LLOD"],"discovery_source_ids":["TG_ARJOIOTRADING_347"],"lexical_hit_required":true},
+    {"concept_id":"MARKET_STRUCTURE","aliases":["Market Structure"],"discovery_source_ids":["TG_ARJOIOTRADING_223"],"lexical_hit_required":true},
+    {"concept_id":"ITH_ITL","aliases":["ITH","ITL"],"discovery_source_ids":["TG_ARJOIOTRADING_223"],"lexical_hit_required":true},
+    {"concept_id":"TIMEFRAME_HIERARCHY","aliases":["HTF","MTF","LTF"],"discovery_source_ids":["TG_ARJOIOTRADING_180"],"lexical_hit_required":true},
+    {"concept_id":"THIRD_CANDLE","aliases":["3rd Candle","Third Candle"],"discovery_source_ids":["TG_ARJOIOTRADING_754"],"lexical_hit_required":false},
+    {"concept_id":"TIME_AND_PRICE","aliases":["Time and Price"],"discovery_source_ids":["TG_ARJOIOTRADING_499"],"lexical_hit_required":true},
+    {"concept_id":"EQUILIBRIUM","aliases":["equilibrium","Equilibrium"],"discovery_source_ids":["TG_ARJOIOTRADING_16"],"lexical_hit_required":true},
+    {"concept_id":"HP_WEEKS","aliases":["HP Weeks"],"discovery_source_ids":["TG_ARJOIOTRADING_711"],"lexical_hit_required":true},
+    {"concept_id":"BREAKER","aliases":["Breaker","breaker"],"discovery_source_ids":["TG_ARJOIOTRADING_132"],"lexical_hit_required":true},
+    {"concept_id":"LOW_PROBABILITY_DECOUPLING","aliases":["not moving in sync","low probability","consolidation"],"discovery_source_ids":["TG_ARJOIOTRADING_129"],"lexical_hit_required":true},
+    {"concept_id":"IFVG","aliases":["IFVG"],"discovery_source_ids":["TG_ARJOIOTRADING_654"],"lexical_hit_required":false},
+    {"concept_id":"REVERSAL","aliases":["Reversal","reversal"],"discovery_source_ids":["TG_ARJOIOTRADING_499"],"lexical_hit_required":true}
+  ]
+}

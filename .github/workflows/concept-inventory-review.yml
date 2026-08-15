@@ -5,11 +5,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'research/concept_inventory.jsonl'
-      - 'research/concept_terms.json'
-      - 'scripts/build_telegram_concept_review.py'
+      - 'research/concept_inventory*.jsonl'
+      - 'research/concept_terms*.json'
+      - 'research/review/lexical_candidate_dispositions.json'
+      - 'scripts/build_telegram_concept_review*.py'
       - 'scripts/check_concept_inventory.py'
-      - 'scripts/check_concept_review.py'
+      - 'scripts/check_concept_review*.py'
       - '.github/workflows/concept-inventory-review.yml'
 
 permissions:
@@ -24,17 +25,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate committed concept inventory provenance
+      - name: Validate canonical concept inventory provenance
         run: python scripts/check_concept_inventory.py
       - name: Build bounded lexical review from captured Telegram sources
         run: >-
-          python scripts/build_telegram_concept_review.py
+          python scripts/build_telegram_concept_review_v2.py
           --output /tmp/concept_term_review.json
           --candidates-output /tmp/lexical_candidates.json
-      - name: Require full captured-corpus review coverage
+      - name: Require full captured-corpus review and candidate disposition coverage
         run: >-
-          python scripts/check_concept_review.py
+          python scripts/check_concept_review_v2.py
           --review /tmp/concept_term_review.json
+          --candidates /tmp/lexical_candidates.json
       - name: Upload bounded review artifacts
         if: always()
         uses: actions/upload-artifact@v4

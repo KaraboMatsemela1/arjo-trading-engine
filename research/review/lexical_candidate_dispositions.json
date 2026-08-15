@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source_audit_candidate_count": 97,
+  "semantic_synthesis_performed": false,
+  "dispositions": {
+    "ADDED_TO_INVENTORY": [
+      "LRLR", "LTF", "MMXM", "BISI", "HRLR", "HTF", "SIBI", "FLOD", "HP", "ITH", "ITL", "LLOD", "MMSM", "MTF",
+      "re not moving in sync as they", "s equilibrium and at equilibrium thats where you", "ve finished a LRLR thats when there"
+    ],
+    "EXISTING_ALIAS": [
+      "FVG", "PD", "DOL", "2CR", "SMT", "OB", "FVA", "MMBM", "MT", "No Resistance Area.", "PD Arrays"
+    ],
+    "INSUFFICIENT_CONTEXT_NOT_INVENTORIED": [
+      "BUT", "IC", "PA", "SL", "SOS", "SSL", "ll take the EQHs of the consolidation that we", "s Super High Probability to take a trade. It", "s explosive moves and it didn"
+    ],
+    "NON_STRATEGY_NOISE": [
+      "ICT", "MMC", "NFP", "EURUSD", "USDJPY", "CPI", "EU", "FOMC", "GBPUSD", "ID", "LAUNCH", "NDA", "YOU",
+      "all ❤️ Be careful in these markets, don", "and we", "ARE", "Are there any discounts?", "Arjo", "BACK", "BEFORE", "BIG",
+      "bumps in the road", "CADCHF", "CLOSED", "EURCAD", "FOMO", "GBPCAD", "GEM",
+      "ll be going over my emails as well, if I haven", "ll be live at 9am NY EST! I",
+      "m here to give you a headstart, here", "m looking for Thumbnail Designers! You don",
+      "MONEY", "MOST", "NEW", "ONLY", "OWN", "PC", "re", "re absolutely free to help them, we",
+      "re interested then dm me. As i won", "re on Facebook then it", "re talking about the concepts we go over I",
+      "s not a funded account giveaway, it", "s perfectly fine, here", "s probably some errors in the data so don",
+      "s worth the wait I wasn", "t an official series, but the videos that I", "t be sharing anything public as in the past i",
+      "t be your average", "t die out and it won", "t let anyone tell you you shouldn", "t mean you did bad. You all did perfect, you",
+      "t need someone else", "t need to be trading everyday? See now why i", "UK", "USDCHF",
+      "ve seen all the suggestions and i love them, i", "WE", "YOUR"
+    ]
+  },
+  "non_lexical_first_party_additions": [
+    "MARKET_STRUCTURE", "THIRD_CANDLE", "TIME_AND_PRICE", "HP_WEEKS", "BREAKER", "LOW_PROBABILITY_DECOUPLING", "EQUILIBRIUM", "IFVG", "REVERSAL"
+  ],
+  "notes": [
+    "No acronym is expanded from generic ICT/SMC knowledge.",
+    "INSUFFICIENT_CONTEXT candidates remain available for later targeted first-party recovery and do not become concepts automatically.",
+    "Broken quoted fragments are dispositioned as noise unless their underlying first-party source directly supports a separately inventoried concept."
+  ]
+}
