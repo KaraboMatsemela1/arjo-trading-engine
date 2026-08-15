@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "semantic_synthesis_performed": false,
+  "terms": [
+    {"concept_id":"PD_ARRAYS","aliases":["PD Arrays","PD Array"],"discovery_source_ids":["TG_ARJOIOTRADING_774"]},
+    {"concept_id":"TREND","aliases":["Trend"],"discovery_source_ids":["TG_ARJOIOTRADING_774"]},
+    {"concept_id":"ORDER_FLOW","aliases":["Order Flow"],"discovery_source_ids":["TG_ARJOIOTRADING_774","TG_ARJOIOTRADING_790"]},
+    {"concept_id":"TARGET_BIAS","aliases":["Target","Bias"],"discovery_source_ids":["TG_ARJOIOTRADING_785"]},
+    {"concept_id":"CANDLE_SCIENCE","aliases":["Candle Science"],"discovery_source_ids":["TG_ARJOIOTRADING_774","TG_ARJOIOTRADING_791"]},
+    {"concept_id":"TWO_CANDLE_REJECTION","aliases":["2CR","2 Candle Rejection"],"discovery_source_ids":["TG_ARJOIOTRADING_776","TG_ARJOIOTRADING_791"]},
+    {"concept_id":"LIQUIDITY_RUN_SWEEP","aliases":["Liquidity","Run","Sweep"],"discovery_source_ids":["TG_ARJOIOTRADING_775"]},
+    {"concept_id":"NO_RESISTANCE_AREA","aliases":["No Resistance Area"],"discovery_source_ids":["TG_ARJOIOTRADING_776"]},
+    {"concept_id":"AREA_OF_OPPORTUNITY","aliases":["AoO"],"discovery_source_ids":["TG_ARJOIOTRADING_778"]},
+    {"concept_id":"FAIR_VALUE_AREA","aliases":["FVA","Fair Value Area","Fair Value Areas"],"discovery_source_ids":["TG_ARJOIOTRADING_778"]},
+    {"concept_id":"FAIR_VALUE_GAP","aliases":["FVG","FVGs","Fair Value Gap","Fair Value Gaps"],"discovery_source_ids":["TG_ARJOIOTRADING_778"]},
+    {"concept_id":"TAPE_READING","aliases":["Tape reading","Tapereading"],"discovery_source_ids":["TG_ARJOIOTRADING_79"]},
+    {"concept_id":"NARRATIVE","aliases":["Narrative"],"discovery_source_ids":["TG_ARJOIOTRADING_79"]},
+    {"concept_id":"ORDER_BLOCK","aliases":["Order Block","Order Blocks","OB","OBs"],"discovery_source_ids":["TG_ARJOIOTRADING_80"]},
+    {"concept_id":"MT","aliases":["MT"],"discovery_source_ids":["TG_ARJOIOTRADING_80"]},
+    {"concept_id":"DOL","aliases":["DOL"],"discovery_source_ids":["TG_ARJOIOTRADING_86"]},
+    {"concept_id":"SMT","aliases":["SMT"],"discovery_source_ids":["TG_ARJOIOTRADING_86"]},
+    {"concept_id":"MMBM_LRLR","aliases":["MMBM","LRLR"],"discovery_source_ids":["TG_ARJOIOTRADING_88"]},
+    {"concept_id":"PREMIUM_ARRAY","aliases":["Premium Array"],"discovery_source_ids":["TG_ARJOIOTRADING_88"]},
+    {"concept_id":"ARGUMENTS_FRAMEWORK","aliases":["arguments","Arguments"],"discovery_source_ids":["TG_ARJOIOTRADING_788"]},
+    {"concept_id":"ORDER_FLOW_TRANSITION","aliases":["Order Flow Transition"],"discovery_source_ids":["TG_ARJOIOTRADING_774"]}
+  ]
+}

@@ -25,6 +25,8 @@ jobs:
         run: python scripts/test_corpus_acquisition.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
+      - name: Validate concept inventory provenance
+        run: python scripts/check_concept_inventory.py
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
