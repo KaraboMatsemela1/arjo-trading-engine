@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Arjo atomic evidence record",
+  "type": "object",
+  "required": [
+    "EVIDENCE_ID", "SOURCE_ID", "TIMESTAMP", "MINIMAL_QUOTE", "FRAME_LOCATOR",
+    "SUPPORTED_CONCEPT", "SUPPORTED_FIELD", "WHAT_IT_PROVES", "WHAT_IT_DOES_NOT_PROVE", "CONFIDENCE"
+  ],
+  "properties": {
+    "EVIDENCE_ID": {"type":"string","pattern":"^EV_[A-F0-9]{24}$"},
+    "SOURCE_ID": {"type":"string","minLength":1},
+    "TIMESTAMP": {"type":"string"},
+    "MINIMAL_QUOTE": {"type":"string"},
+    "FRAME_LOCATOR": {"type":"string","minLength":1},
+    "SUPPORTED_CONCEPT": {"type":"string","minLength":1},
+    "SUPPORTED_FIELD": {"enum":["CONCEPT_MENTION_OR_CONTEXT","DETERMINISTIC_CONSTRUCTION"]},
+    "WHAT_IT_PROVES": {"type":"string","minLength":1},
+    "WHAT_IT_DOES_NOT_PROVE": {"type":"string","minLength":1},
+    "CONFIDENCE": {"enum":["DIRECT","STRONG_PARTIAL","CONTEXTUAL","INSUFFICIENT"]}
+  },
+  "additionalProperties": false
+}
