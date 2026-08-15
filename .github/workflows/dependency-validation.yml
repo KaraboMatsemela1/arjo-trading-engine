@@ -1,0 +1,26 @@
+name: Dependency Validation
+
+on:
+  pull_request:
+  issues:
+    types: [opened, edited, closed, reopened, assigned, unassigned]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/project_state.py --output /tmp/project_state.json --status-output /tmp/STATUS.md
+      - run: python scripts/check_dependencies.py --state /tmp/project_state.json
+      - run: python scripts/check_claims.py --state /tmp/project_state.json
