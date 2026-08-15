@@ -3,7 +3,7 @@
   "channel": "ArjoioTrading",
   "discovered_count": 790,
   "failures": [],
-  "new_source_count": 790,
+  "new_source_count": 0,
   "normalized_snapshot_sha256": "d0933af76429853b90df81f7ba985990e449aa563b3f9996103b1c34b3c29793",
   "pages_fetched": 40,
   "retrieval_date": "2026-08-15",
