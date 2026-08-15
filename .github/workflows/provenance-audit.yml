@@ -1,0 +1,22 @@
+name: Provenance Audit
+
+on:
+  pull_request:
+    paths:
+      - 'research/**'
+      - 'docs/spec/**'
+      - 'scripts/check_provenance.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_provenance.py
