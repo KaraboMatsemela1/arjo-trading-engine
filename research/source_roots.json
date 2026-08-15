@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "roots": [
+    {
+      "source_id": "ROOT_YOUTUBE_ARJOIO",
+      "platform": "youtube",
+      "url": "https://www.youtube.com/@Arjoio",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Direct official channel surface and first-party cross-link nucleus"
+    },
+    {
+      "source_id": "ROOT_X_ARJOIO",
+      "platform": "x",
+      "url": "https://x.com/arjoio",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Direct @arjoio first-party account; posts link to official YouTube material"
+    },
+    {
+      "source_id": "ROOT_WEBSITE_ARJOIO",
+      "platform": "website",
+      "url": "https://arjo.io/",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Legacy first-party property; current HTTP redirect observed to Trading MMT"
+    },
+    {
+      "source_id": "ROOT_WEBSITE_TRADINGMMT",
+      "platform": "website",
+      "url": "https://tradingmmt.com/",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Current destination of arjo.io and branded as Arjoio's MMT"
+    },
+    {
+      "source_id": "ROOT_INSTAGRAM_ARJOIO",
+      "platform": "instagram",
+      "url": "https://www.instagram.com/arjoio/",
+      "status": "PROVISIONAL_FIRST_PARTY",
+      "basis": "Cross-linked alongside confirmed first-party properties; direct retrieval currently unavailable"
+    },
+    {
+      "source_id": "ROOT_TELEGRAM_ARJOIOTRADING",
+      "platform": "telegram",
+      "url": "https://t.me/ArjoioTrading",
+      "status": "PROVISIONAL_FIRST_PARTY",
+      "basis": "Public channel consistently cross-links confirmed Arjo surfaces; retain provisional until independent cross-provenance is captured"
+    },
+    {
+      "source_id": "ROOT_ZAAP_ARJO",
+      "platform": "link_hub",
+      "url": "https://zaap.bio/arjo",
+      "status": "PROVISIONAL_FIRST_PARTY",
+      "basis": "Cross-linked from Arjo public educational descriptions; locator only, zero semantic closure credit"
+    }
+  ]
+}
