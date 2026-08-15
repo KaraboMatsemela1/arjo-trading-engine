@@ -1,0 +1,102 @@
+{
+  "documented_access_limited_surfaces": [
+    "x",
+    "instagram",
+    "discord"
+  ],
+  "generated_at": "2026-08-15T09:36:00.800368+00:00",
+  "principle": "Transport/access limitations are not evidence absence.",
+  "replayable_surfaces_with_gaps": [
+    "website"
+  ],
+  "schema_version": 1,
+  "semantic_closure_performed": false,
+  "source_universe_discovery_complete": false,
+  "surfaces": [
+    {
+      "discovered_count": 381,
+      "failures": [],
+      "item_level_enumeration": true,
+      "platform": "youtube",
+      "queue_truncated": false,
+      "root": "https://www.youtube.com/@Arjoio",
+      "snapshot_sha256": "ce9d3ddd4f9fd50135f54ca0ceabde9437987bb7545b8b0d9c7919927a99a065",
+      "status": "ENUMERATED_CLEAN"
+    },
+    {
+      "discovered_count": 790,
+      "failures": [],
+      "item_level_enumeration": true,
+      "platform": "telegram",
+      "queue_truncated": false,
+      "root": "https://t.me/ArjoioTrading",
+      "snapshot_sha256": "d0933af76429853b90df81f7ba985990e449aa563b3f9996103b1c34b3c29793",
+      "status": "ENUMERATED_CLEAN"
+    },
+    {
+      "discovered_count": 0,
+      "failures": [
+        {
+          "error": "HTTP Error 403: Forbidden",
+          "url": "https://tradingmmt.com/"
+        },
+        {
+          "error": "HTTP Error 403: Forbidden",
+          "url": "https://tradingmmt.com/newsletter/"
+        },
+        {
+          "error": "HTTP Error 403: Forbidden",
+          "url": "https://tradingmmt.com/mmc/"
+        }
+      ],
+      "item_level_enumeration": false,
+      "platform": "website",
+      "queue_truncated": false,
+      "root": "https://tradingmmt.com/",
+      "snapshot_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "ENUMERATED_WITH_GAPS"
+    },
+    {
+      "closure_credit": "ZERO_UNTIL_ITEM_EVIDENCE_ACQUIRED",
+      "discovered_count": 0,
+      "failures": [
+        "UNAUTHENTICATED_ITEM_ENUMERATION_NOT_REPLAYABLY_AVAILABLE"
+      ],
+      "item_level_enumeration": false,
+      "platform": "x",
+      "root": "https://x.com/arjoio",
+      "status": "ROOT_CONFIRMED_ITEM_ENUMERATION_ACCESS_LIMITED"
+    },
+    {
+      "closure_credit": "ZERO_UNTIL_ITEM_EVIDENCE_ACQUIRED",
+      "discovered_count": 0,
+      "failures": [
+        "UNAUTHENTICATED_ITEM_ENUMERATION_NOT_REPLAYABLY_AVAILABLE"
+      ],
+      "item_level_enumeration": false,
+      "platform": "instagram",
+      "root": "https://www.instagram.com/arjoio/",
+      "status": "ROOT_CONFIRMED_ITEM_ENUMERATION_ACCESS_LIMITED"
+    },
+    {
+      "closure_credit": "ZERO_UNTIL_ITEM_EVIDENCE_ACQUIRED",
+      "discovered_count": 0,
+      "failures": [
+        "PLATFORM_JOIN_OR_AUTH_REQUIRED"
+      ],
+      "item_level_enumeration": false,
+      "platform": "discord",
+      "root": "https://discord.gg/tradingmmt",
+      "status": "FIRST_PARTY_LINKED_JOIN_REQUIRED"
+    },
+    {
+      "closure_credit": "ZERO_LOCATOR_ONLY",
+      "discovered_count": 0,
+      "failures": [],
+      "item_level_enumeration": false,
+      "platform": "link_hub",
+      "root": "https://zaap.bio/arjo",
+      "status": "FIRST_PARTY_LINKED_LOCATOR_ONLY"
+    }
+  ]
+}

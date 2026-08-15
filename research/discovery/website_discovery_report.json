@@ -1,0 +1,27 @@
+{
+  "discovered_count": 0,
+  "failures": [
+    {
+      "error": "HTTP Error 403: Forbidden",
+      "url": "https://tradingmmt.com/"
+    },
+    {
+      "error": "HTTP Error 403: Forbidden",
+      "url": "https://tradingmmt.com/newsletter/"
+    },
+    {
+      "error": "HTTP Error 403: Forbidden",
+      "url": "https://tradingmmt.com/mmc/"
+    }
+  ],
+  "first_party_linked_resources_discovered": 0,
+  "internal_pages_discovered": 0,
+  "new_source_count": 0,
+  "normalized_snapshot_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "pages_attempted": 3,
+  "queue_truncated": false,
+  "retrieval_date": "2026-08-15",
+  "root": "https://tradingmmt.com/",
+  "schema_version": 1,
+  "semantic_closure_performed": false
+}
