@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths:
       - 'scripts/discover_youtube_sources.py'
+      - 'scripts/discover_telegram_sources.py'
+      - 'scripts/discover_website_sources.py'
+      - 'scripts/build_surface_audit.py'
       - 'research/source_roots.json'
       - '.github/workflows/new-source-detection.yml'
   schedule:
@@ -28,28 +31,50 @@ jobs:
           python-version: '3.12'
       - name: Install discovery tooling
         run: python -m pip install --disable-pip-version-check yt-dlp
+
       - name: Enumerate official YouTube surfaces
-        id: discovery
+        id: youtube
         shell: bash
         run: |
           set +e
           python scripts/discover_youtube_sources.py
           rc=$?
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
-          if [ "$rc" -eq 2 ]; then
-            exit 2
-          fi
           exit 0
-      - name: Validate generated provenance shape
+
+      - name: Enumerate public first-party Telegram archive
+        id: telegram
         shell: bash
         run: |
-          if [ -f scripts/check_provenance.py ]; then
-            python scripts/check_provenance.py
-          fi
-      - name: Record partial discovery degradation
-        if: steps.discovery.outputs.exit_code == '4'
+          set +e
+          python scripts/discover_telegram_sources.py
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Crawl public first-party website surfaces
+        id: website
+        shell: bash
+        run: |
+          set +e
+          python scripts/discover_website_sources.py
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Build platform surface audit
+        run: python scripts/build_surface_audit.py
+
+      - name: Validate generated provenance shape
+        run: python scripts/check_provenance.py
+
+      - name: Record hard or partial discovery degradation
+        if: steps.youtube.outputs.exit_code != '0' || steps.telegram.outputs.exit_code != '0' || steps.website.outputs.exit_code != '0'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          YOUTUBE_RC: ${{ steps.youtube.outputs.exit_code }}
+          TELEGRAM_RC: ${{ steps.telegram.outputs.exit_code }}
+          WEBSITE_RC: ${{ steps.website.outputs.exit_code }}
         shell: bash
         run: |
           existing="$(gh issue list --state open --search 'Source discovery access degradation in:title' --json number --jq '.[0].number // empty')"
@@ -66,42 +91,72 @@ jobs:
           STATE: READY
           -->
 
-          Automated first-party source discovery succeeded only partially. Review the workflow artifact and determine which official surface failed. Do not interpret a transport failure as evidence absence.
+          Automated first-party source discovery was not fully clean.
 
-          Stop condition: the failed discovery surface either succeeds on replay or receives an explicit terminal external-access classification."
+          Exit codes: YouTube=${YOUTUBE_RC}, Telegram=${TELEGRAM_RC}, Website=${WEBSITE_RC}.
+
+          Inspect the committed/generated discovery reports. Do not interpret a transport failure as evidence absence.
+
+          Stop condition: each failed surface either succeeds on replay or receives an explicit terminal external-access classification."
           fi
-      - name: Open bounded source-registry PR when new sources appear
+
+      - name: Push bounded discovery branch when registry or audit changed
+        id: branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          count="$(python - <<'PY'
-          import json
-          from pathlib import Path
-          p = Path('research/discovery/new_sources.json')
-          print(json.loads(p.read_text())['new_source_count'] if p.exists() else 0)
-          PY
-          )"
-          echo "New first-party source count: $count"
-          if [ "$count" -eq 0 ]; then
-            exit 0
-          fi
-
-          existing="$(gh pr list --state open --search 'Automated source discovery in:title' --json number --jq '.[0].number // empty')"
-          if [ -n "$existing" ]; then
-            echo "Existing source-discovery PR #$existing is already awaiting service."
+          if git diff --quiet -- research/source_registry.csv research/discovery/; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No source-registry changes detected."
             exit 0
           fi
 
           branch="automation/source-discovery-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
           git add research/source_registry.csv research/discovery/
           git commit -m "research: register newly discovered Arjo sources"
           git push origin "$branch"
+
+      - name: Open bounded source-registry PR or create service fallback
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          set +e
           gh pr create \
             --base main \
-            --head "$branch" \
+            --head "$BRANCH" \
             --title "Automated source discovery: register new Arjo sources" \
-            --body "Automated bounded update from the official Arjo YouTube discovery surfaces. No strategy semantics were inferred. Review provenance status and merge only after deterministic validation."
+            --body "Automated bounded update from confirmed first-party discovery surfaces. No strategy semantics were inferred. Review provenance status and merge only after deterministic validation."
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            exit 0
+          fi
+
+          echo "PR creation is not authorized for GITHUB_TOKEN; creating a bounded service issue instead."
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -z "$existing" ]; then
+            gh issue create \
+              --title "Service generated source-discovery branch" \
+              --body "<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-PR-${GITHUB_RUN_ID}
+          TYPE: SOURCE_DISCOVERY_SERVICE
+          DEPENDENCIES: []
+          ENTRY_GATE: REPO_CREATED
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          GitHub Actions generated and pushed bounded discovery branch \\`${BRANCH}\`, but repository policy does not permit GITHUB_TOKEN to create pull requests.
+
+          Create a PR from \\`${BRANCH}\` to \\`main\`, run deterministic checks, and merge only if green. No semantic interpretation is permitted in this service task."
+          fi
