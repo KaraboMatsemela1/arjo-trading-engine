@@ -13,7 +13,7 @@
     "MINIMAL_QUOTE": {"type":"string"},
     "FRAME_LOCATOR": {"type":"string","minLength":1},
     "SUPPORTED_CONCEPT": {"type":"string","minLength":1},
-    "SUPPORTED_FIELD": {"enum":["CONCEPT_MENTION_OR_CONTEXT","DETERMINISTIC_CONSTRUCTION"]},
+    "SUPPORTED_FIELD": {"type":"string","minLength":1},
     "WHAT_IT_PROVES": {"type":"string","minLength":1},
     "WHAT_IT_DOES_NOT_PROVE": {"type":"string","minLength":1},
     "CONFIDENCE": {"enum":["DIRECT","STRONG_PARTIAL","CONTEXTUAL","INSUFFICIENT"]}
