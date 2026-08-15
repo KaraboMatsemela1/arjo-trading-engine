@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Offline smoke test for evidence construction and quote bounds."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from build_evidence_registry import build_records, minimal_quote  # noqa: E402
+
+
+def main() -> int:
+    inventory = [
+        {
+            "CONCEPT_ID": "TEST_CONCEPT",
+            "SOURCE_IDS": ["TG_ARJOIOTRADING_1"],
+            "AMBIGUITIES": ["Exact deterministic construction is unresolved."],
+        }
+    ]
+    terms = {"TEST_CONCEPT": {"aliases": ["Test Concept"]}}
+    dates = {"TG_ARJOIOTRADING_1": "2026-01-01"}
+    messages = {"TG_ARJOIOTRADING_1": "Before context Test Concept appears here with additional words after it."}
+    records = build_records(inventory, terms, dates, messages)
+    if len(records) != 2:
+        raise SystemExit(f"expected 2 records, got {len(records)}")
+    mention = next(row for row in records if row["SUPPORTED_FIELD"] == "CONCEPT_MENTION_OR_CONTEXT")
+    gap = next(row for row in records if row["SUPPORTED_FIELD"] == "DETERMINISTIC_CONSTRUCTION")
+    assert mention["CONFIDENCE"] == "DIRECT"
+    assert "Test Concept" in mention["MINIMAL_QUOTE"]
+    assert len(mention["MINIMAL_QUOTE"].split()) <= 18
+    assert gap["CONFIDENCE"] == "INSUFFICIENT"
+    assert "unresolved" in gap["WHAT_IT_DOES_NOT_PROVE"]
+
+    quote, alias = minimal_quote("alpha beta gamma Long Alias delta epsilon", ["Long Alias"])
+    assert alias == "Long Alias"
+    assert "Long Alias" in quote
+    assert len(quote.split()) <= 18
+    print("Evidence registry smoke tests passed")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
