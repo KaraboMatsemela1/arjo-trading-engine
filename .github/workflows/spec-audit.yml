@@ -1,0 +1,29 @@
+name: SPEC Audit
+
+on:
+  pull_request:
+    paths:
+      - 'research/evidence_registry.jsonl'
+      - 'research/predicate_matrix.csv'
+      - 'docs/spec/**'
+      - 'scripts/check_spec_gate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  spec-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generate state
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/project_state.py --output /tmp/project_state.json --status-output /tmp/STATUS.md
+      - run: python scripts/check_provenance.py
+      - run: python scripts/check_spec_gate.py --state /tmp/project_state.json
