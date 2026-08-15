@@ -1,0 +1,101 @@
+name: New Source Detection
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 5 * * 0'
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install discovery tooling
+        run: python -m pip install --disable-pip-version-check yt-dlp
+      - name: Enumerate official YouTube surfaces
+        id: discovery
+        shell: bash
+        run: |
+          set +e
+          python scripts/discover_youtube_sources.py
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [ "$rc" -eq 2 ]; then
+            exit 2
+          fi
+          exit 0
+      - name: Validate generated provenance shape
+        shell: bash
+        run: |
+          if [ -f scripts/check_provenance.py ]; then
+            python scripts/check_provenance.py
+          fi
+      - name: Record partial discovery degradation
+        if: steps.discovery.outputs.exit_code == '4'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search 'Source discovery access degradation in:title' --json number --jq '.[0].number // empty')"
+          if [ -z "$existing" ]; then
+            gh issue create \
+              --title "Source discovery access degradation" \
+              --body "<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-DISCOVERY-${GITHUB_RUN_ID}
+          TYPE: SOURCE_ACCESS_RECOVERY
+          DEPENDENCIES: []
+          ENTRY_GATE: REPO_CREATED
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Automated first-party source discovery succeeded only partially. Review the workflow artifact and determine which official surface failed. Do not interpret a transport failure as evidence absence.
+
+          Stop condition: the failed discovery surface either succeeds on replay or receives an explicit terminal external-access classification."
+          fi
+      - name: Open bounded source-registry PR when new sources appear
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          count="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('research/discovery/new_sources.json')
+          print(json.loads(p.read_text())['new_source_count'] if p.exists() else 0)
+          PY
+          )"
+          echo "New first-party source count: $count"
+          if [ "$count" -eq 0 ]; then
+            exit 0
+          fi
+
+          existing="$(gh pr list --state open --search 'Automated source discovery in:title' --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            echo "Existing source-discovery PR #$existing is already awaiting service."
+            exit 0
+          fi
+
+          branch="automation/source-discovery-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add research/source_registry.csv research/discovery/
+          git commit -m "research: register newly discovered Arjo sources"
+          git push origin "$branch"
+          gh pr create \
+            --base main \
+            --head "$branch" \
+            --title "Automated source discovery: register new Arjo sources" \
+            --body "Automated bounded update from the official Arjo YouTube discovery surfaces. No strategy semantics were inferred. Review provenance status and merge only after deterministic validation."
