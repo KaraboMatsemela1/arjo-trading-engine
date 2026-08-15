@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Arjo acquisition manifest record",
+  "type": "object",
+  "required": [
+    "schema_version", "acquisition_id", "source_id", "source_type", "source_url",
+    "attempted_at", "status", "transport", "first_party_contacted", "closure_credit",
+    "semantic_extraction_performed", "artifacts", "sha256", "error_class",
+    "error_detail", "http_status", "notes"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "acquisition_id": {"type": "string"},
+    "source_id": {"type": "string"},
+    "source_type": {"type": "string"},
+    "source_url": {"type": "string"},
+    "attempted_at": {"type": "string"},
+    "status": {
+      "enum": [
+        "ENVIRONMENT_ACCESS_FAILURE",
+        "SOURCE_CONTACTED_NO_PAYLOAD",
+        "PAYLOAD_CAPTURED",
+        "SOURCE_REMOVED",
+        "SOURCE_UNAVAILABLE_AFTER_CONTACT"
+      ]
+    },
+    "transport": {"type": "string"},
+    "first_party_contacted": {"type": "boolean"},
+    "closure_credit": {"type": "string"},
+    "semantic_extraction_performed": {"const": false},
+    "artifacts": {"type": "array"},
+    "sha256": {"type": "string"},
+    "error_class": {"type": "string"},
+    "error_detail": {"type": "string"},
+    "http_status": {"type": ["integer", "null"]},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": true
+}
