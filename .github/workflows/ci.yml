@@ -21,6 +21,8 @@ jobs:
         run: python -m compileall -q scripts
       - name: Run acquisition tooling smoke test
         run: python scripts/test_acquisition_tooling.py
+      - name: Run corpus acquisition orchestration tests
+        run: python scripts/test_corpus_acquisition.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Generate canonical project state

@@ -25,7 +25,7 @@ def read_sources(path: Path) -> list[dict[str, str]]:
 
 
 def select_sources(sources: list[dict[str, str]], args: argparse.Namespace) -> list[dict[str, str]]:
-    selected = sources
+    selected = list(sources)
     if args.source_id:
         wanted = set(args.source_id)
         selected = [row for row in selected if row["SOURCE_ID"] in wanted]
@@ -34,6 +34,20 @@ def select_sources(sources: list[dict[str, str]], args: argparse.Namespace) -> l
         selected = [row for row in selected if row.get("SOURCE_TYPE") in wanted]
     if not args.include_roots:
         selected = [row for row in selected if row.get("SOURCE_TYPE") not in LOCATOR_TYPES]
+
+    # Stable ordering is mandatory before sharding so independent runners select
+    # exactly the same source set from the same registry revision.
+    selected = sorted(selected, key=lambda row: row["SOURCE_ID"])
+
+    if args.shard_count is not None or args.shard_index is not None:
+        if args.shard_count is None or args.shard_index is None:
+            raise ValueError("--shard-count and --shard-index must be supplied together")
+        if args.shard_count <= 0:
+            raise ValueError("--shard-count must be positive")
+        if not 0 <= args.shard_index < args.shard_count:
+            raise ValueError("--shard-index must be in [0, shard-count)")
+        selected = [row for index, row in enumerate(selected) if index % args.shard_count == args.shard_index]
+
     return selected[: args.limit] if args.limit is not None else selected
 
 
@@ -57,12 +71,22 @@ def acquire(source: dict[str, str], cache_root: Path, timeout: int, fixture_dir:
     return locator_record(source)
 
 
-def print_plan(selected: list[dict[str, str]]) -> int:
+def print_plan(selected: list[dict[str, str]], args: argparse.Namespace) -> int:
     counts: dict[str, int] = {}
     for row in selected:
         source_type = row.get("SOURCE_TYPE", "")
         counts[source_type] = counts.get(source_type, 0) + 1
-    print(json.dumps({"selected": len(selected), "by_type": counts}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "selected": len(selected),
+                "by_type": counts,
+                "shard_index": args.shard_index,
+                "shard_count": args.shard_count,
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 
@@ -78,12 +102,19 @@ def main() -> int:
     parser.add_argument("--fixture-dir")
     parser.add_argument("--include-roots", action="store_true")
     parser.add_argument("--replace-manifest", action="store_true")
+    parser.add_argument("--shard-index", type=int)
+    parser.add_argument("--shard-count", type=int)
     parser.add_argument("--plan", action="store_true")
     args = parser.parse_args()
 
-    selected = select_sources(read_sources(Path(args.registry)), args)
+    try:
+        selected = select_sources(read_sources(Path(args.registry)), args)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
     if args.plan:
-        return print_plan(selected)
+        return print_plan(selected, args)
     if not selected:
         print("No sources selected", file=sys.stderr)
         return 2
@@ -97,7 +128,17 @@ def main() -> int:
     for record in records:
         status = str(record["status"])
         statuses[status] = statuses.get(status, 0) + 1
-    print(json.dumps({"attempted": len(records), "statuses": statuses}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "attempted": len(records),
+                "statuses": statuses,
+                "shard_index": args.shard_index,
+                "shard_count": args.shard_count,
+            },
+            sort_keys=True,
+        )
+    )
     return 0 if all(record["status"] in ACQUISITION_STATES for record in records) else 3
 
 

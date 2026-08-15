@@ -1,0 +1,140 @@
+name: Corpus Acquisition
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/acquire_corpus.py'
+      - 'scripts/acquisition_*.py'
+      - 'scripts/merge_acquisition_manifests.py'
+      - 'scripts/check_acquisition_manifest.py'
+      - 'scripts/check_corpus_coverage.py'
+      - '.github/workflows/corpus-acquisition.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  acquire:
+    name: acquire-shard-${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public acquisition transport
+        run: python -m pip install --disable-pip-version-check yt-dlp
+      - name: Show deterministic shard plan
+        run: >-
+          python scripts/acquire_corpus.py
+          --shard-count 24
+          --shard-index ${{ matrix.shard }}
+          --plan
+      - name: Acquire terminal dispositions for shard
+        run: >-
+          python scripts/acquire_corpus.py
+          --shard-count 24
+          --shard-index ${{ matrix.shard }}
+          --manifest /tmp/manifest-${{ matrix.shard }}.jsonl
+          --cache-root /tmp/arjo-artifacts-${{ matrix.shard }}
+          --replace-manifest
+      - name: Validate shard manifest
+        run: >-
+          python scripts/check_acquisition_manifest.py
+          --manifest /tmp/manifest-${{ matrix.shard }}.jsonl
+      - name: Upload terminal manifest shard
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-manifest-shard-${{ matrix.shard }}
+          path: /tmp/manifest-${{ matrix.shard }}.jsonl
+          retention-days: 14
+
+  aggregate:
+    name: aggregate-terminal-corpus-state
+    needs: acquire
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download all terminal manifest shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: corpus-manifest-shard-*
+          path: /tmp/corpus-shards
+          merge-multiple: true
+      - name: Merge without conflict resolution
+        run: >-
+          python scripts/merge_acquisition_manifests.py
+          --input-dir /tmp/corpus-shards
+          --output research/acquisition_manifest.jsonl
+      - name: Validate combined manifest
+        run: python scripts/check_acquisition_manifest.py
+      - name: Require complete terminal corpus coverage
+        run: >-
+          python scripts/check_corpus_coverage.py
+          --report research/corpus_coverage.json
+      - name: Upload combined corpus state
+        uses: actions/upload-artifact@v4
+        with:
+          name: corpus-acquisition-state
+          path: |
+            research/acquisition_manifest.jsonl
+            research/corpus_coverage.json
+          retention-days: 30
+      - name: Publish bounded corpus-state branch
+        id: branch
+        shell: bash
+        run: |
+          if git diff --quiet -- research/acquisition_manifest.jsonl research/corpus_coverage.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="automation/corpus-acquisition-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add research/acquisition_manifest.jsonl research/corpus_coverage.json
+          git commit -m "research: record terminal corpus acquisition state"
+          git push origin "$branch"
+      - name: Create bounded branch-service issue
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            exit 0
+          fi
+          body="<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-CORPUS-${GITHUB_RUN_ID}
+          TYPE: CORPUS_ACQUISITION_SERVICE
+          DEPENDENCIES: [5]
+          ENTRY_GATE: ACQUISITION_TOOLING_READY
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Full sharded corpus acquisition completed and passed terminal coverage validation.
+
+          Service generated branch: ${BRANCH}
+
+          Open a PR to main, run deterministic CI/provenance checks, and merge only if green. No strategy semantics were synthesized."
+          gh issue create --title "Service completed corpus-acquisition branch" --body "$body"
