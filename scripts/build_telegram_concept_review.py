@@ -4,6 +4,8 @@
 The live archive is contacted only to recover text for sources that already have a
 SHA-bound `PAYLOAD_CAPTURED` acquisition record. New/unregistered posts are
 reported as discovery debt and do not enter semantic review automatically.
+Media-only/textless captured posts count as observed corpus sources but provide no
+lexical evidence.
 """
 
 from __future__ import annotations
@@ -108,7 +110,9 @@ def main() -> int:
     lexical_sources: dict[str, list[str]] = defaultdict(list)
     lexical_examples: dict[str, str] = {}
     live_message_ids: set[int] = set()
-    reviewed_source_ids: set[str] = set()
+    observed_eligible_source_ids: set[str] = set()
+    text_reviewed_source_ids: set[str] = set()
+    textless_eligible_source_ids: set[str] = set()
     unregistered_source_ids: list[str] = []
     failures: list[dict[str, str]] = []
     current_before: int | None = None
@@ -140,11 +144,13 @@ def main() -> int:
                     unregistered_source_ids.append(source_id)
                 continue
 
+            observed_eligible_source_ids.add(source_id)
             body = match.group("body")
             text = message_text(body)
             if not text:
+                textless_eligible_source_ids.add(source_id)
                 continue
-            reviewed_source_ids.add(source_id)
+            text_reviewed_source_ids.add(source_id)
             date = published_date(body)
 
             for term in terms:
@@ -205,14 +211,17 @@ def main() -> int:
             }
         )
 
-    missing_eligible = sorted(eligible_source_ids - reviewed_source_ids)
+    missing_eligible = sorted(eligible_source_ids - observed_eligible_source_ids)
     review = {
         "schema_version": 1,
         "channel": "ArjoioTrading",
         "pages_fetched": pages_fetched,
         "live_messages_seen": len(live_message_ids),
         "eligible_captured_messages": len(eligible_source_ids),
-        "messages_reviewed": len(reviewed_source_ids),
+        "messages_reviewed": len(observed_eligible_source_ids),
+        "text_messages_reviewed": len(text_reviewed_source_ids),
+        "textless_eligible_count": len(textless_eligible_source_ids),
+        "textless_eligible_source_ids": sorted(textless_eligible_source_ids)[:100],
         "missing_eligible_count": len(missing_eligible),
         "missing_eligible_source_ids": missing_eligible[:100],
         "unregistered_live_count": len(set(unregistered_source_ids)),
@@ -236,7 +245,8 @@ def main() -> int:
         )
     candidate_report = {
         "schema_version": 1,
-        "messages_reviewed": len(reviewed_source_ids),
+        "messages_observed": len(observed_eligible_source_ids),
+        "text_messages_reviewed": len(text_reviewed_source_ids),
         "minimum_frequency_not_applied": True,
         "candidates": lexical,
         "semantic_synthesis_performed": False,
@@ -253,7 +263,9 @@ def main() -> int:
             {
                 "live_messages_seen": len(live_message_ids),
                 "eligible_captured_messages": len(eligible_source_ids),
-                "messages_reviewed": len(reviewed_source_ids),
+                "messages_observed": len(observed_eligible_source_ids),
+                "text_messages_reviewed": len(text_reviewed_source_ids),
+                "textless_eligible": len(textless_eligible_source_ids),
                 "missing_eligible": len(missing_eligible),
                 "unregistered_live": len(set(unregistered_source_ids)),
                 "known_terms": len(review_terms),
@@ -263,7 +275,7 @@ def main() -> int:
             sort_keys=True,
         )
     )
-    if not reviewed_source_ids:
+    if not observed_eligible_source_ids:
         return 2
     return 4 if failures or missing_eligible else 0
 
