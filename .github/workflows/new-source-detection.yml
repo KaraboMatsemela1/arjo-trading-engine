@@ -9,6 +9,7 @@ on:
       - 'scripts/discover_telegram_sources.py'
       - 'scripts/discover_website_sources.py'
       - 'scripts/build_surface_audit.py'
+      - 'scripts/sync_source_roots.py'
       - 'research/source_roots.json'
       - '.github/workflows/new-source-detection.yml'
   schedule:
@@ -31,6 +32,8 @@ jobs:
           python-version: '3.12'
       - name: Install discovery tooling
         run: python -m pip install --disable-pip-version-check yt-dlp
+      - name: Synchronize verified discovery roots
+        run: python scripts/sync_source_roots.py
 
       - name: Enumerate official YouTube surfaces
         id: youtube
