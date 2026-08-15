@@ -2,6 +2,12 @@ name: Scheduled Source Discovery
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/discover_youtube_sources.py'
+      - 'research/source_roots.json'
+      - '.github/workflows/scheduled-source-discovery.yml'
   schedule:
     - cron: '23 5 * * 0'
 
