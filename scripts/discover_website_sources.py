@@ -4,6 +4,12 @@
 This is a URL/title discovery crawler, not a semantic extractor. It stays on the
 first-party site and records external resources only when directly linked by the
 first-party site. Strategy meaning is never inferred here.
+
+Transport policy is deliberately conservative: try a normal browser-shaped HTTP
+request first, then a stock headless Chrome renderer if the server rejects the
+HTTP client. The browser fallback does not solve CAPTCHAs, evade authentication,
+or use stealth flags. A persistent denial is recorded as an environment access
+failure rather than being interpreted as evidence absence.
 """
 
 from __future__ import annotations
@@ -12,12 +18,13 @@ import argparse
 import csv
 import hashlib
 import json
-import sys
+import shutil
+import subprocess
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from collections import deque
+from collections import Counter, deque
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 from pathlib import Path
@@ -49,6 +56,17 @@ SOURCE_FIELDS = [
     "FRAME_EXTRACTION_AVAILABLE",
     "NOTES",
 ]
+BROWSER_USER_AGENT = (
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36"
+)
+CHALLENGE_MARKERS = (
+    "cf-chl-",
+    "challenge-platform",
+    "just a moment...",
+    "checking your browser",
+    "verify you are human",
+)
 
 
 class PageParser(HTMLParser):
@@ -85,12 +103,21 @@ class PageParser(HTMLParser):
         return " ".join(part for part in self.title_parts if part).strip()
 
 
-def fetch(url: str, timeout: int = 30) -> tuple[str, str]:
+def looks_like_access_challenge(html: str) -> bool:
+    lowered = html.lower()
+    return any(marker in lowered for marker in CHALLENGE_MARKERS)
+
+
+def http_fetch(url: str, timeout: int) -> tuple[str, str]:
     request = urllib.request.Request(
         url,
         headers={
-            "User-Agent": "arjo-trading-engine-source-discovery/1.0 (+research; public metadata only)",
-            "Accept": "text/html,application/xhtml+xml",
+            "User-Agent": BROWSER_USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Upgrade-Insecure-Requests": "1",
         },
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
@@ -98,7 +125,73 @@ def fetch(url: str, timeout: int = 30) -> tuple[str, str]:
         content_type = response.headers.get_content_type()
         if content_type not in {"text/html", "application/xhtml+xml"}:
             raise ValueError(f"unsupported content type: {content_type}")
-        return final_url, response.read().decode("utf-8", errors="replace")
+        html = response.read().decode("utf-8", errors="replace")
+        if looks_like_access_challenge(html):
+            raise PermissionError("browser challenge returned to HTTP transport")
+        return final_url, html
+
+
+def find_chrome() -> str | None:
+    for candidate in (
+        "google-chrome-stable",
+        "google-chrome",
+        "chromium-browser",
+        "chromium",
+    ):
+        executable = shutil.which(candidate)
+        if executable:
+            return executable
+    return None
+
+
+def browser_fetch(url: str, timeout: int) -> tuple[str, str]:
+    executable = find_chrome()
+    if not executable:
+        raise RuntimeError("standard Chrome/Chromium executable not available on runner")
+    command = [
+        executable,
+        "--headless=new",
+        "--disable-gpu",
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        "--virtual-time-budget=5000",
+        f"--user-agent={BROWSER_USER_AGENT}",
+        "--dump-dom",
+        url,
+    ]
+    completed = subprocess.run(
+        command,
+        text=True,
+        capture_output=True,
+        timeout=max(timeout, 15),
+        check=False,
+    )
+    html = completed.stdout or ""
+    if completed.returncode != 0:
+        detail = (completed.stderr or "").strip().splitlines()[-1:] or ["unknown browser error"]
+        raise RuntimeError(f"headless browser failed ({completed.returncode}): {detail[0]}")
+    if not html.strip():
+        raise RuntimeError("headless browser returned empty DOM")
+    if looks_like_access_challenge(html):
+        raise PermissionError("public page remained behind a browser challenge")
+    return url, html
+
+
+def fetch(url: str, timeout: int = 30) -> tuple[str, str, str]:
+    attempts: list[str] = []
+    try:
+        final_url, html = http_fetch(url, timeout)
+        return final_url, html, "HTTP_BROWSER_HEADERS"
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError, PermissionError) as exc:
+        attempts.append(f"HTTP_BROWSER_HEADERS={type(exc).__name__}: {exc}")
+
+    try:
+        final_url, html = browser_fetch(url, timeout)
+        return final_url, html, "HEADLESS_BROWSER"
+    except (subprocess.SubprocessError, RuntimeError, PermissionError, OSError) as exc:
+        attempts.append(f"HEADLESS_BROWSER={type(exc).__name__}: {exc}")
+
+    raise RuntimeError("; ".join(attempts))
 
 
 def canonicalize(base: str, href: str) -> str | None:
@@ -132,7 +225,7 @@ def make_id(prefix: str, url: str) -> str:
     return f"{prefix}_{hashlib.sha256(url.encode('utf-8')).hexdigest()[:20].upper()}"
 
 
-def internal_row(url: str, title: str, published: str, retrieval_date: str) -> dict[str, str]:
+def internal_row(url: str, title: str, published: str, retrieval_date: str, transport: str) -> dict[str, str]:
     path = urllib.parse.urlsplit(url).path
     source_type = "WEBSITE_PAGE"
     if path == "/mmc/":
@@ -152,7 +245,10 @@ def internal_row(url: str, title: str, published: str, retrieval_date: str) -> d
         "RAW_ARTIFACT_SHA256": "",
         "TRANSCRIPT_AVAILABLE": "NOT_APPLICABLE",
         "FRAME_EXTRACTION_AVAILABLE": "UNKNOWN",
-        "NOTES": "Discovered by bounded crawl of the first-party Trading MMT public website; relevance unassessed; no semantic closure performed",
+        "NOTES": (
+            "Discovered by bounded crawl of the first-party Trading MMT public website; "
+            f"transport={transport}; relevance unassessed; no semantic closure performed"
+        ),
     }
 
 
@@ -219,6 +315,7 @@ def main() -> int:
     internal_rows: dict[str, dict[str, str]] = {}
     external_rows: dict[str, dict[str, str]] = {}
     failures: list[dict[str, Any]] = []
+    transports: Counter[str] = Counter()
 
     while queue and len(visited) < args.max_pages:
         requested_url = queue.popleft()
@@ -229,11 +326,18 @@ def main() -> int:
             continue
         visited.add(requested_url)
         try:
-            final_url, html = fetch(requested_url)
-        except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
-            failures.append({"url": requested_url, "error": str(exc)})
+            final_url, html, transport = fetch(requested_url)
+        except (RuntimeError, TimeoutError, OSError, ValueError) as exc:
+            failures.append(
+                {
+                    "url": requested_url,
+                    "classification": "ENVIRONMENT_ACCESS_FAILURE",
+                    "error": str(exc),
+                }
+            )
             continue
 
+        transports[transport] += 1
         parser_html = PageParser()
         parser_html.feed(html)
         canonical_final = canonicalize(final_url, final_url) or final_url
@@ -242,6 +346,7 @@ def main() -> int:
             parser_html.title,
             publication_date(parser_html.published_time),
             retrieval_date,
+            transport,
         )
 
         for href in parser_html.links:
@@ -281,6 +386,7 @@ def main() -> int:
         "new_source_count": len(new_rows),
         "queue_truncated": bool(queue),
         "failures": failures,
+        "transport_counts": dict(sorted(transports.items())),
         "normalized_snapshot_sha256": snapshot_sha256,
         "semantic_closure_performed": False,
     }
@@ -295,6 +401,7 @@ def main() -> int:
                 "new": len(new_rows),
                 "failures": len(failures),
                 "queue_truncated": bool(queue),
+                "transport_counts": dict(sorted(transports.items())),
             }
         )
     )
