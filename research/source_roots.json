@@ -6,14 +6,14 @@
       "platform": "youtube",
       "url": "https://www.youtube.com/@Arjoio",
       "status": "CONFIRMED_FIRST_PARTY",
-      "basis": "Direct official channel surface and first-party cross-link nucleus"
+      "basis": "Direct official channel surface; deterministic item-level enumeration available"
     },
     {
       "source_id": "ROOT_X_ARJOIO",
       "platform": "x",
       "url": "https://x.com/arjoio",
-      "status": "CONFIRMED_FIRST_PARTY",
-      "basis": "Direct @arjoio first-party account; posts link to official YouTube material"
+      "status": "CONFIRMED_FIRST_PARTY_ACCESS_LIMITED",
+      "basis": "Direct @arjoio surface and repeated first-party cross-links; unauthenticated replayable item enumeration is currently unavailable"
     },
     {
       "source_id": "ROOT_WEBSITE_ARJOIO",
@@ -27,28 +27,49 @@
       "platform": "website",
       "url": "https://tradingmmt.com/",
       "status": "CONFIRMED_FIRST_PARTY",
-      "basis": "Current destination of arjo.io and branded as Arjoio's MMT"
+      "basis": "Current destination of arjo.io and branded as Arjoio's MMT; bounded public crawl available"
+    },
+    {
+      "source_id": "ROOT_WEBSITE_MMC",
+      "platform": "website",
+      "url": "https://tradingmmt.com/mmc/",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Public MMT Money Making Concepts hub linking first-party lesson resources"
+    },
+    {
+      "source_id": "ROOT_WEBSITE_NEWSLETTER",
+      "platform": "website",
+      "url": "https://tradingmmt.com/newsletter/",
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Public MMT newsletter archive containing educational first-party articles"
     },
     {
       "source_id": "ROOT_INSTAGRAM_ARJOIO",
       "platform": "instagram",
       "url": "https://www.instagram.com/arjoio/",
-      "status": "PROVISIONAL_FIRST_PARTY",
-      "basis": "Cross-linked alongside confirmed first-party properties; direct retrieval currently unavailable"
+      "status": "CONFIRMED_FIRST_PARTY_ACCESS_LIMITED",
+      "basis": "Repeatedly linked from Arjo first-party YouTube descriptions/public surfaces; unauthenticated replayable item enumeration is currently unavailable"
     },
     {
       "source_id": "ROOT_TELEGRAM_ARJOIOTRADING",
       "platform": "telegram",
       "url": "https://t.me/ArjoioTrading",
-      "status": "PROVISIONAL_FIRST_PARTY",
-      "basis": "Public channel consistently cross-links confirmed Arjo surfaces; retain provisional until independent cross-provenance is captured"
+      "status": "CONFIRMED_FIRST_PARTY",
+      "basis": "Direct public channel is reachable and repeatedly cross-links official Arjo YouTube, X, Instagram and web properties; replayable public archive enumeration available"
+    },
+    {
+      "source_id": "ROOT_DISCORD_TRADINGMMT",
+      "platform": "discord",
+      "url": "https://discord.gg/tradingmmt",
+      "status": "CONFIRMED_FIRST_PARTY_LINKED_ACCESS_LIMITED",
+      "basis": "Linked as the free public Discord in current first-party Arjo/Trading MMT educational video descriptions; item discovery requires platform join/auth"
     },
     {
       "source_id": "ROOT_ZAAP_ARJO",
       "platform": "link_hub",
       "url": "https://zaap.bio/arjo",
-      "status": "PROVISIONAL_FIRST_PARTY",
-      "basis": "Cross-linked from Arjo public educational descriptions; locator only, zero semantic closure credit"
+      "status": "CONFIRMED_FIRST_PARTY_LINKED",
+      "basis": "Repeatedly cross-linked from Arjo first-party educational descriptions; locator only and receives zero semantic closure credit"
     }
   ]
 }
