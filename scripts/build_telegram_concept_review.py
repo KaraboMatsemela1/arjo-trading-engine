@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Build a copyright-bounded lexical review of the public first-party Telegram corpus.
+"""Build a copyright-bounded lexical review of captured first-party Telegram posts.
 
-The output is a discovery/review aid only. It records term occurrences and small
-context snippets; it does not define concepts or synthesize executable rules.
+The live archive is contacted only to recover text for sources that already have a
+SHA-bound `PAYLOAD_CAPTURED` acquisition record. New/unregistered posts are
+reported as discovery debt and do not enter semantic review automatically.
 """
 
 from __future__ import annotations
@@ -17,7 +18,7 @@ from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
-from discover_telegram_sources import ARCHIVE_URL, BEFORE_RE, MESSAGE_RE, TIME_RE, fetch, next_before
+from discover_telegram_sources import ARCHIVE_URL, MESSAGE_RE, TIME_RE, fetch, next_before
 
 TEXT_RE = re.compile(r'<div class="tgme_widget_message_text[^\"]*"[^>]*>(.*?)</div>', re.IGNORECASE | re.DOTALL)
 TAG_RE = re.compile(r"<[^>]+>")
@@ -72,9 +73,27 @@ def load_term_catalog(path: Path) -> list[dict]:
     return list(data.get("terms", []))
 
 
+def load_acquired_telegram_sources(path: Path) -> set[str]:
+    source_ids: set[str] = set()
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        if not raw.strip():
+            continue
+        record = json.loads(raw)
+        if (
+            record.get("source_type") == "TELEGRAM_POST"
+            and record.get("status") == "PAYLOAD_CAPTURED"
+            and record.get("first_party_contacted") is True
+            and record.get("closure_credit") == "DIRECT_FIRST_PARTY_PAYLOAD"
+            and record.get("sha256")
+        ):
+            source_ids.add(str(record["source_id"]))
+    return source_ids
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--terms", default="research/concept_terms.json")
+    parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
     parser.add_argument("--output", default="research/review/concept_term_review.json")
     parser.add_argument("--candidates-output", default="research/review/lexical_candidates.json")
     parser.add_argument("--max-pages", type=int, default=100)
@@ -83,11 +102,14 @@ def main() -> int:
     args = parser.parse_args()
 
     terms = load_term_catalog(Path(args.terms))
+    eligible_source_ids = load_acquired_telegram_sources(Path(args.acquisition))
     occurrences: dict[str, list[dict]] = defaultdict(list)
     lexical_counts: Counter[str] = Counter()
     lexical_sources: dict[str, list[str]] = defaultdict(list)
     lexical_examples: dict[str, str] = {}
-    seen_messages: set[int] = set()
+    live_message_ids: set[int] = set()
+    reviewed_source_ids: set[str] = set()
+    unregistered_source_ids: list[str] = []
     failures: list[dict[str, str]] = []
     current_before: int | None = None
     visited_before: set[int | None] = set()
@@ -108,23 +130,45 @@ def main() -> int:
 
         for match in MESSAGE_RE.finditer(page):
             message_id = int(match.group(1))
-            if message_id in seen_messages:
+            if message_id in live_message_ids:
                 continue
-            seen_messages.add(message_id)
+            live_message_ids.add(message_id)
             page_ids.append(message_id)
+            source_id = f"TG_ARJOIOTRADING_{message_id}"
+            if source_id not in eligible_source_ids:
+                if len(unregistered_source_ids) < 100:
+                    unregistered_source_ids.append(source_id)
+                continue
+
             body = match.group("body")
             text = message_text(body)
             if not text:
                 continue
-            source_id = f"TG_ARJOIOTRADING_{message_id}"
+            reviewed_source_ids.add(source_id)
             date = published_date(body)
 
             for term in terms:
                 aliases = [str(alias) for alias in term.get("aliases", [])]
-                matched = next((alias for alias in aliases if re.search(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", text, re.IGNORECASE)), None)
+                matched = next(
+                    (
+                        alias
+                        for alias in aliases
+                        if re.search(
+                            rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])",
+                            text,
+                            re.IGNORECASE,
+                        )
+                    ),
+                    None,
+                )
                 if matched:
                     occurrences[str(term["concept_id"])].append(
-                        {"source_id": source_id, "date": date, "matched_alias": matched, "excerpt": excerpt(text, matched)}
+                        {
+                            "source_id": source_id,
+                            "date": date,
+                            "matched_alias": matched,
+                            "excerpt": excerpt(text, matched),
+                        }
                     )
 
             candidates = set(ACRONYM_RE.findall(text))
@@ -161,11 +205,18 @@ def main() -> int:
             }
         )
 
+    missing_eligible = sorted(eligible_source_ids - reviewed_source_ids)
     review = {
         "schema_version": 1,
         "channel": "ArjoioTrading",
         "pages_fetched": pages_fetched,
-        "messages_reviewed": len(seen_messages),
+        "live_messages_seen": len(live_message_ids),
+        "eligible_captured_messages": len(eligible_source_ids),
+        "messages_reviewed": len(reviewed_source_ids),
+        "missing_eligible_count": len(missing_eligible),
+        "missing_eligible_source_ids": missing_eligible[:100],
+        "unregistered_live_count": len(set(unregistered_source_ids)),
+        "unregistered_live_source_ids": sorted(set(unregistered_source_ids))[:100],
         "failures": failures,
         "catalog_concept_count": len(catalog_ids),
         "terms": review_terms,
@@ -185,7 +236,7 @@ def main() -> int:
         )
     candidate_report = {
         "schema_version": 1,
-        "messages_reviewed": len(seen_messages),
+        "messages_reviewed": len(reviewed_source_ids),
         "minimum_frequency_not_applied": True,
         "candidates": lexical,
         "semantic_synthesis_performed": False,
@@ -197,10 +248,24 @@ def main() -> int:
     candidates_output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(review, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
     candidates_output.write_text(json.dumps(candidate_report, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(json.dumps({"messages_reviewed": len(seen_messages), "pages_fetched": pages_fetched, "known_terms": len(review_terms), "lexical_candidates": len(lexical), "failures": len(failures)}, sort_keys=True))
-    if not seen_messages:
+    print(
+        json.dumps(
+            {
+                "live_messages_seen": len(live_message_ids),
+                "eligible_captured_messages": len(eligible_source_ids),
+                "messages_reviewed": len(reviewed_source_ids),
+                "missing_eligible": len(missing_eligible),
+                "unregistered_live": len(set(unregistered_source_ids)),
+                "known_terms": len(review_terms),
+                "lexical_candidates": len(lexical),
+                "failures": len(failures),
+            },
+            sort_keys=True,
+        )
+    )
+    if not reviewed_source_ids:
         return 2
-    return 4 if failures else 0
+    return 4 if failures or missing_eligible else 0
 
 
 if __name__ == "__main__":
