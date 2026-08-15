@@ -2,15 +2,18 @@
   "discovered_count": 0,
   "failures": [
     {
-      "error": "HTTP Error 403: Forbidden",
+      "classification": "ENVIRONMENT_ACCESS_FAILURE",
+      "error": "HTTP_BROWSER_HEADERS=HTTPError: HTTP Error 403: Forbidden; HEADLESS_BROWSER=PermissionError: public page remained behind a browser challenge",
       "url": "https://tradingmmt.com/"
     },
     {
-      "error": "HTTP Error 403: Forbidden",
+      "classification": "ENVIRONMENT_ACCESS_FAILURE",
+      "error": "HTTP_BROWSER_HEADERS=HTTPError: HTTP Error 403: Forbidden; HEADLESS_BROWSER=PermissionError: public page remained behind a browser challenge",
       "url": "https://tradingmmt.com/newsletter/"
     },
     {
-      "error": "HTTP Error 403: Forbidden",
+      "classification": "ENVIRONMENT_ACCESS_FAILURE",
+      "error": "HTTP_BROWSER_HEADERS=HTTPError: HTTP Error 403: Forbidden; HEADLESS_BROWSER=PermissionError: public page remained behind a browser challenge",
       "url": "https://tradingmmt.com/mmc/"
     }
   ],
@@ -23,5 +26,6 @@
   "retrieval_date": "2026-08-15",
   "root": "https://tradingmmt.com/",
   "schema_version": 1,
-  "semantic_closure_performed": false
+  "semantic_closure_performed": false,
+  "transport_counts": {}
 }
