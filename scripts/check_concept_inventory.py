@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate concept inventory shape, dependencies and direct first-party provenance."""
+"""Validate the canonical union of concept inventory shards and provenance."""
 
 from __future__ import annotations
 
@@ -10,13 +10,8 @@ import sys
 from pathlib import Path
 
 ALLOWED_STATES = {
-    "DIRECT",
-    "DIRECT_CONCEPT_PARTIAL_EXECUTION",
-    "DIRECT_EXAMPLE_PARTIAL",
-    "DIRECT_ALIAS_PARTIAL",
-    "STRONG_PARTIAL",
-    "CONTEXTUAL",
-    "NAMED_CONTEXTUAL",
+    "DIRECT", "DIRECT_CONCEPT_PARTIAL_EXECUTION", "DIRECT_EXAMPLE_PARTIAL",
+    "DIRECT_ALIAS_PARTIAL", "STRONG_PARTIAL", "CONTEXTUAL", "NAMED_CONTEXTUAL",
     "NAMED_UNRESOLVED",
 }
 REQUIRED = {
@@ -38,16 +33,26 @@ def load_jsonl(path: Path) -> list[dict]:
     return rows
 
 
+def load_inventory(pattern: str) -> tuple[list[dict], list[str]]:
+    paths = sorted(Path().glob(pattern))
+    if not paths:
+        raise ValueError(f"no inventory files match {pattern}")
+    concepts: list[dict] = []
+    for path in paths:
+        concepts.extend(load_jsonl(path))
+    return concepts, [path.as_posix() for path in paths]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--inventory", default="research/concept_inventory.jsonl")
+    parser.add_argument("--inventory-glob", default="research/concept_inventory*.jsonl")
     parser.add_argument("--registry", default="research/source_registry.csv")
     parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
     args = parser.parse_args()
 
     errors: list[str] = []
     try:
-        concepts = load_jsonl(Path(args.inventory))
+        concepts, inventory_files = load_inventory(args.inventory_glob)
         acquisitions = load_jsonl(Path(args.acquisition))
     except ValueError as exc:
         print(exc, file=sys.stderr)
@@ -62,7 +67,8 @@ def main() -> int:
     if not concepts:
         errors.append("concept inventory is empty")
     if len(concept_ids) != len(concept_set):
-        errors.append("duplicate CONCEPT_ID detected")
+        duplicates = sorted({value for value in concept_ids if concept_ids.count(value) > 1})
+        errors.append(f"duplicate CONCEPT_ID detected: {duplicates}")
 
     for index, row in enumerate(concepts, start=1):
         concept_id = str(row.get("CONCEPT_ID", f"row-{index}"))
@@ -127,7 +133,6 @@ def main() -> int:
             if not isinstance(row.get(field), list):
                 errors.append(f"{concept_id}: {field} must be a list")
 
-    # Cycle check keeps hierarchy deterministic without claiming causality.
     graph = {str(row["CONCEPT_ID"]): list(row.get("DEPENDENCIES", [])) for row in concepts if row.get("CONCEPT_ID")}
     visiting: set[str] = set()
     visited: set[str] = set()
@@ -158,7 +163,7 @@ def main() -> int:
     for row in concepts:
         state = str(row["DEFINITION_STATE"])
         states[state] = states.get(state, 0) + 1
-    print(json.dumps({"concepts": len(concepts), "definition_states": dict(sorted(states.items()))}, sort_keys=True))
+    print(json.dumps({"concepts": len(concepts), "inventory_files": inventory_files, "definition_states": dict(sorted(states.items()))}, sort_keys=True))
     return 0
 
 
