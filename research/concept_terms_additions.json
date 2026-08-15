@@ -15,7 +15,7 @@
     {"concept_id":"HP_WEEKS","aliases":["HP Weeks"],"discovery_source_ids":["TG_ARJOIOTRADING_711"],"lexical_hit_required":true},
     {"concept_id":"BREAKER","aliases":["Breaker","breaker"],"discovery_source_ids":["TG_ARJOIOTRADING_132"],"lexical_hit_required":true},
     {"concept_id":"LOW_PROBABILITY_DECOUPLING","aliases":["not moving in sync","low probability","consolidation"],"discovery_source_ids":["TG_ARJOIOTRADING_129"],"lexical_hit_required":true},
-    {"concept_id":"IFVG","aliases":["IFVG"],"discovery_source_ids":["TG_ARJOIOTRADING_654"],"lexical_hit_required":true},
+    {"concept_id":"IFVG","aliases":["IFVG"],"discovery_source_ids":["TG_ARJOIOTRADING_654"],"lexical_hit_required":false},
     {"concept_id":"REVERSAL","aliases":["Reversal","reversal"],"discovery_source_ids":["TG_ARJOIOTRADING_499"],"lexical_hit_required":true}
   ]
 }
