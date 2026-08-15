@@ -1,0 +1,46 @@
+name: Concept Inventory Review
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/concept_inventory.jsonl'
+      - 'research/concept_terms.json'
+      - 'scripts/build_telegram_concept_review.py'
+      - 'scripts/check_concept_inventory.py'
+      - 'scripts/check_concept_review.py'
+      - '.github/workflows/concept-inventory-review.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  review-captured-first-party-corpus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate committed concept inventory provenance
+        run: python scripts/check_concept_inventory.py
+      - name: Build bounded lexical review from captured Telegram sources
+        run: >-
+          python scripts/build_telegram_concept_review.py
+          --output /tmp/concept_term_review.json
+          --candidates-output /tmp/lexical_candidates.json
+      - name: Require full captured-corpus review coverage
+        run: >-
+          python scripts/check_concept_review.py
+          --review /tmp/concept_term_review.json
+      - name: Upload bounded review artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: concept-inventory-review
+          path: |
+            /tmp/concept_term_review.json
+            /tmp/lexical_candidates.json
+          retention-days: 14
