@@ -1,1 +1,8 @@
 SOURCE_ID,SOURCE_TYPE,TITLE,URL,PUBLICATION_DATE,AUTHOR,CHANNEL_ID,FIRST_PARTY_STATUS,RETRIEVAL_DATE,RAW_ARTIFACT_SHA256,TRANSCRIPT_AVAILABLE,FRAME_EXTRACTION_AVAILABLE,NOTES
+ROOT_YOUTUBE_ARJOIO,PLATFORM_ROOT,Arjo YouTube,https://www.youtube.com/@Arjoio,,Arjo,,CONFIRMED_FIRST_PARTY,2026-08-15,,UNKNOWN,UNKNOWN,DISCOVERY_ROOT_ONLY; zero semantic closure until item-level evidence
+ROOT_X_ARJOIO,PLATFORM_ROOT,Arjo on X,https://x.com/arjoio,,Arjo,,CONFIRMED_FIRST_PARTY,2026-08-15,,UNKNOWN,UNKNOWN,DISCOVERY_ROOT_ONLY; direct first-party account
+ROOT_WEBSITE_ARJOIO,WEBSITE_ROOT,arjo.io,https://arjo.io/,,Arjo,,CONFIRMED_FIRST_PARTY,2026-08-15,,NOT_APPLICABLE,UNKNOWN,Legacy first-party property; redirect observed to Trading MMT
+ROOT_WEBSITE_TRADINGMMT,WEBSITE_ROOT,Trading MMT,https://tradingmmt.com/,,Arjo / Trading MMT,,CONFIRMED_FIRST_PARTY,2026-08-15,,NOT_APPLICABLE,UNKNOWN,Current destination of arjo.io; item-level educational pages must be separately registered
+ROOT_INSTAGRAM_ARJOIO,PLATFORM_ROOT,Arjo Instagram,https://www.instagram.com/arjoio/,,Arjo,,PROVISIONAL_FIRST_PARTY,2026-08-15,,UNKNOWN,UNKNOWN,Cross-linked with confirmed Arjo surfaces; direct retrieval currently unavailable
+ROOT_TELEGRAM_ARJOIOTRADING,PLATFORM_ROOT,Arjoio Trading Telegram,https://t.me/ArjoioTrading,,Arjo,,PROVISIONAL_FIRST_PARTY,2026-08-15,,UNKNOWN,UNKNOWN,Public channel cross-links confirmed Arjo surfaces; provenance confirmation still required
+ROOT_ZAAP_ARJO,LINK_HUB,Arjo link hub,https://zaap.bio/arjo,,Arjo,,PROVISIONAL_FIRST_PARTY,2026-08-15,,NOT_APPLICABLE,NOT_APPLICABLE,Locator only; zero semantic closure credit until first-party provenance confirmed
