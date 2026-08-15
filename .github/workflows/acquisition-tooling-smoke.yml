@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  acquire-one-first-party-source:
+  acquire-first-party-sources:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,35 +23,54 @@ jobs:
           python-version: '3.12'
       - name: Install acquisition transport
         run: python -m pip install --disable-pip-version-check yt-dlp
-      - name: Acquire one registered YouTube video
+      - name: Attempt one registered YouTube video
         run: >-
           python scripts/acquire_corpus.py
           --source-type YOUTUBE_VIDEO
           --limit 1
           --manifest /tmp/acquisition_manifest.jsonl
           --cache-root /tmp/arjo-artifacts
+      - name: Acquire one public Telegram post
+        run: >-
+          python scripts/acquire_corpus.py
+          --source-id TG_ARJOIOTRADING_1
+          --manifest /tmp/acquisition_manifest.jsonl
+          --cache-root /tmp/arjo-artifacts
       - name: Validate terminal manifest
         run: >-
           python scripts/check_acquisition_manifest.py
           --manifest /tmp/acquisition_manifest.jsonl
-      - name: Require a direct SHA-bound payload
+      - name: Validate capture and access semantics
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
           records = [json.loads(line) for line in Path('/tmp/acquisition_manifest.jsonl').read_text().splitlines() if line.strip()]
-          if len(records) != 1:
-              raise SystemExit(f'expected one record, got {len(records)}')
-          record = records[0]
-          if record['status'] != 'PAYLOAD_CAPTURED':
-              raise SystemExit(f"first-party smoke acquisition did not capture payload: {record['status']} {record['error_detail']}")
-          if not record['first_party_contacted'] or not record['sha256']:
-              raise SystemExit('captured record lacks direct contact or SHA-256 provenance')
-          if record['semantic_extraction_performed']:
-              raise SystemExit('acquisition must not perform semantic extraction')
-          print({'source_id': record['source_id'], 'status': record['status'], 'sha256': record['sha256']})
+          if len(records) != 2:
+              raise SystemExit(f'expected two records, got {len(records)}')
+          telegram = next((r for r in records if r['source_id'] == 'TG_ARJOIOTRADING_1'), None)
+          youtube = next((r for r in records if r['source_type'] == 'YOUTUBE_VIDEO'), None)
+          if telegram is None or telegram['status'] != 'PAYLOAD_CAPTURED':
+              raise SystemExit(f'Telegram direct payload was not captured: {telegram}')
+          if not telegram['first_party_contacted'] or not telegram['sha256']:
+              raise SystemExit('Telegram capture lacks direct contact or SHA-256 provenance')
+          if telegram['closure_credit'] != 'DIRECT_FIRST_PARTY_PAYLOAD':
+              raise SystemExit('Telegram capture lacks direct first-party closure credit')
+          if youtube is None or youtube['status'] not in {'PAYLOAD_CAPTURED', 'ENVIRONMENT_ACCESS_FAILURE'}:
+              raise SystemExit(f'YouTube attempt has unexpected terminal state: {youtube}')
+          if not youtube['first_party_contacted']:
+              raise SystemExit('YouTube attempt did not contact first-party infrastructure')
+          if youtube['status'] == 'ENVIRONMENT_ACCESS_FAILURE':
+              if youtube['sha256'] or youtube['closure_credit'] != 'ZERO_NO_PAYLOAD':
+                  raise SystemExit('YouTube access failure incorrectly claims payload/closure credit')
+          elif not youtube['sha256'] or youtube['closure_credit'] != 'DIRECT_FIRST_PARTY_PAYLOAD':
+              raise SystemExit('YouTube capture lacks SHA/direct closure credit')
+          if any(record['semantic_extraction_performed'] for record in records):
+              raise SystemExit('acquisition smoke performed semantic extraction')
+          print({r['source_id']: {'status': r['status'], 'sha256': r['sha256']} for r in records})
           PY
       - name: Upload bounded manifest
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: acquisition-tooling-smoke
