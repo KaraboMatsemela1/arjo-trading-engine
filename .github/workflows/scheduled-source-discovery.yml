@@ -1,0 +1,38 @@
+name: Scheduled Source Discovery
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 5 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  youtube-discovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install discovery tooling
+        run: python -m pip install --disable-pip-version-check yt-dlp
+      - name: Enumerate official YouTube surfaces
+        id: discovery
+        shell: bash
+        run: |
+          set +e
+          python scripts/discover_youtube_sources.py
+          rc=$?
+          echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
+          if [ "$rc" -eq 2 ]; then
+            exit 2
+          fi
+          exit 0
+      - name: Upload discovery snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arjo-source-discovery
+          path: research/discovery/
