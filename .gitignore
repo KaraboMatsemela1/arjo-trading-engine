@@ -1,0 +1,3 @@
+# Local content-addressed source payload cache. Durable provenance lives in the
+# acquisition manifest; raw public-source payloads are not committed by default.
+.research-cache/
