@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "project": "arjo-trading-engine",
+  "current_gate": "GOVERNANCE_BOOTSTRAP",
+  "spec_ready": false,
+  "paper_execution_enabled": false,
+  "live_execution_enabled": false,
+  "critical_path": [
+    "GOVERNANCE_BOOTSTRAP",
+    "SOURCE_UNIVERSE_DISCOVERED",
+    "CORPUS_ACQUIRED",
+    "CONCEPT_INVENTORY_READY",
+    "EVIDENCE_REGISTRY_READY",
+    "PREDICATE_MATRIX_READY",
+    "SPEC_AUDIT",
+    "SPEC_READY"
+  ],
+  "issues": [],
+  "blocked_reasons": [],
+  "owner_input_required": false
+}
