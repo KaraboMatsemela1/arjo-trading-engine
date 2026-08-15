@@ -1,0 +1,59 @@
+name: Acquisition Tooling Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/acquire_corpus.py'
+      - 'scripts/acquisition_*.py'
+      - 'scripts/check_acquisition_manifest.py'
+      - '.github/workflows/acquisition-tooling-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  acquire-one-first-party-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install acquisition transport
+        run: python -m pip install --disable-pip-version-check yt-dlp
+      - name: Acquire one registered YouTube video
+        run: >-
+          python scripts/acquire_corpus.py
+          --source-type YOUTUBE_VIDEO
+          --limit 1
+          --manifest /tmp/acquisition_manifest.jsonl
+          --cache-root /tmp/arjo-artifacts
+      - name: Validate terminal manifest
+        run: >-
+          python scripts/check_acquisition_manifest.py
+          --manifest /tmp/acquisition_manifest.jsonl
+      - name: Require a direct SHA-bound payload
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          records = [json.loads(line) for line in Path('/tmp/acquisition_manifest.jsonl').read_text().splitlines() if line.strip()]
+          if len(records) != 1:
+              raise SystemExit(f'expected one record, got {len(records)}')
+          record = records[0]
+          if record['status'] != 'PAYLOAD_CAPTURED':
+              raise SystemExit(f"first-party smoke acquisition did not capture payload: {record['status']} {record['error_detail']}")
+          if not record['first_party_contacted'] or not record['sha256']:
+              raise SystemExit('captured record lacks direct contact or SHA-256 provenance')
+          if record['semantic_extraction_performed']:
+              raise SystemExit('acquisition must not perform semantic extraction')
+          print({'source_id': record['source_id'], 'status': record['status'], 'sha256': record['sha256']})
+          PY
+      - name: Upload bounded manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: acquisition-tooling-smoke
+          path: /tmp/acquisition_manifest.jsonl
+          retention-days: 7

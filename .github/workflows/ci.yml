@@ -19,6 +19,10 @@ jobs:
           python-version: '3.12'
       - name: Compile deterministic Python scripts
         run: python -m compileall -q scripts
+      - name: Run acquisition tooling smoke test
+        run: python scripts/test_acquisition_tooling.py
+      - name: Validate acquisition manifest
+        run: python scripts/check_acquisition_manifest.py
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
