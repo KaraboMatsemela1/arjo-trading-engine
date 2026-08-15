@@ -2,6 +2,12 @@ name: New Source Detection
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/discover_youtube_sources.py'
+      - 'research/source_roots.json'
+      - '.github/workflows/new-source-detection.yml'
   schedule:
     - cron: '41 5 * * 0'
 
