@@ -1,0 +1,96 @@
+name: Evidence Extraction
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/concept_inventory*.jsonl'
+      - 'research/concept_terms*.json'
+      - 'scripts/build_evidence_registry.py'
+      - 'scripts/check_evidence_registry.py'
+      - '.github/workflows/evidence-extraction.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build atomic evidence from direct first-party sources
+        run: >-
+          python scripts/build_evidence_registry.py
+          --output /tmp/evidence_registry.jsonl
+          --coverage /tmp/evidence_coverage.json
+      - name: Validate evidence coverage and provenance
+        run: >-
+          python scripts/check_evidence_registry.py
+          --evidence /tmp/evidence_registry.jsonl
+          --coverage /tmp/evidence_coverage.json
+      - name: Stage durable evidence state
+        run: |
+          cp /tmp/evidence_registry.jsonl research/evidence_registry.jsonl
+          cp /tmp/evidence_coverage.json research/evidence_coverage.json
+      - name: Validate repository provenance with generated evidence
+        run: python scripts/check_provenance.py
+      - name: Upload bounded evidence state
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-registry-state
+          path: |
+            research/evidence_registry.jsonl
+            research/evidence_coverage.json
+          retention-days: 30
+      - name: Publish bounded evidence branch
+        id: branch
+        shell: bash
+        run: |
+          if git diff --quiet -- research/evidence_registry.jsonl research/evidence_coverage.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="automation/evidence-registry-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add research/evidence_registry.jsonl research/evidence_coverage.json
+          git commit -m "research: record atomic first-party evidence registry"
+          git push origin "$branch"
+      - name: Create bounded branch-service issue
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            exit 0
+          fi
+          body="<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-EVIDENCE-${GITHUB_RUN_ID}
+          TYPE: EVIDENCE_EXTRACTION_SERVICE
+          DEPENDENCIES: [7]
+          ENTRY_GATE: CONCEPT_INVENTORY_READY
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Atomic first-party evidence extraction completed and passed deterministic coverage/provenance validation.
+
+          Service generated branch: ${BRANCH}
+
+          Open a PR to main, run normal CI/provenance checks, and merge only if green. No predicate synthesis or performance analysis was performed."
+          gh issue create --title "Service completed atomic evidence branch" --body "$body"
