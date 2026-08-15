@@ -147,9 +147,7 @@ jobs:
           echo "PR creation is not authorized for GITHUB_TOKEN; creating a bounded service issue instead."
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -z "$existing" ]; then
-            gh issue create \
-              --title "Service generated source-discovery branch" \
-              --body "<!-- project-meta
+            body="<!-- project-meta
           ISSUE_ID: ARJO-AUTO-PR-${GITHUB_RUN_ID}
           TYPE: SOURCE_DISCOVERY_SERVICE
           DEPENDENCIES: []
@@ -159,7 +157,10 @@ jobs:
           STATE: READY
           -->
 
-          GitHub Actions generated and pushed bounded discovery branch \\`${BRANCH}\`, but repository policy does not permit GITHUB_TOKEN to create pull requests.
+          GitHub Actions generated and pushed bounded discovery branch ${BRANCH}, but repository policy does not permit GITHUB_TOKEN to create pull requests.
 
-          Create a PR from \\`${BRANCH}\` to \\`main\`, run deterministic checks, and merge only if green. No semantic interpretation is permitted in this service task."
+          Create a PR from ${BRANCH} to main, run deterministic checks, and merge only if green. No semantic interpretation is permitted in this service task."
+            gh issue create \
+              --title "Service generated source-discovery branch" \
+              --body "$body"
           fi
