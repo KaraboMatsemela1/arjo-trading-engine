@@ -29,7 +29,7 @@ def base_record(source: dict[str, str], transport: str) -> dict[str, Any]:
         "status": "SOURCE_CONTACTED_NO_PAYLOAD",
         "transport": transport,
         "first_party_contacted": True,
-        "closure_credit": "DIRECT_FIRST_PARTY_PAYLOAD_ONLY",
+        "closure_credit": "ZERO_NO_PAYLOAD",
         "semantic_extraction_performed": False,
         "artifacts": [],
         "sha256": "",
@@ -66,6 +66,8 @@ def add_artifacts(record: dict[str, Any], artifacts: list[dict[str, Any]]) -> di
     record["artifacts"] = artifacts
     record["sha256"] = artifacts[0]["sha256"]
     record["status"] = "PAYLOAD_CAPTURED"
+    if record.get("first_party_contacted"):
+        record["closure_credit"] = "DIRECT_FIRST_PARTY_PAYLOAD"
     return record
 
 
