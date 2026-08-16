@@ -1,0 +1,97 @@
+name: Independent SPEC Audit State
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/evidence_registry.jsonl'
+      - 'research/predicate_matrix.csv'
+      - 'research/two_engineer_preflight.json'
+      - 'research/predicate_recovery_tasks.json'
+      - 'scripts/run_independent_spec_audit.py'
+      - 'scripts/check_independent_spec_audit.py'
+      - '.github/workflows/independent-spec-audit.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run independent evidence-only SPEC audit
+        run: >-
+          python scripts/run_independent_spec_audit.py
+          --output /tmp/SPEC_AUDIT.json
+      - name: Validate independent audit artifact
+        run: >-
+          python scripts/check_independent_spec_audit.py
+          --audit /tmp/SPEC_AUDIT.json
+          --matrix research/predicate_matrix.csv
+      - name: Stage durable audit artifact
+        run: cp /tmp/SPEC_AUDIT.json docs/spec/SPEC_AUDIT.json
+      - name: Validate repository provenance and SPEC boundary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python scripts/check_provenance.py
+          python scripts/project_state.py --output /tmp/project_state.json --status-output /tmp/STATUS.md
+          python scripts/check_spec_gate.py --state /tmp/project_state.json
+      - name: Upload independent audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: independent-spec-audit-state
+          path: docs/spec/SPEC_AUDIT.json
+          retention-days: 30
+      - name: Publish bounded audit-state branch
+        id: branch
+        shell: bash
+        run: |
+          if git diff --quiet -- docs/spec/SPEC_AUDIT.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="automation/independent-spec-audit-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add docs/spec/SPEC_AUDIT.json
+          git commit -m "research: record independent SPEC readiness audit"
+          git push origin "$branch"
+      - name: Create bounded branch-service issue
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            exit 0
+          fi
+          body="<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-SPEC-AUDIT-${GITHUB_RUN_ID}
+          TYPE: SPEC_AUDIT_SERVICE
+          DEPENDENCIES: [9]
+          ENTRY_GATE: PREDICATE_MATRIX_READY
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Independent evidence-only SPEC readiness audit completed and passed artifact validation.
+
+          Service generated branch: ${BRANCH}
+
+          Open a PR to main and merge only if normal CI/provenance/SPEC-boundary checks stay green. A blocked audit result is a valid audit outcome and must not be converted into implementation authorization."
+          gh issue create --title "Service completed independent SPEC audit state branch" --body "$body"
