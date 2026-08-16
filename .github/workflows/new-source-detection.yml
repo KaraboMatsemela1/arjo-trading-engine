@@ -208,7 +208,7 @@ jobs:
       - name: Open reviewed PR or create service fallback
         if: steps.stage.outputs.should_publish == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
           NEW_COUNT: ${{ steps.stage.outputs.new_count }}
           ACCESS_CHANGED: ${{ steps.stage.outputs.access_changed }}
@@ -227,7 +227,7 @@ jobs:
             exit 0
           fi
 
-          echo "PR creation is not authorized for GITHUB_TOKEN; creating a bounded service issue instead."
+          echo "Automation PR credential could not create the PR; creating a bounded service issue instead."
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -z "$existing" ]; then
             body_file="$(mktemp)"
