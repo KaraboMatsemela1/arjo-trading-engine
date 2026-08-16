@@ -5,6 +5,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'research/source_registry.csv'
       - 'scripts/acquire_corpus.py'
       - 'scripts/acquisition_*.py'
       - 'scripts/merge_acquisition_manifests.py'
@@ -14,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
 
 jobs:
@@ -111,18 +113,33 @@ jobs:
           git add research/acquisition_manifest.jsonl research/corpus_coverage.json
           git commit -m "research: record terminal corpus acquisition state"
           git push origin "$branch"
-      - name: Create bounded branch-service issue
+      - name: Open reviewed PR or create service fallback
         if: steps.branch.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
         run: |
+          set +e
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Automated corpus acquisition: publish terminal state" \
+            --body "Bounded terminal corpus-acquisition state generated from the canonical first-party source registry. No strategy semantics were synthesized. Merge only after normal CI, provenance, dependency, and gate checks pass."
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            exit 0
+          fi
+
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -n "$existing" ]; then
             exit 0
           fi
-          body="<!-- project-meta
+
+          body_file="$(mktemp)"
+          cat > "$body_file" <<EOF
+          <!-- project-meta
           ISSUE_ID: ARJO-AUTO-CORPUS-${GITHUB_RUN_ID}
           TYPE: CORPUS_ACQUISITION_SERVICE
           DEPENDENCIES: [5]
@@ -136,5 +153,6 @@ jobs:
 
           Service generated branch: ${BRANCH}
 
-          Open a PR to main, run deterministic CI/provenance checks, and merge only if green. No strategy semantics were synthesized."
-          gh issue create --title "Service completed corpus-acquisition branch" --body "$body"
+          PR creation through GITHUB_TOKEN failed. Open a reviewed PR to main, run deterministic CI/provenance checks, and merge only if green. No strategy semantics were synthesized.
+          EOF
+          gh issue create --title "Service completed corpus-acquisition branch" --body-file "$body_file"
