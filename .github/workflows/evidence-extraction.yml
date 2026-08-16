@@ -5,6 +5,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'research/source_registry.csv'
+      - 'research/acquisition_manifest.jsonl'
       - 'research/concept_inventory*.jsonl'
       - 'research/concept_terms*.json'
       - 'research/evidence_registry*.jsonl'
@@ -16,6 +18,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
 
 jobs:
@@ -74,18 +77,33 @@ jobs:
           git add research/evidence_registry.jsonl research/evidence_coverage.json
           git commit -m "research: record atomic first-party evidence registry"
           git push origin "$branch"
-      - name: Create bounded branch-service issue
+      - name: Open reviewed PR or create service fallback
         if: steps.branch.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
         run: |
+          set +e
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Automated evidence extraction: publish atomic first-party state" \
+            --body "Atomic first-party base evidence extraction completed, additive recovery shards were preserved, and evidence-union coverage/provenance checks passed. No predicate synthesis or performance analysis was performed. Merge only after normal CI, provenance, dependency, and gate checks pass."
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            exit 0
+          fi
+
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -n "$existing" ]; then
             exit 0
           fi
-          body="<!-- project-meta
+
+          body_file="$(mktemp)"
+          cat > "$body_file" <<EOF
+          <!-- project-meta
           ISSUE_ID: ARJO-AUTO-EVIDENCE-${GITHUB_RUN_ID}
           TYPE: EVIDENCE_EXTRACTION_SERVICE
           DEPENDENCIES: [6]
@@ -99,5 +117,6 @@ jobs:
 
           Service generated branch: ${BRANCH}
 
-          Open a PR to main, run normal CI/provenance checks, and merge only if green. No predicate synthesis or performance analysis was performed."
-          gh issue create --title "Service completed atomic evidence branch" --body "$body"
+          PR creation through GITHUB_TOKEN failed. Open a reviewed PR to main, run normal CI/provenance checks, and merge only if green. No predicate synthesis or performance analysis was performed.
+          EOF
+          gh issue create --title "Service completed atomic evidence branch" --body-file "$body_file"
