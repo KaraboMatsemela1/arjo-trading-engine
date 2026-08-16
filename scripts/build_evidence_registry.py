@@ -21,15 +21,12 @@ from collections import defaultdict
 from pathlib import Path
 
 from discover_telegram_sources import ARCHIVE_URL, MESSAGE_RE, fetch, next_before
+from evidence_antibias import contains_pre_spec_outcome
 
 TEXT_RE = re.compile(r'<div class="tgme_widget_message_text[^\"]*"[^>]*>(.*?)</div>', re.IGNORECASE | re.DOTALL)
 TAG_RE = re.compile(r"<[^>]+>")
 BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
 URL_RE = re.compile(r"https?://\S+")
-FORBIDDEN_PRE_SPEC = re.compile(
-    r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)",
-    re.IGNORECASE,
-)
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -68,7 +65,9 @@ def clean_text(body: str) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
-def fetch_telegram_messages(eligible: set[str], max_pages: int, sleep_seconds: float) -> tuple[dict[str, str], list[dict[str, str]]]:
+def fetch_telegram_messages(
+    eligible: set[str], max_pages: int, sleep_seconds: float
+) -> tuple[dict[str, str], list[dict[str, str]]]:
     messages: dict[str, str] = {}
     failures: list[dict[str, str]] = []
     current_before: int | None = None
@@ -104,7 +103,8 @@ def fetch_telegram_messages(eligible: set[str], max_pages: int, sleep_seconds: f
 
 
 def minimal_quote(text: str, aliases: list[str], max_words: int = 18) -> tuple[str, str]:
-    """Return the first alias-centered quote window that contains no pre-SPEC outcome metric."""
+    """Return the first alias-centered quote window with no pre-SPEC outcome data."""
+
     aliases = sorted({alias.strip() for alias in aliases if alias.strip()}, key=len, reverse=True)
     for alias in aliases:
         pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", re.IGNORECASE)
@@ -116,7 +116,7 @@ def minimal_quote(text: str, aliases: list[str], max_words: int = 18) -> tuple[s
             right_budget = max(0, max_words - len(left) - len(hit))
             right = suffix[:right_budget]
             quote = " ".join([*left, *hit, *right]).strip()[:180]
-            if FORBIDDEN_PRE_SPEC.search(quote):
+            if contains_pre_spec_outcome(quote):
                 continue
             return quote, alias
     return "", ""
@@ -150,13 +150,17 @@ def build_records(
                     "SOURCE_ID": source_id,
                     "TIMESTAMP": source_dates.get(source_id, ""),
                     "MINIMAL_QUOTE": quote,
-                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH",
+                    "FRAME_LOCATOR": (
+                        f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT"
+                        if quote
+                        else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH"
+                    ),
                     "SUPPORTED_CONCEPT": concept_id,
                     "SUPPORTED_FIELD": "CONCEPT_MENTION_OR_CONTEXT",
                     "WHAT_IT_PROVES": (
                         f"Direct first-party source explicitly uses '{matched_alias}' in context for {concept_id}."
-                        if quote else
-                        f"The provenance-bound source is cited for {concept_id}, but this extractor cannot recover a pre-SPEC-safe matching text window."
+                        if quote
+                        else f"The provenance-bound source is cited for {concept_id}, but this extractor cannot recover a pre-SPEC-safe matching text window."
                     ),
                     "WHAT_IT_DOES_NOT_PROVE": "It does not by itself establish a complete deterministic trading predicate, parameter set, invalidation, expiry, or performance claim.",
                     "CONFIDENCE": confidence,
@@ -174,7 +178,11 @@ def build_records(
                     "SOURCE_ID": source_id,
                     "TIMESTAMP": source_dates.get(source_id, ""),
                     "MINIMAL_QUOTE": quote,
-                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH",
+                    "FRAME_LOCATOR": (
+                        f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT"
+                        if quote
+                        else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH"
+                    ),
                     "SUPPORTED_CONCEPT": concept_id,
                     "SUPPORTED_FIELD": "DETERMINISTIC_CONSTRUCTION",
                     "WHAT_IT_PROVES": "The cited first-party material establishes concept existence/context only to the stated inventory level.",
@@ -207,7 +215,8 @@ def main() -> int:
 
     cited_sources = {str(source_id) for concept in inventory for source_id in concept.get("SOURCE_IDS", [])}
     eligible = {
-        source_id for source_id in cited_sources
+        source_id
+        for source_id in cited_sources
         if source_id.startswith("TG_ARJOIOTRADING_")
         and acquisition.get(source_id, {}).get("status") == "PAYLOAD_CAPTURED"
         and acquisition.get(source_id, {}).get("first_party_contacted") is True
@@ -224,16 +233,28 @@ def main() -> int:
     records = build_records(inventory, terms, source_dates, messages)
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text("\n".join(json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) for row in records) + "\n", encoding="utf-8")
+    output.write_text(
+        "\n".join(
+            json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":")) for row in records
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
     concept_ids = {str(row["CONCEPT_ID"]) for row in inventory}
     covered = {str(row["SUPPORTED_CONCEPT"]) for row in records}
     direct_mentions = defaultdict(int)
     insufficient_construction = set()
     for row in records:
-        if row["SUPPORTED_FIELD"] == "CONCEPT_MENTION_OR_CONTEXT" and row["CONFIDENCE"] != "INSUFFICIENT":
+        if (
+            row["SUPPORTED_FIELD"] == "CONCEPT_MENTION_OR_CONTEXT"
+            and row["CONFIDENCE"] != "INSUFFICIENT"
+        ):
             direct_mentions[row["SUPPORTED_CONCEPT"]] += 1
-        if row["SUPPORTED_FIELD"] == "DETERMINISTIC_CONSTRUCTION" and row["CONFIDENCE"] == "INSUFFICIENT":
+        if (
+            row["SUPPORTED_FIELD"] == "DETERMINISTIC_CONSTRUCTION"
+            and row["CONFIDENCE"] == "INSUFFICIENT"
+        ):
             insufficient_construction.add(row["SUPPORTED_CONCEPT"])
 
     coverage = {
@@ -250,7 +271,9 @@ def main() -> int:
         "missing_concepts": sorted(concept_ids - covered),
         "semantic_synthesis_performed": False,
     }
-    Path(args.coverage).write_text(json.dumps(coverage, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    Path(args.coverage).write_text(
+        json.dumps(coverage, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     print(json.dumps(coverage, sort_keys=True))
     return 4 if failures else 0
 
