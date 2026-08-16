@@ -1,0 +1,69 @@
+name: Issue 91 Recovery
+
+on:
+  push:
+    branches: [issue-91-equilibrium-stop-run-recovery]
+    paths:
+      - research/recovery/issue_91_targets.csv
+      - scripts/build_issue91_telegram_recovery.py
+      - scripts/test_issue91_recovery.py
+      - .github/workflows/issue-91-recovery.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and test
+        run: |
+          python -m compileall -q scripts
+          python scripts/test_issue91_recovery.py
+      - name: Recover canonical Telegram post 16
+        run: |
+          python scripts/build_issue91_telegram_recovery.py \
+            --acquisition research/acquisition_manifest.jsonl \
+            --output /tmp/issue91_telegram_recovery.json \
+            --archive-cache-root /tmp/issue91-archive-cache \
+            --max-pages 100 \
+            --max-words 20 \
+            --max-excerpts 20
+      - name: Validate bounded recovery output
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/issue91_telegram_recovery.json').read_text())
+          assert report['bounded_source_ids'] == ['TG_ARJOIOTRADING_16']
+          assert report['recovered_source_ids'] == ['TG_ARJOIOTRADING_16']
+          assert report['missing_source_ids'] == []
+          assert report['failures'] == []
+          assert report['performance_data_consulted'] is False
+          assert report['semantic_synthesis_performed'] is False
+          assert report['shared_antibias_guard'] is True
+          message = report['messages'][0]
+          assert 'EQUILIBRIUM' in message['matched_cues']
+          assert 'STOP_RUN' in message['matched_cues']
+          for item in message['excerpts']:
+              assert len(item['excerpt'].split()) <= 20
+          print({
+              'pages_fetched': report['pages_fetched'],
+              'message_word_count': message['message_word_count'],
+              'matched_cues': message['matched_cues'],
+              'excerpts': message['excerpts'],
+          })
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: issue-91-equilibrium-recovery
+          path: |
+            /tmp/issue91_telegram_recovery.json
+            /tmp/issue91-archive-cache
+          retention-days: 14
