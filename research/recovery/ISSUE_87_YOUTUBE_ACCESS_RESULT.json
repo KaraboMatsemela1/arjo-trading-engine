@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "issue": 87,
+  "recovery_type": "PUBLIC_FIRST_PARTY_YOUTUBE_TRANSPORT",
+  "probe_policy": "PUBLIC_UNAUTHENTICATED_OFFICIAL_ROUTES_ONLY",
+  "authoritative_run_id": 31960274492,
+  "artifact_id": 9267044313,
+  "artifact_digest": "sha256:e37569a0764cbba04c411bb22d0ea7de8f15827ad8cd02ed7afa450774f3e5e2",
+  "canary_count": 4,
+  "canary_source_ids": [
+    "YT_VIDEO_xTdSe_vJQ5s",
+    "YT_VIDEO_mlXBuNHO1c8",
+    "YT_VIDEO_sPGSHQNDCPU",
+    "YT_VIDEO_VwcuxpIBcsI"
+  ],
+  "route_totals": {
+    "watch_environment_access_failure": 4,
+    "embed_public_payload_captured": 4,
+    "oembed_metadata_public_payload_captured": 4
+  },
+  "caption_tracks_exposed": 0,
+  "direct_semantic_payloads_captured": 0,
+  "semantic_credit_awarded": false,
+  "per_canary_terminal_pattern": {
+    "watch": {
+      "state": "ENVIRONMENT_ACCESS_FAILURE",
+      "http_status": 200,
+      "challenge_marker": "sign in to confirm you’re not a bot"
+    },
+    "embed": {
+      "state": "PUBLIC_PAYLOAD_CAPTURED",
+      "http_status": 200,
+      "semantic_credit": "ZERO_TRANSPORT_PROBE",
+      "caption_tracks_exposed": 0
+    },
+    "oembed_metadata": {
+      "state": "PUBLIC_PAYLOAD_CAPTURED",
+      "http_status": 200,
+      "semantic_credit": "ZERO_METADATA_ONLY"
+    }
+  },
+  "safety": {
+    "cookies_used": false,
+    "authentication_used": false,
+    "captcha_bypass_used": false,
+    "stealth_or_proxy_rotation_used": false,
+    "private_api_used": false,
+    "third_party_transcript_used": false
+  },
+  "disposition": "TERMINAL_ALLOWED_ROUTES_NO_SEMANTIC_PAYLOAD",
+  "bounded_replay_authorized": false,
+  "rationale": [
+    "All four standard watch pages returned HTTP 200 but contained YouTube's bot-confirmation challenge and are classified as environment access failures.",
+    "All four standard embed pages were publicly retrievable, but none exposed an official caption track in the public response.",
+    "All four official oEmbed endpoints were publicly retrievable but are metadata-only and receive zero semantic credit.",
+    "No direct official transcript/caption payload was captured, so there is no basis for bounded semantic replay across completed predicate-recovery source sets."
+  ],
+  "spec_ready": false
+}
