@@ -9,8 +9,13 @@ import re
 import tempfile
 from pathlib import Path
 
-from build_issue75_recovery_windows import bounded_window
-from build_issue75_telegram_recovery import TARGET_SOURCE_ID, persist_page, target_is_eligible
+from build_issue75_recovery_windows import bounded_window, pre_outcome_scope as payload_scope
+from build_issue75_telegram_recovery import (
+    TARGET_SOURCE_ID,
+    persist_page,
+    pre_outcome_scope as telegram_scope,
+    target_is_eligible,
+)
 from evidence_antibias import contains_pre_spec_outcome
 
 
@@ -21,9 +26,12 @@ def main() -> int:
     assert contains_pre_spec_outcome(bounded_window(contaminated, match, 20))
     assert contains_pre_spec_outcome("29 Order Blocks failed after disrespecting MT.")
     assert contains_pre_spec_outcome("Out of 71 OBs, 42 held in this sample.")
-    assert contains_pre_spec_outcome("Chance of holding when MT is respected is higher.")
-    assert not contains_pre_spec_outcome("I gathered the data on ES for Daily Order Blocks")
-    assert not contains_pre_spec_outcome("OBs that hold will respect MT, which is a useful indication.")
+    assert contains_pre_spec_outcome("Chances of holding when MT is respected are higher.")
+    safe = "I gathered the data on ES for Daily Order Blocks"
+    full = safe + " Out of 71 OBs, 42 held and then MT statistics follow."
+    assert payload_scope(full, TARGET_SOURCE_ID) == safe
+    assert telegram_scope(full) == safe
+    assert not contains_pre_spec_outcome(safe)
 
     with tempfile.TemporaryDirectory() as tmp:
         manifest = Path(tmp) / "manifest.jsonl"
