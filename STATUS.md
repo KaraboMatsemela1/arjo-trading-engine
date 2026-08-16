@@ -1,38 +1,82 @@
 # Project Status
 
+_Generated mechanically by `scripts/project_state.py`._
+
 ## Current objective gate
 
-`GOVERNANCE_BOOTSTRAP`
+`SPEC_READY`
 
-## Gate state
+## Safety state
 
-| Gate | State | Evidence |
-|---|---|---|
-| Governance bootstrap | IN_PROGRESS | Core governance files being established |
-| Source universe discovered | BLOCKED | Requires Phase 1 discovery |
-| Corpus acquired | BLOCKED | Depends on source universe |
-| Concept inventory ready | BLOCKED | Depends on corpus acquisition |
-| Evidence registry ready | BLOCKED | Depends on acquired corpus |
-| Predicate matrix ready | BLOCKED | Depends on evidence registry |
-| Independent spec audit | BLOCKED | Depends on closed predicate |
-| SPEC_READY | FALSE | No predicate has passed independent audit |
+- `SPEC_READY`: `false`
+- `PAPER_EXECUTION_ENABLED`: `false`
+- `LIVE_EXECUTION_ENABLED`: `false`
+
+## Satisfied gates
+
+- `ACQUISITION_TOOLING_READY`
+- `ACTIONS_CI_AVAILABLE`
+- `CONCEPT_INVENTORY_READY`
+- `CORPUS_ACQUIRED`
+- `EVIDENCE_REGISTRY_READY`
+- `GOVERNANCE_BOOTSTRAP_COMPLETE`
+- `PREDICATE_MATRIX_READY`
+- `REPO_CREATED`
+- `SOURCE_UNIVERSE_DISCOVERED`
+
+## Issue queue
+
+| Issue | Type | State | Dependencies ready | Entry gate ready |
+|---|---|---|---|---|
+| #1 | MASTER | READY | True | True |
+| #2 | GOVERNANCE_AUTOMATION | COMPLETE | True | True |
+| #3 | SOURCE_DISCOVERY | COMPLETE | True | True |
+| #4 | ACQUISITION_TOOLING | COMPLETE | True | True |
+| #5 | CORPUS_ACQUISITION | COMPLETE | True | True |
+| #6 | CONCEPT_INVENTORY | COMPLETE | True | True |
+| #7 | EVIDENCE_EXTRACTION | COMPLETE | True | True |
+| #8 | PREDICATE_SYNTHESIS | COMPLETE | True | True |
+| #9 | SPEC_AUDIT | COMPLETE | True | True |
+| #13 | OWNER_AUTHORIZATION | BLOCKED | True | True |
+| #15 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
+| #18 | OWNER_INTERVENTION | COMPLETE | True | True |
+| #19 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
+| #20 | SOURCE_DISCOVERY_SERVICE | COMPLETE | True | True |
+| #30 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
+| #31 | SOURCE_DISCOVERY_SERVICE | COMPLETE | True | True |
+| #32 | EVIDENCE_EXTRACTION_SERVICE | COMPLETE | True | True |
+| #35 | EVIDENCE_ANTIBIAS_RECOVERY | COMPLETE | True | True |
+| #37 | EVIDENCE_EXTRACTION_SERVICE | COMPLETE | True | True |
+| #41 | EVIDENCE_EXTRACTION_SERVICE | COMPLETE | True | True |
+| #43 | PREDICATE_SYNTHESIS_SERVICE | COMPLETE | True | True |
+| #48 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #49 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #50 | PREDICATE_OMISSION_DISPOSITION | COMPLETE | True | True |
+| #54 | SPEC_AUDIT_HARDENING | COMPLETE | True | True |
+| #61 | RECOVERY_EVIDENCE_ADMISSION | COMPLETE | True | True |
+| #63 | PREDICATE_SYNTHESIS_SERVICE | COMPLETE | True | True |
+| #64 | EVIDENCE_EXTRACTION_SERVICE | COMPLETE | True | True |
+| #66 | SPEC_AUDIT_SERVICE | COMPLETE | True | True |
+| #68 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #70 | EVIDENCE_REPRODUCIBILITY_HARDENING | COMPLETE | True | True |
+| #72 | EVIDENCE_EXTRACTION_SERVICE | COMPLETE | True | True |
+| #75 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #77 | DOCUMENTATION | COMPLETE | True | True |
+| #79 | PREDICATE_SYNTHESIS_SERVICE | COMPLETE | True | True |
+| #82 | PREDICATE_SYNTHESIS_SERVICE | COMPLETE | True | True |
+| #83 | SPEC_AUDIT_SERVICE | COMPLETE | True | True |
+| #85 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #87 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
+| #90 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #91 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #94 | PREDICATE_RECOVERY | COMPLETE | True | True |
+| #96 | PREDICATE_SYNTHESIS_SERVICE | COMPLETE | True | True |
+| #98 | SPEC_AUDIT_SERVICE | COMPLETE | True | True |
+| #101 | SOURCE_DISCOVERY | COMPLETE | True | True |
+| #103 | GOVERNANCE_HARDENING | CI_PENDING | True | True |
 
 ## Strategy implementation status
 
-**PROHIBITED.** No detector, backtester, candidate strategy, trade counter, optimizer, performance evaluator, or broker execution logic may be implemented while `SPEC_READY = false`.
+**PROHIBITED while `SPEC_READY = false`.**
 
-## Critical path
-
-`GOVERNANCE_BOOTSTRAP` → `SOURCE_UNIVERSE_DISCOVERED` → `CORPUS_ACQUIRED` → `CONCEPT_INVENTORY_READY` → `EVIDENCE_REGISTRY_READY` → `PREDICATE_MATRIX_READY` → `SPEC_AUDIT` → `SPEC_READY`
-
-## Current blockers
-
-None for governance bootstrap.
-
-## Owner input required
-
-None.
-
-## Reporting rule
-
-This file must reflect objective gate state only. Do not report arbitrary completion percentages.
+Progress is represented by objective gates only; arbitrary percentages are prohibited.

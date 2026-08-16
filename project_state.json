@@ -1,21 +1,988 @@
 {
-  "schema_version": 1,
-  "project": "arjo-trading-engine",
-  "current_gate": "GOVERNANCE_BOOTSTRAP",
-  "spec_ready": false,
-  "paper_execution_enabled": false,
-  "live_execution_enabled": false,
+  "blocked_reasons": [
+    "Issue #13 blocked: SECURITY AUTHORIZATION: allow GitHub Actions to create pull requests"
+  ],
   "critical_path": [
-    "GOVERNANCE_BOOTSTRAP",
+    "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
     "CORPUS_ACQUIRED",
     "CONCEPT_INVENTORY_READY",
     "EVIDENCE_REGISTRY_READY",
     "PREDICATE_MATRIX_READY",
-    "SPEC_AUDIT",
     "SPEC_READY"
   ],
-  "issues": [],
-  "blocked_reasons": [],
-  "owner_input_required": false
+  "current_gate": "SPEC_READY",
+  "issues": [
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-MASTER",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "READY",
+        "TYPE": "MASTER"
+      },
+      "metadata_valid": true,
+      "number": 1,
+      "title": "MASTER: autonomous project lifecycle",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/1"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-002",
+        "OUTPUT_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "OWNER": "bootstrap-agent",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_AUTOMATION"
+      },
+      "metadata_valid": true,
+      "number": 2,
+      "title": "Phase 0: deterministic project-state and gate automation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/2"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-003",
+        "OUTPUT_GATE": "SOURCE_UNIVERSE_DISCOVERED",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_DISCOVERY"
+      },
+      "metadata_valid": true,
+      "number": 3,
+      "title": "Phase 1: enumerate Arjo first-party source universe",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/3"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          3
+        ],
+        "ENTRY_GATE": "SOURCE_UNIVERSE_DISCOVERED",
+        "ISSUE_ID": "ARJO-004",
+        "OUTPUT_GATE": "ACQUISITION_TOOLING_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "ACQUISITION_TOOLING"
+      },
+      "metadata_valid": true,
+      "number": 4,
+      "title": "Phase 2a: build replayable corpus acquisition tooling",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/4"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          3,
+          4
+        ],
+        "ENTRY_GATE": "ACQUISITION_TOOLING_READY",
+        "ISSUE_ID": "ARJO-005",
+        "OUTPUT_GATE": "CORPUS_ACQUIRED",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "CORPUS_ACQUISITION"
+      },
+      "metadata_valid": true,
+      "number": 5,
+      "title": "Phase 2b: acquire and provenance-bind the public corpus",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/5"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          5
+        ],
+        "ENTRY_GATE": "CORPUS_ACQUIRED",
+        "ISSUE_ID": "ARJO-006",
+        "OUTPUT_GATE": "CONCEPT_INVENTORY_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "CONCEPT_INVENTORY"
+      },
+      "metadata_valid": true,
+      "number": 6,
+      "title": "Phase 3: derive first-party concept inventory",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/6"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-007",
+        "OUTPUT_GATE": "EVIDENCE_REGISTRY_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION"
+      },
+      "metadata_valid": true,
+      "number": 7,
+      "title": "Phase 4: extract atomic field-level evidence registry",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/7"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-008",
+        "OUTPUT_GATE": "PREDICATE_MATRIX_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS"
+      },
+      "metadata_valid": true,
+      "number": 8,
+      "title": "Phase 5: synthesize predicates and rank minimal closure sets",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/8"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-009",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SPEC_AUDIT"
+      },
+      "metadata_valid": true,
+      "number": 9,
+      "title": "SPEC_READY: independent evidence-only reconstruction audit",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/9"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          2
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-SEC-001",
+        "OUTPUT_GATE": "ACTIONS_PR_CREATION_ENABLED",
+        "OWNER": "UNCLAIMED",
+        "STATE": "BLOCKED",
+        "TYPE": "OWNER_AUTHORIZATION"
+      },
+      "metadata_valid": true,
+      "number": 13,
+      "title": "SECURITY AUTHORIZATION: allow GitHub Actions to create pull requests",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/13"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-AUTO-DISCOVERY-31877349992",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_ACCESS_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 15,
+      "title": "Source discovery access degradation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/15"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          2
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-OPS-001",
+        "OUTPUT_GATE": "ACTIONS_CI_AVAILABLE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "OWNER_INTERVENTION"
+      },
+      "metadata_valid": true,
+      "number": 18,
+      "title": "OWNER ACTION: restore GitHub Actions billing capacity",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/18"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-AUTO-DISCOVERY-31880577779",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_ACCESS_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 19,
+      "title": "Source discovery access degradation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/19"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-AUTO-PR-31880577779",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_DISCOVERY_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 20,
+      "title": "Service generated source-discovery branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/20"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-AUTO-DISCOVERY-31930294390",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_ACCESS_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 30,
+      "title": "Source discovery access degradation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/30"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-AUTO-PR-31930294390",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_DISCOVERY_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 31,
+      "title": "Service generated source-discovery branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/31"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-AUTO-EVIDENCE-31935316781",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 32,
+      "title": "Service completed atomic evidence branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/32"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-035",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_ANTIBIAS_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 35,
+      "title": "Phase 4 recovery: block explicit pre-SPEC outcome language in evidence quotes",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/35"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-AUTO-EVIDENCE-31935797024",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 37,
+      "title": "Service completed atomic evidence branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/37"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-AUTO-EVIDENCE-31936005972",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 41,
+      "title": "Service completed atomic evidence branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/41"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-AUTO-PREDICATE-31936191239",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 43,
+      "title": "Service completed predicate-synthesis state branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/43"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 48,
+      "title": "Recovery: close first-party predicate gaps for AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/48"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-002",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 49,
+      "title": "Recovery: close first-party predicate gaps for PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/49"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-P5-OMISSIONS-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_OMISSION_DISPOSITION"
+      },
+      "metadata_valid": true,
+      "number": 50,
+      "title": "Phase 5: disposition candidate-selection omission cues",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/50"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-SPEC-AUDIT-HARDEN-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SPEC_AUDIT_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 54,
+      "title": "SPEC audit hardening: separate Phase-5 preflight from independent two-engineer result",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/54"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-001-ADMIT",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "RECOVERY_EVIDENCE_ADMISSION"
+      },
+      "metadata_valid": true,
+      "number": 61,
+      "title": "Phase 5 recovery admission: persist Issue #48 evidence and refresh AoO scope fields",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/61"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-AUTO-PREDICATE-31938057236",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 63,
+      "title": "Service completed predicate-synthesis state branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/63"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-AUTO-EVIDENCE-31938057234",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 64,
+      "title": "Service completed atomic evidence branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/64"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-31938163922",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SPEC_AUDIT_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 66,
+      "title": "Service current post-AoO V2 SPEC audit state",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/66"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          2
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-GOV-SPEC-ISSUE-PUBLISH-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 68,
+      "title": "Governance: harden SPEC audit service-issue publication quoting",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/68"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-EVIDENCE-DETERMINISM-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_REPRODUCIBILITY_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 70,
+      "title": "Phase 4 reproducibility: deterministically order equal-length evidence aliases",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/70"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          6
+        ],
+        "ENTRY_GATE": "CONCEPT_INVENTORY_READY",
+        "ISSUE_ID": "ARJO-AUTO-EVIDENCE-31938879649",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "EVIDENCE_EXTRACTION_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 72,
+      "title": "Service completed atomic evidence branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/72"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-003",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 75,
+      "title": "Recovery: close first-party predicate gaps for ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/75"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "REPO_CREATED",
+        "ISSUE_ID": "ARJO-DOC-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "DOCUMENTATION"
+      },
+      "metadata_valid": true,
+      "number": 77,
+      "title": "Docs: add live project progress dashboard to README",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/77"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-AUTO-PREDICATE-31958891890",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 79,
+      "title": "Service completed predicate-synthesis state branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/79"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-AUTO-PREDICATE-31959099498",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 82,
+      "title": "Service completed predicate-synthesis state branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/82"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-31959184581",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SPEC_AUDIT_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 83,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/83"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-004",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 85,
+      "title": "Recovery: close first-party predicate gaps for ORDER_FLOW_TARGET_BIAS",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/85"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          4,
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-SRC-REC-005",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_ACCESS_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 87,
+      "title": "Recovery: restore public first-party YouTube payload access for predicate-critical sources",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/87"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-006",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 90,
+      "title": "Recovery: close first-party predicate gaps for EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/90"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          87
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-006-DUPLICATE",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 91,
+      "title": "Recovery: close first-party predicate gaps for EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/91"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          87
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-007",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 94,
+      "title": "Recovery: close first-party predicate gaps for MMBM_LRLR_SHORT_CONTEXT",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/94"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          7
+        ],
+        "ENTRY_GATE": "EVIDENCE_REGISTRY_READY",
+        "ISSUE_ID": "ARJO-AUTO-PREDICATE-31961630119",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_SYNTHESIS_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 96,
+      "title": "Service completed predicate-synthesis state branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/96"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-31961852165",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SPEC_AUDIT_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 98,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/98"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          87,
+          94
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-EVIDENCE-CEILING-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "SOURCE_DISCOVERY"
+      },
+      "metadata_valid": true,
+      "number": 101,
+      "title": "Research ceiling: discover genuinely new first-party Arjo evidence",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/101"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          2
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-GOV-STATE-PERSIST-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "ChatGPT",
+        "STATE": "CI_PENDING",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 103,
+      "title": "Governance: persist generated Project State snapshots",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/103"
+    }
+  ],
+  "live_execution_enabled": false,
+  "owner_input_required": false,
+  "paper_execution_enabled": false,
+  "project": "KaraboMatsemela1/arjo-trading-engine",
+  "satisfied_gates": [
+    "ACQUISITION_TOOLING_READY",
+    "ACTIONS_CI_AVAILABLE",
+    "CONCEPT_INVENTORY_READY",
+    "CORPUS_ACQUIRED",
+    "EVIDENCE_REGISTRY_READY",
+    "GOVERNANCE_BOOTSTRAP_COMPLETE",
+    "PREDICATE_MATRIX_READY",
+    "REPO_CREATED",
+    "SOURCE_UNIVERSE_DISCOVERED"
+  ],
+  "schema_version": 1,
+  "spec_ready": false
 }
