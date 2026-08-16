@@ -81,7 +81,7 @@ jobs:
           body="<!-- project-meta
           ISSUE_ID: ARJO-AUTO-EVIDENCE-${GITHUB_RUN_ID}
           TYPE: EVIDENCE_EXTRACTION_SERVICE
-          DEPENDENCIES: [7]
+          DEPENDENCIES: [6]
           ENTRY_GATE: CONCEPT_INVENTORY_READY
           OUTPUT_GATE: NONE
           OWNER: UNCLAIMED
