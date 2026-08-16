@@ -1,5 +1,7 @@
 {
-  "blocked_reasons": [],
+  "blocked_reasons": [
+    "Issue #113 missing project metadata"
+  ],
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -986,6 +988,36 @@
       "number": 106,
       "title": "Evidence ceiling: make new-source monitoring delta-driven and daily",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/106"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          13,
+          106
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTONOMY-HANDOFF-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "ChatGPT",
+        "STATE": "CLAIMED",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 112,
+      "title": "Autonomy: chain new first-party evidence into reviewed research handoffs",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/112"
+    },
+    {
+      "github_state": "CLOSED",
+      "meta": null,
+      "metadata_valid": false,
+      "number": 113,
+      "title": "dummy",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/113"
     }
   ],
   "live_execution_enabled": false,
