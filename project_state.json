@@ -1027,6 +1027,29 @@
       "number": 113,
       "title": "CLOSED: accidental connector placeholder",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/113"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          13,
+          103,
+          112
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-AUTONOMY-PROJECT-STATE-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "ChatGPT",
+        "STATE": "IMPLEMENTING",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 116,
+      "title": "Autonomy: coalesce Project State into a single reviewed Actions PR",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/116"
     }
   ],
   "live_execution_enabled": false,
