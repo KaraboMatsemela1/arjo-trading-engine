@@ -1,0 +1,90 @@
+name: SPEC Readiness Audit State
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/evidence_registry.jsonl'
+      - 'research/predicate_matrix.csv'
+      - 'research/predicate_recovery_tasks.json'
+      - 'research/two_engineer_preflight.json'
+      - 'scripts/run_independent_spec_audit.py'
+      - 'scripts/check_independent_spec_audit.py'
+      - '.github/workflows/spec-readiness-audit.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run independent evidence-only SPEC readiness audit
+        run: >-
+          python scripts/run_independent_spec_audit.py
+          --output /tmp/SPEC_AUDIT.json
+      - name: Validate independent audit invariants
+        run: >-
+          python scripts/check_independent_spec_audit.py
+          --audit /tmp/SPEC_AUDIT.json
+      - name: Stage durable audit artifact
+        run: cp /tmp/SPEC_AUDIT.json docs/spec/SPEC_AUDIT.json
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spec-readiness-audit
+          path: docs/spec/SPEC_AUDIT.json
+          retention-days: 30
+      - name: Publish bounded audit-state branch
+        id: branch
+        shell: bash
+        run: |
+          if git diff --quiet -- docs/spec/SPEC_AUDIT.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="automation/spec-audit-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add docs/spec/SPEC_AUDIT.json
+          git commit -m "research: record independent SPEC readiness audit"
+          git push origin "$branch"
+      - name: Create bounded audit service issue
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            exit 0
+          fi
+          body="<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-SPEC-AUDIT-${GITHUB_RUN_ID}
+          TYPE: SPEC_AUDIT_SERVICE
+          DEPENDENCIES: [8]
+          ENTRY_GATE: PREDICATE_MATRIX_READY
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Independent evidence-only SPEC readiness audit completed and passed audit-invariant validation.
+
+          Service generated branch: ${BRANCH}
+
+          Open a PR to main and merge only if normal CI/provenance/SPEC guards remain green. A successful workflow does not imply SPEC_READY; inspect `spec_ready` and `overall_outcome` in the artifact."
+          gh issue create --title "Service completed independent SPEC audit branch" --body "$body"
