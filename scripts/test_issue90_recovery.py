@@ -9,7 +9,7 @@ import re
 import tempfile
 from pathlib import Path
 
-from build_issue90_telegram_recovery import TERM_PATTERNS, bounded_excerpt, eligible_sources, persist_page
+from build_issue90_telegram_recovery import FIELD_CUES, TERM_PATTERNS, bounded_excerpt, eligible_sources, persist_page
 from evidence_antibias import contains_pre_spec_outcome
 
 
@@ -20,6 +20,12 @@ def main() -> int:
     assert eq is not None and sr is not None
     assert not contains_pre_spec_outcome(bounded_excerpt(text, eq, 20))
     assert not contains_pre_spec_outcome(bounded_excerpt(text, sr, 20))
+
+    # The selected phrase "stop run" must not be misclassified as a stop-loss or entry trigger.
+    assert not FIELD_CUES["STOP"].search(text)
+    assert not FIELD_CUES["TRIGGER_ENTRY"].search(text)
+    assert FIELD_CUES["STOP"].search("Use a stop loss beyond the level")
+    assert FIELD_CUES["TRIGGER_ENTRY"].search("Wait for confirmation before entry")
 
     contaminated = "At equilibrium this setup had a 72% win rate before the stop run."
     eq = TERM_PATTERNS["EQUILIBRIUM"].search(contaminated)
