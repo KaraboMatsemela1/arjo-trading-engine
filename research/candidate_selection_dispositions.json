@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "performance_data_consulted": false,
+  "predicate_candidate_created": false,
+  "dispositions": [
+    {
+      "concept_id": "RESISTANCE_LIQUIDITY_RUNS",
+      "decision": "NOT_ADMITTED_INSUFFICIENT_OPERATIONAL_RELATIONSHIP",
+      "evidence_ids": ["EV_47407FF3FBAB9E586CA93D3B"],
+      "reason": "The direct first-party evidence describes LRLR as indicating explosive moves, but it does not establish a direction, involvement/entry action, target, hold/fail rule, or setup transition. The move-character description is therefore insufficient to admit a predicate candidate without inventing semantics."
+    },
+    {
+      "concept_id": "TAPE_READING",
+      "decision": "NOT_ADMITTED_NON_PREDICATE_PRACTICE",
+      "evidence_ids": ["EV_C2D2AD099F3842101F97C924"],
+      "reason": "The direct first-party evidence defines Tape Reading as studying real-time price delivery for experience while holding no interest in pushing an entry. It is therefore treated as an observational practice, not an executable predicate candidate."
+    }
+  ]
+}
