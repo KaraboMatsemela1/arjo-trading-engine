@@ -31,6 +31,8 @@ jobs:
         run: python scripts/test_issue48_recovery.py
       - name: Run SPEC audit service-issue publication regression tests
         run: python scripts/test_spec_audit_service_issue.py
+      - name: Run discovery watch publication-decision tests
+        run: python scripts/test_discovery_watch_state.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Validate concept inventory provenance
