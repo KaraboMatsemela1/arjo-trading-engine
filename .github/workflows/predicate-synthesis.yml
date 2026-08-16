@@ -1,0 +1,120 @@
+name: Predicate Synthesis
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'research/candidate_predicates.json'
+      - 'research/evidence_registry.jsonl'
+      - 'scripts/build_predicate_matrix.py'
+      - 'scripts/check_predicate_matrix.py'
+      - 'scripts/two_engineer_preflight.py'
+      - 'scripts/build_recovery_tasks.py'
+      - 'scripts/build_candidate_selection_audit.py'
+      - '.github/workflows/predicate-synthesis.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  synthesize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build complete 16-field predicate matrices and closure ranking
+        run: >-
+          python scripts/build_predicate_matrix.py
+          --matrix /tmp/predicate_matrix.csv
+          --closure /tmp/predicate_closure.json
+      - name: Validate evidence mappings and performance-blind closure state
+        run: >-
+          python scripts/check_predicate_matrix.py
+          --matrix /tmp/predicate_matrix.csv
+          --closure /tmp/predicate_closure.json
+      - name: Run deterministic two-code-path reconstruction preflight
+        run: >-
+          python scripts/two_engineer_preflight.py
+          --matrix /tmp/predicate_matrix.csv
+          --output /tmp/two_engineer_preflight.json
+      - name: Build bounded targeted recovery tasks
+        run: >-
+          python scripts/build_recovery_tasks.py
+          --closure /tmp/predicate_closure.json
+          --output /tmp/predicate_recovery_tasks.json
+          --active-limit 2
+      - name: Surface candidate-selection omissions for review
+        run: >-
+          python scripts/build_candidate_selection_audit.py
+          --output /tmp/candidate_selection_audit.json
+      - name: Stage durable Phase 5 state
+        run: |
+          cp /tmp/predicate_matrix.csv research/predicate_matrix.csv
+          cp /tmp/predicate_closure.json research/predicate_closure.json
+          cp /tmp/two_engineer_preflight.json research/two_engineer_preflight.json
+          cp /tmp/predicate_recovery_tasks.json research/predicate_recovery_tasks.json
+          cp /tmp/candidate_selection_audit.json research/candidate_selection_audit.json
+      - name: Validate repository provenance with generated predicate state
+        run: python scripts/check_provenance.py
+      - name: Upload bounded Phase 5 state
+        uses: actions/upload-artifact@v4
+        with:
+          name: predicate-synthesis-state
+          path: |
+            research/predicate_matrix.csv
+            research/predicate_closure.json
+            research/two_engineer_preflight.json
+            research/predicate_recovery_tasks.json
+            research/candidate_selection_audit.json
+          retention-days: 30
+      - name: Publish bounded predicate-state branch
+        id: branch
+        shell: bash
+        run: |
+          if git diff --quiet -- research/predicate_matrix.csv research/predicate_closure.json research/two_engineer_preflight.json research/predicate_recovery_tasks.json research/candidate_selection_audit.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="automation/predicate-synthesis-${GITHUB_RUN_ID}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add research/predicate_matrix.csv research/predicate_closure.json research/two_engineer_preflight.json research/predicate_recovery_tasks.json research/candidate_selection_audit.json
+          git commit -m "research: record predicate matrix and closure state"
+          git push origin "$branch"
+      - name: Create bounded branch-service issue
+        if: steps.branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.branch }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            exit 0
+          fi
+          body="<!-- project-meta
+          ISSUE_ID: ARJO-AUTO-PREDICATE-${GITHUB_RUN_ID}
+          TYPE: PREDICATE_SYNTHESIS_SERVICE
+          DEPENDENCIES: [7]
+          ENTRY_GATE: EVIDENCE_REGISTRY_READY
+          OUTPUT_GATE: NONE
+          OWNER: UNCLAIMED
+          STATE: READY
+          -->
+
+          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit.
+
+          Service generated branch: ${BRANCH}
+
+          Open a PR to main, run normal CI/provenance checks, and merge only if green. Review any unrepresented operational cues before granting PREDICATE_MATRIX_READY. This output is not SPEC_READY and contains no backtest/performance selection."
+          gh issue create --title "Service completed predicate-synthesis state branch" --body "$body"
