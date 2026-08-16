@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from build_evidence_registry import build_records, minimal_quote  # noqa: E402
+from build_evidence_registry import build_records, minimal_quote, ordered_aliases  # noqa: E402
 from evidence_antibias import contains_pre_spec_outcome  # noqa: E402
 
 
@@ -45,6 +45,29 @@ def main() -> int:
     assert alias == "Long Alias"
     assert "Long Alias" in quote
     assert len(quote.split()) <= 18
+
+    # Longest alias retains priority even when a shorter alias appears earlier.
+    quote, alias = minimal_quote(
+        "FVG appears first. Later the Fair Value Gap appears with context.",
+        ["FVG", "Fair Value Gap"],
+    )
+    assert alias == "Fair Value Gap"
+    assert "Fair Value Gap" in quote
+
+    # Equal-length aliases and case variants have one total deterministic order,
+    # regardless of input order or the process-dependent order a set would expose.
+    text = "SIBI appears first in text. Later BISI appears with another context window."
+    alias_orders = [
+        ["SIBI", "BISI", "bisi", " BISI "],
+        ["bisi", " BISI ", "SIBI", "BISI"],
+        ["BISI", "SIBI", "bisi"],
+    ]
+    selections = {minimal_quote(text, values) for values in alias_orders}
+    assert len(selections) == 1
+    deterministic_quote, deterministic_alias = next(iter(selections))
+    assert deterministic_alias == "BISI"
+    assert "BISI appears" in deterministic_quote
+    assert ordered_aliases(alias_orders[0]) == ordered_aliases(alias_orders[1])
 
     # A percentage-contaminated occurrence must be skipped for a later clean occurrence.
     quote, alias = minimal_quote(
