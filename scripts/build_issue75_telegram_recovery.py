@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Recover bounded Issue #75 cue windows from Telegram post 80 only."""
+"""Recover bounded Issue #75 cue windows from Telegram post 80 only.
+
+Only the pre-outcome scope preamble is eligible for recovery. The statistical
+section beginning with the first outcome-count marker is excluded in full.
+"""
 
 from __future__ import annotations
 
@@ -21,18 +25,11 @@ TEXT_RE = re.compile(r'<div class="tgme_widget_message_text[^\"]*"[^>]*>(.*?)</d
 TAG_RE = re.compile(r"<[^>]+>")
 BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
 URL_RE = re.compile(r"https?://\S+")
-CONCEPT_ALIASES = {"ORDER_BLOCK": ["Order Block", "Order Blocks", "OB", "OBs"], "MT": ["MT"]}
+OUTCOME_MARKER = re.compile(r"\bOut\s+of\s+\d+\b", re.IGNORECASE)
+CONCEPT_ALIASES = {"ORDER_BLOCK": ["Order Block", "Order Blocks", "OB", "OBs"]}
 FIELD_CUES = {
     "INSTRUMENTS": re.compile(r"\b(?:gold|xau(?:usd)?|eurusd|gbpusd|nq|es|dxy|btc|eth)\b", re.IGNORECASE),
     "TIMEFRAME": re.compile(r"\b(?:monthly|weekly|daily|4h|1h|15m|5m|htf|ltf|higher timeframe|lower timeframe)\b", re.IGNORECASE),
-    "DIRECTION": re.compile(r"\b(?:direction|buy|buys|sell|sells|long|short|bullish|bearish|higher|lower)\b", re.IGNORECASE),
-    "PRECONDITIONS_SETUP": re.compile(r"\b(?:respect|respects|respected|hold|holds|holding|fail|fails|failed|order block|order blocks|obs?|mt)\b", re.IGNORECASE),
-    "TRIGGER_ENTRY": re.compile(r"\b(?:trigger|entry|entries|enter|confirmation|indication|involved|involvement)\b", re.IGNORECASE),
-    "STOP": re.compile(r"\b(?:stop loss|stop-loss|stops?|sl)\b", re.IGNORECASE),
-    "TARGET": re.compile(r"\b(?:target|targets|draw on liquidity|dol|highs|lows)\b", re.IGNORECASE),
-    "INVALIDATION_EXPIRY": re.compile(r"\b(?:invalid|invalidate|invalidation|fail|fails|failed|expire|expiry|until)\b", re.IGNORECASE),
-    "SESSION_TIME_RULE": re.compile(r"\b(?:new york|london|asia|session|killzone|kill zone|am|pm|midnight|open|opening)\b", re.IGNORECASE),
-    "OPTIONAL_REQUIRED": re.compile(r"\b(?:need|required|must|optional|indication|most|will)\b", re.IGNORECASE),
 }
 
 
@@ -63,6 +60,11 @@ def clean_text(body: str) -> str:
     value = html_lib.unescape(value)
     value = URL_RE.sub(" ", value)
     return re.sub(r"\s+", " ", value).strip()
+
+
+def pre_outcome_scope(text: str) -> str:
+    marker = OUTCOME_MARKER.search(text)
+    return text[: marker.start()].strip() if marker else text.strip()
 
 
 def published_date(body: str) -> str:
@@ -138,7 +140,7 @@ def main() -> int:
             page_ids.append(message_id)
             if f"TG_ARJOIOTRADING_{message_id}" != TARGET_SOURCE_ID:
                 continue
-            text = clean_text(match.group("body"))
+            text = pre_outcome_scope(clean_text(match.group("body")))
             excerpts: list[dict[str, str]] = []
             seen_excerpt: set[str] = set()
             concepts: set[str] = set()
@@ -168,7 +170,7 @@ def main() -> int:
                 "concepts": sorted(concepts), "field_cues": sorted(field_cues),
                 "archive_page_url": page_meta["url"], "archive_page_sha256": page_meta["sha256"],
                 "archive_page_cache_file": page_meta["cache_file"], "excerpts": excerpts[:args.max_excerpts],
-                "semantic_synthesis_performed": False,
+                "semantic_synthesis_performed": False, "outcome_sections_excluded": True,
             }
             break
         candidate = next_before(page, current_before, page_ids)
@@ -183,7 +185,7 @@ def main() -> int:
         "pages_fetched": len(pages), "messages_seen": len(seen_ids), "failures": failures,
         "performance_data_consulted": False, "semantic_synthesis_performed": False,
         "shared_antibias_guard": True, "archive_pages_sha256_bound": True,
-        "archive_pages": pages, "message": recovered,
+        "outcome_sections_excluded": True, "archive_pages": pages, "message": recovered,
     }
     Path(args.output).write_text(json.dumps(report, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({"pages": len(pages), "target_recovered": recovered is not None, "failures": len(failures)}, sort_keys=True))
