@@ -76,6 +76,8 @@ _Generated mechanically by `scripts/project_state.py`._
 | #101 | SOURCE_DISCOVERY | COMPLETE | True | True |
 | #103 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #106 | SOURCE_DISCOVERY_HARDENING | COMPLETE | True | True |
+| #112 | GOVERNANCE_HARDENING | CI_PENDING | True | True |
+| #113 | UNMANAGED | UNMANAGED | False | False |
 
 ## Strategy implementation status
 
