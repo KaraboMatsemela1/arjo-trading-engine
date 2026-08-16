@@ -8,6 +8,7 @@ on:
       - 'research/recovery/issue_48_targets.csv'
       - 'scripts/build_issue48_recovery_windows.py'
       - 'scripts/build_issue48_telegram_archive_recovery.py'
+      - 'scripts/test_issue48_recovery.py'
       - '.github/workflows/issue-48-recovery.yml'
 
 permissions:
@@ -26,6 +27,8 @@ jobs:
         run: python -m pip install --disable-pip-version-check yt-dlp==2026.6.9
       - name: Compile recovery tooling
         run: python -m compileall -q scripts
+      - name: Run offline Issue 48 recovery regression tests
+        run: python scripts/test_issue48_recovery.py
       - name: Acquire only bounded Issue 48 first-party targets
         run: >-
           python scripts/acquire_corpus.py
@@ -52,6 +55,7 @@ jobs:
           python scripts/build_issue48_telegram_archive_recovery.py
           --acquisition research/acquisition_manifest.jsonl
           --output /tmp/issue48_telegram_archive_recovery.json
+          --archive-cache-root /tmp/issue48-archive-cache
           --max-words 20
           --max-excerpts-per-message 12
       - name: Upload bounded recovery evidence locator artifact
@@ -62,4 +66,5 @@ jobs:
             /tmp/issue48_acquisition_manifest.jsonl
             /tmp/issue48_recovery_windows.json
             /tmp/issue48_telegram_archive_recovery.json
+            /tmp/issue48-archive-cache
           retention-days: 14
