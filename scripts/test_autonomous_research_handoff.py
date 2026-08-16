@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
 PR_TOKEN_CONTRACT = "secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN"
+DISPATCH_HELPER = "scripts/dispatch_autonomous_validation.sh"
 
 
 def read(name: str) -> str:
@@ -28,11 +29,13 @@ def check_reviewed_publication(name: str) -> None:
     text = read(name)
     require(
         text,
+        "actions: write",
         "pull-requests: write",
         "gh pr create",
         "gh issue create",
         "Merge only after normal",
         PR_TOKEN_CONTRACT,
+        DISPATCH_HELPER,
     )
     forbid(text, "gh pr merge", "gh merge", "enable-auto-merge", "--auto")
 
@@ -41,6 +44,7 @@ def check_project_state_publication() -> None:
     text = read("project-state.yml")
     require(
         text,
+        "actions: write",
         "pull-requests: write",
         "group: project-state-publication",
         "cancel-in-progress: false",
@@ -50,6 +54,7 @@ def check_project_state_publication() -> None:
         "gh pr create",
         "reviewed PR is open or refreshed",
         PR_TOKEN_CONTRACT,
+        DISPATCH_HELPER,
     )
     forbid(
         text,
@@ -62,14 +67,30 @@ def check_project_state_publication() -> None:
     )
 
 
+def check_dispatch_helper() -> None:
+    helper = (ROOT / DISPATCH_HELPER).read_text(encoding="utf-8")
+    require(
+        helper,
+        "gh workflow run",
+        "ci.yml",
+        "dependency-validation.yml",
+        "gate-integrity.yml",
+        '--ref "$ref"',
+    )
+    ci = read("ci.yml")
+    require(ci, "workflow_dispatch:")
+
+
 def main() -> int:
     source_watch = read("new-source-detection.yml")
     require(
         source_watch,
         "research/source_registry.csv",
+        "actions: write",
         "pull-requests: write",
         "gh pr create",
         PR_TOKEN_CONTRACT,
+        DISPATCH_HELPER,
     )
     forbid(source_watch, "gh pr merge", "gh merge", "enable-auto-merge", "--auto")
 
@@ -96,11 +117,12 @@ def main() -> int:
     check_reviewed_publication("predicate-synthesis.yml")
 
     check_project_state_publication()
+    check_dispatch_helper()
 
     print(
         "autonomous handoff contracts valid: source watch -> corpus -> "
-        "concept/evidence -> predicate, coalesced Project State PRs, and "
-        "dedicated automation PR credential fallback"
+        "concept/evidence -> predicate, coalesced Project State PRs, "
+        "dedicated PR credential fallback, and exact dispatched validation"
     )
     return 0
 

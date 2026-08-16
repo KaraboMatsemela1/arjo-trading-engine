@@ -17,6 +17,7 @@ on:
     - cron: '41 5 * * *'
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
   issues: write
@@ -205,7 +206,7 @@ jobs:
           git push origin "$branch"
           echo "Published bounded source-watch branch ($REASONS): $branch"
 
-      - name: Open reviewed PR or create service fallback
+      - name: Open reviewed PR, dispatch validation, or create service fallback
         if: steps.stage.outputs.should_publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
@@ -224,6 +225,7 @@ jobs:
           rc=$?
           set -e
           if [ "$rc" -eq 0 ]; then
+            scripts/dispatch_autonomous_validation.sh "$BRANCH"
             exit 0
           fi
 
