@@ -362,7 +362,9 @@
       "evidence_ids": [
         "EV_0168479B3125D6C386C46B33",
         "EV_C781D23C34D1E3231A5D0DE0",
+        "EV_CE3A40701403F0ADEB1E88C9",
         "EV_D2B08C6BA0F9A4259DE61E9C",
+        "EV_EB53D46DE5AB0CE28598D703",
         "EV_FA14DEA327F1084A76A0FA20"
       ],
       "evidence_provenance_checks": [
@@ -401,7 +403,33 @@
             "payload_captured": true,
             "sha256_bound": true
           },
+          "evidence_id": "EV_CE3A40701403F0ADEB1E88C9",
+          "source_id": "TG_ARJOIOTRADING_80",
+          "status": "PASS"
+        },
+        {
+          "checks": {
+            "confirmed_first_party": true,
+            "direct_closure_credit": true,
+            "first_party_contacted": true,
+            "known_source": true,
+            "payload_captured": true,
+            "sha256_bound": true
+          },
           "evidence_id": "EV_D2B08C6BA0F9A4259DE61E9C",
+          "source_id": "TG_ARJOIOTRADING_80",
+          "status": "PASS"
+        },
+        {
+          "checks": {
+            "confirmed_first_party": true,
+            "direct_closure_credit": true,
+            "first_party_contacted": true,
+            "known_source": true,
+            "payload_captured": true,
+            "sha256_bound": true
+          },
+          "evidence_id": "EV_EB53D46DE5AB0CE28598D703",
           "source_id": "TG_ARJOIOTRADING_80",
           "status": "PASS"
         },
@@ -422,9 +450,9 @@
       "executable_semantics_reconstructed": false,
       "field_state_counts": {
         "CONTRADICTORY": 0,
-        "MISSING": 12,
+        "MISSING": 10,
         "NOT_APPLICABLE": 0,
-        "PARTIAL": 4,
+        "PARTIAL": 6,
         "SATISFIED": 0
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
