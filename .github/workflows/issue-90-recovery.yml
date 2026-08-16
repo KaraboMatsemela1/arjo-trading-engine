@@ -1,0 +1,95 @@
+name: Issue 90 Recovery
+
+on:
+  push:
+    branches: [issue-90-equilibrium-telegram-recovery]
+    paths:
+      - scripts/build_issue90_telegram_recovery.py
+      - scripts/test_issue90_recovery.py
+      - .github/workflows/issue-90-recovery.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and test
+        run: |
+          python -m compileall -q scripts
+          python scripts/test_issue90_recovery.py
+      - name: Scan canonical Telegram archive
+        run: |
+          python scripts/build_issue90_telegram_recovery.py \
+            --acquisition research/acquisition_manifest.jsonl \
+            --output /tmp/issue90_telegram_recovery.json \
+            --archive-cache-root /tmp/issue90-archive-cache \
+            --max-pages 100 \
+            --max-words 20 \
+            --max-excerpts-per-message 12
+      - name: Print bounded recovery summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/issue90_telegram_recovery.json').read_text())
+          print({
+              'eligible': report['eligible_captured_telegram_sources'],
+              'pages': report['pages_fetched'],
+              'messages_seen': report['messages_seen'],
+              'recovery_messages': report['recovery_message_count'],
+              'equilibrium_messages': report['equilibrium_message_count'],
+              'stop_run_messages': report['stop_run_message_count'],
+              'joint_messages': report['joint_message_count'],
+              'failures': len(report['failures']),
+          })
+          for item in report['messages']:
+              print({
+                  'source_id': item['source_id'],
+                  'date': item['date'],
+                  'term_labels': item['term_labels'],
+                  'field_cues': item['field_cues'],
+                  'archive_page_sha256': item['archive_page_sha256'],
+                  'excerpts': item['excerpts'],
+              })
+          PY
+      - name: Validate recovery boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from sys import path
+          path.insert(0, 'scripts')
+          from evidence_antibias import contains_pre_spec_outcome
+          report = json.loads(Path('/tmp/issue90_telegram_recovery.json').read_text())
+          assert report['issue'] == 90
+          assert report['predicate_id'] == 'EQUILIBRIUM_STOP_RUN_CONTEXT'
+          assert report['lexical_terms'] == ['equilibrium', 'stop run', 'stop-run', 'stoprun']
+          assert report['archive_pages_sha256_bound'] is True
+          assert report['shared_antibias_guard'] is True
+          assert report['performance_data_consulted'] is False
+          assert report['semantic_synthesis_performed'] is False
+          assert not report['failures'], report['failures']
+          for item in report['messages']:
+              assert item['source_id'].startswith('TG_ARJOIOTRADING_')
+              assert item['archive_page_sha256']
+              for excerpt in item['excerpts']:
+                  text = excerpt['excerpt']
+                  assert len(text.split()) <= 20
+                  assert not contains_pre_spec_outcome(text), text
+          print('Issue 90 recovery boundary validated')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: issue-90-equilibrium-telegram-recovery
+          path: |
+            /tmp/issue90_telegram_recovery.json
+            /tmp/issue90-archive-cache
+          retention-days: 14
