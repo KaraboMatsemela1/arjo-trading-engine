@@ -1,7 +1,5 @@
 {
-  "blocked_reasons": [
-    "Issue #13 blocked: SECURITY AUTHORIZATION: allow GitHub Actions to create pull requests"
-  ],
+  "blocked_reasons": [],
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -200,7 +198,7 @@
     {
       "dependencies_satisfied": true,
       "entry_gate_satisfied": true,
-      "github_state": "OPEN",
+      "github_state": "CLOSED",
       "mechanically_ready": true,
       "meta": {
         "DEPENDENCIES": [
@@ -209,8 +207,8 @@
         "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
         "ISSUE_ID": "ARJO-SEC-001",
         "OUTPUT_GATE": "ACTIONS_PR_CREATION_ENABLED",
-        "OWNER": "ChatGPT",
-        "STATE": "BLOCKED",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
         "TYPE": "OWNER_AUTHORIZATION"
       },
       "metadata_valid": true,
@@ -997,6 +995,7 @@
   "satisfied_gates": [
     "ACQUISITION_TOOLING_READY",
     "ACTIONS_CI_AVAILABLE",
+    "ACTIONS_PR_CREATION_ENABLED",
     "CONCEPT_INVENTORY_READY",
     "CORPUS_ACQUIRED",
     "EVIDENCE_REGISTRY_READY",
