@@ -6,8 +6,10 @@ on:
     branches: [main]
     paths:
       - 'research/candidate_predicates.json'
-      - 'research/evidence_registry.jsonl'
+      - 'research/evidence_registry*.jsonl'
+      - 'research/predicate_field_overrides.json'
       - 'research/candidate_selection_dispositions.json'
+      - 'scripts/evidence_registry_union.py'
       - 'scripts/build_predicate_matrix.py'
       - 'scripts/check_predicate_matrix.py'
       - 'scripts/two_engineer_preflight.py'
@@ -120,7 +122,7 @@ jobs:
           STATE: READY
           -->
 
-          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit. The regenerated omission audit passed exact committed-disposition validation before publication.
+          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit from the canonical evidence-shard union. The regenerated omission audit passed exact committed-disposition validation before publication.
 
           Service generated branch: ${BRANCH}
 

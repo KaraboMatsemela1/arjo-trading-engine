@@ -9,6 +9,8 @@ import json
 import sys
 from pathlib import Path
 
+from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
+
 SOURCE_FIELDS = {
     "SOURCE_ID",
     "SOURCE_TYPE",
@@ -70,6 +72,7 @@ def read_jsonl(path: Path) -> tuple[list[dict], list[str]]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--repo-root", default=".")
+    parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
     args = parser.parse_args()
     root = Path(args.repo_root)
     errors: list[str] = []
@@ -90,8 +93,17 @@ def main() -> int:
     if len(source_ids) != len([row for row in source_rows if row.get("SOURCE_ID")]):
         errors.append("source_registry.csv contains duplicate SOURCE_ID values")
 
-    evidence_records, json_errors = read_jsonl(root / "research/evidence_registry.jsonl")
-    errors.extend(json_errors)
+    try:
+        pattern = args.evidence
+        if not Path(args.repo_root).resolve() == Path(".").resolve():
+            # Repository-root override is used only by local/offline validation. Resolve
+            # the default shard glob relative to that root without changing CLI behavior.
+            pattern = str(root / pattern) if any(char in pattern for char in "*?[") else str(root / pattern)
+        evidence_records = load_evidence_union(pattern)
+    except (ValueError, json.JSONDecodeError) as exc:
+        evidence_records = []
+        errors.append(f"Evidence registry union invalid: {exc}")
+
     evidence_ids: set[str] = set()
     for record in evidence_records:
         missing = EVIDENCE_FIELDS - set(record)

@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from evidence_antibias import contains_pre_spec_outcome
+from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
 
 CONFIDENCE = {"DIRECT", "STRONG_PARTIAL", "CONTEXTUAL", "INSUFFICIENT"}
 FIELDS = {
@@ -39,7 +40,7 @@ def load_inventory(pattern: str) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--evidence", default="research/evidence_registry.jsonl")
+    parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
     parser.add_argument("--coverage", default="research/evidence_coverage.json")
     parser.add_argument("--inventory-glob", default="research/concept_inventory*.jsonl")
     parser.add_argument("--registry", default="research/source_registry.csv")
@@ -54,7 +55,11 @@ def main() -> int:
     acquisitions = {
         str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))
     }
-    evidence = read_jsonl(Path(args.evidence))
+    try:
+        evidence = load_evidence_union(args.evidence)
+    except ValueError as exc:
+        print(f"Evidence registry validation failed:\n- {exc}", file=sys.stderr)
+        return 1
 
     seen_ids: set[str] = set()
     concept_evidence: dict[str, list[dict]] = {concept_id: [] for concept_id in concepts}
@@ -157,6 +162,10 @@ def main() -> int:
         errors.append(
             f"coverage does not cover all concepts: {coverage.get('covered_concept_count')} / {len(concepts)}"
         )
+    if coverage.get("evidence_record_count") != len(evidence):
+        errors.append(
+            f"coverage evidence_record_count {coverage.get('evidence_record_count')} != {len(evidence)}"
+        )
     if coverage.get("retrieval_failures"):
         errors.append(f"evidence extraction retrieval failures: {coverage.get('retrieval_failures')}")
 
@@ -171,6 +180,7 @@ def main() -> int:
             {
                 "concepts": len(concepts),
                 "evidence_records": len(evidence),
+                "evidence_shards": len(list(Path().glob("research/evidence_registry*.jsonl"))),
                 "cited_relationships": len(cited_pairs),
                 "concepts_with_direct_or_partial_text": sum(
                     1

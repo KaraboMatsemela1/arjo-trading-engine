@@ -15,6 +15,8 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
+
 REQUIRED_FIELDS = [
     "INPUTS", "INSTRUMENTS", "TIMEFRAME", "HIGHER_TIMEFRAME_CONTEXT", "DIRECTION",
     "PRECONDITIONS", "SETUP", "TRIGGER", "ENTRY", "STOP", "TARGET", "INVALIDATION",
@@ -54,7 +56,7 @@ def matrix_shape(rows: list[dict]) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--matrix", default="research/predicate_matrix.csv")
-    parser.add_argument("--evidence", default="research/evidence_registry.jsonl")
+    parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
     parser.add_argument("--registry", default="research/source_registry.csv")
     parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
     parser.add_argument("--preflight", default="research/two_engineer_preflight.json")
@@ -63,7 +65,7 @@ def main() -> int:
     args = parser.parse_args()
 
     matrix = load_matrix(Path(args.matrix))
-    evidence = {str(row["EVIDENCE_ID"]): row for row in read_jsonl(Path(args.evidence))}
+    evidence = {str(row["EVIDENCE_ID"]): row for row in load_evidence_union(args.evidence)}
     acquisition = {str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))}
     with Path(args.registry).open(newline="", encoding="utf-8") as handle:
         sources = {row["SOURCE_ID"]: row for row in csv.DictReader(handle) if row.get("SOURCE_ID")}
@@ -132,8 +134,6 @@ def main() -> int:
             independent_reconstruction = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
             outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
         elif structural_complete:
-            # V2 deliberately has no mechanism to self-approve an executable packet.
-            # A later bounded issue must provide and independently validate such a packet.
             independent_two_engineer_test = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
             independent_reconstruction = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
             outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"

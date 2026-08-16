@@ -3,7 +3,9 @@
 
 This phase is evidence synthesis only. Unsupported fields become MISSING and no
 performance information is consulted. Closure ranking is lexicographic on
-(missing, contradictory, partial), never on market outcomes.
+(missing, contradictory, partial), never on market outcomes. Post-Phase-4
+recovery evidence is additive: the immutable base registry is read together with
+validated evidence shards, and bounded field overrides are applied explicitly.
 """
 
 from __future__ import annotations
@@ -13,6 +15,8 @@ import csv
 import itertools
 import json
 from pathlib import Path
+
+from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
 
 FIELDS = [
     "INPUTS",
@@ -36,10 +40,6 @@ ALLOWED_STATES = {"SATISFIED", "PARTIAL", "MISSING", "CONTRADICTORY", "NOT_APPLI
 UNRESOLVED_STATES = {"PARTIAL", "MISSING", "CONTRADICTORY"}
 
 
-def read_jsonl(path: Path) -> list[dict]:
-    return [json.loads(raw) for raw in path.read_text(encoding="utf-8").splitlines() if raw.strip()]
-
-
 def load_candidates(path: Path) -> dict:
     data = json.loads(path.read_text(encoding="utf-8"))
     if data.get("selection_policy", {}).get("performance_data_consulted") is not False:
@@ -51,9 +51,40 @@ def load_candidates(path: Path) -> dict:
     return data
 
 
-def expand_candidate(candidate: dict, evidence_ids: set[str]) -> list[dict]:
+def load_overrides(path: Path) -> dict[tuple[str, str], dict]:
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if data.get("performance_data_consulted") is not False:
+        raise ValueError("predicate field overrides must state performance_data_consulted=false")
+    result: dict[tuple[str, str], dict] = {}
+    for row in data.get("overrides", []):
+        predicate_id = str(row.get("predicate_id", ""))
+        field = str(row.get("field", ""))
+        key = (predicate_id, field)
+        if not predicate_id or field not in FIELDS:
+            raise ValueError(f"invalid predicate field override {predicate_id}/{field}")
+        if key in result:
+            raise ValueError(f"duplicate predicate field override {predicate_id}/{field}")
+        result[key] = row
+    return result
+
+
+def expand_candidate(
+    candidate: dict,
+    evidence_ids: set[str],
+    overrides: dict[tuple[str, str], dict],
+) -> list[dict]:
     predicate_id = str(candidate["predicate_id"])
-    hypotheses = candidate.get("field_hypotheses", {})
+    hypotheses = dict(candidate.get("field_hypotheses", {}))
+    for field in FIELDS:
+        override = overrides.get((predicate_id, field))
+        if override is not None:
+            hypotheses[field] = {
+                "state": override.get("state"),
+                "evidence_ids": override.get("evidence_ids", []),
+                "notes": override.get("notes", ""),
+            }
     unknown_fields = sorted(set(hypotheses) - set(FIELDS))
     if unknown_fields:
         raise ValueError(f"{predicate_id}: unknown field hypotheses {unknown_fields}")
@@ -110,7 +141,6 @@ def minimal_bundle_cover(candidate: dict, unresolved_fields: set[str]) -> list[s
             f"{candidate['predicate_id']}: recovery bundles do not cover unresolved fields {missing_coverage}"
         )
 
-    # Exact minimum-cardinality set cover; candidate bundle sets are intentionally small.
     normalized.sort(key=lambda item: item[0])
     for size in range(1, len(normalized) + 1):
         valid: list[tuple[str, ...]] = []
@@ -123,7 +153,12 @@ def minimal_bundle_cover(candidate: dict, unresolved_fields: set[str]) -> list[s
     raise ValueError(f"{candidate['predicate_id']}: no recovery bundle cover found")
 
 
-def build(candidate_data: dict, evidence_records: list[dict]) -> tuple[list[dict], dict]:
+def build(
+    candidate_data: dict,
+    evidence_records: list[dict],
+    overrides: dict[tuple[str, str], dict] | None = None,
+) -> tuple[list[dict], dict]:
+    overrides = overrides or {}
     evidence_ids = {str(row["EVIDENCE_ID"]) for row in evidence_records}
     candidates = list(candidate_data.get("candidates", []))
     predicate_ids = [str(row["predicate_id"]) for row in candidates]
@@ -131,11 +166,14 @@ def build(candidate_data: dict, evidence_records: list[dict]) -> tuple[list[dict
         raise ValueError("duplicate predicate_id in candidate registry")
     if not candidates:
         raise ValueError("candidate registry is empty")
+    unknown_override_predicates = sorted({predicate_id for predicate_id, _ in overrides} - set(predicate_ids))
+    if unknown_override_predicates:
+        raise ValueError(f"predicate field overrides reference unknown candidates {unknown_override_predicates}")
 
     matrix_rows: list[dict] = []
     closures: list[dict] = []
     for candidate in candidates:
-        rows = expand_candidate(candidate, evidence_ids)
+        rows = expand_candidate(candidate, evidence_ids, overrides)
         matrix_rows.extend(rows)
         state_counts = {state: 0 for state in sorted(ALLOWED_STATES)}
         for row in rows:
@@ -199,14 +237,16 @@ def write_matrix(rows: list[dict], path: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidates", default="research/candidate_predicates.json")
-    parser.add_argument("--evidence", default="research/evidence_registry.jsonl")
+    parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
+    parser.add_argument("--overrides", default="research/predicate_field_overrides.json")
     parser.add_argument("--matrix", default="research/predicate_matrix.csv")
     parser.add_argument("--closure", default="research/predicate_closure.json")
     args = parser.parse_args()
 
     candidate_data = load_candidates(Path(args.candidates))
-    evidence = read_jsonl(Path(args.evidence))
-    rows, closure = build(candidate_data, evidence)
+    evidence = load_evidence_union(args.evidence)
+    overrides = load_overrides(Path(args.overrides))
+    rows, closure = build(candidate_data, evidence, overrides)
     write_matrix(rows, Path(args.matrix))
     Path(args.closure).write_text(json.dumps(closure, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(
@@ -214,6 +254,8 @@ def main() -> int:
             {
                 "candidates": closure["candidate_count"],
                 "matrix_rows": len(rows),
+                "evidence_records": len(evidence),
+                "override_count": len(overrides),
                 "closest_candidate": closure["candidates"][0]["predicate_id"],
                 "closest_closure_tuple": closure["candidates"][0]["closure_tuple_missing_contradictory_partial"],
             },

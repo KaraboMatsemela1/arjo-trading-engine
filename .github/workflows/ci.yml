@@ -27,11 +27,13 @@ jobs:
         run: python scripts/test_evidence_registry.py
       - name: Run independent SPEC audit regression tests
         run: python scripts/test_independent_spec_audit.py
+      - name: Run Issue 48 recovery regression tests
+        run: python scripts/test_issue48_recovery.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Validate concept inventory provenance
         run: python scripts/check_concept_inventory.py
-      - name: Validate generated evidence registry when present
+      - name: Validate generated evidence registry union when present
         shell: bash
         run: |
           if [ -s research/evidence_registry.jsonl ] && [ -f research/evidence_coverage.json ]; then
@@ -74,14 +76,19 @@ jobs:
           else
             echo "Candidate omission dispositions not committed yet; Phase 5 gate remains pending."
           fi
-      - name: Run independent evidence-only SPEC readiness audit
+      - name: Run independent evidence-only SPEC readiness audit against regenerated state
         run: >-
           python scripts/run_independent_spec_audit.py
+          --matrix /tmp/predicate_matrix.csv
+          --preflight /tmp/two_engineer_preflight.json
+          --recovery /tmp/predicate_recovery_tasks.json
           --output /tmp/SPEC_AUDIT.json
-      - name: Validate independent SPEC audit invariants
+      - name: Validate independent SPEC audit invariants against regenerated state
         run: >-
           python scripts/check_independent_spec_audit.py
           --audit /tmp/SPEC_AUDIT.json
+          --matrix /tmp/predicate_matrix.csv
+          --recovery /tmp/predicate_recovery_tasks.json
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
