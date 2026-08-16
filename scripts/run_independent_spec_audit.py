@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Independently audit persisted predicate candidates for SPEC_READY.
 
-This auditor does not import the Phase 5 builder. It treats the persisted matrix as
-claims to verify against the evidence/acquisition registries. Executable
-reconstruction is attempted only after all 16 required fields are SATISFIED.
+The persisted Phase-5 matrix is treated as a set of claims, not as executable
+truth. The Phase-5 two-code-path artifact is only a deterministic reconstruction
+preflight; it is never promoted to the independent two-engineer result required
+for SPEC_READY.
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+from collections import Counter
 from pathlib import Path
 
 REQUIRED_FIELDS = [
@@ -19,6 +21,7 @@ REQUIRED_FIELDS = [
     "EXPIRY", "SESSION/TIME_RULE", "OPTIONAL_CONDITIONS", "REQUIRED_CONDITIONS",
 ]
 ALLOWED_STATES = {"SATISFIED", "PARTIAL", "MISSING", "CONTRADICTORY", "NOT_APPLICABLE"}
+INCOMPLETE = {"MISSING", "PARTIAL", "CONTRADICTORY"}
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -31,6 +34,21 @@ def load_matrix(path: Path) -> dict[str, list[dict]]:
         for row in csv.DictReader(handle):
             grouped.setdefault(str(row["PREDICATE_ID"]), []).append(row)
     return grouped
+
+
+def matrix_shape(rows: list[dict]) -> dict:
+    fields = [str(row.get("FIELD", "")) for row in rows]
+    counts = Counter(fields)
+    duplicates = sorted(field for field, count in counts.items() if count != 1)
+    missing = sorted(set(REQUIRED_FIELDS) - set(fields))
+    unexpected = sorted(set(fields) - set(REQUIRED_FIELDS))
+    return {
+        "row_count": len(rows),
+        "duplicate_fields": duplicates,
+        "missing_fields": missing,
+        "unexpected_fields": unexpected,
+        "valid": len(rows) == len(REQUIRED_FIELDS) and not duplicates and not missing and not unexpected,
+    }
 
 
 def main() -> int:
@@ -55,14 +73,14 @@ def main() -> int:
     preflight_by_predicate = {str(row["predicate_id"]): row for row in preflight.get("candidates", [])}
 
     candidate_audits: list[dict] = []
-    any_pass = False
     for predicate_id in sorted(matrix):
         rows = matrix[predicate_id]
-        row_by_field = {str(row["FIELD"]): row for row in rows}
+        shape = matrix_shape(rows)
+        row_by_field = {str(row["FIELD"]): row for row in rows if str(row.get("FIELD", "")) in REQUIRED_FIELDS}
         field_states = {field: str(row_by_field.get(field, {}).get("STATE", "MISSING")) for field in REQUIRED_FIELDS}
         invalid_states = sorted({state for state in field_states.values() if state not in ALLOWED_STATES})
-        state_counts = {state: sum(1 for value in field_states.values() if value == state) for state in sorted(ALLOWED_STATES)}
-        unresolved_fields = [field for field in REQUIRED_FIELDS if field_states[field] in {"MISSING", "PARTIAL", "CONTRADICTORY"}]
+        state_counts = {state: sum(value == state for value in field_states.values()) for state in sorted(ALLOWED_STATES)}
+        unresolved_fields = [field for field in REQUIRED_FIELDS if field_states[field] in INCOMPLETE]
         evidence_ids = sorted({
             value.strip()
             for row in rows
@@ -96,64 +114,74 @@ def main() -> int:
         all_required_fields_satisfied = all(field_states[field] == "SATISFIED" for field in REQUIRED_FIELDS)
         contradictions_resolved = state_counts["CONTRADICTORY"] == 0
         preflight_row = preflight_by_predicate.get(predicate_id, {})
-        two_engineer_test = (
-            "PASS"
-            if preflight.get("status") == "PASS" and preflight_row.get("agreement") is True
-            else "FAIL"
+        phase5_preflight = (
+            "PASS" if preflight.get("status") == "PASS" and preflight_row.get("agreement") is True else "FAIL"
         )
 
-        structural_pass = (
-            not invalid_states
-            and len(row_by_field) == len(REQUIRED_FIELDS)
-            and set(row_by_field) == set(REQUIRED_FIELDS)
+        structural_complete = (
+            shape["valid"]
+            and not invalid_states
             and all_required_fields_satisfied
             and contradictions_resolved
             and provenance_complete
-            and two_engineer_test == "PASS"
+            and phase5_preflight == "PASS"
         )
-        if structural_pass:
-            # A future all-satisfied candidate reaches this branch. The independent
-            # reconstruction still requires a separately versioned executable packet;
-            # this auditor never synthesizes missing semantics from notes.
-            independent_reconstruction = "REQUIRES_VERSIONED_EXECUTABLE_PACKET"
-            outcome = "BLOCKED_NEEDS_VERSIONED_RECONSTRUCTION_PACKET"
-        else:
+
+        if unresolved_fields:
+            independent_two_engineer_test = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
             independent_reconstruction = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
-            outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE" if unresolved_fields else "INSUFFICIENT_EVIDENCE"
+            outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
+        elif structural_complete:
+            # V2 deliberately has no mechanism to self-approve an executable packet.
+            # A later bounded issue must provide and independently validate such a packet.
+            independent_two_engineer_test = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
+            independent_reconstruction = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
+            outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"
+        else:
+            independent_two_engineer_test = "NOT_ATTEMPTED_STRUCTURAL_AUDIT_FAILED"
+            independent_reconstruction = "NOT_ATTEMPTED_STRUCTURAL_AUDIT_FAILED"
+            outcome = "INSUFFICIENT_EVIDENCE"
 
-        passed = (
-            structural_pass
-            and independent_reconstruction == "PASS"
-            and outcome == "PASS"
-        )
-        any_pass = any_pass or passed
         recovery_task = recovery_by_predicate.get(predicate_id)
-        candidate_audits.append(
-            {
-                "predicate_id": predicate_id,
-                "outcome": "PASS" if passed else outcome,
-                "all_required_fields_satisfied": all_required_fields_satisfied,
-                "contradictions_resolved": contradictions_resolved,
-                "provenance_complete": provenance_complete,
-                "two_engineer_test": two_engineer_test,
-                "independent_reconstruction": independent_reconstruction,
-                "field_state_counts": state_counts,
-                "unresolved_fields": unresolved_fields,
-                "invalid_states": invalid_states,
-                "evidence_ids": evidence_ids,
-                "evidence_provenance_checks": evidence_checks,
-                "recovery_task_id": recovery_task.get("task_id") if recovery_task else None,
-                "recovery_bundle_ids": recovery_task.get("minimal_recovery_bundle_ids", []) if recovery_task else [],
-                "executable_semantics_reconstructed": False,
-            }
-        )
+        candidate_audits.append({
+            "predicate_id": predicate_id,
+            "outcome": outcome,
+            "matrix_row_count": shape["row_count"],
+            "matrix_duplicate_fields": shape["duplicate_fields"],
+            "matrix_missing_fields": shape["missing_fields"],
+            "matrix_unexpected_fields": shape["unexpected_fields"],
+            "all_required_fields_satisfied": all_required_fields_satisfied,
+            "contradictions_resolved": contradictions_resolved,
+            "provenance_complete": provenance_complete,
+            "phase5_reconstruction_preflight": phase5_preflight,
+            "independent_two_engineer_test": independent_two_engineer_test,
+            "independent_reconstruction": independent_reconstruction,
+            "field_state_counts": state_counts,
+            "unresolved_fields": unresolved_fields,
+            "invalid_states": invalid_states,
+            "evidence_ids": evidence_ids,
+            "evidence_provenance_checks": evidence_checks,
+            "recovery_task_id": recovery_task.get("task_id") if recovery_task else None,
+            "recovery_bundle_ids": recovery_task.get("minimal_recovery_bundle_ids", []) if recovery_task else [],
+            "executable_semantics_reconstructed": False,
+        })
 
-    overall_outcome = "PASS" if any_pass else "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
+    any_pass = any(row["outcome"] == "PASS" for row in candidate_audits)
+    if any_pass:
+        overall_outcome = "PASS"
+    elif any(row["outcome"] == "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE" for row in candidate_audits):
+        overall_outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
+    elif any(row["outcome"] == "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET" for row in candidate_audits):
+        overall_outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"
+    else:
+        overall_outcome = "INSUFFICIENT_EVIDENCE"
+
     report = {
-        "schema_version": 1,
-        "audit_protocol": "INDEPENDENT_EVIDENCE_ONLY_SPEC_READINESS_V1",
+        "schema_version": 2,
+        "audit_protocol": "INDEPENDENT_EVIDENCE_ONLY_SPEC_READINESS_V2",
         "audit_code_path": "scripts/run_independent_spec_audit.py",
         "phase5_builder_imported": False,
+        "phase5_preflight_is_independent_two_engineer_test": False,
         "community_interpretations_used": False,
         "generic_ict_smc_knowledge_used": False,
         "performance_data_consulted": False,

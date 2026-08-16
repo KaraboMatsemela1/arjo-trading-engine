@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 import sys
+from collections import Counter
 from pathlib import Path
 
 REQUIRED_FIELDS = [
@@ -14,13 +15,14 @@ REQUIRED_FIELDS = [
     "PRECONDITIONS", "SETUP", "TRIGGER", "ENTRY", "STOP", "TARGET", "INVALIDATION",
     "EXPIRY", "SESSION/TIME_RULE", "OPTIONAL_CONDITIONS", "REQUIRED_CONDITIONS",
 ]
+INCOMPLETE = {"MISSING", "PARTIAL", "CONTRADICTORY"}
 
 
-def load_matrix(path: Path) -> dict[str, dict[str, str]]:
-    grouped: dict[str, dict[str, str]] = {}
+def load_matrix(path: Path) -> dict[str, list[dict]]:
+    grouped: dict[str, list[dict]] = {}
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
-            grouped.setdefault(str(row["PREDICATE_ID"]), {})[str(row["FIELD"])] = str(row["STATE"])
+            grouped.setdefault(str(row["PREDICATE_ID"]), []).append(row)
     return grouped
 
 
@@ -37,8 +39,13 @@ def main() -> int:
     recovery_ids = {str(row["task_id"]) for row in recovery.get("tasks", [])}
     errors: list[str] = []
 
+    if audit.get("schema_version") != 2:
+        errors.append("audit schema_version must be 2")
+    if audit.get("audit_protocol") != "INDEPENDENT_EVIDENCE_ONLY_SPEC_READINESS_V2":
+        errors.append("unexpected audit protocol")
     for flag in (
-        "phase5_builder_imported", "community_interpretations_used", "generic_ict_smc_knowledge_used",
+        "phase5_builder_imported", "phase5_preflight_is_independent_two_engineer_test",
+        "community_interpretations_used", "generic_ict_smc_knowledge_used",
         "performance_data_consulted", "trade_counts_consulted",
     ):
         if audit.get(flag) is not False:
@@ -50,16 +57,45 @@ def main() -> int:
     if audit.get("spec_ready") is False and audit.get("frozen_spec_ref") is not None:
         errors.append("failed audit must not freeze a spec")
 
-    audit_rows = {str(row["predicate_id"]): row for row in audit.get("candidates", [])}
+    candidates = audit.get("candidates", [])
+    audit_rows = {str(row.get("predicate_id", "")): row for row in candidates}
+    if len(audit_rows) != len(candidates):
+        errors.append("audit contains duplicate candidate IDs")
     if set(audit_rows) != set(matrix):
         errors.append("audit candidate IDs do not exactly match predicate matrix")
 
     any_pass = False
-    for predicate_id, fields in matrix.items():
+    candidate_outcomes: list[str] = []
+    for predicate_id, rows in matrix.items():
         row = audit_rows.get(predicate_id, {})
-        actual_unresolved = [field for field in REQUIRED_FIELDS if fields.get(field) in {"MISSING", "PARTIAL", "CONTRADICTORY"}]
-        all_satisfied = all(fields.get(field) == "SATISFIED" for field in REQUIRED_FIELDS)
-        contradictions_resolved = not any(fields.get(field) == "CONTRADICTORY" for field in REQUIRED_FIELDS)
+        fields = [str(item.get("FIELD", "")) for item in rows]
+        counts = Counter(fields)
+        duplicate_fields = sorted(field for field, count in counts.items() if count != 1)
+        missing_fields = sorted(set(REQUIRED_FIELDS) - set(fields))
+        unexpected_fields = sorted(set(fields) - set(REQUIRED_FIELDS))
+        row_by_field = {
+            str(item["FIELD"]): str(item["STATE"])
+            for item in rows
+            if str(item.get("FIELD", "")) in REQUIRED_FIELDS
+        }
+        actual_unresolved = [field for field in REQUIRED_FIELDS if row_by_field.get(field, "MISSING") in INCOMPLETE]
+        all_satisfied = (
+            len(rows) == len(REQUIRED_FIELDS)
+            and not duplicate_fields
+            and not missing_fields
+            and not unexpected_fields
+            and all(row_by_field.get(field) == "SATISFIED" for field in REQUIRED_FIELDS)
+        )
+        contradictions_resolved = not any(row_by_field.get(field) == "CONTRADICTORY" for field in REQUIRED_FIELDS)
+
+        if row.get("matrix_row_count") != len(rows):
+            errors.append(f"{predicate_id}: matrix_row_count mismatch")
+        if row.get("matrix_duplicate_fields") != duplicate_fields:
+            errors.append(f"{predicate_id}: matrix_duplicate_fields mismatch")
+        if row.get("matrix_missing_fields") != missing_fields:
+            errors.append(f"{predicate_id}: matrix_missing_fields mismatch")
+        if row.get("matrix_unexpected_fields") != unexpected_fields:
+            errors.append(f"{predicate_id}: matrix_unexpected_fields mismatch")
         if row.get("unresolved_fields") != actual_unresolved:
             errors.append(f"{predicate_id}: unresolved_fields mismatch")
         if row.get("all_required_fields_satisfied") is not all_satisfied:
@@ -68,30 +104,55 @@ def main() -> int:
             errors.append(f"{predicate_id}: contradictions_resolved mismatch")
         if row.get("provenance_complete") is not True:
             errors.append(f"{predicate_id}: evidence provenance audit is incomplete")
-        if row.get("two_engineer_test") != "PASS":
+        if row.get("phase5_reconstruction_preflight") != "PASS":
             errors.append(f"{predicate_id}: Phase 5 reconstruction preflight did not pass")
+        if "two_engineer_test" in row:
+            errors.append(f"{predicate_id}: legacy two_engineer_test field conflates Phase 5 and independent audit")
         if row.get("executable_semantics_reconstructed") is not False:
-            errors.append(f"{predicate_id}: auditor must not claim executable semantics before independent reconstruction PASS")
+            errors.append(f"{predicate_id}: executable semantics must remain false in V2 audit")
+
         recovery_task_id = row.get("recovery_task_id")
         if actual_unresolved and recovery_task_id not in recovery_ids:
             errors.append(f"{predicate_id}: unresolved candidate has no bounded recovery task")
 
-        passed = row.get("outcome") == "PASS"
+        outcome = str(row.get("outcome", ""))
+        candidate_outcomes.append(outcome)
+        passed = outcome == "PASS"
         any_pass = any_pass or passed
         if passed:
             if not all_satisfied:
-                errors.append(f"{predicate_id}: PASS with unresolved required fields")
+                errors.append(f"{predicate_id}: PASS with incomplete matrix")
+            if row.get("independent_two_engineer_test") != "PASS":
+                errors.append(f"{predicate_id}: PASS without independent two-engineer PASS")
             if row.get("independent_reconstruction") != "PASS":
                 errors.append(f"{predicate_id}: PASS without independent reconstruction PASS")
-        else:
-            if actual_unresolved and row.get("outcome") != "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE":
-                errors.append(f"{predicate_id}: unresolved candidate must be BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE")
-            if actual_unresolved and row.get("independent_reconstruction") != "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS":
-                errors.append(f"{predicate_id}: incomplete candidate must not attempt executable reconstruction")
+        elif actual_unresolved:
+            if outcome != "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE":
+                errors.append(f"{predicate_id}: unresolved candidate must need first-party evidence")
+            expected = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
+            if row.get("independent_two_engineer_test") != expected:
+                errors.append(f"{predicate_id}: independent two-engineer test must not run on incomplete fields")
+            if row.get("independent_reconstruction") != expected:
+                errors.append(f"{predicate_id}: independent reconstruction must not run on incomplete fields")
+        elif all_satisfied:
+            expected = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
+            if outcome != "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET":
+                errors.append(f"{predicate_id}: structurally complete candidate must await independent packet")
+            if row.get("independent_two_engineer_test") != expected:
+                errors.append(f"{predicate_id}: independent two-engineer state must await packet")
+            if row.get("independent_reconstruction") != expected:
+                errors.append(f"{predicate_id}: reconstruction state must await packet")
 
     if audit.get("spec_ready") is not any_pass:
         errors.append("overall spec_ready must equal whether any candidate passed")
-    expected_outcome = "PASS" if any_pass else "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
+    if any_pass:
+        expected_outcome = "PASS"
+    elif "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE" in candidate_outcomes:
+        expected_outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
+    elif "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET" in candidate_outcomes:
+        expected_outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"
+    else:
+        expected_outcome = "INSUFFICIENT_EVIDENCE"
     if audit.get("overall_outcome") != expected_outcome:
         errors.append(f"overall_outcome mismatch: expected {expected_outcome}")
 
