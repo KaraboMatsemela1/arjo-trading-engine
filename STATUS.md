@@ -16,6 +16,7 @@ _Generated mechanically by `scripts/project_state.py`._
 
 - `ACQUISITION_TOOLING_READY`
 - `ACTIONS_CI_AVAILABLE`
+- `ACTIONS_PR_CREATION_ENABLED`
 - `CONCEPT_INVENTORY_READY`
 - `CORPUS_ACQUIRED`
 - `EVIDENCE_REGISTRY_READY`
@@ -37,7 +38,7 @@ _Generated mechanically by `scripts/project_state.py`._
 | #7 | EVIDENCE_EXTRACTION | COMPLETE | True | True |
 | #8 | PREDICATE_SYNTHESIS | COMPLETE | True | True |
 | #9 | SPEC_AUDIT | COMPLETE | True | True |
-| #13 | OWNER_AUTHORIZATION | BLOCKED | True | True |
+| #13 | OWNER_AUTHORIZATION | COMPLETE | True | True |
 | #15 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
 | #18 | OWNER_INTERVENTION | COMPLETE | True | True |
 | #19 | SOURCE_ACCESS_RECOVERY | COMPLETE | True | True |
