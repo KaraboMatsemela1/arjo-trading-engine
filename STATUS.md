@@ -78,6 +78,8 @@ _Generated mechanically by `scripts/project_state.py`._
 | #106 | SOURCE_DISCOVERY_HARDENING | COMPLETE | True | True |
 | #112 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #113 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #116 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #120 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 
 ## Strategy implementation status
 
