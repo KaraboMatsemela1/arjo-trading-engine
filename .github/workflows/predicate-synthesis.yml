@@ -7,11 +7,13 @@ on:
     paths:
       - 'research/candidate_predicates.json'
       - 'research/evidence_registry.jsonl'
+      - 'research/candidate_selection_dispositions.json'
       - 'scripts/build_predicate_matrix.py'
       - 'scripts/check_predicate_matrix.py'
       - 'scripts/two_engineer_preflight.py'
       - 'scripts/build_recovery_tasks.py'
       - 'scripts/build_candidate_selection_audit.py'
+      - 'scripts/check_candidate_selection_dispositions.py'
       - '.github/workflows/predicate-synthesis.yml'
 
 permissions:
@@ -54,6 +56,11 @@ jobs:
         run: >-
           python scripts/build_candidate_selection_audit.py
           --output /tmp/candidate_selection_audit.json
+      - name: Require explicit dispositions for every omission-review item
+        run: >-
+          python scripts/check_candidate_selection_dispositions.py
+          --audit /tmp/candidate_selection_audit.json
+          --dispositions research/candidate_selection_dispositions.json
       - name: Stage durable Phase 5 state
         run: |
           cp /tmp/predicate_matrix.csv research/predicate_matrix.csv
@@ -112,9 +119,9 @@ jobs:
           STATE: READY
           -->
 
-          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit.
+          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit. Every current omission-review item passed the committed explicit-disposition gate.
 
           Service generated branch: ${BRANCH}
 
-          Open a PR to main, run normal CI/provenance checks, and merge only if green. Review any unrepresented operational cues before granting PREDICATE_MATRIX_READY. This output is not SPEC_READY and contains no backtest/performance selection."
+          Open a PR to main, run normal CI/provenance checks, and merge only if green. This output is not SPEC_READY and contains no backtest/performance selection."
           gh issue create --title "Service completed predicate-synthesis state branch" --body "$body"
