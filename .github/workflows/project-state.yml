@@ -10,6 +10,11 @@ on:
 permissions:
   contents: write
   issues: read
+  pull-requests: write
+
+concurrency:
+  group: project-state-publication
+  cancel-in-progress: false
 
 jobs:
   generate:
@@ -41,7 +46,7 @@ jobs:
           cp generated/project_state.json project_state.json
           cp generated/STATUS.md STATUS.md
 
-      - name: Publish bounded project-state branch when changed
+      - name: Publish coalesced project-state branch when changed
         id: publish
         shell: bash --noprofile --norc -e -o pipefail {0}
         run: |
@@ -51,18 +56,37 @@ jobs:
             exit 0
           fi
 
-          branch="automation/project-state-${GITHUB_RUN_ID}"
+          branch="automation/project-state-current"
           echo "changed=true" >> "$GITHUB_OUTPUT"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$branch"
+          git checkout -B "$branch"
           git add project_state.json STATUS.md
           git commit -m "governance: persist generated project state"
-          git push origin "$branch"
+          git push --force-with-lease origin "$branch"
 
-          echo "Published bounded project-state branch: $branch"
+          echo "Published coalesced project-state branch: $branch"
+
+      - name: Open or refresh reviewed Project State PR
+        if: steps.publish.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.publish.outputs.branch }}
+        shell: bash --noprofile --norc -e -o pipefail {0}
+        run: |
+          existing="$(gh pr list --state open --head "$BRANCH" --base main --json number --jq '.[0].number // empty')"
+          if [ -n "$existing" ]; then
+            echo "Updated existing Project State PR #$existing via stable branch $BRANCH."
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Governance: persist generated Project State" \
+            --body "Mechanically generated project_state.json and STATUS.md from canonical GitHub issue metadata. This PR is reviewed-only: no workflow self-merge, no semantic research changes, and no strategy execution changes. Merge only after normal CI, dependency, claim, provenance, and gate checks pass."
 
       - name: Report publication result
         env:
@@ -71,8 +95,8 @@ jobs:
         run: |
           if [ "$CHANGED" = "true" ]; then
             echo "Generated project state differs from main."
-            echo "Service branch: $BRANCH"
-            echo "Open a normal reviewed PR to main; this workflow does not create or merge pull requests."
+            echo "Coalesced service branch: $BRANCH"
+            echo "A normal reviewed PR is open or refreshed for the latest generated state."
           else
             echo "No durable project-state update required."
           fi
