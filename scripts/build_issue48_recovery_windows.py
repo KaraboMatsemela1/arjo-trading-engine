@@ -15,6 +15,8 @@ import re
 from html.parser import HTMLParser
 from pathlib import Path
 
+from evidence_antibias import contains_pre_spec_outcome
+
 TERMS = [
     "Area of Opportunity", "AoO", "Fair Value Area", "FVA", "Fair Value Gap", "FVG",
     "2 Candle Rejection", "2CR", "rejection", "trigger", "target", "entry", "enter",
@@ -22,10 +24,6 @@ TERMS = [
     "HTF", "LTF", "disrespect", "respect", "swing high", "swing low", "liquidity",
     "breakaway gap", "BAG", "PD Array",
 ]
-FORBIDDEN_PRE_SPEC = re.compile(
-    r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)",
-    re.IGNORECASE,
-)
 META_TEXT_KEYS = {
     "description",
     "og:description",
@@ -129,7 +127,7 @@ def main() -> int:
             pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE)
             for match in pattern.finditer(text):
                 excerpt = bounded_window(text, match, args.max_words)
-                if not excerpt or FORBIDDEN_PRE_SPEC.search(excerpt):
+                if not excerpt or contains_pre_spec_outcome(excerpt):
                     continue
                 key = (term.lower(), excerpt.lower())
                 if key in seen:
@@ -144,10 +142,11 @@ def main() -> int:
         sources.append(row)
 
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "issue": 48,
         "semantic_synthesis_performed": False,
         "performance_data_consulted": False,
+        "shared_antibias_guard": True,
         "max_excerpt_words": args.max_words,
         "source_count": len(sources),
         "captured_source_count": sum(1 for row in sources if row["status"] == "PAYLOAD_CAPTURED"),
