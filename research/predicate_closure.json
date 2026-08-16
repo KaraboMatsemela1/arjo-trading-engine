@@ -115,9 +115,9 @@
       "closure_distance": 16,
       "closure_rank": 3,
       "closure_tuple_missing_contradictory_partial": [
-        12,
+        10,
         0,
-        4
+        6
       ],
       "concepts": [
         "ORDER_BLOCK",
@@ -126,9 +126,9 @@
       "executable_rule_complete": false,
       "field_state_counts": {
         "CONTRADICTORY": 0,
-        "MISSING": 12,
+        "MISSING": 10,
         "NOT_APPLICABLE": 0,
-        "PARTIAL": 4,
+        "PARTIAL": 6,
         "SATISFIED": 0
       },
       "minimal_recovery_bundle_ids": [
