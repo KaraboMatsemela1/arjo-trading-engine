@@ -15,6 +15,20 @@
       "state": "PARTIAL",
       "evidence_ids": ["EV_910CD2C2C616AE55270F56C3"],
       "notes": "limitation: a directly captured worked AoO example explicitly uses 4h and 1h, but universal timeframe scope, ownership, hierarchy, and component mapping remain unresolved."
+    },
+    {
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "field": "INSTRUMENTS",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_CE3A40701403F0ADEB1E88C9"],
+      "notes": "limitation: the directly captured worked Order Block dataset explicitly uses ES, but universal instrument eligibility, exclusions, substitutions, and MT applicability remain unresolved."
+    },
+    {
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "field": "TIMEFRAME",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_EB53D46DE5AB0CE28598D703"],
+      "notes": "limitation: the directly captured worked Order Block dataset explicitly evaluates Daily Order Blocks, but universal timeframe scope, hierarchy, ownership, and MT applicability remain unresolved."
     }
   ]
 }
