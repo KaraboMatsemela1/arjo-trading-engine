@@ -4,7 +4,7 @@
     "instagram",
     "discord"
   ],
-  "generated_at": "2026-08-15T10:52:58.883525+00:00",
+  "generated_at": "2026-08-16T06:00:26.810773+00:00",
   "principle": "Transport/access limitations are not evidence absence.",
   "replayable_surfaces_with_gaps": [
     "website"
@@ -20,7 +20,7 @@
       "platform": "youtube",
       "queue_truncated": false,
       "root": "https://www.youtube.com/@Arjoio",
-      "snapshot_sha256": "ce9d3ddd4f9fd50135f54ca0ceabde9437987bb7545b8b0d9c7919927a99a065",
+      "snapshot_sha256": "a983f5f989b3c9fa436e08dae37745de848aa170fa70f191e29dd45dc95880d5",
       "status": "ENUMERATED_CLEAN"
     },
     {
@@ -30,7 +30,7 @@
       "platform": "telegram",
       "queue_truncated": false,
       "root": "https://t.me/ArjoioTrading",
-      "snapshot_sha256": "d0933af76429853b90df81f7ba985990e449aa563b3f9996103b1c34b3c29793",
+      "snapshot_sha256": "a0ee74b258fe3a57f95d08b1abcbf8911aff6624c9237bbd6426d2f2b0172842",
       "status": "ENUMERATED_CLEAN"
     },
     {
