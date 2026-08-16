@@ -7,8 +7,11 @@ on:
     paths:
       - 'research/concept_inventory*.jsonl'
       - 'research/concept_terms*.json'
+      - 'research/evidence_registry*.jsonl'
       - 'scripts/build_evidence_registry.py'
       - 'scripts/check_evidence_registry.py'
+      - 'scripts/evidence_registry_union.py'
+      - 'scripts/reconcile_evidence_coverage.py'
       - '.github/workflows/evidence-extraction.yml'
 
 permissions:
@@ -26,21 +29,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Build atomic evidence from direct first-party sources
+      - name: Build atomic base evidence from direct first-party sources
         run: >-
           python scripts/build_evidence_registry.py
           --output /tmp/evidence_registry.jsonl
           --coverage /tmp/evidence_coverage.json
-      - name: Validate evidence coverage and provenance
+      - name: Validate regenerated base evidence before staging
         run: >-
           python scripts/check_evidence_registry.py
           --evidence /tmp/evidence_registry.jsonl
           --coverage /tmp/evidence_coverage.json
-      - name: Stage durable evidence state
+      - name: Stage durable base evidence state
         run: |
           cp /tmp/evidence_registry.jsonl research/evidence_registry.jsonl
           cp /tmp/evidence_coverage.json research/evidence_coverage.json
-      - name: Validate repository provenance with generated evidence
+      - name: Reconcile coverage with additive recovery evidence shards
+        run: python scripts/reconcile_evidence_coverage.py
+      - name: Validate canonical evidence union after staging
+        run: python scripts/check_evidence_registry.py
+      - name: Validate repository provenance with generated evidence union
         run: python scripts/check_provenance.py
       - name: Upload bounded evidence state
         uses: actions/upload-artifact@v4
@@ -88,7 +95,7 @@ jobs:
           STATE: READY
           -->
 
-          Atomic first-party evidence extraction completed and passed deterministic coverage/provenance validation.
+          Atomic first-party base evidence extraction completed, additive recovery shards were preserved, and the deterministic evidence-union coverage/provenance checks passed.
 
           Service generated branch: ${BRANCH}
 
