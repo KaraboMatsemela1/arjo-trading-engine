@@ -1,0 +1,14 @@
+{
+  "cited_source_count": 25,
+  "concept_count": 36,
+  "concepts_with_direct_text_evidence": 29,
+  "concepts_with_explicit_construction_gap": 36,
+  "covered_concept_count": 36,
+  "eligible_direct_cited_source_count": 25,
+  "evidence_record_count": 81,
+  "messages_recovered": 25,
+  "missing_concepts": [],
+  "retrieval_failures": [],
+  "schema_version": 1,
+  "semantic_synthesis_performed": false
+}
