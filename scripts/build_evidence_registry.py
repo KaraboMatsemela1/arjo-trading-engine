@@ -26,6 +26,10 @@ TEXT_RE = re.compile(r'<div class="tgme_widget_message_text[^\"]*"[^>]*>(.*?)</d
 TAG_RE = re.compile(r"<[^>]+>")
 BR_RE = re.compile(r"<br\s*/?>", re.IGNORECASE)
 URL_RE = re.compile(r"https?://\S+")
+FORBIDDEN_PRE_SPEC = re.compile(
+    r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)",
+    re.IGNORECASE,
+)
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -100,19 +104,21 @@ def fetch_telegram_messages(eligible: set[str], max_pages: int, sleep_seconds: f
 
 
 def minimal_quote(text: str, aliases: list[str], max_words: int = 18) -> tuple[str, str]:
+    """Return the first alias-centered quote window that contains no pre-SPEC outcome metric."""
     aliases = sorted({alias.strip() for alias in aliases if alias.strip()}, key=len, reverse=True)
     for alias in aliases:
-        match = re.search(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", text, re.IGNORECASE)
-        if not match:
-            continue
-        prefix = text[: match.start()].split()
-        hit = text[match.start() : match.end()].split()
-        suffix = text[match.end() :].split()
-        left = prefix[-5:]
-        right_budget = max(0, max_words - len(left) - len(hit))
-        right = suffix[:right_budget]
-        quote = " ".join([*left, *hit, *right]).strip()
-        return quote[:180], alias
+        pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", re.IGNORECASE)
+        for match in pattern.finditer(text):
+            prefix = text[: match.start()].split()
+            hit = text[match.start() : match.end()].split()
+            suffix = text[match.end() :].split()
+            left = prefix[-5:]
+            right_budget = max(0, max_words - len(left) - len(hit))
+            right = suffix[:right_budget]
+            quote = " ".join([*left, *hit, *right]).strip()[:180]
+            if FORBIDDEN_PRE_SPEC.search(quote):
+                continue
+            return quote, alias
     return "", ""
 
 
@@ -144,13 +150,13 @@ def build_records(
                     "SOURCE_ID": source_id,
                     "TIMESTAMP": source_dates.get(source_id, ""),
                     "MINIMAL_QUOTE": quote,
-                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_TEXT_MATCH",
+                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH",
                     "SUPPORTED_CONCEPT": concept_id,
                     "SUPPORTED_FIELD": "CONCEPT_MENTION_OR_CONTEXT",
                     "WHAT_IT_PROVES": (
                         f"Direct first-party source explicitly uses '{matched_alias}' in context for {concept_id}."
                         if quote else
-                        f"The provenance-bound source is cited for {concept_id}, but this extractor cannot recover a matching textual term from it."
+                        f"The provenance-bound source is cited for {concept_id}, but this extractor cannot recover a pre-SPEC-safe matching text window."
                     ),
                     "WHAT_IT_DOES_NOT_PROVE": "It does not by itself establish a complete deterministic trading predicate, parameter set, invalidation, expiry, or performance claim.",
                     "CONFIDENCE": confidence,
@@ -168,7 +174,7 @@ def build_records(
                     "SOURCE_ID": source_id,
                     "TIMESTAMP": source_dates.get(source_id, ""),
                     "MINIMAL_QUOTE": quote,
-                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_TEXT_MATCH",
+                    "FRAME_LOCATOR": f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:TEXT" if quote else f"TELEGRAM_MESSAGE:{source_id.removeprefix('TG_ARJOIOTRADING_')}:NO_SAFE_TEXT_MATCH",
                     "SUPPORTED_CONCEPT": concept_id,
                     "SUPPORTED_FIELD": "DETERMINISTIC_CONSTRUCTION",
                     "WHAT_IT_PROVES": "The cited first-party material establishes concept existence/context only to the stated inventory level.",

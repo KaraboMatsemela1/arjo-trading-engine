@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline smoke test for evidence construction and quote bounds."""
+"""Offline smoke test for evidence construction, quote bounds and anti-bias filtering."""
 
 from __future__ import annotations
 
@@ -38,6 +38,21 @@ def main() -> int:
     assert alias == "Long Alias"
     assert "Long Alias" in quote
     assert len(quote.split()) <= 18
+
+    # A metric-contaminated occurrence must be skipped in favor of a later clean occurrence.
+    quote, alias = minimal_quote(
+        "Test Concept showed 72% in this old outcome note. Later clean context uses Test Concept for study only.",
+        ["Test Concept"],
+    )
+    assert alias == "Test Concept"
+    assert "72%" not in quote
+    assert "Later clean context" in quote
+
+    # If every occurrence is contaminated, extraction must downgrade to no safe quote.
+    quote, alias = minimal_quote("Test Concept had 72% outcomes.", ["Test Concept"])
+    assert quote == ""
+    assert alias == ""
+
     print("Evidence registry smoke tests passed")
     return 0
 
