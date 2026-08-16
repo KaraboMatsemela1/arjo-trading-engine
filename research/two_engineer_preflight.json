@@ -15,8 +15,8 @@
     },
     {
       "agreement": true,
-      "candidate_registry_hash": "17bd3a8e11e9522ae66f853479f9cdfd66565af15e366b6aa5b456ac215629b0",
-      "matrix_reconstruction_hash": "17bd3a8e11e9522ae66f853479f9cdfd66565af15e366b6aa5b456ac215629b0",
+      "candidate_registry_hash": "5f3549cd2fcba33f83bda4a2f122497e9633528b3f77a79cf3a26fbf23d2fbf1",
+      "matrix_reconstruction_hash": "5f3549cd2fcba33f83bda4a2f122497e9633528b3f77a79cf3a26fbf23d2fbf1",
       "predicate_id": "MMBM_LRLR_SHORT_CONTEXT"
     },
     {
@@ -38,7 +38,7 @@
       "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
     }
   ],
-  "field_override_count": 4,
+  "field_override_count": 7,
   "field_overrides_included": true,
   "independence_scope": "TWO_INDEPENDENT_CODE_PATHS_OVER_THE_SAME_EVIDENCE_ONLY_PACKET",
   "independent_humans_or_models": false,
