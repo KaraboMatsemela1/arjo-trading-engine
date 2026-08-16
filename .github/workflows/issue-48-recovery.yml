@@ -1,0 +1,54 @@
+name: Issue 48 First-Party Recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [issue-48-aoo-first-party-recovery]
+    paths:
+      - 'research/recovery/issue_48_targets.csv'
+      - 'scripts/build_issue48_recovery_windows.py'
+      - '.github/workflows/issue-48-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile recovery tooling
+        run: python -m compileall -q scripts
+      - name: Acquire only bounded Issue 48 first-party targets
+        run: >-
+          python scripts/acquire_corpus.py
+          --registry research/recovery/issue_48_targets.csv
+          --manifest /tmp/issue48_acquisition_manifest.jsonl
+          --cache-root /tmp/issue48-cache
+          --replace-manifest
+          --timeout 120
+      - name: Validate terminal recovery acquisition records
+        run: >-
+          python scripts/check_acquisition_manifest.py
+          --registry research/recovery/issue_48_targets.csv
+          --manifest /tmp/issue48_acquisition_manifest.jsonl
+      - name: Build bounded lexical recovery windows
+        run: >-
+          python scripts/build_issue48_recovery_windows.py
+          --manifest /tmp/issue48_acquisition_manifest.jsonl
+          --cache-root /tmp/issue48-cache
+          --output /tmp/issue48_recovery_windows.json
+          --max-words 20
+          --max-windows-per-source 12
+      - name: Upload bounded recovery evidence locator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-48-first-party-recovery
+          path: |
+            /tmp/issue48_acquisition_manifest.jsonl
+            /tmp/issue48_recovery_windows.json
+          retention-days: 14
