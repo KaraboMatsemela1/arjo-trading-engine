@@ -6,16 +6,24 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import re
 import sys
 from pathlib import Path
 
+from evidence_antibias import contains_pre_spec_outcome
+
 CONFIDENCE = {"DIRECT", "STRONG_PARTIAL", "CONTEXTUAL", "INSUFFICIENT"}
 FIELDS = {
-    "EVIDENCE_ID", "SOURCE_ID", "TIMESTAMP", "MINIMAL_QUOTE", "FRAME_LOCATOR",
-    "SUPPORTED_CONCEPT", "SUPPORTED_FIELD", "WHAT_IT_PROVES", "WHAT_IT_DOES_NOT_PROVE", "CONFIDENCE",
+    "EVIDENCE_ID",
+    "SOURCE_ID",
+    "TIMESTAMP",
+    "MINIMAL_QUOTE",
+    "FRAME_LOCATOR",
+    "SUPPORTED_CONCEPT",
+    "SUPPORTED_FIELD",
+    "WHAT_IT_PROVES",
+    "WHAT_IT_DOES_NOT_PROVE",
+    "CONFIDENCE",
 }
-FORBIDDEN_PRE_SPEC = re.compile(r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)", re.IGNORECASE)
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -43,14 +51,17 @@ def main() -> int:
     concepts = {str(row["CONCEPT_ID"]): row for row in inventory}
     with Path(args.registry).open(newline="", encoding="utf-8") as handle:
         sources = {row["SOURCE_ID"]: row for row in csv.DictReader(handle) if row.get("SOURCE_ID")}
-    acquisitions = {str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))}
+    acquisitions = {
+        str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))
+    }
     evidence = read_jsonl(Path(args.evidence))
 
     seen_ids: set[str] = set()
     concept_evidence: dict[str, list[dict]] = {concept_id: [] for concept_id in concepts}
     cited_pairs = {
         (str(concept["CONCEPT_ID"]), str(source_id))
-        for concept in inventory for source_id in concept.get("SOURCE_IDS", [])
+        for concept in inventory
+        for source_id in concept.get("SOURCE_IDS", [])
     }
     evidence_pairs: set[tuple[str, str]] = set()
 
@@ -83,7 +94,9 @@ def main() -> int:
                 errors.append(f"{label}: source {source_id} is not confirmed first-party")
             expected_date = source.get("PUBLICATION_DATE", "")
             if expected_date and record.get("TIMESTAMP") != expected_date:
-                errors.append(f"{label}: timestamp mismatch {record.get('TIMESTAMP')} != {expected_date}")
+                errors.append(
+                    f"{label}: timestamp mismatch {record.get('TIMESTAMP')} != {expected_date}"
+                )
 
         acquisition = acquisitions.get(source_id)
         if acquisition is None:
@@ -107,14 +120,18 @@ def main() -> int:
             str(record.get(field, ""))
             for field in ("MINIMAL_QUOTE", "WHAT_IT_PROVES", "WHAT_IT_DOES_NOT_PROVE")
         )
-        if FORBIDDEN_PRE_SPEC.search(combined):
+        if contains_pre_spec_outcome(combined):
             errors.append(f"{label}: pre-SPEC performance/outcome metric leaked into evidence")
-        if not str(record.get("WHAT_IT_PROVES", "")).strip() or not str(record.get("WHAT_IT_DOES_NOT_PROVE", "")).strip():
+        if not str(record.get("WHAT_IT_PROVES", "")).strip() or not str(
+            record.get("WHAT_IT_DOES_NOT_PROVE", "")
+        ).strip():
             errors.append(f"{label}: proof boundaries must be non-empty")
 
     missing_pairs = sorted(cited_pairs - evidence_pairs)
     if missing_pairs:
-        errors.append(f"concept-cited source relationships missing evidence: {missing_pairs[:25]}")
+        errors.append(
+            f"concept-cited source relationships missing evidence: {missing_pairs[:25]}"
+        )
 
     for concept_id, concept in concepts.items():
         rows = concept_evidence.get(concept_id, [])
@@ -123,10 +140,13 @@ def main() -> int:
             continue
         ambiguities = [value for value in concept.get("AMBIGUITIES", []) if str(value).strip()]
         if ambiguities and not any(
-            row.get("SUPPORTED_FIELD") == "DETERMINISTIC_CONSTRUCTION" and row.get("CONFIDENCE") == "INSUFFICIENT"
+            row.get("SUPPORTED_FIELD") == "DETERMINISTIC_CONSTRUCTION"
+            and row.get("CONFIDENCE") == "INSUFFICIENT"
             for row in rows
         ):
-            errors.append(f"{concept_id}: ambiguity exists but no explicit insufficient construction evidence")
+            errors.append(
+                f"{concept_id}: ambiguity exists but no explicit insufficient construction evidence"
+            )
 
     coverage = json.loads(Path(args.coverage).read_text(encoding="utf-8"))
     if coverage.get("semantic_synthesis_performed") is not False:
@@ -134,7 +154,9 @@ def main() -> int:
     if coverage.get("concept_count") != len(concepts):
         errors.append(f"coverage concept count {coverage.get('concept_count')} != {len(concepts)}")
     if coverage.get("covered_concept_count") != len(concepts):
-        errors.append(f"coverage does not cover all concepts: {coverage.get('covered_concept_count')} / {len(concepts)}")
+        errors.append(
+            f"coverage does not cover all concepts: {coverage.get('covered_concept_count')} / {len(concepts)}"
+        )
     if coverage.get("retrieval_failures"):
         errors.append(f"evidence extraction retrieval failures: {coverage.get('retrieval_failures')}")
 
@@ -144,14 +166,21 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    print(json.dumps({
-        "concepts": len(concepts),
-        "evidence_records": len(evidence),
-        "cited_relationships": len(cited_pairs),
-        "concepts_with_direct_or_partial_text": sum(
-            1 for rows in concept_evidence.values() if any(row.get("CONFIDENCE") != "INSUFFICIENT" for row in rows)
-        ),
-    }, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "concepts": len(concepts),
+                "evidence_records": len(evidence),
+                "cited_relationships": len(cited_pairs),
+                "concepts_with_direct_or_partial_text": sum(
+                    1
+                    for rows in concept_evidence.values()
+                    if any(row.get("CONFIDENCE") != "INSUFFICIENT" for row in rows)
+                ),
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 
