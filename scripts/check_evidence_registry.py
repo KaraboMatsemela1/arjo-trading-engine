@@ -162,6 +162,10 @@ def main() -> int:
         errors.append(
             f"coverage does not cover all concepts: {coverage.get('covered_concept_count')} / {len(concepts)}"
         )
+    if coverage.get("evidence_record_count") != len(evidence):
+        errors.append(
+            f"coverage evidence_record_count {coverage.get('evidence_record_count')} != {len(evidence)}"
+        )
     if coverage.get("retrieval_failures"):
         errors.append(f"evidence extraction retrieval failures: {coverage.get('retrieval_failures')}")
 
