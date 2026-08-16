@@ -8,6 +8,7 @@ on:
     - cron: '17 * * * *'
 
 permissions:
+  actions: write
   contents: write
   issues: read
   pull-requests: write
@@ -69,7 +70,7 @@ jobs:
 
           echo "Published coalesced project-state branch: $branch"
 
-      - name: Open or refresh reviewed Project State PR
+      - name: Open or refresh reviewed Project State PR and dispatch validation
         if: steps.publish.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
@@ -79,14 +80,15 @@ jobs:
           existing="$(gh pr list --state open --head "$BRANCH" --base main --json number --jq '.[0].number // empty')"
           if [ -n "$existing" ]; then
             echo "Updated existing Project State PR #$existing via stable branch $BRANCH."
-            exit 0
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "Governance: persist generated Project State" \
+              --body "Mechanically generated project_state.json and STATUS.md from canonical GitHub issue metadata. This PR is reviewed-only: no workflow self-merge, no semantic research changes, and no strategy execution changes. Merge only after normal CI, dependency, claim, provenance, and gate checks pass."
           fi
 
-          gh pr create \
-            --base main \
-            --head "$BRANCH" \
-            --title "Governance: persist generated Project State" \
-            --body "Mechanically generated project_state.json and STATUS.md from canonical GitHub issue metadata. This PR is reviewed-only: no workflow self-merge, no semantic research changes, and no strategy execution changes. Merge only after normal CI, dependency, claim, provenance, and gate checks pass."
+          scripts/dispatch_autonomous_validation.sh "$BRANCH"
 
       - name: Report publication result
         env:
@@ -96,7 +98,7 @@ jobs:
           if [ "$CHANGED" = "true" ]; then
             echo "Generated project state differs from main."
             echo "Coalesced service branch: $BRANCH"
-            echo "A normal reviewed PR is open or refreshed for the latest generated state."
+            echo "A normal reviewed PR is open or refreshed and exact validation workflows were dispatched."
           else
             echo "No durable project-state update required."
           fi
