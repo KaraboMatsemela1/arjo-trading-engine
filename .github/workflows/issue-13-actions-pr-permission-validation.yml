@@ -1,0 +1,26 @@
+name: Issue 13 Actions PR Permission Validation
+
+on:
+  push:
+    branches:
+      - issue-13-actions-pr-validation
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create bounded validation PR with GITHUB_TOKEN
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base main \
+            --head issue-13-actions-pr-validation \
+            --title "Validation: GitHub Actions PR creation permission" \
+            --body "Disposable Issue #13 validation PR created directly by GitHub Actions using GITHUB_TOKEN. Do not merge; close after confirming successful creation. No research, trading, or semantic state is changed."
