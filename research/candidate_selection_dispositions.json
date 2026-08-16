@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "audit_basis": "research/candidate_selection_audit.json",
+  "performance_data_consulted": false,
+  "invented_semantics_used": false,
+  "dispositions": [
+    {
+      "concept_id": "RESISTANCE_LIQUIDITY_RUNS",
+      "audit_evidence_ids": ["EV_47407FF3FBAB9E586CA93D3B"],
+      "decision": "NOT_CANDIDATE",
+      "reason": "The direct first-party evidence says LRLR indicates explosive moves, but it does not establish a direction, setup transition, trigger, entry, stop, target, invalidation, or other sufficiently bounded operational relationship. Treating that descriptive cue as a separate predicate would invent missing semantics.",
+      "retained_role": "RECOVERY_CONTEXT_ONLY",
+      "future_admission_condition": "Admit only if additional direct first-party evidence establishes a bounded operational relationship and its relationship to MMBM/LRLR without generic-market inference."
+    },
+    {
+      "concept_id": "TAPE_READING",
+      "audit_evidence_ids": ["EV_C2D2AD099F3842101F97C924"],
+      "decision": "NOT_CANDIDATE",
+      "reason": "Arjo directly defines Tape Reading as studying real-time price delivery for experience while holding no interest in pushing an entry. The captured definition therefore supports an observational study method, not an entry/setup predicate candidate.",
+      "retained_role": "OBSERVATIONAL_METHOD",
+      "future_admission_condition": "Admit only if separate direct first-party evidence explicitly gives Tape Reading a bounded executable strategy role rather than observational study use."
+    }
+  ]
+}

@@ -62,6 +62,16 @@ jobs:
         run: >-
           python scripts/build_candidate_selection_audit.py
           --output /tmp/candidate_selection_audit.json
+      - name: Validate candidate omission dispositions when present
+        shell: bash
+        run: |
+          if [ -f research/candidate_selection_dispositions.json ]; then
+            python scripts/check_candidate_selection_dispositions.py \
+              --audit /tmp/candidate_selection_audit.json \
+              --dispositions research/candidate_selection_dispositions.json
+          else
+            echo "Candidate omission dispositions not committed yet; Phase 5 gate remains pending."
+          fi
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
