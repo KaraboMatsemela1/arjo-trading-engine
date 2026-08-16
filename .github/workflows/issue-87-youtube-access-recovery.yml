@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - issue-87-youtube-public-access-recovery
+    paths:
+      - research/recovery/issue_87_youtube_canaries.csv
+      - scripts/probe_youtube_public_routes.py
+      - scripts/test_youtube_public_route_probe.py
+      - .github/workflows/issue-87-youtube-access-recovery.yml
   workflow_dispatch:
 
 permissions:
