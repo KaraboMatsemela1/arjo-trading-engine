@@ -1,0 +1,48 @@
+name: Issue 75 Recovery
+
+on:
+  push:
+    branches: [issue-75-ob-mt-first-party-recovery]
+    paths:
+      - research/recovery/issue_75_targets.csv
+      - scripts/build_issue75_recovery_windows.py
+      - scripts/build_issue75_telegram_recovery.py
+      - scripts/test_issue75_recovery.py
+      - .github/workflows/issue-75-recovery.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install acquisition helper
+        run: python -m pip install --disable-pip-version-check yt-dlp==2026.6.9
+      - name: Compile and test
+        run: |
+          python -m compileall -q scripts
+          python scripts/test_issue75_recovery.py
+      - name: Acquire bounded targets
+        run: python scripts/acquire_corpus.py --registry research/recovery/issue_75_targets.csv --manifest /tmp/issue75_acquisition_manifest.jsonl --cache-root /tmp/issue75-cache --replace-manifest --timeout 120
+      - name: Validate acquisition
+        run: python scripts/check_acquisition_manifest.py --registry research/recovery/issue_75_targets.csv --manifest /tmp/issue75_acquisition_manifest.jsonl
+      - name: Build target windows
+        run: python scripts/build_issue75_recovery_windows.py --manifest /tmp/issue75_acquisition_manifest.jsonl --cache-root /tmp/issue75-cache --output /tmp/issue75_recovery_windows.json --max-words 20 --max-windows-per-source 16
+      - name: Recover Telegram source
+        run: python scripts/build_issue75_telegram_recovery.py --acquisition research/acquisition_manifest.jsonl --output /tmp/issue75_telegram_recovery.json --archive-cache-root /tmp/issue75-archive-cache --max-words 20 --max-excerpts 18
+      - uses: actions/upload-artifact@v4
+        with:
+          name: issue-75-first-party-recovery
+          path: |
+            /tmp/issue75_acquisition_manifest.jsonl
+            /tmp/issue75_recovery_windows.json
+            /tmp/issue75_telegram_recovery.json
+            /tmp/issue75-archive-cache
+          retention-days: 14
