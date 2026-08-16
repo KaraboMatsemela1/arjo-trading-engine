@@ -1,0 +1,70 @@
+name: Issue 49 First-Party Recovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [issue-49-pd-array-first-party-recovery]
+    paths:
+      - 'research/recovery/issue_49_targets.csv'
+      - 'scripts/build_issue49_recovery_windows.py'
+      - 'scripts/build_issue49_telegram_recovery.py'
+      - 'scripts/test_issue49_recovery.py'
+      - '.github/workflows/issue-49-recovery.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned public-source acquisition helper
+        run: python -m pip install --disable-pip-version-check yt-dlp==2026.6.9
+      - name: Compile recovery tooling
+        run: python -m compileall -q scripts
+      - name: Run offline Issue 49 recovery regression tests
+        run: python scripts/test_issue49_recovery.py
+      - name: Acquire only bounded Issue 49 first-party targets
+        run: >-
+          python scripts/acquire_corpus.py
+          --registry research/recovery/issue_49_targets.csv
+          --manifest /tmp/issue49_acquisition_manifest.jsonl
+          --cache-root /tmp/issue49-cache
+          --replace-manifest
+          --timeout 120
+      - name: Validate terminal recovery acquisition records
+        run: >-
+          python scripts/check_acquisition_manifest.py
+          --registry research/recovery/issue_49_targets.csv
+          --manifest /tmp/issue49_acquisition_manifest.jsonl
+      - name: Build bounded lexical windows from captured target payloads
+        run: >-
+          python scripts/build_issue49_recovery_windows.py
+          --manifest /tmp/issue49_acquisition_manifest.jsonl
+          --cache-root /tmp/issue49-cache
+          --output /tmp/issue49_recovery_windows.json
+          --max-words 20
+          --max-windows-per-source 16
+      - name: Recover only canonical Telegram posts 776 and 791 from SHA-bound archive pages
+        run: >-
+          python scripts/build_issue49_telegram_recovery.py
+          --acquisition research/acquisition_manifest.jsonl
+          --output /tmp/issue49_telegram_recovery.json
+          --archive-cache-root /tmp/issue49-archive-cache
+          --max-words 20
+          --max-excerpts-per-message 16
+      - name: Upload bounded Issue 49 recovery artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: issue-49-first-party-recovery
+          path: |
+            /tmp/issue49_acquisition_manifest.jsonl
+            /tmp/issue49_recovery_windows.json
+            /tmp/issue49_telegram_recovery.json
+            /tmp/issue49-archive-cache
+          retention-days: 14
