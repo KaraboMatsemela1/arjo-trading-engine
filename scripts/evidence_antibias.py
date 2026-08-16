@@ -20,7 +20,10 @@ FORBIDDEN_PRE_SPEC = re.compile(
     r"\d+(?:\.\d+)?%|"
     r"\b(?:winner|winners|loser|losers)\b|"
     r"\b(?:won|lost)\s+(?:(?:a|an|the|\d+)\s+)?(?:trade|trades|position|positions)\b|"
-    r"\b(?:winning|losing)\s+(?:trade|trades|day|week|month|streak)\b"
+    r"\b(?:winning|losing)\s+(?:trade|trades|day|week|month|streak)\b|"
+    r"\b\d+\s+(?:order\s+blocks?|obs?|trades?|setups?|entries?|positions?)\s+(?:held|failed|won|lost|worked|profited)\b|"
+    r"\bout\s+of\s+\d+\s+(?:order\s+blocks?|obs?|trades?|setups?|entries?|positions?)\b|"
+    r"\bchance\s+of\s+(?:holding|failing|winning|losing|success|failure)\b"
     r")",
     re.IGNORECASE,
 )
