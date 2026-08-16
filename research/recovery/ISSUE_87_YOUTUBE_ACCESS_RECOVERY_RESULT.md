@@ -13,8 +13,8 @@ This is an external-access result, not evidence absence. `SPEC_READY=false` and 
 ## Authoritative probe
 
 - workflow: `Issue 87 YouTube Access Recovery`
-- run: `31960189800`
-- artifact: `9267022847`
+- run: `31960392777`
+- artifact: `9267071393`
 - canaries: 4 predicate-critical official Arjo videos
 - allowed public routes per canary: watch, embed, oEmbed metadata
 - direct semantic payloads captured: 0
