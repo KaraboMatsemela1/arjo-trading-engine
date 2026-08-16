@@ -3,6 +3,8 @@
 
 Locator/evidence recovery only: no predicate assignment or semantic synthesis.
 Only direct PAYLOAD_CAPTURED first-party attempts are read; excerpts are capped.
+For Telegram post 80, only the pre-outcome scope preamble is eligible; the
+statistical section is excluded in full before lexical scanning.
 """
 
 from __future__ import annotations
@@ -24,6 +26,7 @@ TERMS = [
     "invalidation", "expiry", "session", "4h", "1h", "15m", "5m", "HTF", "LTF",
 ]
 META_TEXT_KEYS = {"description", "og:description", "twitter:description", "og:title", "twitter:title"}
+POST80_OUTCOME_MARKER = re.compile(r"\bOut\s+of\s+\d+\b", re.IGNORECASE)
 
 
 class TextExtractor(HTMLParser):
@@ -67,6 +70,15 @@ def to_text(payload: bytes, content_type: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(" ".join(parser.parts))).strip()
 
 
+def pre_outcome_scope(text: str, source_id: str) -> str:
+    """Return only text eligible for pre-SPEC scanning for the bounded source."""
+
+    if source_id != "TG_ARJOIOTRADING_80":
+        return text
+    marker = POST80_OUTCOME_MARKER.search(text)
+    return text[: marker.start()].strip() if marker else text.strip()
+
+
 def bounded_window(text: str, match: re.Match[str], max_words: int) -> str:
     before = text[:match.start()].split()
     hit = text[match.start():match.end()].split()
@@ -90,11 +102,13 @@ def main() -> int:
     sources: list[dict] = []
     total_windows = 0
     for record in sorted(records, key=lambda row: str(row.get("source_id", ""))):
+        source_id = str(record.get("source_id", ""))
         row = {
-            "source_id": record.get("source_id"), "source_type": record.get("source_type"),
+            "source_id": source_id, "source_type": record.get("source_type"),
             "source_url": record.get("source_url"), "status": record.get("status"),
             "closure_credit": record.get("closure_credit"), "sha256": record.get("sha256", ""),
             "windows": [], "semantic_synthesis_performed": False,
+            "outcome_sections_excluded": source_id == "TG_ARJOIOTRADING_80",
         }
         if record.get("status") != "PAYLOAD_CAPTURED" or record.get("closure_credit") != "DIRECT_FIRST_PARTY_PAYLOAD":
             sources.append(row)
@@ -105,7 +119,7 @@ def main() -> int:
             path = cache_root / rel
             if rel and path.exists():
                 texts.append(to_text(path.read_bytes(), str(artifact.get("content_type", ""))))
-        text = re.sub(r"\s+", " ", " ".join(texts)).strip()
+        text = pre_outcome_scope(re.sub(r"\s+", " ", " ".join(texts)).strip(), source_id)
         seen: set[tuple[str, str]] = set()
         for term in TERMS:
             pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(term)}(?![A-Za-z0-9])", re.IGNORECASE)
@@ -128,7 +142,8 @@ def main() -> int:
     report = {
         "schema_version": 1, "issue": 75, "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
         "semantic_synthesis_performed": False, "performance_data_consulted": False,
-        "shared_antibias_guard": True, "max_excerpt_words": args.max_words,
+        "shared_antibias_guard": True, "outcome_sections_excluded": True,
+        "max_excerpt_words": args.max_words,
         "source_count": len(sources),
         "captured_source_count": sum(1 for row in sources if row["status"] == "PAYLOAD_CAPTURED"),
         "window_count": total_windows, "sources": sources,
