@@ -6,9 +6,11 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import re
 import sys
 from pathlib import Path
+
+from evidence_antibias import contains_pre_spec_outcome
+from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
 
 FIELDS = [
     "INPUTS", "INSTRUMENTS", "TIMEFRAME", "HIGHER_TIMEFRAME_CONTEXT", "DIRECTION",
@@ -17,20 +19,12 @@ FIELDS = [
 ]
 STATES = {"SATISFIED", "PARTIAL", "MISSING", "CONTRADICTORY", "NOT_APPLICABLE"}
 UNRESOLVED = {"PARTIAL", "MISSING", "CONTRADICTORY"}
-FORBIDDEN = re.compile(
-    r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)",
-    re.IGNORECASE,
-)
-
-
-def read_jsonl(path: Path) -> list[dict]:
-    return [json.loads(raw) for raw in path.read_text(encoding="utf-8").splitlines() if raw.strip()]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidates", default="research/candidate_predicates.json")
-    parser.add_argument("--evidence", default="research/evidence_registry.jsonl")
+    parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
     parser.add_argument("--matrix", default="research/predicate_matrix.csv")
     parser.add_argument("--closure", default="research/predicate_closure.json")
     args = parser.parse_args()
@@ -38,7 +32,7 @@ def main() -> int:
     errors: list[str] = []
     candidate_data = json.loads(Path(args.candidates).read_text(encoding="utf-8"))
     candidates = {str(row["predicate_id"]): row for row in candidate_data.get("candidates", [])}
-    evidence = {str(row["EVIDENCE_ID"]): row for row in read_jsonl(Path(args.evidence))}
+    evidence = {str(row["EVIDENCE_ID"]): row for row in load_evidence_union(args.evidence)}
     with Path(args.matrix).open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     closure = json.loads(Path(args.closure).read_text(encoding="utf-8"))
@@ -74,7 +68,7 @@ def main() -> int:
         if unknown_refs:
             errors.append(f"{predicate_id}/{field}: unknown evidence {unknown_refs}")
         notes = str(row.get("NOTES", ""))
-        if FORBIDDEN.search(notes):
+        if contains_pre_spec_outcome(notes):
             errors.append(f"{predicate_id}/{field}: performance/outcome metric leaked into synthesis notes")
 
         if state == "MISSING" and refs:
@@ -112,7 +106,7 @@ def main() -> int:
         if len(candidate_rows) != len(FIELDS) or set(fields) != set(FIELDS):
             errors.append(f"{predicate_id}: matrix must contain exactly the canonical 16 fields")
         rationale = str(candidates[predicate_id].get("rationale", ""))
-        if FORBIDDEN.search(rationale):
+        if contains_pre_spec_outcome(rationale):
             errors.append(f"{predicate_id}: performance/outcome metric leaked into candidate rationale")
         evidence_source_ids = {str(record["SOURCE_ID"]) for record in evidence.values()}
         unknown_sources = sorted(set(candidates[predicate_id].get("source_ids", [])) - evidence_source_ids)
@@ -154,7 +148,7 @@ def main() -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    print(json.dumps({"candidates": len(candidates), "matrix_rows": len(rows), "ranked_ids": actual_ranked}, sort_keys=True))
+    print(json.dumps({"candidates": len(candidates), "evidence_records": len(evidence), "matrix_rows": len(rows), "ranked_ids": actual_ranked}, sort_keys=True))
     return 0
 
 
