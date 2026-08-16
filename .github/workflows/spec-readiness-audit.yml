@@ -86,5 +86,5 @@ jobs:
 
           Service generated branch: ${BRANCH}
 
-          Open a PR to main and merge only if normal CI/provenance/SPEC guards remain green. A successful workflow does not imply SPEC_READY; inspect `spec_ready` and `overall_outcome` in the artifact."
+          Open a PR to main and merge only if normal CI/provenance/SPEC guards remain green. A successful workflow does not imply SPEC_READY; inspect spec_ready and overall_outcome in the artifact."
           gh issue create --title "Service completed independent SPEC audit branch" --body "$body"
