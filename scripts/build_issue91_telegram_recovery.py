@@ -79,7 +79,10 @@ def bounded_excerpt(text: str, match: re.Match[str], max_words: int) -> str:
     before = text[: match.start()].split()
     hit = text[match.start() : match.end()].split()
     after = text[match.end() :].split()
-    left = before[-7:]
+    # Prefer more pre-cue context because scope/instrument ownership often precedes
+    # the Equilibrium phrase. The total excerpt remains capped by max_words.
+    left_budget = min(13, max(0, max_words - len(hit)))
+    left = before[-left_budget:]
     return " ".join([*left, *hit, *after[: max(0, max_words - len(left) - len(hit))]]).strip()
 
 
