@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "performance_data_consulted": false,
+  "overrides": [
+    {
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "field": "INSTRUMENTS",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_3B235EF470AD5BAFC8857649"],
+      "notes": "limitation: a directly captured worked AoO example explicitly uses Gold, but universal instrument eligibility, exclusions, and substitutions remain unresolved."
+    },
+    {
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "field": "TIMEFRAME",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_910CD2C2C616AE55270F56C3"],
+      "notes": "limitation: a directly captured worked AoO example explicitly uses 4h and 1h, but universal timeframe scope, ownership, hierarchy, and component mapping remain unresolved."
+    }
+  ]
+}
