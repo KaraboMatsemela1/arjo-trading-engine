@@ -7,6 +7,7 @@ on:
       - research/recovery/issue_85_targets.csv
       - scripts/build_issue85_recovery_windows.py
       - scripts/build_issue85_telegram_recovery.py
+      - scripts/build_issue85_recovery_summary.py
       - scripts/test_issue85_recovery.py
       - .github/workflows/issue-85-recovery.yml
   workflow_dispatch:
@@ -37,6 +38,8 @@ jobs:
         run: python scripts/build_issue85_recovery_windows.py --manifest /tmp/issue85_acquisition_manifest.jsonl --cache-root /tmp/issue85-cache --output /tmp/issue85_recovery_windows.json --max-words 20 --max-windows-per-source 18
       - name: Recover canonical Telegram sources
         run: python scripts/build_issue85_telegram_recovery.py --acquisition research/acquisition_manifest.jsonl --output /tmp/issue85_telegram_recovery.json --archive-cache-root /tmp/issue85-archive-cache --max-words 20 --max-excerpts 18
+      - name: Build and print bounded recovery summary
+        run: python scripts/build_issue85_recovery_summary.py --manifest /tmp/issue85_acquisition_manifest.jsonl --windows /tmp/issue85_recovery_windows.json --telegram /tmp/issue85_telegram_recovery.json --output /tmp/issue85_recovery_summary.json
       - uses: actions/upload-artifact@v4
         with:
           name: issue-85-first-party-recovery
@@ -44,5 +47,6 @@ jobs:
             /tmp/issue85_acquisition_manifest.jsonl
             /tmp/issue85_recovery_windows.json
             /tmp/issue85_telegram_recovery.json
+            /tmp/issue85_recovery_summary.json
             /tmp/issue85-archive-cache
           retention-days: 14
