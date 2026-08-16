@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "issue": 48,
+  "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+  "workflow_run_id": 31937350692,
+  "artifact_id": 9261038445,
+  "artifact_digest": "sha256:a91c847cc3fd869ad57f4c6c140bbb353e439896a97a44266431fcb4c80a229c",
+  "performance_data_consulted": false,
+  "trade_counts_consulted": false,
+  "generic_ict_smc_knowledge_used": false,
+  "first_party_only": true,
+  "direct_target_disposition": {
+    "target_count": 17,
+    "payload_captured": 6,
+    "environment_access_failure": 11
+  },
+  "telegram_archive_recovery": {
+    "eligible_captured_sources": 790,
+    "pages_fetched": 40,
+    "messages_seen": 790,
+    "recovery_messages": 33,
+    "retrieval_failures": 0,
+    "archive_pages_sha256_bound": true
+  },
+  "primary_direct_source": {
+    "source_id": "TG_ARJOIOTRADING_778",
+    "source_url": "https://t.me/ArjoioTrading/778",
+    "direct_payload_sha256": "3c4d33d3667f3b1023998c07375c79b430f4ec56184a987ba511b4376c698ad7",
+    "archive_page_sha256": "b77e10fd873fd794fe7090ac7a410728c4fba6598267bef872156e1d286f5c88",
+    "publication_date": "2025-05-07"
+  },
+  "field_assessment": [
+    {
+      "field": "INSTRUMENTS",
+      "before": "MISSING",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "Worked first-party AoO example explicitly identifies Gold.",
+      "limitation": "A worked Gold example does not establish universal instrument eligibility or exclusions."
+    },
+    {
+      "field": "TIMEFRAME",
+      "before": "MISSING",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "Worked first-party AoO example explicitly identifies 4h and 1h timeframes.",
+      "limitation": "The source does not establish universal timeframe ownership, mapping, or which timeframe owns each predicate component."
+    },
+    {
+      "field": "HIGHER_TIMEFRAME_CONTEXT",
+      "before": "MISSING",
+      "proposed_after_atomic_admission": "MISSING",
+      "support": "The worked example mentions 4h and 1h.",
+      "limitation": "Mentioning two timeframes does not define a deterministic higher-timeframe hierarchy or ownership rule."
+    },
+    {
+      "field": "DIRECTION",
+      "before": "PARTIAL",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "The worked example links FVA disrespect with looking for buys.",
+      "limitation": "No universal bullish/bearish direction mapping or complete respect/disrespect predicate is established."
+    },
+    {
+      "field": "PRECONDITIONS",
+      "before": "PARTIAL",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "The worked example states a parameter involving a run of the Rejection High followed by FVA disrespect.",
+      "limitation": "Rejection High selection and FVA disrespect geometry remain unresolved."
+    },
+    {
+      "field": "SETUP",
+      "before": "PARTIAL",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "AoO, FVA, the Rejection High, buy context, 2CR and FVGs are directly related in one first-party example.",
+      "limitation": "The example does not establish a universal AoO setup predicate or required-versus-illustrative status."
+    },
+    {
+      "field": "TRIGGER",
+      "before": "PARTIAL",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "The worked example directly uses 2CR in entry context.",
+      "limitation": "The exact two-candle construction, close/wick requirements, timing and trigger boundary remain unresolved."
+    },
+    {
+      "field": "ENTRY",
+      "before": "PARTIAL",
+      "proposed_after_atomic_admission": "PARTIAL",
+      "support": "The first-party example directly states that the entry used 2CR from FVGs.",
+      "limitation": "Exact entry price, FVG selection, 2CR construction and timing remain unresolved."
+    }
+  ],
+  "unchanged_missing_fields": [
+    "STOP",
+    "TARGET",
+    "INVALIDATION",
+    "EXPIRY",
+    "SESSION/TIME_RULE",
+    "OPTIONAL_CONDITIONS"
+  ],
+  "unchanged_partial_fields": [
+    "INPUTS",
+    "REQUIRED_CONDITIONS"
+  ],
+  "current_matrix_counts": {
+    "MISSING": 9,
+    "PARTIAL": 7,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "proposed_counts_after_atomic_admission": {
+    "MISSING": 7,
+    "PARTIAL": 9,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "candidate_ready": false,
+  "spec_ready": false,
+  "atomic_admission_required": true,
+  "disposition": "MATERIAL_PARTIAL_ADVANCEMENT_REQUIRES_ATOMIC_ADMISSION"
+}
