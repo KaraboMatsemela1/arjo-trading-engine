@@ -51,10 +51,10 @@ FIELD_CUES = {
         re.IGNORECASE,
     ),
     "TRIGGER_ENTRY": re.compile(
-        r"\b(?:trigger|confirmation|confirm|entry|entries|enter|involved|involvement|sweep|sweeps|run|runs|reject|rejection)\b",
+        r"\b(?:trigger|confirmation|confirm|entry|entries|enter|involved|involvement|sweep|sweeps|reject|rejection)\b",
         re.IGNORECASE,
     ),
-    "STOP": re.compile(r"\b(?:stop loss|stop-loss|stops?|sl)\b", re.IGNORECASE),
+    "STOP": re.compile(r"\b(?:stop loss|stop-loss|sl)\b", re.IGNORECASE),
     "TARGET": re.compile(r"\b(?:target|targets|highs|lows|draw on liquidity|dol)\b", re.IGNORECASE),
     "INVALIDATION_EXPIRY": re.compile(
         r"\b(?:invalid|invalidate|invalidation|fail|fails|failed|failure|expire|expires|expiry|until)\b",
