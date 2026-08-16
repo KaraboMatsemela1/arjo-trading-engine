@@ -34,6 +34,39 @@ jobs:
             --caption-dir /tmp/issue87-captions \
             --timeout 45
 
+      - name: Print redacted route summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/issue87_youtube_access_report.json').read_text())
+          for item in report['results']:
+              print({
+                  'source_id': item['source_id'],
+                  'caption_tracks_exposed': item['caption_tracks_exposed'],
+                  'direct_semantic_payload_captured': item['direct_semantic_payload_captured'],
+                  'routes': [
+                      {
+                          'route': route['route'],
+                          'state': route['state'],
+                          'http_status': route['http_status'],
+                          'content_type': route['content_type'],
+                          'bytes': route['bytes'],
+                          'challenge_marker': route['challenge_marker'],
+                          'error': route['error'],
+                      }
+                      for route in item['routes']
+                  ],
+                  'caption': None if item['caption'] is None else {
+                      'state': item['caption']['state'],
+                      'http_status': item['caption']['http_status'],
+                      'language_code': item['caption']['language_code'],
+                      'kind': item['caption']['kind'],
+                      'semantic_credit': item['caption']['semantic_credit'],
+                  },
+              })
+          PY
+
       - name: Validate safety policy
         run: |
           python - <<'PY'
