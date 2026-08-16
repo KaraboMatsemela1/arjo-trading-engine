@@ -5,6 +5,8 @@ on:
   push:
     branches: [main]
     paths:
+      - 'research/source_registry.csv'
+      - 'research/acquisition_manifest.jsonl'
       - 'research/concept_inventory*.jsonl'
       - 'research/concept_terms*.json'
       - 'research/review/lexical_candidate_dispositions.json'
