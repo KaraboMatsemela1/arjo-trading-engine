@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   issues: write
 
 jobs:
@@ -101,18 +102,33 @@ jobs:
           git add research/predicate_matrix.csv research/predicate_closure.json research/two_engineer_preflight.json research/predicate_recovery_tasks.json research/candidate_selection_audit.json
           git commit -m "research: record predicate matrix and closure state"
           git push origin "$branch"
-      - name: Create bounded branch-service issue
+      - name: Open reviewed PR or create service fallback
         if: steps.branch.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
         run: |
+          set +e
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "Automated predicate synthesis: publish evidence-bound closure state" \
+            --body "Generated complete 16-field matrices, performance-blind closure ranking, deterministic reconstruction preflight, bounded recovery tasks, and candidate-selection audit from the canonical evidence union. This output is not automatically SPEC_READY and contains no backtest/performance selection. Merge only after normal CI, provenance, dependency, and gate checks pass."
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            exit 0
+          fi
+
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -n "$existing" ]; then
             exit 0
           fi
-          body="<!-- project-meta
+
+          body_file="$(mktemp)"
+          cat > "$body_file" <<EOF
+          <!-- project-meta
           ISSUE_ID: ARJO-AUTO-PREDICATE-${GITHUB_RUN_ID}
           TYPE: PREDICATE_SYNTHESIS_SERVICE
           DEPENDENCIES: [7]
@@ -122,9 +138,10 @@ jobs:
           STATE: READY
           -->
 
-          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit from the canonical evidence-shard union. The regenerated omission audit passed exact committed-disposition validation before publication.
+          Phase 5 predicate synthesis generated complete 16-field matrices, performance-blind closure ranking, a deterministic two-code-path reconstruction preflight, bounded recovery tasks, and a candidate-selection omission audit from the canonical evidence-shard union.
 
           Service generated branch: ${BRANCH}
 
-          Open a PR to main, run normal CI/provenance checks, and merge only if green. This output is not SPEC_READY and contains no backtest/performance selection."
-          gh issue create --title "Service completed predicate-synthesis state branch" --body "$body"
+          PR creation through GITHUB_TOKEN failed. Open a reviewed PR to main, run normal CI/provenance checks, and merge only if green. This output is not SPEC_READY and contains no backtest/performance selection.
+          EOF
+          gh issue create --title "Service completed predicate-synthesis state branch" --body-file "$body_file"
