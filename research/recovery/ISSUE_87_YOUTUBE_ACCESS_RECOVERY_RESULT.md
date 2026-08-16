@@ -13,8 +13,9 @@ This is an external-access result, not evidence absence. `SPEC_READY=false` and 
 ## Authoritative probe
 
 - workflow: `Issue 87 YouTube Access Recovery`
-- run: `31960189800`
-- artifact: `9267022847`
+- run: `31960274492`
+- artifact: `9267044313`
+- artifact digest: `sha256:e37569a0764cbba04c411bb22d0ea7de8f15827ad8cd02ed7afa450774f3e5e2`
 - canaries: 4 predicate-critical official Arjo videos
 - allowed public routes per canary: watch, embed, oEmbed metadata
 - direct semantic payloads captured: 0
@@ -33,7 +34,7 @@ Canaries:
 
 ### Public watch page
 
-All four watch requests returned HTTP 200 HTML, but every page contained YouTube's explicit `sign in to confirm you're not a bot` challenge. These are therefore terminal `ENVIRONMENT_ACCESS_FAILURE` results for semantic acquisition.
+All four watch requests returned HTTP 200 HTML, but every page contained YouTube's explicit `sign in to confirm you're not a bot` challenge. These are terminal `ENVIRONMENT_ACCESS_FAILURE` results for semantic acquisition.
 
 ### Public embed page
 
