@@ -13,14 +13,17 @@ All 16 fields remain unresolved. `SPEC_READY=false` and implementation remains u
 ## Authoritative recovery
 
 - workflow: `Issue 85 Recovery`
-- run: `31959673355`
-- artifact: `9266896625`
+- run: `31959852785`
+- artifact: `9266943499`
+- artifact digest: `sha256:74c5fdcfe88e9bdc9e76fb616e8161336c3f7b111118a8ff18dfce6e8f771921`
 - bounded targets: 9
 - direct payloads captured: 3
 - `ENVIRONMENT_ACCESS_FAILURE`: 6
 - terminal acquisition validation: PASS
 - pre-SPEC recovery regression tests: PASS
+- bounded printed summary anti-bias / 20-word checks: PASS
 - Telegram targets recovered from SHA-bound public archive pages: 3 / 3
+- archive pages fetched: 2
 - archive retrieval failures: 0
 
 ## Captured first-party sources
@@ -43,6 +46,8 @@ The captured text reinforces the existing four `PARTIAL` fields but does not clo
 - `DIRECTION` — Bias/where-to-trade language exists, but deterministic bullish/bearish mapping is not defined;
 - `TARGET` — Order Flow is said to tell the Target, but target selection and price construction are not defined;
 - `REQUIRED_CONDITIONS` — the Order Flow-to-Target relationship is direct, but no complete prerequisite set is defined.
+
+The bounded Telegram recovery emitted no new field cue for `INSTRUMENTS`, `TIMEFRAME`, `HIGHER_TIMEFRAME_CONTEXT`, `TRIGGER`, `ENTRY`, or `SESSION/TIME_RULE`.
 
 Still `MISSING`:
 
@@ -74,9 +79,9 @@ Titles and search-index snippets remain locator-only and receive zero closure cr
 
 ## Next engineering implication
 
-This is the fourth bounded predicate-recovery lane to show the same structural limitation: directly captured Telegram text provides relationship/context evidence, while the deterministic construction is concentrated in inaccessible official YouTube lessons.
+This bounded pass confirms a transport bottleneck: directly captured Telegram text supplies relationship/context evidence, while the richer deterministic construction remains behind official video routes that are inaccessible from the current acquisition environment.
 
-The next high-leverage task should therefore be a **bounded first-party YouTube access-recovery investigation** rather than immediately cycling into another weak predicate. The purpose is transport recovery only; it must not bypass authentication, CAPTCHA, anti-bot controls, or use secondary-source transcripts as semantic evidence.
+A future access-recovery task may investigate compliant first-party video retrieval methods, but it must not bypass authentication, CAPTCHA, anti-bot controls, or use secondary-source transcripts as semantic evidence.
 
 ## Safety boundary
 
