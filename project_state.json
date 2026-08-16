@@ -209,7 +209,7 @@
         "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
         "ISSUE_ID": "ARJO-SEC-001",
         "OUTPUT_GATE": "ACTIONS_PR_CREATION_ENABLED",
-        "OWNER": "UNCLAIMED",
+        "OWNER": "ChatGPT",
         "STATE": "BLOCKED",
         "TYPE": "OWNER_AUTHORIZATION"
       },
