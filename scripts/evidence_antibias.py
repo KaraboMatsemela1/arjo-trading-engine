@@ -19,7 +19,7 @@ FORBIDDEN_PRE_SPEC = re.compile(
     r"\btrade\s*count\b|"
     r"\d+(?:\.\d+)?%|"
     r"\b(?:winner|winners|loser|losers)\b|"
-    r"\b(?:won|lost)\s+(?:a|an|the|\d+)?\s*(?:trade|trades|position|positions)?\b|"
+    r"\b(?:won|lost)\s+(?:(?:a|an|the|\d+)\s+)?(?:trade|trades|position|positions)\b|"
     r"\b(?:winning|losing)\s+(?:trade|trades|day|week|month|streak)\b"
     r")",
     re.IGNORECASE,
