@@ -105,7 +105,7 @@ jobs:
       - name: Open reviewed PR or create service fallback
         if: steps.branch.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
         shell: bash
         run: |
@@ -142,6 +142,6 @@ jobs:
 
           Service generated branch: ${BRANCH}
 
-          PR creation through GITHUB_TOKEN failed. Open a reviewed PR to main, run normal CI/provenance checks, and merge only if green. This output is not SPEC_READY and contains no backtest/performance selection.
+          Automation PR credential failed. Open a reviewed PR to main, run normal CI/provenance checks, and merge only if green. This output is not SPEC_READY and contains no backtest/performance selection.
           EOF
           gh issue create --title "Service completed predicate-synthesis state branch" --body-file "$body_file"
