@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "issue": 101,
+  "authoritative_run": 31962154795,
+  "artifact_id": 9267525569,
+  "artifact_sha256": "399b64580c6fa12ca5a6f47bdbd19cf3f76940eb7df2efd060b3dc42f0259789",
+  "generated_at_utc": "2026-08-16T17:38:32.532676+00:00",
+  "baseline_registry_rows": 1181,
+  "scanned_registry_rows": 1181,
+  "new_source_count": 0,
+  "new_source_counts_by_platform": {
+    "YOUTUBE": 0,
+    "TELEGRAM": 0,
+    "WEBSITE": 0,
+    "OTHER": 0
+  },
+  "requires_bounded_acquisition": false,
+  "surfaces": {
+    "youtube": {
+      "exit_code": 0,
+      "discovered_count": 381,
+      "new_source_count": 0,
+      "failures": [],
+      "surfaces_succeeded": ["playlists", "shorts", "streams", "videos"],
+      "normalized_snapshot_sha256": "a983f5f989b3c9fa436e08dae37745de848aa170fa70f191e29dd45dc95880d5"
+    },
+    "telegram": {
+      "exit_code": 0,
+      "discovered_count": 790,
+      "new_source_count": 0,
+      "failures": [],
+      "pages_fetched": 40,
+      "normalized_snapshot_sha256": "a0ee74b258fe3a57f95d08b1abcbf8911aff6624c9237bbd6426d2f2b0172842"
+    },
+    "website": {
+      "exit_code": 2,
+      "discovered_count": 0,
+      "new_source_count": 0,
+      "pages_attempted": 3,
+      "failures": [
+        {
+          "url": "https://tradingmmt.com/",
+          "classification": "ENVIRONMENT_ACCESS_FAILURE",
+          "error": "HTTP 403; standard headless browser remained behind public browser challenge"
+        },
+        {
+          "url": "https://tradingmmt.com/newsletter/",
+          "classification": "ENVIRONMENT_ACCESS_FAILURE",
+          "error": "HTTP 403; standard headless browser remained behind public browser challenge"
+        },
+        {
+          "url": "https://tradingmmt.com/mmc/",
+          "classification": "ENVIRONMENT_ACCESS_FAILURE",
+          "error": "HTTP 403; standard headless browser remained behind public browser challenge"
+        }
+      ]
+    }
+  },
+  "semantic_closure_performed": false,
+  "search_or_metadata_semantic_credit": "ZERO",
+  "source_registry_changed": false,
+  "spec_ready": false,
+  "implementation_authorized": false
+}
