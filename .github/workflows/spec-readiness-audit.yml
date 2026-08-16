@@ -5,12 +5,13 @@ on:
   push:
     branches: [main]
     paths:
-      - 'research/evidence_registry.jsonl'
+      - 'research/evidence_registry*.jsonl'
       - 'research/predicate_matrix.csv'
       - 'research/predicate_recovery_tasks.json'
       - 'research/two_engineer_preflight.json'
       - 'scripts/run_independent_spec_audit.py'
       - 'scripts/check_independent_spec_audit.py'
+      - 'scripts/build_spec_audit_service_issue.py'
       - '.github/workflows/spec-readiness-audit.yml'
 
 permissions:
@@ -72,19 +73,11 @@ jobs:
           if [ -n "$existing" ]; then
             exit 0
           fi
-          body="<!-- project-meta
-          ISSUE_ID: ARJO-AUTO-SPEC-AUDIT-${GITHUB_RUN_ID}
-          TYPE: SPEC_AUDIT_SERVICE
-          DEPENDENCIES: [8]
-          ENTRY_GATE: PREDICATE_MATRIX_READY
-          OUTPUT_GATE: NONE
-          OWNER: UNCLAIMED
-          STATE: READY
-          -->
-
-          Independent evidence-only SPEC readiness audit completed and passed audit-invariant validation.
-
-          Service generated branch: ${BRANCH}
-
-          Open a PR to main and merge only if normal CI/provenance/SPEC guards remain green. A successful workflow does not imply SPEC_READY; inspect `spec_ready` and `overall_outcome` in the artifact."
-          gh issue create --title "Service completed independent SPEC audit branch" --body "$body"
+          body_file="/tmp/spec-audit-service-issue.md"
+          python scripts/build_spec_audit_service_issue.py \
+            --branch "$BRANCH" \
+            --run-id "$GITHUB_RUN_ID" \
+            --output "$body_file"
+          gh issue create \
+            --title "Service completed independent SPEC audit branch" \
+            --body-file "$body_file"
