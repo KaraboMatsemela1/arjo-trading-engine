@@ -72,7 +72,7 @@ jobs:
       - name: Open or refresh reviewed Project State PR
         if: steps.publish.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.publish.outputs.branch }}
         shell: bash --noprofile --norc -e -o pipefail {0}
         run: |
