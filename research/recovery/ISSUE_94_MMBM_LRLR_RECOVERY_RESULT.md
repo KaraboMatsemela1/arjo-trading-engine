@@ -13,17 +13,19 @@ Candidate state becomes **10 MISSING / 6 PARTIAL / 0 SATISFIED / 0 CONTRADICTORY
 ## Authoritative recovery
 
 - workflow: `Issue 94 Recovery`
-- run: `31961110007`
-- artifact: `9267265874`
-- artifact SHA-256: `cdd51b2ab9baab3929cf395f24770fad4189e9a7f370ed137cc9876ed184b362`
+- run: `31961396749`
+- artifact: `9267336003`
+- artifact SHA-256: `db38428b4e3e7c62e6fe38c0371572c11d5930841cf245ab019a590b7490d9f6`
 - semantic source: exactly `TG_ARJOIOTRADING_88`
 - canonical acquisition SHA-256: `5a130afb13fa6533504a79821f00aadfbc25ce09f0188f93174546cf53d55eae`
-- SHA-bound archive page containing post 88: `3e1a055493a25ea2d56902ae2a9e14e3b4d0357a31a554317a0f9243f2c1c61c`
+- SHA-bound archive page containing post 88 for this replay: `d6bfc8514001fee21648294fd26fe7ba998d84060275df2af69f24f7c75b8bad`
 - public Telegram archive pages fetched: 36
 - archive failures: 0
 - target recovered: 1 / 1
 - bounded excerpt cap: 20 words
 - shared pre-SPEC anti-bias guard: PASS
+
+The live Telegram archive wrapper is replayable but not byte-stable across fetches; the immutable canonical acquisition payload SHA above remains the primary source identity. The replay SHA binds the exact archive page used by this recovery run.
 
 ## Admitted evidence
 
