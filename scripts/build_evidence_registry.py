@@ -102,11 +102,22 @@ def fetch_telegram_messages(
     return messages, failures
 
 
-def minimal_quote(text: str, aliases: list[str], max_words: int = 18) -> tuple[str, str]:
-    """Return the first alias-centered quote window with no pre-SPEC outcome data."""
+def ordered_aliases(aliases: list[str]) -> list[str]:
+    """Return aliases in a total deterministic preference order.
 
-    aliases = sorted({alias.strip() for alias in aliases if alias.strip()}, key=len, reverse=True)
-    for alias in aliases:
+    Longest aliases retain priority. Equal-length aliases are ordered by
+    case-folded spelling and then original spelling, so hash/set iteration order
+    cannot affect which alias/window is selected.
+    """
+
+    cleaned = {alias.strip() for alias in aliases if alias.strip()}
+    return sorted(cleaned, key=lambda alias: (-len(alias), alias.casefold(), alias))
+
+
+def minimal_quote(text: str, aliases: list[str], max_words: int = 18) -> tuple[str, str]:
+    """Return the first deterministically preferred safe alias-centered window."""
+
+    for alias in ordered_aliases(aliases):
         pattern = re.compile(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", re.IGNORECASE)
         for match in pattern.finditer(text):
             prefix = text[: match.start()].split()
