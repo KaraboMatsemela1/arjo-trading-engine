@@ -2,7 +2,7 @@
 
 Research-grade, evidence-first project for translating Arjo's public first-party trading education into deterministic, machine-executable specifications and evaluating them scientifically.
 
-> **Current research state:** `FIRST_PARTY_PREDICATE_RECOVERY`
+> **Current research state:** `NEW_FIRST_PARTY_EVIDENCE_REQUIRED`
 >
 > **SPEC_READY:** `false`
 >
@@ -35,7 +35,7 @@ CONCEPT INVENTORY
 ████████████████████   COMPLETE — 36 source-bound concepts
 
 ATOMIC EVIDENCE REGISTRY
-████████████████████   COMPLETE — provenance-bound first-party evidence
+████████████████████   COMPLETE — 88 records across 4 evidence shards
 
 PREDICATE SYNTHESIS / MATRIX
 ████████████████████   COMPLETE — 6 bounded candidates; required fields still incomplete
@@ -44,7 +44,13 @@ INDEPENDENT SPEC AUDIT
 ████████████████████   COMPLETE — BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE
 
 FIRST-PARTY PREDICATE RECOVERY
-████████████░░░░░░░░   ACTIVE — bounded recovery lanes; no candidate closed yet
+████████████████████   COMPLETE — bounded pass exhausted across all 6 candidates
+
+PUBLIC YOUTUBE ACCESS RECOVERY
+████████████████████   COMPLETE — semantic payload unavailable on allowed public routes
+
+NEW FIRST-PARTY EVIDENCE DISCOVERY
+░░░░░░░░░░░░░░░░░░░░   REQUIRED — current evidence ceiling blocks further semantic closure
 
 SPEC FREEZE / v0.1
 ░░░░░░░░░░░░░░░░░░░░   BLOCKED — SPEC_READY = false
@@ -83,11 +89,26 @@ CONTROLLED LIVE
 ░░░░░░░░░░░░░░░░░░░░   NOT AUTHORIZED — explicit future canary/risk approval required
 ```
 
+### Current predicate closure
+
+| Candidate | Current state | Readiness |
+|---|---:|---|
+| `AOO_FVA_2CR_FVG_LONG_CONTEXT` | 7 MISSING / 9 PARTIAL | incomplete |
+| `PD_ARRAY_2CR_FAILURE_INVOLVEMENT` | 9 MISSING / 7 PARTIAL | incomplete |
+| `MMBM_LRLR_SHORT_CONTEXT` | 10 MISSING / 6 PARTIAL | incomplete |
+| `ORDER_BLOCK_MT_HOLD_CONTEXT` | 10 MISSING / 6 PARTIAL | incomplete |
+| `ORDER_FLOW_TARGET_BIAS` | 12 MISSING / 4 PARTIAL | incomplete |
+| `EQUILIBRIUM_STOP_RUN_CONTEXT` | 13 MISSING / 3 PARTIAL | incomplete |
+
+No candidate has a `SATISFIED` deterministic field set or an executable rule. Closure ranking is evidence-completeness only and never uses performance.
+
 ### Current research position
 
-- Governance, source discovery, acquisition tooling, corpus acquisition, concept inventory, evidence registry, and predicate-matrix gates are complete.
-- The independent evidence-only audit process completed with `SPEC_READY = false` and outcome `BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE`.
-- Current work is bounded first-party predicate recovery. Missing semantics remain missing; inaccessible first-party sources receive zero semantic credit.
+- Governance, source discovery, acquisition tooling, corpus acquisition, concept inventory, evidence registry, predicate synthesis, bounded predicate recovery, and independent audit processes are complete.
+- All six current candidates have received bounded first-party recovery passes. None is evidence-complete.
+- The refreshed independent evidence-only audit remains `SPEC_READY = false` with outcome `BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE`.
+- The allowed unauthenticated public YouTube routes were separately tested. Watch pages are bot-challenged in the runner; public embed/oEmbed responses expose availability/metadata but no semantic caption payload. Those surfaces receive zero semantic closure credit.
+- The next research lane is **genuinely new direct first-party evidence discovery/acquisition**. Existing exhausted source sets should not be recycled unless the public payload/access conditions materially change.
 - No detector, backtester, trade-count analysis, optimizer, performance evaluation, paper execution, live execution, or broker logic is authorized yet.
 
 ## Canonical state
@@ -101,7 +122,7 @@ CONTROLLED LIVE
 
 ## Critical path
 
-`GOVERNANCE_BOOTSTRAP_COMPLETE` → `SOURCE_UNIVERSE_DISCOVERED` → `ACQUISITION_TOOLING_READY` → `CORPUS_ACQUIRED` → `CONCEPT_INVENTORY_READY` → `EVIDENCE_REGISTRY_READY` → `PREDICATE_MATRIX_READY` → `INDEPENDENT_SPEC_AUDIT` → **first-party predicate recovery** → `SPEC_READY`
+`GOVERNANCE_BOOTSTRAP_COMPLETE` → `SOURCE_UNIVERSE_DISCOVERED` → `ACQUISITION_TOOLING_READY` → `CORPUS_ACQUIRED` → `CONCEPT_INVENTORY_READY` → `EVIDENCE_REGISTRY_READY` → `PREDICATE_MATRIX_READY` → `INDEPENDENT_SPEC_AUDIT` → `BOUNDED_PREDICATE_RECOVERY_COMPLETE` → **new direct first-party evidence required** → `SPEC_READY`
 
 Engineering infrastructure that cannot influence strategy semantics may proceed independently.
 
