@@ -26,6 +26,13 @@ FORBIDDEN_PRE_SPEC = re.compile(
     r"(?:\bwin\s*rate\b|\bprofit\s*factor\b|\bsharpe\b|\bexpectancy\b|\bp\s*&\s*l\b|\bpnl\b|\btrade\s*count\b|\d+(?:\.\d+)?%)",
     re.IGNORECASE,
 )
+META_TEXT_KEYS = {
+    "description",
+    "og:description",
+    "twitter:description",
+    "og:title",
+    "twitter:title",
+}
 
 
 class TextExtractor(HTMLParser):
@@ -35,8 +42,17 @@ class TextExtractor(HTMLParser):
         self.skip_depth = 0
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        if tag.lower() in {"script", "style", "noscript", "svg"}:
+        lower_tag = tag.lower()
+        if lower_tag in {"script", "style", "noscript", "svg"}:
             self.skip_depth += 1
+            return
+        if lower_tag != "meta":
+            return
+        attr_map = {str(key).lower(): value for key, value in attrs if value is not None}
+        key = str(attr_map.get("property") or attr_map.get("name") or "").lower()
+        content = str(attr_map.get("content") or "").strip()
+        if key in META_TEXT_KEYS and content:
+            self.parts.append(content)
 
     def handle_endtag(self, tag: str) -> None:
         if tag.lower() in {"script", "style", "noscript", "svg"} and self.skip_depth:
