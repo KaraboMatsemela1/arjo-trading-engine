@@ -80,16 +80,16 @@ EQUILIBRIUM_STOP_RUN_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party ev
 EQUILIBRIUM_STOP_RUN_CONTEXT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
 EQUILIBRIUM_STOP_RUN_CONTEXT,REQUIRED_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes REQUIRED_CONDITIONS for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,INPUTS,PARTIAL,EV_6C22A223A333A5E257339E47;EV_0A517AA921C323FC9CFE4FB7,"limitation: MMBM/LRLR is explicit, but the model construction and states are unresolved."
-MMBM_LRLR_SHORT_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,INSTRUMENTS,PARTIAL,EV_8193B22D6714969F8D70E09C,"limitation: the directly captured worked MMBM/LRLR narrative explicitly uses ES, but universal instrument eligibility, exclusions, substitutions, and model scope remain unresolved."
 MMBM_LRLR_SHORT_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,DIRECTION,PARTIAL,EV_6C22A223A333A5E257339E47,"limitation: the example connects taking highs with shorts/stops, but the universal directional mapping and model state are unresolved."
 MMBM_LRLR_SHORT_CONTEXT,PRECONDITIONS,PARTIAL,EV_6C22A223A333A5E257339E47;EV_0A517AA921C323FC9CFE4FB7,"limitation: completion of MMBM/LRLR appears before the described context, but completion criteria are unresolved."
-MMBM_LRLR_SHORT_CONTEXT,SETUP,MISSING,,No direct first-party evidence in the current registry establishes SETUP for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,SETUP,PARTIAL,EV_0732BE192A44C3F56677B598,"limitation: the source directly associates finishing LRLR with likely choppy price action, but exact model completion, consolidation geometry, setup boundaries, and executable conditions remain unresolved."
 MMBM_LRLR_SHORT_CONTEXT,TRIGGER,MISSING,,No direct first-party evidence in the current registry establishes TRIGGER for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,ENTRY,MISSING,,No direct first-party evidence in the current registry establishes ENTRY for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
-MMBM_LRLR_SHORT_CONTEXT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,TARGET,PARTIAL,EV_7E443637E083DB93E55728F5,"limitation: the worked narrative identifies consolidation EQHs as a subsequent objective, but universal target construction, qualifying EQHs, sequencing, and precedence remain unresolved."
 MMBM_LRLR_SHORT_CONTEXT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
 MMBM_LRLR_SHORT_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.

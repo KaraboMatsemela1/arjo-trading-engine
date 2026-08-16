@@ -5,10 +5,10 @@
     "RECOVER_PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
   ],
   "backlog_recovery_task_ids": [
+    "RECOVER_MMBM_LRLR_SHORT_CONTEXT",
     "RECOVER_ORDER_BLOCK_MT_HOLD_CONTEXT",
     "RECOVER_ORDER_FLOW_TARGET_BIAS",
-    "RECOVER_EQUILIBRIUM_STOP_RUN_CONTEXT",
-    "RECOVER_MMBM_LRLR_SHORT_CONTEXT"
+    "RECOVER_EQUILIBRIUM_STOP_RUN_CONTEXT"
   ],
   "generation_basis": "MINIMUM_CARDINALITY_RECOVERY_BUNDLE_COVER_OF_UNRESOLVED_FIELDS",
   "performance_data_consulted": false,
@@ -223,6 +223,96 @@
         6
       ],
       "concepts": [
+        "MMBM_LRLR"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for MMBM_LRLR_SHORT_CONTEXT",
+      "minimal_recovery_bundle_ids": [
+        "MMBM_EXECUTION",
+        "MMBM_MODEL",
+        "MMBM_OPTIONAL",
+        "MMBM_SCOPE"
+      ],
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "recovery_targets": [
+        {
+          "bundle_id": "MMBM_EXECUTION",
+          "fields": [
+            "ENTRY",
+            "STOP",
+            "TARGET",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover executable entry, stop, target, invalidation, and expiry semantics."
+        },
+        {
+          "bundle_id": "MMBM_MODEL",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "TRIGGER",
+            "DIRECTION",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover MMBM/LRLR construction, model states, completion, direction, and required conditions."
+        },
+        {
+          "bundle_id": "MMBM_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional conditions if any."
+        },
+        {
+          "bundle_id": "MMBM_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instrument, timeframe hierarchy, and session scope."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_88"
+      ],
+      "task_id": "RECOVER_MMBM_LRLR_SHORT_CONTEXT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 4,
+      "closure_tuple_missing_contradictory_partial": [
+        10,
+        0,
+        6
+      ],
+      "concepts": [
         "ORDER_BLOCK",
         "MT"
       ],
@@ -307,7 +397,7 @@
       ]
     },
     {
-      "closure_rank": 4,
+      "closure_rank": 5,
       "closure_tuple_missing_contradictory_partial": [
         12,
         0,
@@ -407,7 +497,7 @@
       ]
     },
     {
-      "closure_rank": 5,
+      "closure_rank": 6,
       "closure_tuple_missing_contradictory_partial": [
         13,
         0,
@@ -477,96 +567,6 @@
         "TG_ARJOIOTRADING_16"
       ],
       "task_id": "RECOVER_EQUILIBRIUM_STOP_RUN_CONTEXT",
-      "unresolved_fields": [
-        "INPUTS",
-        "INSTRUMENTS",
-        "TIMEFRAME",
-        "HIGHER_TIMEFRAME_CONTEXT",
-        "DIRECTION",
-        "PRECONDITIONS",
-        "SETUP",
-        "TRIGGER",
-        "ENTRY",
-        "STOP",
-        "TARGET",
-        "INVALIDATION",
-        "EXPIRY",
-        "SESSION/TIME_RULE",
-        "OPTIONAL_CONDITIONS",
-        "REQUIRED_CONDITIONS"
-      ]
-    },
-    {
-      "closure_rank": 6,
-      "closure_tuple_missing_contradictory_partial": [
-        13,
-        0,
-        3
-      ],
-      "concepts": [
-        "MMBM_LRLR"
-      ],
-      "constraints": {
-        "first_party_only": true,
-        "invented_semantics_prohibited": true,
-        "locator_only_secondary_credit": false,
-        "performance_data_prohibited": true
-      },
-      "issue_creation_requested": false,
-      "issue_title": "Recovery: close first-party predicate gaps for MMBM_LRLR_SHORT_CONTEXT",
-      "minimal_recovery_bundle_ids": [
-        "MMBM_EXECUTION",
-        "MMBM_MODEL",
-        "MMBM_OPTIONAL",
-        "MMBM_SCOPE"
-      ],
-      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
-      "recovery_targets": [
-        {
-          "bundle_id": "MMBM_EXECUTION",
-          "fields": [
-            "ENTRY",
-            "STOP",
-            "TARGET",
-            "INVALIDATION",
-            "EXPIRY"
-          ],
-          "target": "Recover executable entry, stop, target, invalidation, and expiry semantics."
-        },
-        {
-          "bundle_id": "MMBM_MODEL",
-          "fields": [
-            "INPUTS",
-            "PRECONDITIONS",
-            "SETUP",
-            "TRIGGER",
-            "DIRECTION",
-            "REQUIRED_CONDITIONS"
-          ],
-          "target": "Recover MMBM/LRLR construction, model states, completion, direction, and required conditions."
-        },
-        {
-          "bundle_id": "MMBM_OPTIONAL",
-          "fields": [
-            "OPTIONAL_CONDITIONS"
-          ],
-          "target": "Recover optional conditions if any."
-        },
-        {
-          "bundle_id": "MMBM_SCOPE",
-          "fields": [
-            "INSTRUMENTS",
-            "TIMEFRAME",
-            "HIGHER_TIMEFRAME_CONTEXT",
-            "SESSION/TIME_RULE"
-          ],
-          "target": "Recover instrument, timeframe hierarchy, and session scope."
-        }
-      ],
-      "source_ids_already_supporting_candidate": [
-        "TG_ARJOIOTRADING_88"
-      ],
-      "task_id": "RECOVER_MMBM_LRLR_SHORT_CONTEXT",
       "unresolved_fields": [
         "INPUTS",
         "INSTRUMENTS",
