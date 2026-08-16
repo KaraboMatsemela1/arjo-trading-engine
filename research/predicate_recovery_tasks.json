@@ -218,9 +218,9 @@
     {
       "closure_rank": 3,
       "closure_tuple_missing_contradictory_partial": [
-        12,
+        10,
         0,
-        4
+        6
       ],
       "concepts": [
         "ORDER_BLOCK",

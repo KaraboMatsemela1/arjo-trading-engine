@@ -21,8 +21,8 @@
     },
     {
       "agreement": true,
-      "candidate_registry_hash": "2f5f2ab2f44308084d35df7f38b387053835134069eccc20fe3d37184bbf9f03",
-      "matrix_reconstruction_hash": "2f5f2ab2f44308084d35df7f38b387053835134069eccc20fe3d37184bbf9f03",
+      "candidate_registry_hash": "71becaee3be5c2297c0828d9aefa1d787584645efedfa788cbbfcb563fee3141",
+      "matrix_reconstruction_hash": "71becaee3be5c2297c0828d9aefa1d787584645efedfa788cbbfcb563fee3141",
       "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT"
     },
     {
@@ -38,7 +38,7 @@
       "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
     }
   ],
-  "field_override_count": 2,
+  "field_override_count": 4,
   "field_overrides_included": true,
   "independence_scope": "TWO_INDEPENDENT_CODE_PATHS_OVER_THE_SAME_EVIDENCE_ONLY_PACKET",
   "independent_humans_or_models": false,
