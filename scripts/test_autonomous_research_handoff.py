@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github" / "workflows"
+PR_TOKEN_CONTRACT = "secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN"
 
 
 def read(name: str) -> str:
@@ -31,6 +32,7 @@ def check_reviewed_publication(name: str) -> None:
         "gh pr create",
         "gh issue create",
         "Merge only after normal",
+        PR_TOKEN_CONTRACT,
     )
     forbid(text, "gh pr merge", "gh merge", "enable-auto-merge", "--auto")
 
@@ -47,6 +49,7 @@ def check_project_state_publication() -> None:
         "gh pr list",
         "gh pr create",
         "reviewed PR is open or refreshed",
+        PR_TOKEN_CONTRACT,
     )
     forbid(
         text,
@@ -66,6 +69,7 @@ def main() -> int:
         "research/source_registry.csv",
         "pull-requests: write",
         "gh pr create",
+        PR_TOKEN_CONTRACT,
     )
     forbid(source_watch, "gh pr merge", "gh merge", "enable-auto-merge", "--auto")
 
@@ -95,7 +99,8 @@ def main() -> int:
 
     print(
         "autonomous handoff contracts valid: source watch -> corpus -> "
-        "concept/evidence -> predicate, plus coalesced reviewed Project State PRs"
+        "concept/evidence -> predicate, coalesced Project State PRs, and "
+        "dedicated automation PR credential fallback"
     )
     return 0
 
