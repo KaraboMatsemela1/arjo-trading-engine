@@ -37,6 +37,31 @@ jobs:
           else
             echo "Evidence registry not generated yet; post-merge extraction gate remains pending."
           fi
+      - name: Build Phase 5 predicate matrix and closure state
+        run: >-
+          python scripts/build_predicate_matrix.py
+          --matrix /tmp/predicate_matrix.csv
+          --closure /tmp/predicate_closure.json
+      - name: Validate Phase 5 predicate matrix and closure state
+        run: >-
+          python scripts/check_predicate_matrix.py
+          --matrix /tmp/predicate_matrix.csv
+          --closure /tmp/predicate_closure.json
+      - name: Run two-code-path reconstruction preflight
+        run: >-
+          python scripts/two_engineer_preflight.py
+          --matrix /tmp/predicate_matrix.csv
+          --output /tmp/two_engineer_preflight.json
+      - name: Build bounded recovery task plan
+        run: >-
+          python scripts/build_recovery_tasks.py
+          --closure /tmp/predicate_closure.json
+          --output /tmp/predicate_recovery_tasks.json
+          --active-limit 2
+      - name: Build candidate omission audit
+        run: >-
+          python scripts/build_candidate_selection_audit.py
+          --output /tmp/candidate_selection_audit.json
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
