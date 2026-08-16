@@ -966,6 +966,28 @@
       "number": 103,
       "title": "Governance: persist generated Project State snapshots",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/103"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          101,
+          103
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-EVIDENCE-WATCH-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "ChatGPT",
+        "STATE": "CI_PENDING",
+        "TYPE": "SOURCE_DISCOVERY_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 106,
+      "title": "Evidence ceiling: make new-source monitoring delta-driven and daily",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/106"
     }
   ],
   "live_execution_enabled": false,
