@@ -19,6 +19,10 @@ def main() -> int:
     match = re.search(r"Order Blocks", contaminated)
     assert match is not None
     assert contains_pre_spec_outcome(bounded_window(contaminated, match, 20))
+    assert contains_pre_spec_outcome("29 Order Blocks failed after disrespecting MT.")
+    assert contains_pre_spec_outcome("Out of 71 OBs, 42 held in this sample.")
+    assert contains_pre_spec_outcome("Chance of holding when MT is respected is higher.")
+    assert not contains_pre_spec_outcome("I gathered the data on ES for Daily Order Blocks")
     assert not contains_pre_spec_outcome("OBs that hold will respect MT, which is a useful indication.")
 
     with tempfile.TemporaryDirectory() as tmp:
