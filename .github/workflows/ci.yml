@@ -33,6 +33,8 @@ jobs:
         run: python scripts/test_spec_audit_service_issue.py
       - name: Run discovery watch publication-decision tests
         run: python scripts/test_discovery_watch_state.py
+      - name: Run autonomous research handoff contract tests
+        run: python scripts/test_autonomous_research_handoff.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Validate concept inventory provenance
