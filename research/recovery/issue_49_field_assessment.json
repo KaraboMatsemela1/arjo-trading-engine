@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "issue": 49,
+  "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+  "recovery_run_id": 31957782284,
+  "recovery_artifact_id": 9266411864,
+  "performance_data_consulted": false,
+  "generic_ict_smc_knowledge_used": false,
+  "semantic_scope": "BOUNDED_FIRST_PARTY_ONLY",
+  "source_summary": {
+    "bounded_targets": 11,
+    "payload_captured": 2,
+    "environment_access_failure": 9,
+    "captured_source_ids": [
+      "TG_ARJOIOTRADING_776",
+      "TG_ARJOIOTRADING_791"
+    ],
+    "zero_credit_source_ids": [
+      "YT_SHORT_DV1vmVAI8SU",
+      "YT_SHORT_plmgen7XmAs",
+      "YT_STREAM_Y4E6kMjJI_w",
+      "YT_VIDEO_4ykdAYui33k",
+      "YT_VIDEO_8mPlORPHo-w",
+      "YT_VIDEO_S6xnKJjq3bE",
+      "YT_VIDEO_eO3gCRCQp-I",
+      "YT_VIDEO_sPGSHQNDCPU",
+      "YT_VIDEO_utWXzcKiMJ0"
+    ]
+  },
+  "baseline_counts": {
+    "MISSING": 9,
+    "PARTIAL": 7,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "post_recovery_counts": {
+    "MISSING": 9,
+    "PARTIAL": 7,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "field_assessments": {
+    "INPUTS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "PD Arrays, Candle Science and 2CR are directly linked, but their exact observable constructions remain unresolved."
+    },
+    "INSTRUMENTS": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes instrument applicability for this candidate."
+    },
+    "TIMEFRAME": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes a strategy timeframe."
+    },
+    "HIGHER_TIMEFRAME_CONTEXT": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes HTF inheritance or hierarchy for this candidate."
+    },
+    "DIRECTION": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "TG_ARJOIOTRADING_791 states PD Arrays are implemented with Candle Science/2CR to tell direction, but deterministic bullish/bearish mapping is absent."
+    },
+    "PRECONDITIONS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "TG_ARJOIOTRADING_776 states resistance is opposing PD Arrays and refers to their failure through 2CR, but qualifying array geometry and failure thresholds are unresolved."
+    },
+    "SETUP": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "Opposing PD Array resistance and No Resistance Area context are direct, but spatial/time setup boundaries are unresolved."
+    },
+    "TRIGGER": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "2CR is directly tied to telling when opposing PD Arrays fail, but the exact two-candle predicate is inaccessible."
+    },
+    "ENTRY": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "TG_ARJOIOTRADING_776 says 2CR tells when to get involved, but executable entry timing/price is not established."
+    },
+    "STOP": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes stop placement."
+    },
+    "TARGET": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes target construction."
+    },
+    "INVALIDATION": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "The word failure describes opposing PD Arrays but does not establish trade invalidation semantics."
+    },
+    "EXPIRY": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source establishes signal expiry."
+    },
+    "SESSION/TIME_RULE": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "The 11am NY EST phrase in TG_ARJOIOTRADING_776 schedules a livestream, not a trading-session rule, so it receives no field credit."
+    },
+    "OPTIONAL_CONDITIONS": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded captured source distinguishes optional filters from required conditions."
+    },
+    "REQUIRED_CONDITIONS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "The direct relationships are clear, but universal required-vs-illustrative status remains unresolved."
+    }
+  },
+  "result": "NO_FIELD_STATE_ADVANCEMENT",
+  "spec_ready": false,
+  "implementation_authorized": false
+}
