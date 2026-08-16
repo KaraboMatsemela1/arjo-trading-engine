@@ -24,6 +24,20 @@ def read_sources(path: Path) -> list[dict[str, str]]:
         return [row for row in csv.DictReader(handle) if row.get("SOURCE_ID") and row.get("URL")]
 
 
+def read_terminal_source_ids(path: Path) -> set[str]:
+    if not path.exists():
+        return set()
+    terminal: set[str] = set()
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        if not raw.strip():
+            continue
+        record = json.loads(raw)
+        source_id = str(record.get("source_id", ""))
+        if source_id and record.get("status") in ACQUISITION_STATES:
+            terminal.add(source_id)
+    return terminal
+
+
 def select_sources(sources: list[dict[str, str]], args: argparse.Namespace) -> list[dict[str, str]]:
     selected = list(sources)
     if args.source_id:
@@ -34,6 +48,9 @@ def select_sources(sources: list[dict[str, str]], args: argparse.Namespace) -> l
         selected = [row for row in selected if row.get("SOURCE_TYPE") in wanted]
     if not args.include_roots:
         selected = [row for row in selected if row.get("SOURCE_TYPE") not in LOCATOR_TYPES]
+    if args.skip_terminal_existing:
+        terminal = read_terminal_source_ids(Path(args.manifest))
+        selected = [row for row in selected if row["SOURCE_ID"] not in terminal]
 
     # Stable ordering is mandatory before sharding so independent runners select
     # exactly the same source set from the same registry revision.
@@ -81,6 +98,7 @@ def print_plan(selected: list[dict[str, str]], args: argparse.Namespace) -> int:
             {
                 "selected": len(selected),
                 "by_type": counts,
+                "skip_terminal_existing": args.skip_terminal_existing,
                 "shard_index": args.shard_index,
                 "shard_count": args.shard_count,
             },
@@ -102,6 +120,7 @@ def main() -> int:
     parser.add_argument("--fixture-dir")
     parser.add_argument("--include-roots", action="store_true")
     parser.add_argument("--replace-manifest", action="store_true")
+    parser.add_argument("--skip-terminal-existing", action="store_true")
     parser.add_argument("--shard-index", type=int)
     parser.add_argument("--shard-count", type=int)
     parser.add_argument("--plan", action="store_true")
@@ -109,13 +128,16 @@ def main() -> int:
 
     try:
         selected = select_sources(read_sources(Path(args.registry)), args)
-    except ValueError as exc:
+    except (ValueError, json.JSONDecodeError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
 
     if args.plan:
         return print_plan(selected, args)
     if not selected:
+        if args.skip_terminal_existing:
+            print(json.dumps({"attempted": 0, "statuses": {}, "no_op": True}, sort_keys=True))
+            return 0
         print("No sources selected", file=sys.stderr)
         return 2
 
@@ -133,6 +155,7 @@ def main() -> int:
             {
                 "attempted": len(records),
                 "statuses": statuses,
+                "no_op": False,
                 "shard_index": args.shard_index,
                 "shard_count": args.shard_count,
             },

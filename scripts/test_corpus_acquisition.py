@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline tests for deterministic sharding, manifest merge and corpus coverage."""
+"""Offline tests for deterministic and idempotent corpus acquisition."""
 
 from __future__ import annotations
 
@@ -59,6 +59,24 @@ def terminal(source_id: str, source_type: str, status: str) -> dict:
     }
 
 
+def write_registry(path: Path, rows: list[dict[str, str]]) -> None:
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FIELDS)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def read_manifest(path: Path) -> dict[str, dict]:
+    return {
+        record["source_id"]: record
+        for record in (
+            json.loads(raw)
+            for raw in path.read_text(encoding="utf-8").splitlines()
+            if raw.strip()
+        )
+    }
+
+
 def main() -> int:
     with tempfile.TemporaryDirectory() as temp:
         base = Path(temp)
@@ -74,10 +92,7 @@ def main() -> int:
             source_row("C", "TELEGRAM_POST"),
             source_row("ROOT", "PLATFORM_ROOT"),
         ]
-        with registry.open("w", newline="", encoding="utf-8") as handle:
-            writer = csv.DictWriter(handle, fieldnames=FIELDS)
-            writer.writeheader()
-            writer.writerows(rows)
+        write_registry(registry, rows)
 
         plan0 = run(str(ROOT / "scripts/acquire_corpus.py"), "--registry", str(registry), "--shard-count", "2", "--shard-index", "0", "--plan")
         plan1 = run(str(ROOT / "scripts/acquire_corpus.py"), "--registry", str(registry), "--shard-count", "2", "--shard-index", "1", "--plan")
@@ -107,6 +122,49 @@ def main() -> int:
         assert report["terminal_record_count"] == 3
         assert report["by_status"]["PAYLOAD_CAPTURED"] == 2
         assert report["by_status"]["ENVIRONMENT_ACCESS_FAILURE"] == 1
+
+        # Fully terminal manifests are strict no-ops under autonomous delta mode.
+        before = merged.read_text(encoding="utf-8")
+        no_op = run(
+            str(ROOT / "scripts/acquire_corpus.py"),
+            "--registry", str(registry),
+            "--manifest", str(merged),
+            "--skip-terminal-existing",
+        )
+        assert no_op.returncode == 0, no_op.stderr
+        assert json.loads(no_op.stdout)["attempted"] == 0
+        assert json.loads(no_op.stdout)["no_op"] is True
+        assert merged.read_text(encoding="utf-8") == before
+
+        # A synthetic new source is the only record acquired and merged; existing
+        # terminal records remain byte-for-byte unchanged as parsed objects.
+        rows.append(source_row("D", "TEST_LOCATOR"))
+        write_registry(registry, rows)
+        delta_plan = run(
+            str(ROOT / "scripts/acquire_corpus.py"),
+            "--registry", str(registry),
+            "--manifest", str(merged),
+            "--skip-terminal-existing",
+            "--plan",
+        )
+        assert delta_plan.returncode == 0
+        assert json.loads(delta_plan.stdout)["selected"] == 1
+
+        old_records = read_manifest(merged)
+        delta = run(
+            str(ROOT / "scripts/acquire_corpus.py"),
+            "--registry", str(registry),
+            "--manifest", str(merged),
+            "--skip-terminal-existing",
+        )
+        assert delta.returncode == 0, delta.stderr
+        assert json.loads(delta.stdout)["attempted"] == 1
+        new_records = read_manifest(merged)
+        assert set(new_records) == {"A", "B", "C", "D"}
+        assert new_records["A"] == old_records["A"]
+        assert new_records["B"] == old_records["B"]
+        assert new_records["C"] == old_records["C"]
+        assert new_records["D"]["status"] == "SOURCE_CONTACTED_NO_PAYLOAD"
 
     print("Corpus acquisition orchestration tests passed")
     return 0
