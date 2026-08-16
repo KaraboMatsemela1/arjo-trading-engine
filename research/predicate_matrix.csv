@@ -1,7 +1,7 @@
 PREDICATE_ID,FIELD,STATE,EVIDENCE_IDS,NOTES
 AOO_FVA_2CR_FVG_LONG_CONTEXT,INPUTS,PARTIAL,EV_C56CCD137DF55FB6E7ACA5ED;EV_572DF3099958D3DDEE9B87F1;EV_AF722B29242FEC2095F26D3C;EV_EA873C29C93ACEEDC1655D9B;EV_FAF3FDDDD281DD0A6E5BAA26;EV_7BB848F736E84076A21CE5BE;EV_82E71D57611901AE0D8A1A09,limitation: the source identifies FVA/FVG/2CR/AoO context but does not define their complete observable constructions.
-AOO_FVA_2CR_FVG_LONG_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
-AOO_FVA_2CR_FVG_LONG_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,INSTRUMENTS,PARTIAL,EV_3B235EF470AD5BAFC8857649,"limitation: a directly captured worked AoO example explicitly uses Gold, but universal instrument eligibility, exclusions, and substitutions remain unresolved."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,TIMEFRAME,PARTIAL,EV_910CD2C2C616AE55270F56C3,"limitation: a directly captured worked AoO example explicitly uses 4h and 1h, but universal timeframe scope, ownership, hierarchy, and component mapping remain unresolved."
 AOO_FVA_2CR_FVG_LONG_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
 AOO_FVA_2CR_FVG_LONG_CONTEXT,DIRECTION,PARTIAL,EV_572DF3099958D3DDEE9B87F1;EV_FAF3FDDDD281DD0A6E5BAA26,"limitation: FVA disrespect is associated with looking for buys in this example, but the respect/disrespect predicate and universal direction mapping are unresolved."
 AOO_FVA_2CR_FVG_LONG_CONTEXT,PRECONDITIONS,PARTIAL,EV_572DF3099958D3DDEE9B87F1;EV_FAF3FDDDD281DD0A6E5BAA26,"limitation: FVA disrespect appears before the buy context, but its geometry and qualifying threshold are unresolved."
