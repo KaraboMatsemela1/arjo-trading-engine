@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "issue": 91,
+  "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT",
+  "authoritative_recovery_run": 31960905391,
+  "artifact_id": 9267214340,
+  "bounded_source_count": 1,
+  "baseline": {
+    "MISSING": 13,
+    "PARTIAL": 3,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "final": {
+    "MISSING": 13,
+    "PARTIAL": 3,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "field_advancements": [],
+  "fields": {
+    "INPUTS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "The recovered example directly associates price around 0.5 with equilibrium, but the source does not define the parent range, calculation, anchors, or tolerance required to construct that 0.5."},
+    "INSTRUMENTS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No instrument is identified in the bounded safe context."},
+    "TIMEFRAME": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No timeframe is identified in the bounded safe context."},
+    "HIGHER_TIMEFRAME_CONTEXT": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No higher-timeframe ownership or hierarchy is established."},
+    "DIRECTION": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The phrase 'before continuing' does not define the direction of continuation or a deterministic directional map."},
+    "PRECONDITIONS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Being at equilibrium is associated with a likely stop run, but exact qualification of equilibrium remains unresolved."},
+    "SETUP": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "The equilibrium/stop-run context is direct, but no complete observable setup boundary is defined."},
+    "TRIGGER": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The occurrence of a likely stop run is descriptive; no exact event is defined as an entry/decision trigger."},
+    "ENTRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No entry price, timing, or involvement rule is established."},
+    "STOP": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The term stop run describes market behavior and does not establish the strategy's protective stop construction."},
+    "TARGET": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No target-selection or price construction is established."},
+    "INVALIDATION": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No invalidation predicate is established."},
+    "EXPIRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No expiry or lifecycle limit is established."},
+    "SESSION/TIME_RULE": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No session or clock-time rule is present in the bounded source."},
+    "OPTIONAL_CONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No optional-vs-required condition split is established."},
+    "REQUIRED_CONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The source does not prove a complete universal prerequisite set."}
+  },
+  "captured_sources": ["TG_ARJOIOTRADING_16"],
+  "existing_evidence_reused": [
+    "EV_72FA00B0C191C4291B6BD9AA",
+    "EV_8B32047911C6EC4FB51D8CCB"
+  ],
+  "new_evidence_admitted": [],
+  "contextual_detail_not_promoted": "A directly recovered worked example says price stays around 0.5 because it is equilibrium and associates equilibrium with a likely stop run before continuing. The parent range and deterministic construction are not defined.",
+  "performance_data_consulted": false,
+  "generic_ict_smc_substitution": false,
+  "spec_ready": false,
+  "implementation_authorized": false
+}
