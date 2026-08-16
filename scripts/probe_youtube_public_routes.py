@@ -13,7 +13,6 @@ import argparse
 import csv
 import hashlib
 import json
-import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -256,22 +255,23 @@ def main() -> int:
         "third_party_transcript_used": False,
     }
     Path(args.output).write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    route_states = sorted({route["state"] for result in results for route in result["routes"]})
+    route_counts = {
+        state: sum(
+            1
+            for result in results
+            for route in result["routes"]
+            if route["state"] == state
+        )
+        for state in route_states
+    }
     print(
         json.dumps(
             {
                 "targets": len(results),
                 "semantic_payloads_captured": report["semantic_payloads_captured"],
-                "route_states": {
-                    state: sum(
-                        1
-                        for result in results
-                        for route in result["routes"]
-                        if (state := route["state"])
-                    )
-                    for state in sorted(
-                        {route["state"] for result in results for route in result["routes"]}
-                    )
-                },
+                "route_states": route_counts,
             },
             sort_keys=True,
         )
