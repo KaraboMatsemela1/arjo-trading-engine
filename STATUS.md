@@ -80,6 +80,8 @@ _Generated mechanically by `scripts/project_state.py`._
 | #113 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #116 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #120 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #122 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #125 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 
 ## Strategy implementation status
 

@@ -1073,6 +1073,54 @@
       "number": 120,
       "title": "Autonomy: make corpus acquisition delta-driven and idempotent",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/120"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          13,
+          112,
+          116,
+          120
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-AUTONOMY-PR-CREDENTIAL-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 122,
+      "title": "Autonomy: support dedicated PR credential for zero-touch CI handoff",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/122"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          112,
+          116,
+          120,
+          122
+        ],
+        "ENTRY_GATE": "GOVERNANCE_BOOTSTRAP_COMPLETE",
+        "ISSUE_ID": "ARJO-AUTONOMY-DISPATCHED-VALIDATION-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 125,
+      "title": "Autonomy: dispatch exact validation gates for Actions-created PRs",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/125"
     }
   ],
   "live_execution_enabled": false,
