@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "issue": 48,
+  "performance_data_consulted": false,
+  "invented_semantics_used": false,
+  "overrides": [
+    {
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "field_updates": {
+        "INSTRUMENTS": {
+          "state": "PARTIAL",
+          "evidence_ids": ["EV_3B235EF470AD5BAFC8857649"],
+          "notes": "limitation: the direct first-party example uses Gold, but it does not establish the universal instrument set or whether instrument choice changes the predicate."
+        },
+        "TIMEFRAME": {
+          "state": "PARTIAL",
+          "evidence_ids": ["EV_910CD2C2C616AE55270F56C3"],
+          "notes": "limitation: the example uses 4h and 1h timeframes, but it does not define a universal timeframe mapping, hierarchy, inheritance rule, or required pairing."
+        },
+        "DIRECTION": {
+          "append_evidence_ids": ["EV_06BCDB734F85CF3D637AD97E"],
+          "notes_append": " Recovery evidence makes the buy-direction sequence explicit for this example, while the universal direction mapping remains unresolved."
+        },
+        "PRECONDITIONS": {
+          "append_evidence_ids": ["EV_4958CA2416C9FE3A3602B0DD"],
+          "notes_append": " Recovery evidence explicitly orders Rejection High run before FVA disrespect in this example; construction and universal requirement remain unresolved."
+        },
+        "TRIGGER": {
+          "append_evidence_ids": ["EV_0C9251E66C04140877F4BE5F"],
+          "notes_append": " A separate first-party 2CR example distinguishes first- and second-candle behavior, but it does not close the universal 2CR predicate or prove applicability to this AoO example."
+        },
+        "ENTRY": {
+          "append_evidence_ids": ["EV_63DB4DBDEA32DC547A1922B4"],
+          "notes_append": " Recovery evidence directly states that the example entry used 2CR from FVGs; exact price, timing, FVG selection, invalidation, and expiry remain unresolved."
+        }
+      }
+    }
+  ]
+}
