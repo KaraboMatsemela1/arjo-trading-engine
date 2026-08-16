@@ -1,0 +1,69 @@
+name: Issue 87 YouTube Access Recovery
+
+on:
+  push:
+    branches:
+      - issue-87-youtube-public-access-recovery
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile and test transport probe
+        run: |
+          python -m compileall -q scripts
+          python scripts/test_youtube_public_route_probe.py
+
+      - name: Probe bounded official public routes
+        run: |
+          mkdir -p /tmp/issue87-captions
+          python scripts/probe_youtube_public_routes.py \
+            --targets research/recovery/issue_87_youtube_canaries.csv \
+            --output /tmp/issue87_youtube_access_report.json \
+            --caption-dir /tmp/issue87-captions \
+            --timeout 45
+
+      - name: Validate safety policy
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/issue87_youtube_access_report.json').read_text())
+          assert report['target_count'] == 4
+          assert report['probe_policy'] == 'PUBLIC_UNAUTHENTICATED_OFFICIAL_ROUTES_ONLY'
+          for key in (
+              'cookies_used',
+              'authentication_used',
+              'captcha_bypass_used',
+              'stealth_or_proxy_rotation_used',
+              'private_api_used',
+              'third_party_transcript_used',
+          ):
+              assert report[key] is False, (key, report[key])
+          for item in report['results']:
+              assert item['titles_descriptions_metadata_semantic_credit'] == 'ZERO'
+              if item['caption'] and item['caption']['semantic_credit'] == 'ELIGIBLE_DIRECT_FIRST_PARTY_PAYLOAD':
+                  assert item['caption']['discovered_from_public_page'] is True
+                  assert item['caption']['official_host'] is True
+          print({'target_count': report['target_count'], 'semantic_payloads_captured': report['semantic_payloads_captured']})
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: issue-87-youtube-access-recovery
+          path: |
+            /tmp/issue87_youtube_access_report.json
+            /tmp/issue87-captions
+          retention-days: 14
+          if-no-files-found: warn
