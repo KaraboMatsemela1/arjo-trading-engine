@@ -17,11 +17,11 @@ from pathlib import Path
 from evidence_antibias import contains_pre_spec_outcome
 
 TERMS = [
-    "Order Block", "Order Blocks", "OB", "OBs", "Reclaimed Order Block", "MT",
+    "ES", "Daily", "Order Block", "Order Blocks", "OB", "OBs", "Reclaimed Order Block", "MT",
     "respect", "respects", "hold", "holds", "holding", "fail", "fails", "failed",
     "indication", "trigger", "entry", "enter", "confirmation", "direction", "bullish",
     "bearish", "buy", "sell", "long", "short", "stop loss", "target", "invalid",
-    "invalidation", "expiry", "session", "daily", "4h", "1h", "15m", "5m", "HTF", "LTF",
+    "invalidation", "expiry", "session", "4h", "1h", "15m", "5m", "HTF", "LTF",
 ]
 META_TEXT_KEYS = {"description", "og:description", "twitter:description", "og:title", "twitter:title"}
 
