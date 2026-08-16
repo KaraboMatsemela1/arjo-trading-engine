@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "issue": 90,
+  "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT",
+  "authoritative_run": 31960834403,
+  "artifact_id": 9267194612,
+  "baseline": {"MISSING": 13, "PARTIAL": 3, "SATISFIED": 0, "CONTRADICTORY": 0},
+  "final": {"MISSING": 13, "PARTIAL": 3, "SATISFIED": 0, "CONTRADICTORY": 0},
+  "field_advancements": [],
+  "fields": {
+    "INPUTS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Equilibrium is explicit, but its source range and deterministic calculation remain unresolved."},
+    "INSTRUMENTS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No instrument scope is stated in the bounded recovered message."},
+    "TIMEFRAME": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No timeframe scope or ownership is stated."},
+    "HIGHER_TIMEFRAME_CONTEXT": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No higher-timeframe inheritance is stated."},
+    "DIRECTION": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "Stop-run likelihood does not establish bullish/bearish direction mapping."},
+    "PRECONDITIONS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Being at equilibrium is associated with likely stop-run behavior, but exact qualification remains unresolved."},
+    "SETUP": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "The same source mentions setup levels, but does not establish a complete executable setup or source-range construction."},
+    "TRIGGER": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The phrase stop run is behavior/context, not an explicit executable trigger predicate."},
+    "ENTRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No executable entry price or timing rule is stated."},
+    "STOP": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "Stop run is not a stop-loss rule; no stop placement is stated."},
+    "TARGET": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "Expected DOL is mentioned, but DOL expansion and deterministic target construction are unresolved."},
+    "INVALIDATION": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No invalidation predicate is stated."},
+    "EXPIRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No expiry/lifecycle rule is stated."},
+    "SESSION/TIME_RULE": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No session or clock-time rule is stated."},
+    "OPTIONAL_CONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No optional condition is distinguished."},
+    "REQUIRED_CONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "The source does not establish which observed elements are universally required."}
+  },
+  "new_evidence_admitted": [],
+  "performance_data_consulted": false,
+  "generic_ict_smc_substitution": false,
+  "spec_ready": false,
+  "implementation_authorized": false
+}
