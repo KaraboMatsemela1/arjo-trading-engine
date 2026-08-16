@@ -29,6 +29,27 @@
       "state": "PARTIAL",
       "evidence_ids": ["EV_EB53D46DE5AB0CE28598D703"],
       "notes": "limitation: the directly captured worked Order Block dataset explicitly evaluates Daily Order Blocks, but universal timeframe scope, hierarchy, ownership, and MT applicability remain unresolved."
+    },
+    {
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "field": "INSTRUMENTS",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_8193B22D6714969F8D70E09C"],
+      "notes": "limitation: the directly captured worked MMBM/LRLR narrative explicitly uses ES, but universal instrument eligibility, exclusions, substitutions, and model scope remain unresolved."
+    },
+    {
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "field": "SETUP",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_0732BE192A44C3F56677B598"],
+      "notes": "limitation: the source directly associates finishing LRLR with likely choppy price action, but exact model completion, consolidation geometry, setup boundaries, and executable conditions remain unresolved."
+    },
+    {
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "field": "TARGET",
+      "state": "PARTIAL",
+      "evidence_ids": ["EV_7E443637E083DB93E55728F5"],
+      "notes": "limitation: the worked narrative identifies consolidation EQHs as a subsequent objective, but universal target construction, qualifying EQHs, sequencing, and precedence remain unresolved."
     }
   ]
 }
