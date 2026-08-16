@@ -1,0 +1,48 @@
+{
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "agreement": true,
+      "candidate_registry_hash": "0c81c6f62c9c714b0775369d7ad9d7b433f25d4550a4561e404b87e0385b350d",
+      "matrix_reconstruction_hash": "0c81c6f62c9c714b0775369d7ad9d7b433f25d4550a4561e404b87e0385b350d",
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT"
+    },
+    {
+      "agreement": true,
+      "candidate_registry_hash": "5c464b087420c2ffd60411086e9046c46294111e108dcc8ea432a982837321d1",
+      "matrix_reconstruction_hash": "5c464b087420c2ffd60411086e9046c46294111e108dcc8ea432a982837321d1",
+      "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT"
+    },
+    {
+      "agreement": true,
+      "candidate_registry_hash": "17bd3a8e11e9522ae66f853479f9cdfd66565af15e366b6aa5b456ac215629b0",
+      "matrix_reconstruction_hash": "17bd3a8e11e9522ae66f853479f9cdfd66565af15e366b6aa5b456ac215629b0",
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT"
+    },
+    {
+      "agreement": true,
+      "candidate_registry_hash": "2f5f2ab2f44308084d35df7f38b387053835134069eccc20fe3d37184bbf9f03",
+      "matrix_reconstruction_hash": "2f5f2ab2f44308084d35df7f38b387053835134069eccc20fe3d37184bbf9f03",
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT"
+    },
+    {
+      "agreement": true,
+      "candidate_registry_hash": "9225eb10cfa1e7bb6341f5e956785d200402d47d71d47fd0a3b1176bd5c273f4",
+      "matrix_reconstruction_hash": "9225eb10cfa1e7bb6341f5e956785d200402d47d71d47fd0a3b1176bd5c273f4",
+      "predicate_id": "ORDER_FLOW_TARGET_BIAS"
+    },
+    {
+      "agreement": true,
+      "candidate_registry_hash": "28243df45bfd6e99324bd66df50b14ef5d6c4c65879e09956fa061c33b9be89a",
+      "matrix_reconstruction_hash": "28243df45bfd6e99324bd66df50b14ef5d6c4c65879e09956fa061c33b9be89a",
+      "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
+    }
+  ],
+  "independence_scope": "TWO_INDEPENDENT_CODE_PATHS_OVER_THE_SAME_EVIDENCE_ONLY_PACKET",
+  "independent_humans_or_models": false,
+  "performance_data_consulted": false,
+  "protocol": "TWO_ENGINEER_DETERMINISTIC_RECONSTRUCTION_PREFLIGHT",
+  "satisfies_independent_spec_ready_audit": false,
+  "schema_version": 1,
+  "status": "PASS"
+}

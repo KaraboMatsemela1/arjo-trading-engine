@@ -1,0 +1,352 @@
+{
+  "candidate_count": 6,
+  "concept_review": [
+    {
+      "bounded_examples": [
+        "Interested in more about the AoO and how you can clearly understand where to look to get involved?"
+      ],
+      "concept_id": "AREA_OF_OPPORTUNITY",
+      "operational_cue_evidence_ids": [
+        "EV_C56CCD137DF55FB6E7ACA5ED"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "ARGUMENTS_FRAMEWORK",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "BISI_SIBI",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "BREAKER",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "CANDLE_SCIENCE",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "DOL",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "a while, why? Because it's equilibrium and at equilibrium thats where you'll likely get a stop run as"
+      ],
+      "concept_id": "EQUILIBRIUM",
+      "operational_cue_evidence_ids": [
+        "EV_72FA00B0C191C4291B6BD9AA"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [
+        "High \u2192 We\u2019ve disrespected the FVA \u2192 We can look for buys After that, the entry is just"
+      ],
+      "concept_id": "FAIR_VALUE_AREA",
+      "operational_cue_evidence_ids": [
+        "EV_572DF3099958D3DDEE9B87F1"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [
+        "entry, I used 2CR from FVGs here. Interested in more about the AoO and how you can clearly"
+      ],
+      "concept_id": "FAIR_VALUE_GAP",
+      "operational_cue_evidence_ids": [
+        "EV_AF722B29242FEC2095F26D3C"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "FLOD_LLOD",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "HP_WEEKS",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "IFVG",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "ITH_ITL",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "LIQUIDITY_RUN_SWEEP",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "LOW_PROBABILITY_DECOUPLING",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "MARKET_MAKER_MODELS",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "MARKET_STRUCTURE",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "finished a MMBM aka a LRLR , we took the highs which means we took shorts their Stop"
+      ],
+      "concept_id": "MMBM_LRLR",
+      "operational_cue_evidence_ids": [
+        "EV_6C22A223A333A5E257339E47"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [
+        "OBs that hold will respect MT so that's a good indication if a OB will hold. So 29"
+      ],
+      "concept_id": "MT",
+      "operational_cue_evidence_ids": [
+        "EV_0168479B3125D6C386C46B33"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "NARRATIVE",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "a trade. It's a \" No Resistance Area .\" It's where price moves fast, discussed in this new"
+      ],
+      "concept_id": "NO_RESISTANCE_AREA",
+      "operational_cue_evidence_ids": [
+        "EV_E8B2EA0265EC096276C55532"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [
+        "respects MT. Meaning that most OBs that hold will respect MT so that's a good indication if a"
+      ],
+      "concept_id": "ORDER_BLOCK",
+      "operational_cue_evidence_ids": [
+        "EV_D2B08C6BA0F9A4259DE61E9C"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [
+        "Episode 1, we're diving into Order Flow and how that tells us the Target."
+      ],
+      "concept_id": "ORDER_FLOW",
+      "operational_cue_evidence_ids": [
+        "EV_4EADDE6B3E0B95A8E83D0B00"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "ORDER_FLOW_TRANSITION",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "new video: Resistance is Opposing PD Arrays . And when they fail told through 2CR, it tells us",
+        "we implement it with the PD Arrays to tell us the direction."
+      ],
+      "concept_id": "PD_ARRAYS",
+      "operational_cue_evidence_ids": [
+        "EV_C8BEA72C855FC2301F15D3F0",
+        "EV_CAAA17FEBDB39543DD7B8AD6"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "PREMIUM_ARRAY",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "on your hands LRLR ( Low Resistance Liquidity Run ) indicates that there's explosive moves and it didn't"
+      ],
+      "concept_id": "RESISTANCE_LIQUIDITY_RUNS",
+      "operational_cue_evidence_ids": [
+        "EV_47407FF3FBAB9E586CA93D3B"
+      ],
+      "represented_in_candidate": false,
+      "review_state": "REVIEW_REQUIRED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "REVERSAL",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "SMT",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "Tape reading : Studying real time Price delivery for experience and holding no interest in pushing an entry"
+      ],
+      "concept_id": "TAPE_READING",
+      "operational_cue_evidence_ids": [
+        "EV_C2D2AD099F3842101F97C924"
+      ],
+      "represented_in_candidate": false,
+      "review_state": "REVIEW_REQUIRED"
+    },
+    {
+      "bounded_examples": [
+        "on knowing exactly what the Target is in price, the Bias. Enjoy!",
+        "Time to profit from the Bias , knowing exactly where we want to trade. Ps: the livestreams will",
+        "how that tells us the Target ."
+      ],
+      "concept_id": "TARGET_BIAS",
+      "operational_cue_evidence_ids": [
+        "EV_22D0263AE5E535F475633161",
+        "EV_682019305394DD960FBEFCE4",
+        "EV_8AD848A97EBC1DC159B34765"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "THIRD_CANDLE",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "TIMEFRAME_HIERARCHY",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "TIME_AND_PRICE",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "TREND",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
+    },
+    {
+      "bounded_examples": [
+        "when they fail told through 2CR , it tells us when to get involved. I'll also be live",
+        "for my entry, I used 2CR from FVGs here. Interested in more about the AoO and how you"
+      ],
+      "concept_id": "TWO_CANDLE_REJECTION",
+      "operational_cue_evidence_ids": [
+        "EV_7D187598F3CA70091E89BC12",
+        "EV_EA873C29C93ACEEDC1655D9B"
+      ],
+      "represented_in_candidate": true,
+      "review_state": "REPRESENTED"
+    }
+  ],
+  "inventory_concept_count": 36,
+  "method": "LEXICAL_OMISSION_AUDIT_ONLY",
+  "performance_data_consulted": false,
+  "represented_concept_count": 13,
+  "schema_version": 1,
+  "semantic_classification_performed": false,
+  "unrepresented_operational_cue_count": 2,
+  "unrepresented_operational_cues": [
+    {
+      "bounded_examples": [
+        "on your hands LRLR ( Low Resistance Liquidity Run ) indicates that there's explosive moves and it didn't"
+      ],
+      "concept_id": "RESISTANCE_LIQUIDITY_RUNS",
+      "operational_cue_evidence_ids": [
+        "EV_47407FF3FBAB9E586CA93D3B"
+      ],
+      "represented_in_candidate": false,
+      "review_state": "REVIEW_REQUIRED"
+    },
+    {
+      "bounded_examples": [
+        "Tape reading : Studying real time Price delivery for experience and holding no interest in pushing an entry"
+      ],
+      "concept_id": "TAPE_READING",
+      "operational_cue_evidence_ids": [
+        "EV_C2D2AD099F3842101F97C924"
+      ],
+      "represented_in_candidate": false,
+      "review_state": "REVIEW_REQUIRED"
+    }
+  ]
+}
