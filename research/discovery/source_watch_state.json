@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "search_or_metadata_semantic_credit": "ZERO",
+  "semantic_closure_performed": false,
+  "surface_exit_codes": {
+    "telegram": 0,
+    "website": 2,
+    "youtube": 0
+  },
+  "surface_states": {
+    "telegram": "CLEAN_DISCOVERY",
+    "website": "NO_DISCOVERY_PAYLOAD",
+    "youtube": "CLEAN_DISCOVERY"
+  }
+}
