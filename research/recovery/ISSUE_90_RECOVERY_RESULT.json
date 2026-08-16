@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "issue": 90,
+  "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT",
+  "authoritative_run_id": 31960834403,
+  "artifact_id": 9267194612,
+  "artifact_digest": "sha256:0501c50607e162fa349cacc6e2ee8b012203b97ce905f1faa5c1bf6f1bf2431a",
+  "eligible_canonical_telegram_sources": 790,
+  "archive_pages_fetched": 40,
+  "archive_retrieval_failures": 0,
+  "archive_pages_sha256_bound": true,
+  "messages_seen": 790,
+  "equilibrium_message_count": 1,
+  "stop_run_message_count": 1,
+  "joint_message_count": 1,
+  "recovery_source_ids": ["TG_ARJOIOTRADING_16"],
+  "new_source_ids": [],
+  "new_evidence_shard_required": false,
+  "field_override_required": false,
+  "field_advancements": [],
+  "predicate_state_before": {
+    "MISSING": 13,
+    "PARTIAL": 3,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "predicate_state_after": {
+    "MISSING": 13,
+    "PARTIAL": 3,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "shared_antibias_guard": true,
+  "performance_data_consulted": false,
+  "semantic_synthesis_performed_by_recovery_tool": false,
+  "disposition": "NO_NEW_FIELD_PROMOTION",
+  "rationale": [
+    "The fixed-term scan of all 790 canonical captured Telegram sources found exactly one matching message, TG_ARJOIOTRADING_16, which is already the sole source supporting this candidate.",
+    "The message directly links equilibrium with likely stop-run behavior, which is already represented by the existing INPUTS, PRECONDITIONS, and SETUP PARTIAL states.",
+    "After correcting cue inflation, the phrase stop run is not treated as a stop-loss or entry trigger.",
+    "The only additional lexical field cue is DOL/target context, but DOL expansion and deterministic target construction are unresolved; TARGET therefore remains MISSING.",
+    "The same message notes setup levels 0.25, 0.5, and 0.75, but it does not define the source range/calculation, universal required conditions, direction, executable trigger/entry, target construction, or lifecycle for the Equilibrium stop-run candidate."
+  ],
+  "remaining_missing_fields": [
+    "INSTRUMENTS",
+    "TIMEFRAME",
+    "HIGHER_TIMEFRAME_CONTEXT",
+    "DIRECTION",
+    "TRIGGER",
+    "ENTRY",
+    "STOP",
+    "TARGET",
+    "INVALIDATION",
+    "EXPIRY",
+    "SESSION/TIME_RULE",
+    "OPTIONAL_CONDITIONS",
+    "REQUIRED_CONDITIONS"
+  ],
+  "spec_ready": false
+}
