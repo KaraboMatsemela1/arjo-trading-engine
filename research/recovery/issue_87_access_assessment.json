@@ -1,8 +1,9 @@
 {
   "schema_version": 1,
   "issue": 87,
-  "authoritative_run": 31960189800,
-  "artifact_id": 9267022847,
+  "authoritative_run": 31960274492,
+  "artifact_id": 9267044313,
+  "artifact_digest": "sha256:e37569a0764cbba04c411bb22d0ea7de8f15827ad8cd02ed7afa450774f3e5e2",
   "probe_policy": "PUBLIC_UNAUTHENTICATED_OFFICIAL_ROUTES_ONLY",
   "canary_count": 4,
   "canaries": [
