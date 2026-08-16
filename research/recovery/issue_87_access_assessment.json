@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "issue": 87,
+  "authoritative_run": 31960189800,
+  "artifact_id": 9267022847,
+  "probe_policy": "PUBLIC_UNAUTHENTICATED_OFFICIAL_ROUTES_ONLY",
+  "canary_count": 4,
+  "canaries": [
+    "YT_VIDEO_xTdSe_vJQ5s",
+    "YT_VIDEO_mlXBuNHO1c8",
+    "YT_VIDEO_sPGSHQNDCPU",
+    "YT_VIDEO_VwcuxpIBcsI"
+  ],
+  "route_summary": {
+    "watch": {
+      "attempted": 4,
+      "public_payload_captured": 0,
+      "environment_access_failure": 4,
+      "terminal_reason": "HTTP 200 HTML contained YouTube 'sign in to confirm you're not a bot' challenge on every canary"
+    },
+    "embed": {
+      "attempted": 4,
+      "public_payload_captured": 4,
+      "environment_access_failure": 0,
+      "semantic_credit": "ZERO_TRANSPORT_PROBE"
+    },
+    "oembed_metadata": {
+      "attempted": 4,
+      "public_payload_captured": 4,
+      "environment_access_failure": 0,
+      "semantic_credit": "ZERO_METADATA_ONLY"
+    }
+  },
+  "caption_tracks_exposed": 0,
+  "direct_semantic_payloads_captured": 0,
+  "caption_requests_attempted": 0,
+  "semantic_unlock": false,
+  "terminal_classification": "PUBLIC_PAGE_METADATA_AVAILABLE_BUT_SEMANTIC_PAYLOAD_UNAVAILABLE",
+  "safety": {
+    "cookies_used": false,
+    "authentication_used": false,
+    "captcha_bypass_used": false,
+    "stealth_or_proxy_rotation_used": false,
+    "private_api_used": false,
+    "third_party_transcript_used": false,
+    "titles_descriptions_metadata_semantic_credit": "ZERO"
+  },
+  "spec_ready": false,
+  "implementation_authorized": false
+}
