@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "issue": 94,
+  "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+  "authoritative_recovery_run": 31961110007,
+  "artifact_id": 9267265874,
+  "artifact_sha256": "cdd51b2ab9baab3929cf395f24770fad4189e9a7f370ed137cc9876ed184b362",
+  "canonical_payload_sha256": "5a130afb13fa6533504a79821f00aadfbc25ce09f0188f93174546cf53d55eae",
+  "recovery_archive_sha256": "3e1a055493a25ea2d56902ae2a9e14e3b4d0357a31a554317a0f9243f2c1c61c",
+  "baseline": {"MISSING": 13, "PARTIAL": 3, "SATISFIED": 0, "CONTRADICTORY": 0},
+  "final": {"MISSING": 10, "PARTIAL": 6, "SATISFIED": 0, "CONTRADICTORY": 0},
+  "field_advancements": [
+    {"field": "INSTRUMENTS", "from": "MISSING", "to": "PARTIAL", "evidence_id": "EV_8193B22D6714969F8D70E09C"},
+    {"field": "SETUP", "from": "MISSING", "to": "PARTIAL", "evidence_id": "EV_0732BE192A44C3F56677B598"},
+    {"field": "TARGET", "from": "MISSING", "to": "PARTIAL", "evidence_id": "EV_7E443637E083DB93E55728F5"}
+  ],
+  "non_promotions": {
+    "TIMEFRAME": "No timeframe is stated.",
+    "HIGHER_TIMEFRAME_CONTEXT": "No higher-timeframe ownership or hierarchy is stated.",
+    "TRIGGER": "Forecast sequence language is not an executable decision trigger.",
+    "ENTRY": "No entry price or timing rule is stated.",
+    "STOP": "Shorts' Stop Loss, Buyers' SL, and Buy Stops describe market-participant liquidity, not the strategy's protective stop.",
+    "INVALIDATION": "No invalidation predicate is stated.",
+    "EXPIRY": "No expiry rule is stated.",
+    "SESSION/TIME_RULE": "No session or clock-time rule is stated.",
+    "OPTIONAL_CONDITIONS": "No optional-vs-required split is stated.",
+    "REQUIRED_CONDITIONS": "The worked narrative does not prove a universal prerequisite set."
+  },
+  "performance_data_consulted": false,
+  "generic_ict_smc_substitution": false,
+  "spec_ready": false,
+  "implementation_authorized": false
+}
