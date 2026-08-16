@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "issue": 85,
+  "predicate_id": "ORDER_FLOW_TARGET_BIAS",
+  "recovery_run_id": 31959852785,
+  "artifact_id": 9266943499,
+  "artifact_digest": "sha256:74c5fdcfe88e9bdc9e76fb616e8161336c3f7b111118a8ff18dfce6e8f771921",
+  "bounded_source_count": 9,
+  "terminal_status_counts": {
+    "PAYLOAD_CAPTURED": 3,
+    "ENVIRONMENT_ACCESS_FAILURE": 6
+  },
+  "captured_source_ids": [
+    "TG_ARJOIOTRADING_785",
+    "TG_ARJOIOTRADING_786",
+    "TG_ARJOIOTRADING_790"
+  ],
+  "environment_access_failure_source_ids": [
+    "YT_SHORT_8RuafyGCuuA",
+    "YT_VIDEO_7PT8zRItzhM",
+    "YT_VIDEO_NvufvH990aQ",
+    "YT_VIDEO_X3IDEQ_xTJo",
+    "YT_VIDEO_mlXBuNHO1c8",
+    "YT_VIDEO_xTdSe_vJQ5s"
+  ],
+  "direct_payload_window_count": 9,
+  "telegram_archive_page_count": 2,
+  "telegram_archive_failure_count": 0,
+  "telegram_archive_pages_sha256_bound": true,
+  "shared_antibias_guard": true,
+  "performance_data_consulted": false,
+  "semantic_synthesis_performed_by_recovery_tools": false,
+  "field_cues_from_captured_telegram": [],
+  "field_advancements": [],
+  "new_evidence_shard_required": false,
+  "field_override_required": false,
+  "predicate_state_before": {
+    "MISSING": 12,
+    "PARTIAL": 4,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "predicate_state_after": {
+    "MISSING": 12,
+    "PARTIAL": 4,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "disposition": "NO_NEW_FIELD_PROMOTION",
+  "rationale": [
+    "The three captured Telegram payloads restate already-admitted relationships: Target/Bias context, Bias/where-to-trade context, and Order Flow informing Target.",
+    "The canonical predicate matrix already represents those relationships in INPUTS, DIRECTION, TARGET, and REQUIRED_CONDITIONS as PARTIAL.",
+    "The bounded Telegram recovery produced no INSTRUMENTS, TIMEFRAME, HIGHER_TIMEFRAME_CONTEXT, TRIGGER, ENTRY, or SESSION/TIME_RULE field cues.",
+    "No captured first-party payload defines the observable Order Flow algorithm, deterministic Target construction, exact Target-versus-Bias semantics, lifecycle, or universal scope.",
+    "The six richer official video/short routes terminated as ENVIRONMENT_ACCESS_FAILURE and therefore receive zero semantic credit."
+  ],
+  "remaining_missing_fields": [
+    "INSTRUMENTS",
+    "TIMEFRAME",
+    "HIGHER_TIMEFRAME_CONTEXT",
+    "PRECONDITIONS",
+    "SETUP",
+    "TRIGGER",
+    "ENTRY",
+    "STOP",
+    "INVALIDATION",
+    "EXPIRY",
+    "SESSION/TIME_RULE",
+    "OPTIONAL_CONDITIONS"
+  ],
+  "spec_ready": false
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "issue": 85,
+  "predicate_id": "ORDER_FLOW_TARGET_BIAS",
+  "authoritative_recovery_run": 31959852785,
+  "artifact_id": 9266943499,
+  "artifact_digest": "sha256:74c5fdcfe88e9bdc9e76fb616e8161336c3f7b111118a8ff18dfce6e8f771921",
+  "bounded_target_count": 9,
+  "terminal_source_split": {
+    "PAYLOAD_CAPTURED": 3,
+    "ENVIRONMENT_ACCESS_FAILURE": 6
+  },
+  "baseline": {
+    "MISSING": 12,
+    "PARTIAL": 4,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "final": {
+    "MISSING": 12,
+    "PARTIAL": 4,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "field_advancements": [],
+  "fields": {
+    "INPUTS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Existing first-party evidence establishes Order Flow as the upstream concept but not its observable inputs or algorithm."},
+    "INSTRUMENTS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No bounded captured source establishes instrument eligibility or exclusions."},
+    "TIMEFRAME": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No bounded captured source establishes timeframe scope or ownership."},
+    "HIGHER_TIMEFRAME_CONTEXT": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No bounded captured source establishes higher-timeframe context or inheritance."},
+    "DIRECTION": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Target/Bias and where-to-trade language remains contextual; deterministic bullish/bearish direction mapping is unresolved."},
+    "PRECONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No qualifying prerequisite set is established by the captured Telegram text."},
+    "SETUP": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No complete observable Order Flow setup boundary is established."},
+    "TRIGGER": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No exact trigger event or confirmation rule is established."},
+    "ENTRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No executable entry price or timing rule is established."},
+    "STOP": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No stop construction is established."},
+    "TARGET": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "Direct first-party text says Order Flow tells the Target, but target selection and price construction remain unresolved."},
+    "INVALIDATION": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No invalidation predicate is established."},
+    "EXPIRY": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No expiry or lifecycle timing rule is established."},
+    "SESSION/TIME_RULE": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No trading-session or clock-time rule is established by the bounded captured source text."},
+    "OPTIONAL_CONDITIONS": {"state": "MISSING", "disposition": "UNCHANGED", "reason": "No optional-vs-required condition split is established."},
+    "REQUIRED_CONDITIONS": {"state": "PARTIAL", "disposition": "UNCHANGED", "reason": "The Order Flow-to-Target relationship is direct, but no complete prerequisite set is established."}
+  },
+  "captured_sources": [
+    "TG_ARJOIOTRADING_785",
+    "TG_ARJOIOTRADING_786",
+    "TG_ARJOIOTRADING_790"
+  ],
+  "zero_credit_access_failures": [
+    "YT_VIDEO_mlXBuNHO1c8",
+    "YT_VIDEO_7PT8zRItzhM",
+    "YT_VIDEO_NvufvH990aQ",
+    "YT_VIDEO_X3IDEQ_xTJo",
+    "YT_VIDEO_xTdSe_vJQ5s",
+    "YT_SHORT_8RuafyGCuuA"
+  ],
+  "existing_evidence_reused": [
+    "EV_682019305394DD960FBEFCE4",
+    "EV_8AD848A97EBC1DC159B34765",
+    "EV_22D0263AE5E535F475633161",
+    "EV_9B5480162CFA86DA4C049ACD"
+  ],
+  "new_evidence_admitted": [],
+  "performance_data_consulted": false,
+  "generic_ict_smc_substitution": false,
+  "spec_ready": false,
+  "implementation_authorized": false
+}
