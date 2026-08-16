@@ -19,6 +19,7 @@ on:
       - '.github/workflows/predicate-synthesis.yml'
 
 permissions:
+  actions: write
   contents: write
   pull-requests: write
   issues: write
@@ -102,7 +103,7 @@ jobs:
           git add research/predicate_matrix.csv research/predicate_closure.json research/two_engineer_preflight.json research/predicate_recovery_tasks.json research/candidate_selection_audit.json
           git commit -m "research: record predicate matrix and closure state"
           git push origin "$branch"
-      - name: Open reviewed PR or create service fallback
+      - name: Open reviewed PR, dispatch validation, or create service fallback
         if: steps.branch.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.ARJO_AUTOMATION_PR_TOKEN || secrets.GITHUB_TOKEN }}
@@ -118,6 +119,7 @@ jobs:
           rc=$?
           set -e
           if [ "$rc" -eq 0 ]; then
+            scripts/dispatch_autonomous_validation.sh "$BRANCH"
             exit 0
           fi
 
