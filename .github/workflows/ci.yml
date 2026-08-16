@@ -29,6 +29,8 @@ jobs:
         run: python scripts/test_independent_spec_audit.py
       - name: Run Issue 48 recovery regression tests
         run: python scripts/test_issue48_recovery.py
+      - name: Run SPEC audit service-issue publication regression tests
+        run: python scripts/test_spec_audit_service_issue.py
       - name: Validate acquisition manifest
         run: python scripts/check_acquisition_manifest.py
       - name: Validate concept inventory provenance
