@@ -82,7 +82,8 @@ jobs:
             --output /tmp/issue101_incremental_discovery.json \
             --youtube-rc "$YOUTUBE_RC" \
             --telegram-rc "$TELEGRAM_RC" \
-            --website-rc "$WEBSITE_RC"
+            --website-rc "$WEBSITE_RC" \
+            --issue 101
 
       - name: Validate discovery boundary
         run: |
@@ -90,6 +91,7 @@ jobs:
           import json
           from pathlib import Path
           report = json.loads(Path('/tmp/issue101_incremental_discovery.json').read_text())
+          assert report['issue'] == 101
           assert report['semantic_closure_performed'] is False
           assert report['search_or_metadata_semantic_credit'] == 'ZERO'
           assert report['baseline_registry_rows'] > 0

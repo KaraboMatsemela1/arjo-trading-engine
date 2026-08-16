@@ -41,6 +41,7 @@ def main() -> int:
     parser.add_argument("--youtube-rc", type=int, required=True)
     parser.add_argument("--telegram-rc", type=int, required=True)
     parser.add_argument("--website-rc", type=int, required=True)
+    parser.add_argument("--issue", type=int)
     args = parser.parse_args()
 
     baseline = read_registry(Path(args.baseline))
@@ -66,7 +67,7 @@ def main() -> int:
 
     report = {
         "schema_version": 1,
-        "issue": 101,
+        "issue": args.issue,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "baseline_registry_rows": len(baseline),
         "scanned_registry_rows": len(scanned),
