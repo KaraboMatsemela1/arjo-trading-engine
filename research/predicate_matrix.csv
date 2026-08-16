@@ -1,1 +1,97 @@
 PREDICATE_ID,FIELD,STATE,EVIDENCE_IDS,NOTES
+AOO_FVA_2CR_FVG_LONG_CONTEXT,INPUTS,PARTIAL,EV_C56CCD137DF55FB6E7ACA5ED;EV_572DF3099958D3DDEE9B87F1;EV_AF722B29242FEC2095F26D3C;EV_EA873C29C93ACEEDC1655D9B;EV_FAF3FDDDD281DD0A6E5BAA26;EV_7BB848F736E84076A21CE5BE;EV_82E71D57611901AE0D8A1A09,limitation: the source identifies FVA/FVG/2CR/AoO context but does not define their complete observable constructions.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,DIRECTION,PARTIAL,EV_572DF3099958D3DDEE9B87F1;EV_FAF3FDDDD281DD0A6E5BAA26,"limitation: FVA disrespect is associated with looking for buys in this example, but the respect/disrespect predicate and universal direction mapping are unresolved."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,PRECONDITIONS,PARTIAL,EV_572DF3099958D3DDEE9B87F1;EV_FAF3FDDDD281DD0A6E5BAA26,"limitation: FVA disrespect appears before the buy context, but its geometry and qualifying threshold are unresolved."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,SETUP,PARTIAL,EV_C56CCD137DF55FB6E7ACA5ED;EV_572DF3099958D3DDEE9B87F1;EV_367E7A222613DD3C8037D78C,"limitation: AoO/FVA context is operationally related in the example, but no universal AoO setup predicate is established."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,TRIGGER,PARTIAL,EV_EA873C29C93ACEEDC1655D9B;EV_82E71D57611901AE0D8A1A09,"limitation: 2CR is used for the entry, but the exact two-candle trigger predicate is unresolved."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,ENTRY,PARTIAL,EV_EA873C29C93ACEEDC1655D9B;EV_AF722B29242FEC2095F26D3C;EV_82E71D57611901AE0D8A1A09;EV_7BB848F736E84076A21CE5BE,"limitation: the post directly says the example entry used 2CR from FVGs, but exact entry price, 2CR construction, FVG selection, and timing are unresolved."
+AOO_FVA_2CR_FVG_LONG_CONTEXT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+AOO_FVA_2CR_FVG_LONG_CONTEXT,REQUIRED_CONDITIONS,PARTIAL,EV_572DF3099958D3DDEE9B87F1;EV_EA873C29C93ACEEDC1655D9B,limitation: the evidence shows a sequence in one example but does not prove which elements are universally required versus illustrative.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,INPUTS,PARTIAL,EV_C8BEA72C855FC2301F15D3F0;EV_7D187598F3CA70091E89BC12;EV_1599D67E839F24B066ED9ECA;EV_E8B2EA0265EC096276C55532;EV_23584FF557A85B99719F76F9;EV_82E71D57611901AE0D8A1A09,"limitation: PD Arrays, 2CR, Candle Science, and No Resistance Area are linked, but their complete observable constructions are unresolved."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,DIRECTION,PARTIAL,EV_CAAA17FEBDB39543DD7B8AD6;EV_1599D67E839F24B066ED9ECA,"limitation: PD Arrays are said to tell direction, but the deterministic bullish/bearish mapping is not available."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,PRECONDITIONS,PARTIAL,EV_C8BEA72C855FC2301F15D3F0;EV_23584FF557A85B99719F76F9,"limitation: opposing PD Arrays are described as resistance, but qualifying arrays and boundaries are unresolved."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,SETUP,PARTIAL,EV_C8BEA72C855FC2301F15D3F0;EV_E8B2EA0265EC096276C55532,"limitation: resistance/no-resistance context is directly related, but the spatial and temporal setup boundary is unresolved."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,TRIGGER,PARTIAL,EV_7D187598F3CA70091E89BC12;EV_82E71D57611901AE0D8A1A09,"limitation: 2CR tells the failure of opposing PD Arrays, but the exact failure/candle predicate is unresolved."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,ENTRY,PARTIAL,EV_7D187598F3CA70091E89BC12;EV_82E71D57611901AE0D8A1A09,"limitation: 2CR is said to tell when to get involved, but executable entry price/timing is unresolved."
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+PD_ARRAY_2CR_FAILURE_INVOLVEMENT,REQUIRED_CONDITIONS,PARTIAL,EV_C8BEA72C855FC2301F15D3F0;EV_7D187598F3CA70091E89BC12;EV_1599D67E839F24B066ED9ECA,"limitation: the relationship is direct, but universal required-vs-example status is unresolved."
+ORDER_FLOW_TARGET_BIAS,INPUTS,PARTIAL,EV_4EADDE6B3E0B95A8E83D0B00;EV_463EB47ADD2974FF1D3075C3,"limitation: Order Flow is the stated upstream concept, but its observable market-data inputs and algorithm are unresolved."
+ORDER_FLOW_TARGET_BIAS,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+ORDER_FLOW_TARGET_BIAS,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+ORDER_FLOW_TARGET_BIAS,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+ORDER_FLOW_TARGET_BIAS,DIRECTION,PARTIAL,EV_682019305394DD960FBEFCE4;EV_8AD848A97EBC1DC159B34765;EV_9B5480162CFA86DA4C049ACD,"limitation: Bias is linked with Target/where to trade, but the evidence does not resolve whether Bias is identical to a price target or a broader directional state."
+ORDER_FLOW_TARGET_BIAS,PRECONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes PRECONDITIONS for this candidate.
+ORDER_FLOW_TARGET_BIAS,SETUP,MISSING,,No direct first-party evidence in the current registry establishes SETUP for this candidate.
+ORDER_FLOW_TARGET_BIAS,TRIGGER,MISSING,,No direct first-party evidence in the current registry establishes TRIGGER for this candidate.
+ORDER_FLOW_TARGET_BIAS,ENTRY,MISSING,,No direct first-party evidence in the current registry establishes ENTRY for this candidate.
+ORDER_FLOW_TARGET_BIAS,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+ORDER_FLOW_TARGET_BIAS,TARGET,PARTIAL,EV_4EADDE6B3E0B95A8E83D0B00;EV_22D0263AE5E535F475633161;EV_463EB47ADD2974FF1D3075C3,"limitation: Order Flow is directly said to tell the Target, but target selection/price construction is unresolved."
+ORDER_FLOW_TARGET_BIAS,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+ORDER_FLOW_TARGET_BIAS,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+ORDER_FLOW_TARGET_BIAS,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+ORDER_FLOW_TARGET_BIAS,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+ORDER_FLOW_TARGET_BIAS,REQUIRED_CONDITIONS,PARTIAL,EV_4EADDE6B3E0B95A8E83D0B00;EV_22D0263AE5E535F475633161,"limitation: the relationship Order Flow to Target is direct, but no complete prerequisite set is established."
+ORDER_BLOCK_MT_HOLD_CONTEXT,INPUTS,PARTIAL,EV_D2B08C6BA0F9A4259DE61E9C;EV_0168479B3125D6C386C46B33;EV_FA14DEA327F1084A76A0FA20;EV_C781D23C34D1E3231A5D0DE0,"limitation: Order Block and MT are explicit inputs to the relationship, but their deterministic constructions are unresolved."
+ORDER_BLOCK_MT_HOLD_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,DIRECTION,MISSING,,No direct first-party evidence in the current registry establishes DIRECTION for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,PRECONDITIONS,PARTIAL,EV_D2B08C6BA0F9A4259DE61E9C;EV_0168479B3125D6C386C46B33,"limitation: respect of MT is associated with an Order Block holding, but the qualifying respect/hold thresholds are unresolved."
+ORDER_BLOCK_MT_HOLD_CONTEXT,SETUP,PARTIAL,EV_D2B08C6BA0F9A4259DE61E9C;EV_0168479B3125D6C386C46B33,"limitation: the OB/MT relationship is direct context, not a complete executable setup."
+ORDER_BLOCK_MT_HOLD_CONTEXT,TRIGGER,MISSING,,No direct first-party evidence in the current registry establishes TRIGGER for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,ENTRY,MISSING,,No direct first-party evidence in the current registry establishes ENTRY for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+ORDER_BLOCK_MT_HOLD_CONTEXT,REQUIRED_CONDITIONS,PARTIAL,EV_D2B08C6BA0F9A4259DE61E9C;EV_0168479B3125D6C386C46B33,"limitation: the evidence describes an indication, not a proven universal required condition."
+EQUILIBRIUM_STOP_RUN_CONTEXT,INPUTS,PARTIAL,EV_72FA00B0C191C4291B6BD9AA;EV_8B32047911C6EC4FB51D8CCB,"limitation: equilibrium is the explicit context, but its source range and calculation are unresolved."
+EQUILIBRIUM_STOP_RUN_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,DIRECTION,MISSING,,No direct first-party evidence in the current registry establishes DIRECTION for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,PRECONDITIONS,PARTIAL,EV_72FA00B0C191C4291B6BD9AA;EV_8B32047911C6EC4FB51D8CCB,"limitation: being at equilibrium is associated with likely stop-run behavior, but exact qualification is unresolved."
+EQUILIBRIUM_STOP_RUN_CONTEXT,SETUP,PARTIAL,EV_72FA00B0C191C4291B6BD9AA,"limitation: stop-run context is described, but no direction, trigger, or executable setup is established."
+EQUILIBRIUM_STOP_RUN_CONTEXT,TRIGGER,MISSING,,No direct first-party evidence in the current registry establishes TRIGGER for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,ENTRY,MISSING,,No direct first-party evidence in the current registry establishes ENTRY for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+EQUILIBRIUM_STOP_RUN_CONTEXT,REQUIRED_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes REQUIRED_CONDITIONS for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,INPUTS,PARTIAL,EV_6C22A223A333A5E257339E47;EV_0A517AA921C323FC9CFE4FB7,"limitation: MMBM/LRLR is explicit, but the model construction and states are unresolved."
+MMBM_LRLR_SHORT_CONTEXT,INSTRUMENTS,MISSING,,No direct first-party evidence in the current registry establishes INSTRUMENTS for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,TIMEFRAME,MISSING,,No direct first-party evidence in the current registry establishes TIMEFRAME for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,HIGHER_TIMEFRAME_CONTEXT,MISSING,,No direct first-party evidence in the current registry establishes HIGHER_TIMEFRAME_CONTEXT for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,DIRECTION,PARTIAL,EV_6C22A223A333A5E257339E47,"limitation: the example connects taking highs with shorts/stops, but the universal directional mapping and model state are unresolved."
+MMBM_LRLR_SHORT_CONTEXT,PRECONDITIONS,PARTIAL,EV_6C22A223A333A5E257339E47;EV_0A517AA921C323FC9CFE4FB7,"limitation: completion of MMBM/LRLR appears before the described context, but completion criteria are unresolved."
+MMBM_LRLR_SHORT_CONTEXT,SETUP,MISSING,,No direct first-party evidence in the current registry establishes SETUP for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,TRIGGER,MISSING,,No direct first-party evidence in the current registry establishes TRIGGER for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,ENTRY,MISSING,,No direct first-party evidence in the current registry establishes ENTRY for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,STOP,MISSING,,No direct first-party evidence in the current registry establishes STOP for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,TARGET,MISSING,,No direct first-party evidence in the current registry establishes TARGET for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,INVALIDATION,MISSING,,No direct first-party evidence in the current registry establishes INVALIDATION for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,EXPIRY,MISSING,,No direct first-party evidence in the current registry establishes EXPIRY for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,SESSION/TIME_RULE,MISSING,,No direct first-party evidence in the current registry establishes SESSION/TIME_RULE for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,OPTIONAL_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes OPTIONAL_CONDITIONS for this candidate.
+MMBM_LRLR_SHORT_CONTEXT,REQUIRED_CONDITIONS,MISSING,,No direct first-party evidence in the current registry establishes REQUIRED_CONDITIONS for this candidate.

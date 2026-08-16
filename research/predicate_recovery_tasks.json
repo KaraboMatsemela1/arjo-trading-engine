@@ -1,0 +1,590 @@
+{
+  "active_recovery_limit": 2,
+  "active_recovery_task_ids": [
+    "RECOVER_AOO_FVA_2CR_FVG_LONG_CONTEXT",
+    "RECOVER_PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
+  ],
+  "backlog_recovery_task_ids": [
+    "RECOVER_ORDER_BLOCK_MT_HOLD_CONTEXT",
+    "RECOVER_ORDER_FLOW_TARGET_BIAS",
+    "RECOVER_EQUILIBRIUM_STOP_RUN_CONTEXT",
+    "RECOVER_MMBM_LRLR_SHORT_CONTEXT"
+  ],
+  "generation_basis": "MINIMUM_CARDINALITY_RECOVERY_BUNDLE_COVER_OF_UNRESOLVED_FIELDS",
+  "performance_data_consulted": false,
+  "schema_version": 1,
+  "tasks": [
+    {
+      "closure_rank": 1,
+      "closure_tuple_missing_contradictory_partial": [
+        9,
+        0,
+        7
+      ],
+      "concepts": [
+        "AREA_OF_OPPORTUNITY",
+        "FAIR_VALUE_AREA",
+        "FAIR_VALUE_GAP",
+        "TWO_CANDLE_REJECTION"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "minimal_recovery_bundle_ids": [
+        "AOO_OPTIONAL",
+        "AOO_RISK_TARGET",
+        "AOO_SCOPE",
+        "AOO_STRUCTURE",
+        "AOO_TRIGGER_ENTRY"
+      ],
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "recovery_targets": [
+        {
+          "bundle_id": "AOO_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover whether optional filters exist and their exact definitions."
+        },
+        {
+          "bundle_id": "AOO_RISK_TARGET",
+          "fields": [
+            "STOP",
+            "TARGET",
+            "DIRECTION"
+          ],
+          "target": "Recover deterministic stop, target, and universal direction mapping for this candidate."
+        },
+        {
+          "bundle_id": "AOO_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instrument, timeframe hierarchy, higher-timeframe, and session/time applicability."
+        },
+        {
+          "bundle_id": "AOO_STRUCTURE",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover direct first-party definitions for AoO/FVA/FVG construction, respect-disrespect criteria, and required-vs-optional status."
+        },
+        {
+          "bundle_id": "AOO_TRIGGER_ENTRY",
+          "fields": [
+            "TRIGGER",
+            "ENTRY",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover the exact 2CR predicate, FVG selection, entry timing, invalidation, and expiry."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_778"
+      ],
+      "task_id": "RECOVER_AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 2,
+      "closure_tuple_missing_contradictory_partial": [
+        9,
+        0,
+        7
+      ],
+      "concepts": [
+        "PD_ARRAYS",
+        "TWO_CANDLE_REJECTION",
+        "NO_RESISTANCE_AREA",
+        "CANDLE_SCIENCE"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+      "minimal_recovery_bundle_ids": [
+        "PD_2CR_TRIGGER",
+        "PD_ARRAY_GEOMETRY",
+        "PD_EXIT",
+        "PD_OPTIONAL",
+        "PD_SCOPE"
+      ],
+      "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+      "recovery_targets": [
+        {
+          "bundle_id": "PD_2CR_TRIGGER",
+          "fields": [
+            "TRIGGER",
+            "ENTRY",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover exact 2CR candle/failure predicate, involvement timing, invalidation, and expiry."
+        },
+        {
+          "bundle_id": "PD_ARRAY_GEOMETRY",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "DIRECTION",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover PD Array taxonomy/geometry, opposing-array qualification, direction mapping, and required status."
+        },
+        {
+          "bundle_id": "PD_EXIT",
+          "fields": [
+            "STOP",
+            "TARGET"
+          ],
+          "target": "Recover deterministic stop and target rules."
+        },
+        {
+          "bundle_id": "PD_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional filters/conditions if any."
+        },
+        {
+          "bundle_id": "PD_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instruments, timeframe hierarchy, HTF inheritance, and session rules."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_776",
+        "TG_ARJOIOTRADING_791"
+      ],
+      "task_id": "RECOVER_PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 3,
+      "closure_tuple_missing_contradictory_partial": [
+        12,
+        0,
+        4
+      ],
+      "concepts": [
+        "ORDER_BLOCK",
+        "MT"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "minimal_recovery_bundle_ids": [
+        "OB_MT_CONSTRUCTION",
+        "OB_MT_EXECUTION",
+        "OB_MT_OPTIONAL",
+        "OB_MT_SCOPE"
+      ],
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "recovery_targets": [
+        {
+          "bundle_id": "OB_MT_CONSTRUCTION",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "TRIGGER",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover Order Block construction, MT construction, and deterministic respect/hold/fail thresholds."
+        },
+        {
+          "bundle_id": "OB_MT_EXECUTION",
+          "fields": [
+            "ENTRY",
+            "STOP",
+            "TARGET",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover execution/risk/exit semantics if this component is used in a full strategy."
+        },
+        {
+          "bundle_id": "OB_MT_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional conditions if any."
+        },
+        {
+          "bundle_id": "OB_MT_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE",
+            "DIRECTION"
+          ],
+          "target": "Recover scope, hierarchy, and directional interpretation."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_80"
+      ],
+      "task_id": "RECOVER_ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 4,
+      "closure_tuple_missing_contradictory_partial": [
+        12,
+        0,
+        4
+      ],
+      "concepts": [
+        "ORDER_FLOW",
+        "TARGET_BIAS"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for ORDER_FLOW_TARGET_BIAS",
+      "minimal_recovery_bundle_ids": [
+        "OF_ALGORITHM",
+        "OF_EXECUTION",
+        "OF_OPTIONAL",
+        "OF_SCOPE",
+        "OF_TARGET_BIAS"
+      ],
+      "predicate_id": "ORDER_FLOW_TARGET_BIAS",
+      "recovery_targets": [
+        {
+          "bundle_id": "OF_ALGORITHM",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover the observable Order Flow algorithm and prerequisites."
+        },
+        {
+          "bundle_id": "OF_EXECUTION",
+          "fields": [
+            "ENTRY",
+            "STOP",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover execution, stop, invalidation, and expiry if this component participates in a full strategy."
+        },
+        {
+          "bundle_id": "OF_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional conditions if any."
+        },
+        {
+          "bundle_id": "OF_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instrument, timeframe, HTF, and time/session scope."
+        },
+        {
+          "bundle_id": "OF_TARGET_BIAS",
+          "fields": [
+            "DIRECTION",
+            "TARGET",
+            "TRIGGER"
+          ],
+          "target": "Recover deterministic Target selection and the exact Target/Bias relationship."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_785",
+        "TG_ARJOIOTRADING_786",
+        "TG_ARJOIOTRADING_790"
+      ],
+      "task_id": "RECOVER_ORDER_FLOW_TARGET_BIAS",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 5,
+      "closure_tuple_missing_contradictory_partial": [
+        13,
+        0,
+        3
+      ],
+      "concepts": [
+        "EQUILIBRIUM"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "minimal_recovery_bundle_ids": [
+        "EQ_CONSTRUCTION",
+        "EQ_EXECUTION",
+        "EQ_OPTIONAL",
+        "EQ_SCOPE"
+      ],
+      "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "recovery_targets": [
+        {
+          "bundle_id": "EQ_CONSTRUCTION",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "TRIGGER",
+            "DIRECTION",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover equilibrium range construction, tolerance, stop-run predicate, direction, and required status."
+        },
+        {
+          "bundle_id": "EQ_EXECUTION",
+          "fields": [
+            "ENTRY",
+            "STOP",
+            "TARGET",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover execution, risk, target, invalidation, and expiry if this context forms part of a strategy."
+        },
+        {
+          "bundle_id": "EQ_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional conditions if any."
+        },
+        {
+          "bundle_id": "EQ_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instruments, timeframe/HTF ownership, and session/time rules."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_16"
+      ],
+      "task_id": "RECOVER_EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "closure_rank": 6,
+      "closure_tuple_missing_contradictory_partial": [
+        13,
+        0,
+        3
+      ],
+      "concepts": [
+        "MMBM_LRLR"
+      ],
+      "constraints": {
+        "first_party_only": true,
+        "invented_semantics_prohibited": true,
+        "locator_only_secondary_credit": false,
+        "performance_data_prohibited": true
+      },
+      "issue_creation_requested": false,
+      "issue_title": "Recovery: close first-party predicate gaps for MMBM_LRLR_SHORT_CONTEXT",
+      "minimal_recovery_bundle_ids": [
+        "MMBM_EXECUTION",
+        "MMBM_MODEL",
+        "MMBM_OPTIONAL",
+        "MMBM_SCOPE"
+      ],
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "recovery_targets": [
+        {
+          "bundle_id": "MMBM_EXECUTION",
+          "fields": [
+            "ENTRY",
+            "STOP",
+            "TARGET",
+            "INVALIDATION",
+            "EXPIRY"
+          ],
+          "target": "Recover executable entry, stop, target, invalidation, and expiry semantics."
+        },
+        {
+          "bundle_id": "MMBM_MODEL",
+          "fields": [
+            "INPUTS",
+            "PRECONDITIONS",
+            "SETUP",
+            "TRIGGER",
+            "DIRECTION",
+            "REQUIRED_CONDITIONS"
+          ],
+          "target": "Recover MMBM/LRLR construction, model states, completion, direction, and required conditions."
+        },
+        {
+          "bundle_id": "MMBM_OPTIONAL",
+          "fields": [
+            "OPTIONAL_CONDITIONS"
+          ],
+          "target": "Recover optional conditions if any."
+        },
+        {
+          "bundle_id": "MMBM_SCOPE",
+          "fields": [
+            "INSTRUMENTS",
+            "TIMEFRAME",
+            "HIGHER_TIMEFRAME_CONTEXT",
+            "SESSION/TIME_RULE"
+          ],
+          "target": "Recover instrument, timeframe hierarchy, and session scope."
+        }
+      ],
+      "source_ids_already_supporting_candidate": [
+        "TG_ARJOIOTRADING_88"
+      ],
+      "task_id": "RECOVER_MMBM_LRLR_SHORT_CONTEXT",
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    }
+  ]
+}

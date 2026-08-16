@@ -1,0 +1,323 @@
+{
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "candidate_type": "ENTRY_CHAIN",
+      "closure_distance": 16,
+      "closure_rank": 1,
+      "closure_tuple_missing_contradictory_partial": [
+        9,
+        0,
+        7
+      ],
+      "concepts": [
+        "AREA_OF_OPPORTUNITY",
+        "FAIR_VALUE_AREA",
+        "FAIR_VALUE_GAP",
+        "TWO_CANDLE_REJECTION"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 9,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 7,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "AOO_OPTIONAL",
+        "AOO_RISK_TARGET",
+        "AOO_SCOPE",
+        "AOO_STRUCTURE",
+        "AOO_TRIGGER_ENTRY"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "source_ids": [
+        "TG_ARJOIOTRADING_778"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "candidate_type": "DIRECTION_AND_INVOLVEMENT_CHAIN",
+      "closure_distance": 16,
+      "closure_rank": 2,
+      "closure_tuple_missing_contradictory_partial": [
+        9,
+        0,
+        7
+      ],
+      "concepts": [
+        "PD_ARRAYS",
+        "TWO_CANDLE_REJECTION",
+        "NO_RESISTANCE_AREA",
+        "CANDLE_SCIENCE"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 9,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 7,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "PD_2CR_TRIGGER",
+        "PD_ARRAY_GEOMETRY",
+        "PD_EXIT",
+        "PD_OPTIONAL",
+        "PD_SCOPE"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT",
+      "source_ids": [
+        "TG_ARJOIOTRADING_776",
+        "TG_ARJOIOTRADING_791"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "candidate_type": "HOLD_FAIL_COMPONENT",
+      "closure_distance": 16,
+      "closure_rank": 3,
+      "closure_tuple_missing_contradictory_partial": [
+        12,
+        0,
+        4
+      ],
+      "concepts": [
+        "ORDER_BLOCK",
+        "MT"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 12,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 4,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "OB_MT_CONSTRUCTION",
+        "OB_MT_EXECUTION",
+        "OB_MT_OPTIONAL",
+        "OB_MT_SCOPE"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "source_ids": [
+        "TG_ARJOIOTRADING_80"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "candidate_type": "TARGET_SELECTION_COMPONENT",
+      "closure_distance": 16,
+      "closure_rank": 4,
+      "closure_tuple_missing_contradictory_partial": [
+        12,
+        0,
+        4
+      ],
+      "concepts": [
+        "ORDER_FLOW",
+        "TARGET_BIAS"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 12,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 4,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "OF_ALGORITHM",
+        "OF_EXECUTION",
+        "OF_OPTIONAL",
+        "OF_SCOPE",
+        "OF_TARGET_BIAS"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "ORDER_FLOW_TARGET_BIAS",
+      "source_ids": [
+        "TG_ARJOIOTRADING_785",
+        "TG_ARJOIOTRADING_786",
+        "TG_ARJOIOTRADING_790"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "candidate_type": "SETUP_CONTEXT_COMPONENT",
+      "closure_distance": 16,
+      "closure_rank": 5,
+      "closure_tuple_missing_contradictory_partial": [
+        13,
+        0,
+        3
+      ],
+      "concepts": [
+        "EQUILIBRIUM"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 13,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 3,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "EQ_CONSTRUCTION",
+        "EQ_EXECUTION",
+        "EQ_OPTIONAL",
+        "EQ_SCOPE"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "EQUILIBRIUM_STOP_RUN_CONTEXT",
+      "source_ids": [
+        "TG_ARJOIOTRADING_16"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    },
+    {
+      "candidate_type": "DIRECTION_CONTEXT_COMPONENT",
+      "closure_distance": 16,
+      "closure_rank": 6,
+      "closure_tuple_missing_contradictory_partial": [
+        13,
+        0,
+        3
+      ],
+      "concepts": [
+        "MMBM_LRLR"
+      ],
+      "executable_rule_complete": false,
+      "field_state_counts": {
+        "CONTRADICTORY": 0,
+        "MISSING": 13,
+        "NOT_APPLICABLE": 0,
+        "PARTIAL": 3,
+        "SATISFIED": 0
+      },
+      "minimal_recovery_bundle_ids": [
+        "MMBM_EXECUTION",
+        "MMBM_MODEL",
+        "MMBM_OPTIONAL",
+        "MMBM_SCOPE"
+      ],
+      "performance_data_consulted": false,
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "source_ids": [
+        "TG_ARJOIOTRADING_88"
+      ],
+      "unresolved_fields": [
+        "INPUTS",
+        "INSTRUMENTS",
+        "TIMEFRAME",
+        "HIGHER_TIMEFRAME_CONTEXT",
+        "DIRECTION",
+        "PRECONDITIONS",
+        "SETUP",
+        "TRIGGER",
+        "ENTRY",
+        "STOP",
+        "TARGET",
+        "INVALIDATION",
+        "EXPIRY",
+        "SESSION/TIME_RULE",
+        "OPTIONAL_CONDITIONS",
+        "REQUIRED_CONDITIONS"
+      ]
+    }
+  ],
+  "performance_data_consulted": false,
+  "ranking_basis": "LEXICOGRAPHIC_MISSING_CONTRADICTORY_PARTIAL_THEN_TOTAL_UNRESOLVED",
+  "required_field_count": 16,
+  "schema_version": 1
+}
