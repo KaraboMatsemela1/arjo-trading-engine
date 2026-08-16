@@ -2,8 +2,9 @@
   "schema_version": 1,
   "issue": 85,
   "predicate_id": "ORDER_FLOW_TARGET_BIAS",
-  "authoritative_recovery_run": 31959673355,
-  "artifact_id": 9266896625,
+  "authoritative_recovery_run": 31959852785,
+  "artifact_id": 9266943499,
+  "artifact_digest": "sha256:74c5fdcfe88e9bdc9e76fb616e8161336c3f7b111118a8ff18dfce6e8f771921",
   "bounded_target_count": 9,
   "terminal_source_split": {
     "PAYLOAD_CAPTURED": 3,
