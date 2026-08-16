@@ -72,6 +72,14 @@ jobs:
           else
             echo "Candidate omission dispositions not committed yet; Phase 5 gate remains pending."
           fi
+      - name: Run independent evidence-only SPEC readiness audit
+        run: >-
+          python scripts/run_independent_spec_audit.py
+          --output /tmp/SPEC_AUDIT.json
+      - name: Validate independent SPEC audit invariants
+        run: >-
+          python scripts/check_independent_spec_audit.py
+          --audit /tmp/SPEC_AUDIT.json
       - name: Generate canonical project state
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
