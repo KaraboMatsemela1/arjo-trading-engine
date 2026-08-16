@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "issue": 75,
+  "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+  "recovery_run_id": 31958765415,
+  "recovery_artifact_id": 9266676640,
+  "performance_data_consulted": false,
+  "generic_ict_smc_knowledge_used": false,
+  "semantic_scope": "BOUNDED_FIRST_PARTY_PRE_OUTCOME_ONLY",
+  "source_summary": {
+    "bounded_targets": 7,
+    "payload_captured": 1,
+    "environment_access_failure": 6,
+    "captured_source_ids": ["TG_ARJOIOTRADING_80"],
+    "zero_credit_source_ids": [
+      "YT_SHORT_dG0_n6A3gVw",
+      "YT_VIDEO_-IiaWZt3DxU",
+      "YT_VIDEO_1uHafYQiyQU",
+      "YT_VIDEO_MZZPsTkZxZ0",
+      "YT_VIDEO_PUctccigOik",
+      "YT_VIDEO_S_XEq7Is82I"
+    ],
+    "outcome_sections_excluded": true
+  },
+  "baseline_counts": {
+    "MISSING": 12,
+    "PARTIAL": 4,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "post_recovery_counts": {
+    "MISSING": 10,
+    "PARTIAL": 6,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0
+  },
+  "field_assessments": {
+    "INPUTS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "Order Block and MT remain explicit inputs, but neither deterministic construction is closed."
+    },
+    "INSTRUMENTS": {
+      "before": "MISSING",
+      "after": "PARTIAL",
+      "evidence_ids": ["EV_CE3A40701403F0ADEB1E88C9"],
+      "reason": "The pre-outcome first-party scope sentence explicitly identifies ES as the worked dataset instrument; universal instrument eligibility remains unresolved."
+    },
+    "TIMEFRAME": {
+      "before": "MISSING",
+      "after": "PARTIAL",
+      "evidence_ids": ["EV_EB53D46DE5AB0CE28598D703"],
+      "reason": "The pre-outcome first-party scope sentence explicitly identifies Daily Order Blocks; universal timeframe scope and hierarchy remain unresolved."
+    },
+    "HIGHER_TIMEFRAME_CONTEXT": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "Daily worked-example scope does not establish higher-timeframe inheritance or hierarchy."
+    },
+    "DIRECTION": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes bullish/bearish direction semantics."
+    },
+    "PRECONDITIONS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "Existing first-party evidence links MT respect with Order Block hold context, but qualifying thresholds remain unresolved."
+    },
+    "SETUP": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "The Order Block/MT relationship remains contextual rather than a complete executable setup."
+    },
+    "TRIGGER": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes a trigger predicate."
+    },
+    "ENTRY": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes executable entry timing or price."
+    },
+    "STOP": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes stop placement."
+    },
+    "TARGET": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes target construction."
+    },
+    "INVALIDATION": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes trade invalidation semantics."
+    },
+    "EXPIRY": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes signal expiry."
+    },
+    "SESSION/TIME_RULE": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence establishes a session or time-of-day rule."
+    },
+    "OPTIONAL_CONDITIONS": {
+      "before": "MISSING",
+      "after": "MISSING",
+      "reason": "No bounded pre-outcome evidence distinguishes optional filters."
+    },
+    "REQUIRED_CONDITIONS": {
+      "before": "PARTIAL",
+      "after": "PARTIAL",
+      "reason": "Existing evidence describes an indication, not a proven universal required condition."
+    }
+  },
+  "result": "TWO_SCOPE_FIELDS_ADVANCED_TO_PARTIAL",
+  "spec_ready": false,
+  "implementation_authorized": false
+}
