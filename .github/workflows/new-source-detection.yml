@@ -8,12 +8,13 @@ on:
       - 'scripts/discover_youtube_sources.py'
       - 'scripts/discover_telegram_sources.py'
       - 'scripts/discover_website_sources.py'
-      - 'scripts/build_surface_audit.py'
-      - 'scripts/sync_source_roots.py'
+      - 'scripts/build_incremental_discovery_report.py'
+      - 'scripts/build_discovery_watch_state.py'
       - 'research/source_roots.json'
+      - 'research/discovery/source_watch_state.json'
       - '.github/workflows/new-source-detection.yml'
   schedule:
-    - cron: '41 5 * * 0'
+    - cron: '41 5 * * *'
 
 permissions:
   contents: write
@@ -23,24 +24,34 @@ permissions:
 jobs:
   detect:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Install discovery tooling
         run: python -m pip install --disable-pip-version-check yt-dlp
-      - name: Synchronize verified discovery roots
-        run: python scripts/sync_source_roots.py
+
+      - name: Prepare isolated registry
+        run: |
+          rm -rf /tmp/source-watch-discovery
+          mkdir -p /tmp/source-watch-discovery
+          cp research/source_registry.csv /tmp/source-watch-baseline.csv
+          cp research/source_registry.csv /tmp/source-watch-scanned.csv
 
       - name: Enumerate official YouTube surfaces
         id: youtube
         shell: bash
         run: |
           set +e
-          python scripts/discover_youtube_sources.py
+          python scripts/discover_youtube_sources.py \
+            --registry /tmp/source-watch-scanned.csv \
+            --discovery-dir /tmp/source-watch-discovery
           rc=$?
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
@@ -50,7 +61,10 @@ jobs:
         shell: bash
         run: |
           set +e
-          python scripts/discover_telegram_sources.py
+          python scripts/discover_telegram_sources.py \
+            --registry /tmp/source-watch-scanned.csv \
+            --discovery-dir /tmp/source-watch-discovery \
+            --max-pages 100
           rc=$?
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
@@ -60,84 +74,153 @@ jobs:
         shell: bash
         run: |
           set +e
-          python scripts/discover_website_sources.py
+          python scripts/discover_website_sources.py \
+            --registry /tmp/source-watch-scanned.csv \
+            --discovery-dir /tmp/source-watch-discovery \
+            --max-pages 100
           rc=$?
           echo "exit_code=$rc" >> "$GITHUB_OUTPUT"
           exit 0
 
-      - name: Build platform surface audit
-        run: python scripts/build_surface_audit.py
-
-      - name: Validate generated provenance shape
-        run: python scripts/check_provenance.py
-
-      - name: Record hard or partial discovery degradation
-        if: steps.youtube.outputs.exit_code != '0' || steps.telegram.outputs.exit_code != '0' || steps.website.outputs.exit_code != '0'
+      - name: Build isolated source delta
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           YOUTUBE_RC: ${{ steps.youtube.outputs.exit_code }}
           TELEGRAM_RC: ${{ steps.telegram.outputs.exit_code }}
           WEBSITE_RC: ${{ steps.website.outputs.exit_code }}
+        run: |
+          python scripts/build_incremental_discovery_report.py \
+            --baseline /tmp/source-watch-baseline.csv \
+            --scanned /tmp/source-watch-scanned.csv \
+            --discovery-dir /tmp/source-watch-discovery \
+            --output /tmp/source-watch-report.json \
+            --youtube-rc "$YOUTUBE_RC" \
+            --telegram-rc "$TELEGRAM_RC" \
+            --website-rc "$WEBSITE_RC"
+
+      - name: Classify durable watch-state delta
+        run: |
+          python scripts/build_discovery_watch_state.py \
+            --incremental-report /tmp/source-watch-report.json \
+            --baseline-state research/discovery/source_watch_state.json \
+            --state-output /tmp/source-watch-state.json \
+            --decision-output /tmp/source-watch-decision.json
+
+      - name: Validate discovery boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path('/tmp/source-watch-report.json').read_text())
+          state = json.loads(Path('/tmp/source-watch-state.json').read_text())
+          decision = json.loads(Path('/tmp/source-watch-decision.json').read_text())
+
+          assert report['semantic_closure_performed'] is False
+          assert report['search_or_metadata_semantic_credit'] == 'ZERO'
+          assert state['semantic_closure_performed'] is False
+          assert state['search_or_metadata_semantic_credit'] == 'ZERO'
+          assert decision['semantic_closure_performed'] is False
+          assert decision['search_or_metadata_semantic_credit'] == 'ZERO'
+          assert report['baseline_registry_rows'] > 0
+          assert report['scanned_registry_rows'] >= report['baseline_registry_rows']
+          assert report['new_source_count'] == len(report['new_sources'])
+          assert decision['new_source_count'] == report['new_source_count']
+          assert decision['current_surface_exit_codes'] == state['surface_exit_codes']
+          for row in report['new_sources']:
+              assert row['FIRST_PARTY_STATUS'] in {
+                  'CONFIRMED_FIRST_PARTY',
+                  'CONFIRMED_FIRST_PARTY_LINKED',
+              }
+              assert row['URL'].startswith(('https://', 'http://'))
+
+          print({
+              'new_source_count': report['new_source_count'],
+              'surface_exit_codes': report['surface_exit_codes'],
+              'should_publish': decision['should_publish'],
+              'publication_reasons': decision['publication_reasons'],
+          })
+          PY
+
+      - name: Upload every bounded watch result
+        uses: actions/upload-artifact@v4
+        with:
+          name: new-source-detection-${{ github.run_id }}
+          path: |
+            /tmp/source-watch-report.json
+            /tmp/source-watch-state.json
+            /tmp/source-watch-decision.json
+            /tmp/source-watch-discovery
+          retention-days: 14
+
+      - name: Stage durable delta only when meaningful
+        id: stage
         shell: bash
         run: |
-          existing="$(gh issue list --state open --search 'Source discovery access degradation in:title' --json number --jq '.[0].number // empty')"
-          if [ -z "$existing" ]; then
-            gh issue create \
-              --title "Source discovery access degradation" \
-              --body "<!-- project-meta
-          ISSUE_ID: ARJO-AUTO-DISCOVERY-${GITHUB_RUN_ID}
-          TYPE: SOURCE_ACCESS_RECOVERY
-          DEPENDENCIES: []
-          ENTRY_GATE: REPO_CREATED
-          OUTPUT_GATE: NONE
-          OWNER: UNCLAIMED
-          STATE: READY
-          -->
+          should_publish="$(python -c "import json; print(str(json.load(open('/tmp/source-watch-decision.json'))['should_publish']).lower())")"
+          new_count="$(python -c "import json; print(json.load(open('/tmp/source-watch-decision.json'))['new_source_count'])")"
+          access_changed="$(python -c "import json; print(str(json.load(open('/tmp/source-watch-decision.json'))['access_state_changed']).lower())")"
+          reasons="$(python -c "import json; print(','.join(json.load(open('/tmp/source-watch-decision.json'))['publication_reasons']))")"
 
-          Automated first-party source discovery was not fully clean.
+          echo "should_publish=$should_publish" >> "$GITHUB_OUTPUT"
+          echo "new_count=$new_count" >> "$GITHUB_OUTPUT"
+          echo "access_changed=$access_changed" >> "$GITHUB_OUTPUT"
+          echo "reasons=$reasons" >> "$GITHUB_OUTPUT"
 
-          Exit codes: YouTube=${YOUTUBE_RC}, Telegram=${TELEGRAM_RC}, Website=${WEBSITE_RC}.
-
-          Inspect the committed/generated discovery reports. Do not interpret a transport failure as evidence absence.
-
-          Stop condition: each failed surface either succeeds on replay or receives an explicit terminal external-access classification."
-          fi
-
-      - name: Push bounded discovery branch when registry or audit changed
-        id: branch
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
-        run: |
-          if git diff --quiet -- research/source_registry.csv research/discovery/; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No source-registry changes detected."
+          if [ "$should_publish" != "true" ]; then
+            echo "No new first-party URLs and no access-state transition; artifact only."
             exit 0
           fi
 
-          branch="automation/source-discovery-${GITHUB_RUN_ID}"
-          echo "changed=true" >> "$GITHUB_OUTPUT"
+          cp /tmp/source-watch-state.json research/discovery/source_watch_state.json
+          cp /tmp/source-watch-report.json research/discovery/latest_source_watch_delta.json
+
+          if [ "$new_count" -gt 0 ]; then
+            cp /tmp/source-watch-scanned.csv research/source_registry.csv
+          fi
+
+          git diff --exit-code --quiet -- \
+            research/source_registry.csv \
+            research/discovery/source_watch_state.json \
+            research/discovery/latest_source_watch_delta.json && {
+              echo "Decision required publication but no durable diff was produced." >&2
+              exit 1
+            }
+
+      - name: Push bounded discovery branch
+        id: branch
+        if: steps.stage.outputs.should_publish == 'true'
+        env:
+          REASONS: ${{ steps.stage.outputs.reasons }}
+        shell: bash
+        run: |
+          branch="automation/source-watch-${GITHUB_RUN_ID}"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add research/source_registry.csv research/discovery/
-          git commit -m "research: register newly discovered Arjo sources"
+          git add research/source_registry.csv \
+            research/discovery/source_watch_state.json \
+            research/discovery/latest_source_watch_delta.json
+          git commit -m "research: publish first-party source watch delta"
           git push origin "$branch"
+          echo "Published bounded source-watch branch ($REASONS): $branch"
 
-      - name: Open bounded source-registry PR or create service fallback
-        if: steps.branch.outputs.changed == 'true'
+      - name: Open reviewed PR or create service fallback
+        if: steps.stage.outputs.should_publish == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ steps.branch.outputs.branch }}
+          NEW_COUNT: ${{ steps.stage.outputs.new_count }}
+          ACCESS_CHANGED: ${{ steps.stage.outputs.access_changed }}
+          REASONS: ${{ steps.stage.outputs.reasons }}
         shell: bash
         run: |
           set +e
           gh pr create \
             --base main \
             --head "$BRANCH" \
-            --title "Automated source discovery: register new Arjo sources" \
-            --body "Automated bounded update from confirmed first-party discovery surfaces. No strategy semantics were inferred. Review provenance status and merge only after deterministic validation."
+            --title "Automated source watch: publish first-party delta" \
+            --body "Bounded first-party source-watch delta. Reasons: ${REASONS}. New source URLs: ${NEW_COUNT}. Access state changed: ${ACCESS_CHANGED}. Search/title/metadata and transport state receive zero semantic closure credit. Merge only after normal deterministic validation."
           rc=$?
           set -e
           if [ "$rc" -eq 0 ]; then
@@ -147,20 +230,30 @@ jobs:
           echo "PR creation is not authorized for GITHUB_TOKEN; creating a bounded service issue instead."
           existing="$(gh issue list --state open --search "$BRANCH in:body" --json number --jq '.[0].number // empty')"
           if [ -z "$existing" ]; then
-            body="<!-- project-meta
-          ISSUE_ID: ARJO-AUTO-PR-${GITHUB_RUN_ID}
+            body_file="$(mktemp)"
+            cat > "$body_file" <<EOF
+          <!-- project-meta
+          ISSUE_ID: ARJO-AUTO-SOURCE-WATCH-${GITHUB_RUN_ID}
           TYPE: SOURCE_DISCOVERY_SERVICE
           DEPENDENCIES: []
-          ENTRY_GATE: REPO_CREATED
+          ENTRY_GATE: PREDICATE_MATRIX_READY
           OUTPUT_GATE: NONE
           OWNER: UNCLAIMED
           STATE: READY
           -->
 
-          GitHub Actions generated and pushed bounded discovery branch ${BRANCH}, but repository policy does not permit GITHUB_TOKEN to create pull requests.
+          The daily first-party source watch produced a meaningful durable delta.
 
-          Create a PR from ${BRANCH} to main, run deterministic checks, and merge only if green. No semantic interpretation is permitted in this service task."
+          Branch: \`${BRANCH}\`
+          Publication reasons: \`${REASONS}\`
+          New first-party source URLs: \`${NEW_COUNT}\`
+          Access state changed: \`${ACCESS_CHANGED}\`
+
+          Create a reviewed PR from the branch to \`main\`, run normal CI/provenance/dependency/gate checks, and merge only if green.
+
+          This is discovery/transport state only. Search/title/metadata and access status receive zero semantic closure credit. If access improved or new first-party URLs appeared, start bounded acquisition only after the durable delta is merged.
+          EOF
             gh issue create \
-              --title "Service generated source-discovery branch" \
-              --body "$body"
+              --title "Service generated first-party source-watch delta" \
+              --body-file "$body_file"
           fi
