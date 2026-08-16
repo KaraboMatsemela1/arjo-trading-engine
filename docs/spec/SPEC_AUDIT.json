@@ -280,10 +280,26 @@
       "all_required_fields_satisfied": false,
       "contradictions_resolved": true,
       "evidence_ids": [
+        "EV_0732BE192A44C3F56677B598",
         "EV_0A517AA921C323FC9CFE4FB7",
-        "EV_6C22A223A333A5E257339E47"
+        "EV_6C22A223A333A5E257339E47",
+        "EV_7E443637E083DB93E55728F5",
+        "EV_8193B22D6714969F8D70E09C"
       ],
       "evidence_provenance_checks": [
+        {
+          "checks": {
+            "confirmed_first_party": true,
+            "direct_closure_credit": true,
+            "first_party_contacted": true,
+            "known_source": true,
+            "payload_captured": true,
+            "sha256_bound": true
+          },
+          "evidence_id": "EV_0732BE192A44C3F56677B598",
+          "source_id": "TG_ARJOIOTRADING_88",
+          "status": "PASS"
+        },
         {
           "checks": {
             "confirmed_first_party": true,
@@ -309,14 +325,40 @@
           "evidence_id": "EV_6C22A223A333A5E257339E47",
           "source_id": "TG_ARJOIOTRADING_88",
           "status": "PASS"
+        },
+        {
+          "checks": {
+            "confirmed_first_party": true,
+            "direct_closure_credit": true,
+            "first_party_contacted": true,
+            "known_source": true,
+            "payload_captured": true,
+            "sha256_bound": true
+          },
+          "evidence_id": "EV_7E443637E083DB93E55728F5",
+          "source_id": "TG_ARJOIOTRADING_88",
+          "status": "PASS"
+        },
+        {
+          "checks": {
+            "confirmed_first_party": true,
+            "direct_closure_credit": true,
+            "first_party_contacted": true,
+            "known_source": true,
+            "payload_captured": true,
+            "sha256_bound": true
+          },
+          "evidence_id": "EV_8193B22D6714969F8D70E09C",
+          "source_id": "TG_ARJOIOTRADING_88",
+          "status": "PASS"
         }
       ],
       "executable_semantics_reconstructed": false,
       "field_state_counts": {
         "CONTRADICTORY": 0,
-        "MISSING": 13,
+        "MISSING": 10,
         "NOT_APPLICABLE": 0,
-        "PARTIAL": 3,
+        "PARTIAL": 6,
         "SATISFIED": 0
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
