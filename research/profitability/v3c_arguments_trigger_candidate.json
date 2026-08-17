@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_ARGUMENTS_4H_SWING_1H_2CR_V3C",
+  "status": "PREREGISTERED_BEFORE_DEVELOPMENT_TRIGGER_COUNT",
+  "classification": "OWNER_OPERATIONAL_TRIGGER_FAMILY_NOT_COMPLETE_STRATEGY_NOT_ARJO_SEMANTIC_CLOSURE",
+  "direct_first_party_sources": [
+    "WEB_MMT_ARGUMENTS_20260817",
+    "WEB_MMT_2CR_EXACT_20260817"
+  ],
+  "direct_first_party_core": {
+    "context": "trade above a 4h Swing High and monitor 1h 2CR",
+    "respect": "rejection high remains intact",
+    "failure": "rejection high gets run",
+    "bullish_interpretation": "2CR failure by rejection-high run leaves one-sided bullish argument",
+    "run_observability": "candle close above the rejection high is an explicit first-party observable route"
+  },
+  "owner_operational_trigger": {
+    "instrument": "NAS100_USD",
+    "semantic_price_component": "MID",
+    "development_window": ["2024-01-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "h4_swing_high": {
+      "construction": "radius-1 three-bar pivot high",
+      "predicate": "middle.high > left.high AND middle.high > right.high",
+      "confirmation": "right 4h bar must be complete; swing confirmed at right-bar close"
+    },
+    "h1_2cr_pair": {
+      "contiguity": "two consecutive complete 1h bars",
+      "eligible_after": "swing confirmation",
+      "rejection_predicate": "bar.high >= swing_high AND bar.close < swing_high",
+      "pair_qualifies": "first or second bar satisfies rejection_predicate",
+      "rejection_candle_selector": "if second rejects select second, else select first",
+      "rejection_high": "selected rejection candle high",
+      "pair_selector": "earliest qualifying pair after swing confirmation"
+    },
+    "activation": {
+      "predicate": "first later complete 1h close strictly above rejection_high",
+      "one_trigger_per_swing_high": true
+    },
+    "session_restriction": "NONE because direct source does not specify one",
+    "expiry": "NONE because direct source does not specify one",
+    "entry_fill": "UNRESOLVED_NOT_DEFINED_IN_THIS_CANDIDATE",
+    "stop": "UNRESOLVED_NOT_DEFINED_IN_THIS_CANDIDATE",
+    "target": "UNRESOLVED_NOT_DEFINED_IN_THIS_CANDIDATE"
+  },
+  "development_coverage": {
+    "post_trigger_price_traversal_allowed": false,
+    "performance_metrics_allowed": false,
+    "coverage_metric": "unique activated swing-high triggers",
+    "coverage_floor": 30,
+    "selection_rule": "if >=30 triggers, freeze a separate execution/risk candidate before any outcome access; if <30, reject this trigger family without reactive loosening"
+  },
+  "backward_oos_boundary": {
+    "2010_2023_v2_post_entry_outcomes_remain_unread": true,
+    "2010_2023_data_not_used_for_v3c_candidate_design": true
+  },
+  "authorization": {
+    "paper_execution": false,
+    "live_execution": false,
+    "broker_mutation": false
+  },
+  "candidate_sha256": "de51f2c721aaedd0f6587755ebcab31ac2b264188d3de1f5531ec7057fb53b7b"
+}
