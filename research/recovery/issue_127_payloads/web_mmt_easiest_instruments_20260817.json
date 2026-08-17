@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "Wait until we disrespect the resistance (Run the 2CR High).",
+    "Now price has a clear path towards the next ATH without any resistance bothering us",
+    "price was respecting a 4h FVG and 1h FVA, my execution was on the 15m timeframe.",
+    "For example: Metals, Indices, JPY pairs."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T05:20:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_EASIEST_INSTRUMENTS_20260817",
+  "title": "The Easiest Instruments to Trade",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/the-easiest-instruments-to-trade/"
+}
