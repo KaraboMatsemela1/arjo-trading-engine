@@ -5,7 +5,7 @@
   "base_url": "https://api-fxpractice.oanda.com",
   "bootstrap_end_exclusive": "2026-10-01T00:00:00Z",
   "contract_id": "ARJO-V2-VAL-OANDA-NAS100-001",
-  "contract_sha256": "4a412c1fc8af2ab40249a717e33fcfb71348dbb5e762a62629ff1220b918379b",
+  "contract_sha256": "edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca",
   "derived_granularities_minutes": [
     15,
     60,
@@ -14,6 +14,8 @@
   "end_exclusive": "2027-03-01T00:00:00Z",
   "environment": "practice",
   "evaluation_authorization_id": "ARJO_V2_FUTURE_VALIDATION_EVALUATION_V1",
+  "full_window_single_shot": true,
+  "harness_acquisition_not_before": "2027-03-01T00:00:00Z",
   "instrument": "NAS100_USD",
   "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
   "live_trading_authorized": false,
