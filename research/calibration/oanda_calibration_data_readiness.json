@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "status": "CALIBRATION_DATA_READY",
+  "provider": "OANDA_V20",
+  "venue": "OANDA_FXTRADE",
+  "environment": "practice",
+  "instrument": "NAS100_USD",
+  "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+  "identity_boundary": "NAS100_USD is an OANDA Nasdaq-100 CFD price series and is not asserted to be literal CME NQ futures or venue-equivalent to CME NQ.",
+  "price_component": "MID",
+  "source_granularity": "M1",
+  "request_contract_sha256": "8923d63d27df107fd422b9bab97490c8403d656ffb9c3577cc3e4f67474c4a51",
+  "workflow_run_id": 32014398864,
+  "workflow_head_sha": "4ec159f24c68d57dc39436e7689edbaa3ba6ea78",
+  "frozen_calibration_start": "2024-01-01T00:00:00Z",
+  "frozen_calibration_end_exclusive": "2026-01-01T00:00:00Z",
+  "protected_holdout_start": "2026-01-01T00:00:00Z",
+  "holdout_requested": false,
+  "holdout_accessed": false,
+  "mutation_endpoints_used": false,
+  "paper_trading_authorized": false,
+  "live_trading_authorized": false,
+  "provider_price_quantum": "0.1",
+  "provider_price_quantum_classification": "PROVIDER_PRICE_PRECISION_POLICY_NOT_EXCHANGE_TICK",
+  "total_complete_m1_rows": 707057,
+  "coverage_policy": "Preserve provider-delivered complete M1 candles only. Do not fabricate market-closure or provider-missing minutes. Derived 15m/1h/4h bars exist only for complete minute buckets; incomplete buckets are omitted.",
+  "coverage_note": "The first provider-delivered M1 bar in each annual shard begins at 23:00 UTC on January 1 because of provider market availability/holiday closure. This readiness state does not claim 24x7 continuous coverage.",
+  "shards": [
+    {
+      "year": 2024,
+      "job_id": 95340743848,
+      "artifact_id": 9282976276,
+      "artifact_zip_sha256": "4671cffa82253d72901a9188dd3f56b6ca1b48a38893acaa5dab24521266448d",
+      "requested_start": "2024-01-01T00:00:00Z",
+      "requested_end_exclusive": "2025-01-01T00:00:00Z",
+      "complete_m1_rows": 354516,
+      "m1_first": "2024-01-01T23:00:00Z",
+      "m1_last": "2024-12-31T21:59:00Z",
+      "retrieval_sha256": "cf78702b709e6099cbf097347e80f167649783988b62e337c14deb72087849c2",
+      "m1_sha256": "0233a09c9cc6b78967b44f09db96d44503e9200f7873a5b2072fd4edeaf9ffc5",
+      "raw_page_count": 118,
+      "derived": {
+        "15m": {
+          "rows": 23521,
+          "omitted_incomplete_buckets": 139,
+          "sha256": "59b97a5d12c623cedfa736c7215ec588cc18ab5fc1e22754619bfb7c0ddfcbdc"
+        },
+        "1h": {
+          "rows": 5862,
+          "omitted_incomplete_buckets": 56,
+          "sha256": "4a4add80a3bb205b42c0eb1a64f88e9df3504ccc96e633126059919b25b61139"
+        },
+        "4h": {
+          "rows": 1273,
+          "omitted_incomplete_buckets": 333,
+          "sha256": "1dab27f15b5b697ab5df24d1e59d3d748f88b8752064bf22ab4585b88c1ce450"
+        }
+      }
+    },
+    {
+      "year": 2025,
+      "job_id": 95340744063,
+      "artifact_id": 9283007527,
+      "artifact_zip_sha256": "d2f9d8b198ea25a96c7157ff00874764a56a579830f7c3669207f03bbb856b82",
+      "requested_start": "2025-01-01T00:00:00Z",
+      "requested_end_exclusive": "2026-01-01T00:00:00Z",
+      "complete_m1_rows": 352541,
+      "m1_first": "2025-01-01T23:00:00Z",
+      "m1_last": "2025-12-31T21:59:00Z",
+      "retrieval_sha256": "4a53100460c78af9bc216c96ccf853df4b43f0a5b9cd7a9098c55b4191faeb0f",
+      "m1_sha256": "c8e92e0360d40c00c265636dd4c3a4250196fe6a66b67339e606afe03dde3e0c",
+      "raw_page_count": 117,
+      "derived": {
+        "15m": {
+          "rows": 23498,
+          "omitted_incomplete_buckets": 8,
+          "sha256": "cfb9522d352aa75fe1f39b3a99a1459e8dd3a8d02fbc3cb23b46e3fb320093c9"
+        },
+        "1h": {
+          "rows": 5869,
+          "omitted_incomplete_buckets": 12,
+          "sha256": "70a161439c46431db7f825c2316a5414ee7e8ae4374b4de7d8ebd1e6e0e2d352"
+        },
+        "4h": {
+          "rows": 1273,
+          "omitted_incomplete_buckets": 323,
+          "sha256": "6cc3cd562e120472e7904b377f5fc35fa4fe29f040359d3beedf7566494db804"
+        }
+      }
+    }
+  ]
+}
