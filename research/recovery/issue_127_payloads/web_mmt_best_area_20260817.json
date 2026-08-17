@@ -1,0 +1,19 @@
+{
+  "excerpts": [
+    "our target will always be a PD Array.",
+    "First Candle rejects → 2nd Candle can expand",
+    "1st Candle doesn’t reject → 2nd Candle can sweep the Previous Candle High/Low",
+    "We know we Run the high when we’re comfortable above the high.",
+    "a candle close above the high or FVGs created above the high.",
+    "Once we Run the high there’s now a clear path toward the next PD Array (target)."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_BEST_AREA_20260817",
+  "title": "How To Find The Best Area To Trade",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/how-to-find-the-best-area-to-trade/"
+}
