@@ -76,20 +76,10 @@ def main() -> int:
     assert contract["account_id_env"] == "OANDA_ACCOUNT_ID"
     assert contract["api_token_env"] == "OANDA_API_TOKEN"
 
-    # Only the exact protected interval or strict subranges inside it are legal.
     assert bounded_interval(contract, VALIDATION_START, VALIDATION_END) == (VALIDATION_START, VALIDATION_END)
-    expect_error(
-        lambda: bounded_interval(contract, VALIDATION_START - timedelta(minutes=1), VALIDATION_END),
-        "outside protected validation interval",
-    )
-    expect_error(
-        lambda: bounded_interval(contract, VALIDATION_START, VALIDATION_END + timedelta(minutes=1)),
-        "outside protected validation interval",
-    )
-    expect_error(
-        lambda: bounded_interval(contract, VALIDATION_END, VALIDATION_END),
-        "outside protected validation interval",
-    )
+    expect_error(lambda: bounded_interval(contract, VALIDATION_START - timedelta(minutes=1), VALIDATION_END), "outside protected validation interval")
+    expect_error(lambda: bounded_interval(contract, VALIDATION_START, VALIDATION_END + timedelta(minutes=1)), "outside protected validation interval")
+    expect_error(lambda: bounded_interval(contract, VALIDATION_END, VALIDATION_END), "outside protected validation interval")
 
     windows = request_windows(VALIDATION_START, VALIDATION_END, 4500)
     assert windows[0][0] == VALIDATION_START
@@ -104,27 +94,16 @@ def main() -> int:
     agg15, omitted = aggregate_complete_buckets(sample, 15)
     assert len(agg15) == 1 and omitted == 0
 
-    # Provider data outside the protected interval is rejected even if the request wrapper were bypassed.
-    expect_error(
-        lambda: parse_candle_payload(payload(VALIDATION_START - timedelta(minutes=1), 1), "NAS100_USD", "M"),
-        "bar outside protected validation interval",
-    )
-    expect_error(
-        lambda: parse_candle_payload(payload(VALIDATION_END, 1), "NAS100_USD", "M"),
-        "bar outside protected validation interval",
-    )
+    expect_error(lambda: parse_candle_payload(payload(VALIDATION_START - timedelta(minutes=1), 1), "NAS100_USD", "M"), "bar outside protected validation interval")
+    expect_error(lambda: parse_candle_payload(payload(VALIDATION_END, 1), "NAS100_USD", "M"), "bar outside protected validation interval")
 
-    # Duplicate merge conflicts fail closed.
+    # Duplicate merge conflicts fail closed while both duplicate bars remain valid OHLC candles.
     page_a = parse_candle_payload(payload(VALIDATION_START, 2), "NAS100_USD", "M")
     page_b_doc = json.loads(payload(VALIDATION_START + timedelta(minutes=1), 1))
-    page_b_doc["candles"][0]["mid"]["c"] = "999.0"
+    page_b_doc["candles"][0]["mid"]["c"] = "100.4"
     page_b = parse_candle_payload(json.dumps(page_b_doc).encode(), "NAS100_USD", "M")
-    expect_error(
-        lambda: merge_pages([page_a, page_b], VALIDATION_START, VALIDATION_START + timedelta(minutes=2)),
-        "conflicting duplicate",
-    )
+    expect_error(lambda: merge_pages([page_a, page_b], VALIDATION_START, VALIDATION_START + timedelta(minutes=2)), "conflicting duplicate")
 
-    # A mocked acquisition proves the manifest semantics without network or real secrets.
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "out"
         start = VALIDATION_START
@@ -132,18 +111,8 @@ def main() -> int:
         fake_payload = payload(start, 15)
         fake_request_sha = "a" * 64
         env = {"OANDA_ACCOUNT_ID": "test-account", "OANDA_API_TOKEN": "test-token"}
-        with patch.dict(os.environ, env, clear=False), patch(
-            "oanda_protected_validation_data._request_payload",
-            return_value=(fake_payload, fake_request_sha),
-        ):
-            manifest = acquire(
-                contract_path=CONTRACT,
-                protocol_path=PROTOCOL,
-                output_dir=out,
-                start=start,
-                end=end,
-                delay=0,
-            )
+        with patch.dict(os.environ, env, clear=False), patch("oanda_protected_validation_data._request_payload", return_value=(fake_payload, fake_request_sha)):
+            manifest = acquire(contract_path=CONTRACT, protocol_path=PROTOCOL, output_dir=out, start=start, end=end, delay=0)
         assert manifest["holdout_accessed"] is True
         assert manifest["protected_validation_accessed"] is True
         assert manifest["calibration_window_accessed"] is False
@@ -159,7 +128,6 @@ def main() -> int:
         assert "test-token" not in text
         assert "test-account" not in text
 
-    # Contract content may name GitHub secret variables but must never contain credential values or auth headers.
     contract_text = CONTRACT.read_text(encoding="utf-8")
     assert "OANDA_ACCOUNT_ID" in contract_text
     assert "OANDA_API_TOKEN" in contract_text
