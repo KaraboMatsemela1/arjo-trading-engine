@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "disposition_id": "ARJO_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_V1",
+  "as_of_utc": "2026-08-17T18:57:20Z",
+  "issue": 235,
+  "dependency_issue": 232,
+  "entry_gate": "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
+  "output_gate": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "status": "NO_VALIDATED_PROFITABLE_EDGE_CURRENT_EVIDENCE",
+  "validated_profitable_edge": false,
+  "paper_execution_enabled": false,
+  "live_execution_enabled": false,
+  "broker_mutation_enabled": false,
+  "post_result_refit_permitted": false,
+  "tested_families": [
+    {
+      "family": "V2_AOO_FVA_FVG_2CR",
+      "result": "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED",
+      "evidence_issue": 221,
+      "evidence_pr": 222,
+      "resolved_or_executable_count": 10,
+      "frozen_minimum_count": 30,
+      "reason": "Backward 2010-2023 occurrence-frequency gate failed before post-entry outcome access."
+    },
+    {
+      "family": "V3A_AOO_WITHOUT_GEOMETRIC_ZONE_OVERLAP",
+      "result": "COVERAGE_INFEASIBLE_REJECTED",
+      "evidence_issue": 223,
+      "evidence_pr": 224,
+      "development_qualified": 7,
+      "development_execution_observable": 4,
+      "frozen_minimum_count": 30,
+      "post_entry_outcomes_accessed": false
+    },
+    {
+      "family": "V3B_FIXED_MULTI_INDEX_V2_SEMANTICS",
+      "result": "COVERAGE_INFEASIBLE_REJECTED",
+      "evidence_issue": 225,
+      "evidence_pr": 226,
+      "instruments": ["NAS100_USD", "SPX500_USD", "US30_USD"],
+      "portfolio_executable_occurrences": 1,
+      "frozen_minimum_count": 30,
+      "post_entry_outcomes_accessed": false
+    },
+    {
+      "family": "V3C_ARGUMENTS_2CR",
+      "result": "EDGE_NOT_ESTABLISHED",
+      "evidence_issue": 232,
+      "evidence_pr": 234,
+      "workflow_run": 32056095283,
+      "result_sha256": "e2af05e4fad93def189bedd22cc865ea78be4ac43a1a2e9d5e5822c8b84ff78b",
+      "provider_provenance_sha256": "de8b7dcb37ea580b51ad16949257964aa0967da364d48dbbc988f20663bac4f1",
+      "base": {
+        "resolved_executed_trades": 1304,
+        "net_expectancy_r": 0.0013801962818530444,
+        "profit_factor": 1.0025647240130293,
+        "bootstrap_95_low_r": -0.06426419764828437,
+        "bootstrap_95_high_r": 0.06455867406050317,
+        "max_drawdown_r": 48.80171352611564,
+        "data_integrity_failures": 0,
+        "synthetic_fills": 0
+      },
+      "stress": {
+        "resolved_executed_trades": 1297,
+        "net_expectancy_r": -0.044683765355838866,
+        "profit_factor": 0.9198829599488039,
+        "bootstrap_95_low_r": -0.10970192262427086,
+        "bootstrap_95_high_r": 0.021729936838612414,
+        "max_drawdown_r": 95.1231792036119,
+        "data_integrity_failures": 0,
+        "synthetic_fills": 0
+      },
+      "post_result_refit_performed": false
+    }
+  ],
+  "unused_first_party_family_disposition": {
+    "executable_unused_family_available": false,
+    "candidate_selection_audit": "research/candidate_selection_audit.json",
+    "candidate_selection_dispositions": "research/candidate_selection_dispositions.json",
+    "concept_inventory": [
+      "research/concept_inventory.jsonl",
+      "research/concept_inventory_additions.jsonl"
+    ],
+    "reviewed_concept_count": 36,
+    "candidate_count": 6,
+    "rejected_unrepresented_operational_cues": [
+      "RESISTANCE_LIQUIDITY_RUNS",
+      "TAPE_READING"
+    ],
+    "incomplete_named_or_partial_examples": [
+      "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "ORDER_FLOW_TARGET_BIAS",
+      "MMBM_LRLR_SHORT_CONTEXT",
+      "MARKET_MAKER_MODELS",
+      "MARKET_STRUCTURE",
+      "THIRD_CANDLE",
+      "TIME_AND_PRICE",
+      "SMT"
+    ],
+    "generic_ict_smc_semantic_backfill_permitted": false
+  },
+  "first_party_access_debt": {
+    "youtube_public_semantic_payload_available": false,
+    "classification": "PUBLIC_PAGE_METADATA_AVAILABLE_BUT_SEMANTIC_PAYLOAD_UNAVAILABLE",
+    "evidence": "research/recovery/ISSUE_87_YOUTUBE_ACCESS_RECOVERY_RESULT.md",
+    "secondary_transcript_semantic_substitution_permitted": false,
+    "captcha_or_auth_bypass_permitted": false
+  },
+  "reentry_conditions": [
+    "New direct first-party semantic evidence closes a currently incomplete strategy family without generic-market inference.",
+    "A genuinely independent strategy family is fully preregistered before any outcome access, with deterministic trigger and causal execution semantics.",
+    "If first-party YouTube public semantic payload later becomes directly available through compliant access, recover and audit it before implementation."
+  ],
+  "forbidden_reentry_paths": [
+    "Tune or weaken V3-C after observing its 2010-2023 economic result.",
+    "Mine the consumed V3-C trade ledger to select new parameters or predicates.",
+    "Use V3-A or V3-B count failures to reactively loosen their predicates.",
+    "Invent missing Arjo semantics from generic ICT/SMC conventions.",
+    "Enable paper/live/broker mutation without a separately validated profitable-edge gate."
+  ]
+}
