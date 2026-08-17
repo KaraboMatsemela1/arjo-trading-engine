@@ -18,8 +18,6 @@ jobs:
   seal:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -28,15 +26,13 @@ jobs:
       - name: Verify no M1/provider/outcome path exists in this stage
         run: python scripts/test_v3c_backward_oos_trigger_seal.py
       - name: Download sealed 2010-2023 structure artifact
-        run: |
-          mkdir -p /tmp/v3c-oos-structure
-          curl --fail --location --retry 3 \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9293573972/zip" \
-            -o /tmp/v3c-oos-structure.zip
-          unzip -q /tmp/v3c-oos-structure.zip -d /tmp/v3c-oos-structure
+        uses: actions/download-artifact@v4
+        with:
+          name: profitability-backward-oos-stage1
+          path: /tmp/v3c-oos-structure
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 32047616340
       - name: Reconstruct and seal V3-C backward-OOS triggers
         run: >-
           python scripts/scan_v3c_backward_oos_triggers.py
@@ -73,4 +69,4 @@ jobs:
           retention-days: 90
       - name: Delete runner-local structure payloads
         if: always()
-        run: rm -rf /tmp/v3c-oos-structure /tmp/v3c-oos-structure.zip
+        run: rm -rf /tmp/v3c-oos-structure
