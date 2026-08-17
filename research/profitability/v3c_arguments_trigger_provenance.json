@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "V3_ARGUMENTS_TRIGGER_COVERAGE_PROVENANCE_BOUND",
+  "workflow_run_id": 32049873631,
+  "workflow_head_sha": "98d07c841bf7d0ae2b8b5105ab6d936c75a2468a",
+  "artifact_id": 9294279244,
+  "artifact_name": "v3c-arguments-trigger-coverage",
+  "artifact_zip_sha256": "5c319bd39cd5a46f0ce830efbd06e95d03cf82d6159db93f0bbcedbee653772f",
+  "artifact_size_bytes": 12933,
+  "artifact_expires_at": "2026-11-15T17:26:43Z",
+  "candidate_sha256": "de51f2c721aaedd0f6587755ebcab31ac2b264188d3de1f5531ec7057fb53b7b",
+  "trigger_set_sha256": "47061979163219481611286b8268c02be1eee9bee0ed4188077ae0921a27a2fc",
+  "coverage_report_sha256": "0f36656a351877e61d1dfedde7e29a57710efb0afe580d7bad99a3928eb80564",
+  "h4_swing_high_count": 335,
+  "trigger_count": 316,
+  "unique_activation_dates": 189,
+  "coverage_feasible": true,
+  "dual_path_exact_match": true,
+  "post_trigger_price_traversal_accessed": false,
+  "performance_metrics_accessed": false,
+  "backward_oos_outcomes_accessed": false
+}
