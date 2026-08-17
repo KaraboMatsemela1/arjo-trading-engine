@@ -7,105 +7,105 @@
       "field": "INSTRUMENTS",
       "state": "PARTIAL",
       "evidence_ids": ["EV_3B235EF470AD5BAFC8857649", "EV_206F710B56DFDA5FF5393600"],
-      "notes": "Direct worked examples now include Gold and NQ, while Arjo separately identifies Metals, Indices and JPY pairs as easy-to-target classes; universal eligibility and exclusions remain unresolved."
+      "notes": "limitation: direct worked examples now include Gold and NQ, while Arjo separately identifies Metals, Indices and JPY pairs as easy-to-target classes; universal eligibility and exclusions remain unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "TIMEFRAME",
       "state": "PARTIAL",
       "evidence_ids": ["EV_910CD2C2C616AE55270F56C3", "EV_3C39A8D356CA839E82469856", "EV_427DA06DF5EBFA7F4CFB170A"],
-      "notes": "Direct examples establish 4h/1h monitoring and a concrete NQ plan using 4h FVG, 1h FVA and 15m execution; no universal timeframe hierarchy is stated."
+      "notes": "limitation: direct examples establish 4h/1h monitoring and a concrete NQ plan using 4h FVG, 1h FVA and 15m execution; no universal timeframe hierarchy is stated."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "HIGHER_TIMEFRAME_CONTEXT",
       "state": "PARTIAL",
       "evidence_ids": ["EV_C2756F9518B03DDD50018EAB", "EV_E395733042FA0357BA746E7A", "EV_427DA06DF5EBFA7F4CFB170A"],
-      "notes": "Arjo directly conditions LTF involvement on HTF expansion and provides an explicit 4h/1h/15m example, but the complete deterministic HTF-ready predicate remains unresolved."
+      "notes": "limitation: Arjo directly conditions LTF involvement on HTF expansion and provides an explicit 4h/1h/15m example, but the complete deterministic HTF-ready predicate remains unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "DIRECTION",
       "state": "PARTIAL",
       "evidence_ids": ["EV_E7B28BAB2958EEB61E1C17F0", "EV_8B0F5A4366459E7D6E782D39", "EV_53110264054D0997F8C055BD"],
-      "notes": "The recovered long examples directly map a run of resistance/rejection high to one-sided bullish continuation toward ATH, but a complete direction algorithm across all PD Arrays remains unresolved."
+      "notes": "limitation: the recovered long examples directly map a run of resistance/rejection high to one-sided bullish continuation toward ATH, but a complete direction algorithm across all PD Arrays remains unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "PRECONDITIONS",
       "state": "PARTIAL",
       "evidence_ids": ["EV_6212CBC146F1DC384AC22114", "EV_423B07F374A923697DA6BB9E", "EV_E2CA3E5215E4B2C2044D7BC9"],
-      "notes": "Arjo requires competing/opposing arguments to be removed before involvement and gives a run of the 2CR high as a worked condition; the full argument inventory and weighting remain unresolved."
+      "notes": "limitation: Arjo requires competing/opposing arguments to be removed before involvement and gives a run of the 2CR high as a worked condition; the full argument inventory and weighting remain unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "SETUP",
       "state": "PARTIAL",
       "evidence_ids": ["EV_0A8F5F653FB3CE0F676D03DC", "EV_427DA06DF5EBFA7F4CFB170A", "EV_C2756F9518B03DDD50018EAB"],
-      "notes": "AoO is directly bounded from Trigger to Target and worked plans place LTF execution inside HTF expansion, but exact PD Array/FVA/FVG construction and setup selection remain incomplete."
+      "notes": "limitation: AoO is directly bounded from Trigger to Target and worked plans place LTF execution inside HTF expansion, but exact PD Array/FVA/FVG construction and setup selection remain incomplete."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "TRIGGER",
       "state": "PARTIAL",
       "evidence_ids": ["EV_5207FDBCB70DE92EF53D1B5D", "EV_4C80F21E8802AD529D83DB98", "EV_E2CA3E5215E4B2C2044D7BC9", "EV_AED1F1512355C2B3B6DEAB4D"],
-      "notes": "A Run on Liquidity / Run of the 2CR high is directly identified as a trigger, with close-above and two-sting examples; alternative valid run constructions and tolerances remain unresolved."
+      "notes": "limitation: a Run on Liquidity / Run of the 2CR high is directly identified as a trigger, with close-above and two-sting examples; alternative valid run constructions and tolerances remain unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "ENTRY",
       "state": "PARTIAL",
       "evidence_ids": ["EV_8259279C63C178C23819BC9A", "EV_E395733042FA0357BA746E7A", "EV_427DA06DF5EBFA7F4CFB170A"],
-      "notes": "Arjo states to enter when price trades into the AoO and gives a 15m execution example inside HTF/LTF context, but exact order type, fill price and confirmation timing remain unresolved."
+      "notes": "limitation: Arjo states to enter when price trades into the AoO and gives a 15m execution example inside HTF/LTF context, but exact order type, fill price and confirmation timing remain unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "STOP",
       "state": "PARTIAL",
       "evidence_ids": ["EV_CE024998E9A268E91AEE9C8C", "EV_514A58C948D6EF8D860728D4"],
-      "notes": "Arjo gives a general invalid-probability boundary and an explicit bearish Swing-High stop example, but a directly stated deterministic long-side stop for this candidate is still missing."
+      "notes": "limitation: Arjo gives a general invalid-probability boundary and an explicit bearish Swing-High stop example, but a directly stated deterministic long-side stop for this candidate is still missing."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "TARGET",
       "state": "PARTIAL",
       "evidence_ids": ["EV_A5FDF5358232B28E3F99AF3B", "EV_46709B3E120AD397C1A76716", "EV_53110264054D0997F8C055BD"],
-      "notes": "Targets are directly constrained to PD Arrays and the recovered NQ plan targets the next ATH, but complete PD Array construction and tie-breaking among eligible targets remain unresolved."
+      "notes": "limitation: targets are directly constrained to PD Arrays and the recovered NQ plan targets the next ATH, but complete PD Array construction and tie-breaking among eligible targets remain unresolved."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "INVALIDATION",
       "state": "PARTIAL",
       "evidence_ids": ["EV_9B03AD2F44C9C0B7109FA14F", "EV_514A58C948D6EF8D860728D4"],
-      "notes": "Running a rejection high explicitly invalidates the prior respect interpretation and stop logic is tied to where the setup becomes low-probability, but post-entry invalidation remains under-specified."
+      "notes": "limitation: running a rejection high explicitly invalidates the prior respect interpretation and stop logic is tied to where the setup becomes low-probability, but post-entry invalidation remains under-specified."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "EXPIRY",
       "state": "PARTIAL",
       "evidence_ids": ["EV_ABCF74C2963F5E39E9CA555D", "EV_6065BAEFC53803A9239A6CF6"],
-      "notes": "Arjo says to move on when the required parameter is not met and requires trading within the WoO, but no universal bar-count or clock expiry rule is stated."
+      "notes": "limitation: Arjo says to move on when the required parameter is not met and requires trading within the WoO, but no universal bar-count or clock expiry rule is stated."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "SESSION/TIME_RULE",
       "state": "PARTIAL",
       "evidence_ids": ["EV_6065BAEFC53803A9239A6CF6", "EV_DE2F50C2FB863386182ACEE1"],
-      "notes": "Trading is directly required to occur within a Window of Opportunity, implemented via a configured session or alerts; a universal fixed clock interval is intentionally not supplied."
+      "notes": "limitation: trading is directly required to occur within a Window of Opportunity, implemented via a configured session or alerts; a universal fixed clock interval is intentionally not supplied."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "OPTIONAL_CONDITIONS",
       "state": "PARTIAL",
       "evidence_ids": ["EV_D6C6356C0D952C57DB7642D0"],
-      "notes": "A December-specific avoid-trading filter is directly documented, but it is calendar-specific and does not establish the complete optional-filter set for the candidate."
+      "notes": "limitation: a December-specific avoid-trading filter is directly documented, but it is calendar-specific and does not establish the complete optional-filter set for the candidate."
     },
     {
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
       "field": "REQUIRED_CONDITIONS",
       "state": "PARTIAL",
       "evidence_ids": ["EV_423B07F374A923697DA6BB9E", "EV_807B2C8536C00D3916C61268", "EV_B1E00961E27385C483D1E85F"],
-      "notes": "Direct evidence requires removing competing arguments before involvement and structures the trading plan as Bias, Narrative, Context, Entry and Risk Management; complete objective rules for every level remain unresolved."
+      "notes": "limitation: direct evidence requires removing competing arguments before involvement and structures the trading plan as Bias, Narrative, Context, Entry and Risk Management; complete objective rules for every level remain unresolved."
     },
     {
       "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
