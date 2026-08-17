@@ -18,7 +18,7 @@ from pathlib import Path
 from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
 
 PROTOCOL = "FIRST_PARTY_PRESCRIBED_CALIBRATION_V1"
-STAGES = {"PREREGISTERED", "CALIBRATION_COMPLETE"}
+STAGES = {"SEED_ASSESSMENT", "PREREGISTERED", "CALIBRATION_COMPLETE"}
 REPLAYABILITY = {"REPLAYABLE", "BLOCKED_UNRESOLVED_EXECUTION_PARAMETERS"}
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 
@@ -43,7 +43,8 @@ def validate_packet(packet: dict, evidence: dict[str, dict]) -> list[str]:
         errors.append(prefix + "schema_version must be 1")
     if packet.get("protocol") != PROTOCOL:
         errors.append(prefix + f"protocol must be {PROTOCOL}")
-    if packet.get("stage") not in STAGES:
+    stage = packet.get("stage")
+    if stage not in STAGES:
         errors.append(prefix + f"stage must be one of {sorted(STAGES)}")
     if not str(packet.get("predicate_id", "")):
         errors.append(prefix + "predicate_id is required")
@@ -169,7 +170,11 @@ def validate_packet(packet: dict, evidence: dict[str, dict]) -> list[str]:
     outcome_authorized = packet.get("outcome_access_authorized")
     if outcome_authorized not in {True, False}:
         errors.append(prefix + "outcome_access_authorized must be boolean")
+    if stage == "SEED_ASSESSMENT" and outcome_authorized is not False:
+        errors.append(prefix + "SEED_ASSESSMENT can never authorize outcome access")
     if outcome_authorized is True:
+        if stage != "PREREGISTERED":
+            errors.append(prefix + "outcome authorization is issued only from a PREREGISTERED packet")
         if replayability != "REPLAYABLE":
             errors.append(prefix + "outcome access requires a REPLAYABLE seed plan")
         if not parameters:
@@ -180,7 +185,7 @@ def validate_packet(packet: dict, evidence: dict[str, dict]) -> list[str]:
         if not HEX64.match(frozen_sha):
             errors.append(prefix + "outcome access requires preregistration_sha256")
 
-    if packet.get("stage") == "CALIBRATION_COMPLETE":
+    if stage == "CALIBRATION_COMPLETE":
         if outcome_authorized is not True:
             errors.append(prefix + "CALIBRATION_COMPLETE requires prior outcome access authorization")
         if calibration_data_accessed is not True:
