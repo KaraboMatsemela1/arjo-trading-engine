@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "Failure to create FVGs",
+    "Failure to follow through, and create new FVGs",
+    "Ugly 2 Candle Rejection",
+    "If they are present, it’s better to stay out."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_DECEMBER_20260817",
+  "title": "December Protocol",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/december-protocol/"
+}

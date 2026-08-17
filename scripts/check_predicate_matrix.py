@@ -21,10 +21,38 @@ STATES = {"SATISFIED", "PARTIAL", "MISSING", "CONTRADICTORY", "NOT_APPLICABLE"}
 UNRESOLVED = {"PARTIAL", "MISSING", "CONTRADICTORY"}
 
 
+def load_context_extensions(path: Path, candidate_ids: set[str]) -> dict[str, set[str]]:
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if data.get("schema_version") != 1:
+        raise ValueError("candidate context extensions schema_version must be 1")
+    if data.get("performance_data_consulted") is not False:
+        raise ValueError("candidate context extensions must be performance-blind")
+    result: dict[str, set[str]] = {}
+    for row in data.get("extensions", []):
+        predicate_id = str(row.get("predicate_id", ""))
+        concepts = {str(value) for value in row.get("concepts", []) if str(value)}
+        rationale = str(row.get("rationale", "")).strip()
+        if predicate_id not in candidate_ids:
+            raise ValueError(f"candidate context extension references unknown predicate {predicate_id}")
+        if predicate_id in result:
+            raise ValueError(f"duplicate candidate context extension for {predicate_id}")
+        if not concepts:
+            raise ValueError(f"{predicate_id}: candidate context extension concepts must be non-empty")
+        if not rationale:
+            raise ValueError(f"{predicate_id}: candidate context extension requires rationale")
+        if contains_pre_spec_outcome(rationale):
+            raise ValueError(f"{predicate_id}: performance/outcome metric leaked into context rationale")
+        result[predicate_id] = concepts
+    return result
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--candidates", default="research/candidate_predicates.json")
     parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
+    parser.add_argument("--context-extensions", default="research/candidate_context_extensions.json")
     parser.add_argument("--matrix", default="research/predicate_matrix.csv")
     parser.add_argument("--closure", default="research/predicate_closure.json")
     args = parser.parse_args()
@@ -33,6 +61,11 @@ def main() -> int:
     candidate_data = json.loads(Path(args.candidates).read_text(encoding="utf-8"))
     candidates = {str(row["predicate_id"]): row for row in candidate_data.get("candidates", [])}
     evidence = {str(row["EVIDENCE_ID"]): row for row in load_evidence_union(args.evidence)}
+    try:
+        context_extensions = load_context_extensions(Path(args.context_extensions), set(candidates))
+    except ValueError as exc:
+        print(f"Predicate matrix validation failed:\n- {exc}", file=sys.stderr)
+        return 1
     with Path(args.matrix).open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     closure = json.loads(Path(args.closure).read_text(encoding="utf-8"))
@@ -93,12 +126,12 @@ def main() -> int:
         if state == "NOT_APPLICABLE" and not notes.strip():
             errors.append(f"{predicate_id}/{field}: NOT_APPLICABLE requires rationale")
 
-        candidate_concepts = set(candidates[predicate_id].get("concepts", []))
+        allowed_concepts = set(candidates[predicate_id].get("concepts", [])) | context_extensions.get(predicate_id, set())
         for ref in refs:
             record = evidence.get(ref)
-            if record and record.get("SUPPORTED_CONCEPT") not in candidate_concepts:
+            if record and record.get("SUPPORTED_CONCEPT") not in allowed_concepts:
                 errors.append(
-                    f"{predicate_id}/{field}: evidence {ref} supports concept {record.get('SUPPORTED_CONCEPT')} outside candidate concept set"
+                    f"{predicate_id}/{field}: evidence {ref} supports concept {record.get('SUPPORTED_CONCEPT')} outside candidate or explicit context concept set"
                 )
 
     for predicate_id, candidate_rows in grouped.items():

@@ -1,0 +1,18 @@
+{
+  "excerpts": [
+    "We trade above a Swing High on the 4h, if we look at the 1h to monitor 2CR",
+    "If the 1st Candle or 2nd Candle rejection high remains intact and is not traded above, we’re respecting the Swing High.",
+    "But if the rejection high now gets run, we’re disrespecting the Swing High",
+    "Either you have multiple arguments/options of things that can happen, when that’s the case, you wait.",
+    "2CR fails because the rejection high gets run, we’re now only left with one option and one-sided arguments: Bullish."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_ARGUMENTS_20260817",
+  "title": "This is Exactly How “Arguments” Work",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/this-is-exactly-how-arguments-work/"
+}

@@ -1,0 +1,16 @@
+{
+  "excerpts": [
+    "How do we Run the high? By becoming comfortable above the high, 2 stings above it for example.",
+    "1. Bias 2. Narrative 3. Context 4. Entry 5. Risk Management",
+    "a trading plan needs the 80/20 rule: 80% objective, 20% subjective."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T05:20:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_OBJECTIVE_PLAN_20260817",
+  "title": "It’s Boring, But This Creates The Best Traders",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/its-boring-but-this-creates-the-best-traders/"
+}

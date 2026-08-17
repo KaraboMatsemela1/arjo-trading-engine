@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "WoO = Window of Opportunity.",
+    "You always want to trade within your WoO.",
+    "Pre-set session. For example, from 9:30 a.m. to 11:00 a.m. is when you look for a trade opportunity.",
+    "If you don’t use a pre-set session, then you use alerts."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_WOO_20260817",
+  "title": "Psychology is NOT Your Problem, This is",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/psychology-is-not-your-problem-this-is/"
+}

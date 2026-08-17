@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "If we trade into the AoO → Enter (1)",
+    "The area from the Trigger to the Target is the Area of Opportunity.",
+    "My favorite Trigger for an AoO is a Run on Liquidity, which confirms that we’re moving towards the next target.",
+    "If we run this high here, it’s a Trigger that we’re going to go towards the All Time High."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_AOO_20260817",
+  "title": "AoO",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/aoo/"
+}

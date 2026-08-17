@@ -4,7 +4,8 @@
 The persisted Phase-5 matrix is treated as a set of claims, not as executable
 truth. The Phase-5 two-code-path artifact is only a deterministic reconstruction
 preflight; it is never promoted to the independent two-engineer result required
-for SPEC_READY.
+for SPEC_READY. A structurally complete candidate may pass only when an explicit,
+SHA-bound independent reconstruction packet validates against the exact matrix.
 """
 
 from __future__ import annotations
@@ -15,7 +16,10 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from acquisition_manifest_union import DEFAULT_ACQUISITION_GLOB, load_acquisition_union
 from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
+from independent_reconstruction_packet import load_packet, validate_candidate_packet
+from source_registry_union import DEFAULT_SOURCE_GLOB, load_source_union
 
 REQUIRED_FIELDS = [
     "INPUTS", "INSTRUMENTS", "TIMEFRAME", "HIGHER_TIMEFRAME_CONTEXT", "DIRECTION",
@@ -24,10 +28,6 @@ REQUIRED_FIELDS = [
 ]
 ALLOWED_STATES = {"SATISFIED", "PARTIAL", "MISSING", "CONTRADICTORY", "NOT_APPLICABLE"}
 INCOMPLETE = {"MISSING", "PARTIAL", "CONTRADICTORY"}
-
-
-def read_jsonl(path: Path) -> list[dict]:
-    return [json.loads(raw) for raw in path.read_text(encoding="utf-8").splitlines() if raw.strip()]
 
 
 def load_matrix(path: Path) -> dict[str, list[dict]]:
@@ -57,24 +57,29 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--matrix", default="research/predicate_matrix.csv")
     parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
-    parser.add_argument("--registry", default="research/source_registry.csv")
-    parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
+    parser.add_argument("--registry", default=DEFAULT_SOURCE_GLOB)
+    parser.add_argument("--acquisition", default=DEFAULT_ACQUISITION_GLOB)
     parser.add_argument("--preflight", default="research/two_engineer_preflight.json")
     parser.add_argument("--recovery", default="research/predicate_recovery_tasks.json")
+    parser.add_argument("--independent-packet", default="docs/spec/INDEPENDENT_RECONSTRUCTION.json")
     parser.add_argument("--output", default="docs/spec/SPEC_AUDIT.json")
     args = parser.parse_args()
 
     matrix = load_matrix(Path(args.matrix))
     evidence = {str(row["EVIDENCE_ID"]): row for row in load_evidence_union(args.evidence)}
-    acquisition = {str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))}
-    with Path(args.registry).open(newline="", encoding="utf-8") as handle:
-        sources = {row["SOURCE_ID"]: row for row in csv.DictReader(handle) if row.get("SOURCE_ID")}
+    acquisition = {
+        str(row.get("source_id", "")): row for row in load_acquisition_union(args.acquisition)
+    }
+    sources = {str(row["SOURCE_ID"]): row for row in load_source_union(args.registry)}
     preflight = json.loads(Path(args.preflight).read_text(encoding="utf-8"))
     recovery = json.loads(Path(args.recovery).read_text(encoding="utf-8"))
+    packet_bundle = load_packet(Path(args.independent_packet))
+    repo_root = Path(".").resolve()
     recovery_by_predicate = {str(row["predicate_id"]): row for row in recovery.get("tasks", [])}
     preflight_by_predicate = {str(row["predicate_id"]): row for row in preflight.get("candidates", [])}
 
     candidate_audits: list[dict] = []
+    passed_specs: list[str] = []
     for predicate_id in sorted(matrix):
         rows = matrix[predicate_id]
         shape = matrix_shape(rows)
@@ -129,14 +134,23 @@ def main() -> int:
             and phase5_preflight == "PASS"
         )
 
+        packet_validation = {"status": "NOT_EVALUATED", "errors": [], "frozen_spec_ref": None}
         if unresolved_fields:
             independent_two_engineer_test = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
             independent_reconstruction = "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS"
             outcome = "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE"
         elif structural_complete:
-            independent_two_engineer_test = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
-            independent_reconstruction = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
-            outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"
+            packet_validation = validate_candidate_packet(packet_bundle, predicate_id, rows, repo_root)
+            if packet_validation["status"] == "PASS":
+                independent_two_engineer_test = "PASS"
+                independent_reconstruction = "PASS"
+                outcome = "PASS"
+                if packet_validation.get("frozen_spec_ref"):
+                    passed_specs.append(str(packet_validation["frozen_spec_ref"]))
+            else:
+                independent_two_engineer_test = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
+                independent_reconstruction = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
+                outcome = "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET"
         else:
             independent_two_engineer_test = "NOT_ATTEMPTED_STRUCTURAL_AUDIT_FAILED"
             independent_reconstruction = "NOT_ATTEMPTED_STRUCTURAL_AUDIT_FAILED"
@@ -156,6 +170,7 @@ def main() -> int:
             "phase5_reconstruction_preflight": phase5_preflight,
             "independent_two_engineer_test": independent_two_engineer_test,
             "independent_reconstruction": independent_reconstruction,
+            "independent_packet_validation": packet_validation,
             "field_state_counts": state_counts,
             "unresolved_fields": unresolved_fields,
             "invalid_states": invalid_states,
@@ -189,7 +204,7 @@ def main() -> int:
         "spec_ready": any_pass,
         "overall_outcome": overall_outcome,
         "implementation_authorized": any_pass,
-        "frozen_spec_ref": None,
+        "frozen_spec_ref": sorted(passed_specs)[0] if passed_specs else None,
         "required_field_count": len(REQUIRED_FIELDS),
         "candidate_count": len(candidate_audits),
         "candidates": candidate_audits,

@@ -4,10 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
 from pathlib import Path
+
+from acquisition_manifest_union import DEFAULT_ACQUISITION_GLOB, load_acquisition_union
+from source_registry_union import DEFAULT_SOURCE_GLOB, load_source_union
 
 ALLOWED_STATES = {
     "DIRECT", "DIRECT_CONCEPT_PARTIAL_EXECUTION", "DIRECT_EXAMPLE_PARTIAL",
@@ -46,20 +48,19 @@ def load_inventory(pattern: str) -> tuple[list[dict], list[str]]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--inventory-glob", default="research/concept_inventory*.jsonl")
-    parser.add_argument("--registry", default="research/source_registry.csv")
-    parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
+    parser.add_argument("--registry", default=DEFAULT_SOURCE_GLOB)
+    parser.add_argument("--acquisition", default=DEFAULT_ACQUISITION_GLOB)
     args = parser.parse_args()
 
     errors: list[str] = []
     try:
         concepts, inventory_files = load_inventory(args.inventory_glob)
-        acquisitions = load_jsonl(Path(args.acquisition))
+        sources = {str(row["SOURCE_ID"]): row for row in load_source_union(args.registry)}
+        acquisitions = load_acquisition_union(args.acquisition)
     except ValueError as exc:
         print(exc, file=sys.stderr)
         return 1
 
-    with Path(args.registry).open(newline="", encoding="utf-8") as handle:
-        sources = {row["SOURCE_ID"]: row for row in csv.DictReader(handle) if row.get("SOURCE_ID")}
     acquisition_by_source = {str(row.get("source_id", "")): row for row in acquisitions}
     concept_ids = [str(row.get("CONCEPT_ID", "")) for row in concepts]
     concept_set = set(concept_ids)

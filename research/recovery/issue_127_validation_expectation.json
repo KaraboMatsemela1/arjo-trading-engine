@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "issue": 127,
+  "expected_evidence_record_count": 117,
+  "expected_concept_count": 37,
+  "expected_aoo_candidate_state_after_regeneration": {
+    "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+    "missing": 0,
+    "partial": 16,
+    "satisfied": 0,
+    "spec_ready": false
+  },
+  "required_validation": [
+    "CI",
+    "Dependency Validation",
+    "Gate Integrity Audit",
+    "Provenance Audit",
+    "SPEC Audit",
+    "independent SPEC audit remains fail-closed"
+  ]
+}

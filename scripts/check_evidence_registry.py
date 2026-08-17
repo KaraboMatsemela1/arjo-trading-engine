@@ -4,13 +4,14 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
 from pathlib import Path
 
+from acquisition_manifest_union import DEFAULT_ACQUISITION_GLOB, load_acquisition_union
 from evidence_antibias import contains_pre_spec_outcome
 from evidence_registry_union import DEFAULT_EVIDENCE_GLOB, load_evidence_union
+from source_registry_union import DEFAULT_SOURCE_GLOB, load_source_union
 
 CONFIDENCE = {"DIRECT", "STRONG_PARTIAL", "CONTEXTUAL", "INSUFFICIENT"}
 FIELDS = {
@@ -43,19 +44,18 @@ def main() -> int:
     parser.add_argument("--evidence", default=DEFAULT_EVIDENCE_GLOB)
     parser.add_argument("--coverage", default="research/evidence_coverage.json")
     parser.add_argument("--inventory-glob", default="research/concept_inventory*.jsonl")
-    parser.add_argument("--registry", default="research/source_registry.csv")
-    parser.add_argument("--acquisition", default="research/acquisition_manifest.jsonl")
+    parser.add_argument("--registry", default=DEFAULT_SOURCE_GLOB)
+    parser.add_argument("--acquisition", default=DEFAULT_ACQUISITION_GLOB)
     args = parser.parse_args()
 
     errors: list[str] = []
     inventory = load_inventory(args.inventory_glob)
     concepts = {str(row["CONCEPT_ID"]): row for row in inventory}
-    with Path(args.registry).open(newline="", encoding="utf-8") as handle:
-        sources = {row["SOURCE_ID"]: row for row in csv.DictReader(handle) if row.get("SOURCE_ID")}
-    acquisitions = {
-        str(row.get("source_id", "")): row for row in read_jsonl(Path(args.acquisition))
-    }
     try:
+        sources = {str(row["SOURCE_ID"]): row for row in load_source_union(args.registry)}
+        acquisitions = {
+            str(row.get("source_id", "")): row for row in load_acquisition_union(args.acquisition)
+        }
         evidence = load_evidence_union(args.evidence)
     except ValueError as exc:
         print(f"Evidence registry validation failed:\n- {exc}", file=sys.stderr)

@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "This already gives us an easy understanding of where to place the SL, above the Swing High.",
+    "Your SL should go at the area where price turns from high probability to low probability",
+    "1st candle is a rejection → 2nd candle can expand",
+    "1st candle is NOT a rejection → 2nd candle can reject"
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_STOP_EXACT_20260817",
+  "title": "This Is Exactly Where to Place Your Stop Loss",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/this-is-exactly-where-to-place-your-stop-loss/"
+}
