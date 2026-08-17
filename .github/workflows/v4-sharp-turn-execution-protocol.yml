@@ -1,0 +1,61 @@
+name: V4 Sharp Turn Execution Protocol
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/v4_sharp_turn_candidate.json'
+      - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
+      - 'research/profitability/v4_sharp_turn_execution_evidence_boundary.json'
+      - 'scripts/check_v4_sharp_turn_execution_protocol.py'
+      - 'scripts/test_v4_sharp_turn_protocol.py'
+      - '.github/workflows/v4-sharp-turn-execution-protocol.yml'
+  push:
+    branches:
+      - research/issue-242-v4-sharp-turn-protocol
+    paths:
+      - 'research/v4_sharp_turn_candidate.json'
+      - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
+      - 'research/profitability/v4_sharp_turn_execution_evidence_boundary.json'
+      - 'scripts/check_v4_sharp_turn_execution_protocol.py'
+      - 'scripts/test_v4_sharp_turn_protocol.py'
+      - '.github/workflows/v4-sharp-turn-execution-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable V4 Sharp Turn protocol
+        run: python scripts/check_v4_sharp_turn_execution_protocol.py
+      - name: Run V4 protocol sabotage regressions
+        run: python scripts/test_v4_sharp_turn_protocol.py
+      - name: Prove V4 outcome and execution lock
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('research/profitability/v4_sharp_turn_execution_protocol_v1.json'))
+          b=json.load(open('research/profitability/v4_sharp_turn_execution_evidence_boundary.json'))
+          assert p['status']=='FROZEN_BEFORE_V4_MARKET_OUTCOME_ACCESS'
+          assert p['market_data']['no_market_request_authorized_by_protocol_freeze_issue'] is True
+          assert p['market_data']['request_m1_only_after_v4_trigger_set_is_sealed'] is True
+          assert p['authorization']=={
+              'market_data_execution_for_issue_242':False,
+              'backtest_execution':False,
+              'paper_execution':False,
+              'live_execution':False,
+              'broker_mutation':False,
+          }
+          assert b['v4_market_data_requested'] is False
+          assert b['v4_triggers_enumerated'] is False
+          assert b['v4_economic_outcomes_accessed'] is False
+          assert b['v4_performance_metrics_accessed'] is False
+          assert b['historical_window_is_untouched_family_holdout'] is False
+          print('V4 Sharp Turn pre-outcome lock verified')
+          PY
