@@ -1,0 +1,51 @@
+name: V2 Future Validation Protocol
+
+on:
+  pull_request:
+    paths:
+      - research/v2/future_validation_protocol_v1.json
+      - scripts/check_v2_future_validation_protocol.py
+      - scripts/check_v2_future_validation_access.py
+      - scripts/test_v2_future_validation_protocol.py
+      - .github/workflows/v2-future-validation-protocol.yml
+  push:
+    branches:
+      - v2/issue-193-future-validation-protocol
+    paths:
+      - research/v2/future_validation_protocol_v1.json
+      - scripts/check_v2_future_validation_protocol.py
+      - scripts/check_v2_future_validation_access.py
+      - scripts/test_v2_future_validation_protocol.py
+      - .github/workflows/v2-future-validation-protocol.yml
+
+permissions:
+  contents: read
+
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile protocol tooling
+        run: python -m py_compile scripts/check_v2_future_validation_protocol.py scripts/check_v2_future_validation_access.py scripts/test_v2_future_validation_protocol.py
+      - name: Validate frozen protocol lineage
+        run: >-
+          python scripts/check_v2_future_validation_protocol.py
+          --protocol research/v2/future_validation_protocol_v1.json
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+          --reservation research/v2/future_validation_reservation_v1.json
+          --remediation research/v2/v2_remediation_readiness.json
+          --v1-disposition research/v2/v1_post_validation_disposition.json
+      - name: Run sabotage and chronology tests
+        run: PYTHONPATH=scripts python scripts/test_v2_future_validation_protocol.py
+      - name: Prove current access remains denied
+        run: |
+          if PYTHONPATH=scripts python scripts/check_v2_future_validation_access.py --protocol research/v2/future_validation_protocol_v1.json --gate acquisition; then
+            echo 'future acquisition unexpectedly authorized' >&2
+            exit 1
+          fi
+          echo 'future_validation_access=DENIED_AS_EXPECTED'
