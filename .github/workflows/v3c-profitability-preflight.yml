@@ -1,0 +1,40 @@
+name: V3-C Profitability Preflight
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/issue-232-v3c-profitability]
+    paths:
+      - 'research/profitability/v3c_profitability_execution_lock_v1.json'
+      - 'scripts/v3c_profitability_engine.py'
+      - 'scripts/test_v3c_profitability_engine.py'
+      - 'scripts/run_v3c_profitability_oanda.py'
+      - '.github/workflows/v3c-profitability-preflight.yml'
+      - '.github/workflows/v3c-profitability-execute.yml'
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Compile implementation
+        run: |
+          python -m py_compile scripts/v3c_profitability_engine.py scripts/test_v3c_profitability_engine.py
+          if [ -f scripts/run_v3c_profitability_oanda.py ]; then python -m py_compile scripts/run_v3c_profitability_oanda.py; fi
+      - name: Run sabotage tests without provider access
+        run: python scripts/test_v3c_profitability_engine.py
+      - name: Verify pre-M1 execution lock
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          x=json.load(open('research/profitability/v3c_profitability_execution_lock_v1.json')); recorded=x.pop('spec_sha256')
+          raw=json.dumps(x,sort_keys=True,separators=(',',':')).encode()
+          assert hashlib.sha256(raw).hexdigest()==recorded=='cc1b6aa88a318c26fbc653751ab34c7c399241770a0db954fc3809c1fa0d17c7'
+          assert x['status']=='FROZEN_BEFORE_FIRST_M1_RESPONSE'
+          assert x['parameter_changes_after_first_m1_response'] is False
+          assert '1440-complete-bar horizon' in x['provider_mechanics']['bounded_prefetch']
+          assert not x['paper_execution_authorized'] and not x['live_execution_authorized'] and not x['broker_mutation_authorized']
+          print('V3-C profitability execution lock verified')
+          PY

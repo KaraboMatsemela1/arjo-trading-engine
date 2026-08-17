@@ -1,0 +1,75 @@
+name: V3-C Profitability Execute
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/profitability/V3C_PROFITABILITY_EXECUTE_LOCK.json'
+
+permissions:
+  contents: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Re-run no-network sabotage suite before first M1 access
+        run: python scripts/test_v3c_profitability_engine.py
+      - name: Verify research execution marker and immutable bindings
+        run: |
+          python - <<'PY'
+          import json
+          m=json.load(open('research/profitability/V3C_PROFITABILITY_EXECUTE_LOCK.json'))
+          assert m['status']=='AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT'
+          assert m['trigger_set_sha256']=='e633ef474c35946ca40e3314cfd5511b2193b4fae387da2e2d75131c5ed7020b'
+          assert m['execution_protocol_sha256']=='0b3a6a5e217e7e4c279f7384c14579e97bf6821bc59deefac3086e7b4ce4ba7a'
+          assert m['profitability_lock_sha256']=='cc1b6aa88a318c26fbc653751ab34c7c399241770a0db954fc3809c1fa0d17c7'
+          assert m['paper_execution_authorized'] is False
+          assert m['live_execution_authorized'] is False
+          assert m['broker_mutation_authorized'] is False
+          print('V3-C first M1 research read marker verified')
+          PY
+      - name: Execute sealed backward-OOS profitability measurement
+        run: python scripts/run_v3c_profitability_oanda.py --output-dir /tmp/v3c-profitability
+      - name: Verify result safety and no development leakage
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/v3c-profitability/profitability-result.json'))
+          assert r['status']=='V3_ARGUMENTS_PROFITABILITY_RESULT_READY'
+          assert r['first_m1_response_accessed'] is True
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['development_2024_2025_outcomes_accessed'] is False
+          assert r['v2_2010_2023_trade_outcomes_accessed'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          print('classification=' + r['classification'])
+          print('validated_profitable_edge=' + str(r['validated_profitable_edge']))
+          print('base_resolved=' + str(r['base_metrics']['resolved_executed_trades']))
+          print('base_expectancy_r=' + str(r['base_metrics']['net_expectancy_r']))
+          print('base_profit_factor=' + str(r['base_metrics']['profit_factor']))
+          print('base_bootstrap_ci=' + str(r['base_metrics']['bootstrap_95pct_ci_net_expectancy_r']))
+          print('stress_expectancy_r=' + str(r['stress_metrics']['net_expectancy_r']))
+          print('stress_profit_factor=' + str(r['stress_metrics']['profit_factor']))
+          print('result_sha256=' + r['result_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3c-profitability-result
+          path: |
+            /tmp/v3c-profitability/profitability-result.json
+            /tmp/v3c-profitability/base-trade-ledger.jsonl
+            /tmp/v3c-profitability/stress-trade-ledger.jsonl
+            /tmp/v3c-profitability/provider-provenance.json
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,13 @@
+{
+  "status": "AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT",
+  "issue": 232,
+  "trigger_set_sha256": "e633ef474c35946ca40e3314cfd5511b2193b4fae387da2e2d75131c5ed7020b",
+  "execution_protocol_sha256": "0b3a6a5e217e7e4c279f7384c14579e97bf6821bc59deefac3086e7b4ce4ba7a",
+  "profitability_lock_sha256": "cc1b6aa88a318c26fbc653751ab34c7c399241770a0db954fc3809c1fa0d17c7",
+  "purpose": "One-time sealed 2010-2023 V3-C research profitability measurement after green offline preflight and merged canonical trigger set.",
+  "parameter_changes_after_first_m1_response": false,
+  "development_2024_2025_outcomes_accessed": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
