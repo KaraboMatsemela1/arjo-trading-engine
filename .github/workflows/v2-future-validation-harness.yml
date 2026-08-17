@@ -1,0 +1,77 @@
+name: V2 Future Validation Harness
+
+on:
+  pull_request:
+    paths:
+      - research/v2/nas100_oanda_future_validation_request_contract.json
+      - scripts/check_v2_future_validation_access_v2.py
+      - scripts/oanda_v2_future_validation_data.py
+      - scripts/run_v2_future_validation_primary.py
+      - scripts/run_v2_future_validation_independent.py
+      - scripts/compare_v2_future_validation_paths.py
+      - scripts/seal_v2_future_validation_result.py
+      - scripts/test_v2_future_validation_harness.py
+      - scripts/test_v2_future_validation_independence.py
+      - .github/workflows/v2-future-validation-harness.yml
+      - .github/workflows/v2-future-validation-execution.yml
+  push:
+    branches:
+      - v2/issue-195-future-validation-harness
+    paths:
+      - research/v2/nas100_oanda_future_validation_request_contract.json
+      - scripts/check_v2_future_validation_access_v2.py
+      - scripts/oanda_v2_future_validation_data.py
+      - scripts/run_v2_future_validation_primary.py
+      - scripts/run_v2_future_validation_independent.py
+      - scripts/compare_v2_future_validation_paths.py
+      - scripts/seal_v2_future_validation_result.py
+      - scripts/test_v2_future_validation_harness.py
+      - scripts/test_v2_future_validation_independence.py
+      - .github/workflows/v2-future-validation-harness.yml
+      - .github/workflows/v2-future-validation-execution.yml
+
+permissions:
+  contents: read
+
+jobs:
+  offline-harness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile full future-validation harness
+        run: >-
+          python -m py_compile
+          scripts/check_v2_future_validation_access_v2.py
+          scripts/oanda_v2_future_validation_data.py
+          scripts/run_v2_future_validation_primary.py
+          scripts/run_v2_future_validation_independent.py
+          scripts/compare_v2_future_validation_paths.py
+          scripts/seal_v2_future_validation_result.py
+          scripts/test_v2_future_validation_harness.py
+          scripts/test_v2_future_validation_independence.py
+      - name: Enforce independent Path B
+        run: python scripts/test_v2_future_validation_independence.py
+      - name: Run synthetic dual-path and authorization tests
+        run: PYTHONPATH=scripts python scripts/test_v2_future_validation_harness.py
+      - name: Prove final acquisition remains fail closed without authorization
+        run: |
+          if PYTHONPATH=scripts python scripts/check_v2_future_validation_access_v2.py --gate acquisition; then
+            echo 'acquisition unexpectedly authorized' >&2
+            exit 1
+          fi
+          echo 'future_validation_acquisition=DENIED_AS_EXPECTED'
+      - name: Prove final evaluation remains fail closed without authorization
+        run: |
+          if PYTHONPATH=scripts python scripts/check_v2_future_validation_access_v2.py --gate evaluation; then
+            echo 'evaluation unexpectedly authorized' >&2
+            exit 1
+          fi
+          echo 'future_validation_evaluation=DENIED_AS_EXPECTED'
+      - name: Prove no reserved-window payload is committed
+        run: |
+          test ! -e research/v2/future-validation-data || exit 1
+          ! git ls-files | grep -E 'NAS100_USD\.(M1|15m|60m|240m)\.jsonl$'

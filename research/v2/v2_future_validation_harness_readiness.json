@@ -1,0 +1,53 @@
+{
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "future_validation_data_access_authorized": false,
+    "future_validation_evaluation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "components": {
+    "acquisition": "scripts/oanda_v2_future_validation_data.py",
+    "comparison": "scripts/compare_v2_future_validation_paths.py",
+    "guard": "scripts/check_v2_future_validation_access_v2.py",
+    "independent_path": "scripts/run_v2_future_validation_independent.py",
+    "primary_path": "scripts/run_v2_future_validation_primary.py",
+    "result_sealer": "scripts/seal_v2_future_validation_result.py"
+  },
+  "final_execution": {
+    "acquisition_window": {
+      "end_exclusive": "2027-03-01T00:00:00Z",
+      "start": "2026-09-01T00:00:00Z"
+    },
+    "bootstrap_state_at_start": "EMPTY",
+    "full_window_single_shot": true,
+    "not_before": "2027-03-01T00:00:00Z",
+    "owner_authorization_phrase": "AUTHORIZE_V2_FUTURE_VALIDATION",
+    "owner_dispatch_required": true,
+    "pre_start_market_data_allowed": false,
+    "scored_window": {
+      "end_exclusive": "2027-03-01T00:00:00Z",
+      "start": "2026-10-01T00:00:00Z"
+    },
+    "v1_holdout_reuse_allowed": false,
+    "workflow": ".github/workflows/v2-future-validation-execution.yml"
+  },
+  "harness_readiness_sha256": "8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79",
+  "measurement_policy_sha256": "6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "protocol_sha256": "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38",
+  "request_contract_sha256": "edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca",
+  "schema_version": 1,
+  "status": "V2_FUTURE_VALIDATION_HARNESS_READY",
+  "verification": {
+    "current_acquisition_denied": "PASS",
+    "current_evaluation_denied": "PASS",
+    "head_sha": "195c77abd0cd754792a8fc5cea9a66a54f72b70e",
+    "offline_harness_status": "PASS",
+    "path_b_independence": "PASS",
+    "reserved_payload_committed": false,
+    "result_sealing": "PASS",
+    "synthetic_dual_path_agreement": "PASS",
+    "workflow_run_id": 32038475077
+  }
+}

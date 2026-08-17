@@ -1,0 +1,118 @@
+name: V2 Future Validation Execution
+
+on:
+  workflow_dispatch:
+    inputs:
+      owner_authorization:
+        description: "Exact phrase required: AUTHORIZE_V2_FUTURE_VALIDATION"
+        required: true
+        type: string
+      expected_protocol_sha:
+        description: "Frozen causal validation protocol SHA"
+        required: true
+        default: "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38"
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  final-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Require explicit repository-owner dispatch
+        env:
+          OWNER_AUTHORIZATION: ${{ inputs.owner_authorization }}
+          EXPECTED_PROTOCOL_SHA_INPUT: ${{ inputs.expected_protocol_sha }}
+        run: |
+          test "${GITHUB_ACTOR}" = "KaraboMatsemela1"
+          test "${OWNER_AUTHORIZATION}" = "AUTHORIZE_V2_FUTURE_VALIDATION"
+          test "${EXPECTED_PROTOCOL_SHA_INPUT}" = "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38"
+      - name: Materialize bounded validation authorizations
+        run: |
+          mkdir -p /tmp/v2-auth
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          common={
+            'protocol_sha256':'193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38',
+            'measurement_policy_sha256':'6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6',
+            'request_contract_sha256':'edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca',
+            'authorized':True,
+            'paper_execution_authorized':False,
+            'live_execution_authorized':False,
+            'broker_mutation_authorized':False,
+          }
+          acq={**common,'authorization_id':'ARJO_V2_FUTURE_VALIDATION_DATA_ACCESS_V1','gate':'acquisition'}
+          eva={**common,'authorization_id':'ARJO_V2_FUTURE_VALIDATION_EVALUATION_V1','gate':'evaluation'}
+          Path('/tmp/v2-auth/acquisition.json').write_text(json.dumps(acq,sort_keys=True)+'\n')
+          Path('/tmp/v2-auth/evaluation.json').write_text(json.dumps(eva,sort_keys=True)+'\n')
+          PY
+      - name: Enforce final chronology and frozen bindings before provider access
+        run: >-
+          PYTHONPATH=scripts python scripts/check_v2_future_validation_access_v2.py
+          --gate acquisition --authorization /tmp/v2-auth/acquisition.json
+      - name: Acquire exact full OANDA future-validation window
+        env:
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+        run: >-
+          PYTHONPATH=scripts python scripts/oanda_v2_future_validation_data.py
+          --authorization /tmp/v2-auth/acquisition.json
+          --output-dir /tmp/v2-final/data
+      - name: Recheck evaluation authorization and full-window chronology
+        run: >-
+          PYTHONPATH=scripts python scripts/check_v2_future_validation_access_v2.py
+          --gate evaluation --authorization /tmp/v2-auth/evaluation.json
+      - name: Run primary V2 future-validation path
+        run: >-
+          PYTHONPATH=scripts python scripts/run_v2_future_validation_primary.py
+          --authorization /tmp/v2-auth/evaluation.json
+          --data-dir /tmp/v2-final/data
+          --output /tmp/v2-final/reports/PRIMARY_V2_PRODUCTION_PATH.json
+      - name: Run independent V2 future-validation path
+        run: >-
+          PYTHONPATH=scripts python scripts/run_v2_future_validation_independent.py
+          --authorization /tmp/v2-auth/evaluation.json
+          --data-dir /tmp/v2-final/data
+          --output /tmp/v2-final/reports/INDEPENDENT_V2_STANDARD_LIBRARY_PATH.json
+      - name: Compare frozen paths exactly
+        run: >-
+          PYTHONPATH=scripts python scripts/compare_v2_future_validation_paths.py
+          --primary /tmp/v2-final/reports/PRIMARY_V2_PRODUCTION_PATH.json
+          --independent /tmp/v2-final/reports/INDEPENDENT_V2_STANDARD_LIBRARY_PATH.json
+          --output /tmp/v2-final/reports/V2_FUTURE_VALIDATION_COMPARISON.json
+      - name: Seal final validation result
+        run: >-
+          PYTHONPATH=scripts python scripts/seal_v2_future_validation_result.py
+          --primary /tmp/v2-final/reports/PRIMARY_V2_PRODUCTION_PATH.json
+          --independent /tmp/v2-final/reports/INDEPENDENT_V2_STANDARD_LIBRARY_PATH.json
+          --comparison /tmp/v2-final/reports/V2_FUTURE_VALIDATION_COMPARISON.json
+          --output /tmp/v2-final/reports/V2_FUTURE_VALIDATION_RESULT.json
+      - name: Verify research-only authorization boundary
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/v2-final/reports/V2_FUTURE_VALIDATION_RESULT.json'
+          r=json.load(open(p))
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          assert r['no_refit_performed'] is True
+          assert r['bootstrap_performance_inspected'] is False
+          print('final_validation_research_boundary=PASS')
+          PY
+      - name: Upload immutable future-validation evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-v2-future-validation-final
+          path: /tmp/v2-final
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 9
