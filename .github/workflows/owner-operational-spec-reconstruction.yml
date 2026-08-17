@@ -1,0 +1,136 @@
+name: Owner Operational SPEC Reconstruction
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/owner-operational-spec-reconstruction.yml'
+      - 'scripts/reconstruct_owner_operational_spec_primary.py'
+      - 'scripts/reconstruct_owner_operational_spec_independent.py'
+      - 'scripts/compare_owner_operational_spec_reconstructions.py'
+      - 'scripts/test_owner_operational_spec_reconstruction_independence.py'
+      - 'docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json'
+      - 'docs/spec/SPEC_READY.json'
+  push:
+    branches:
+      - spec/issue-183-owner-operational-reconstruction
+    paths:
+      - '.github/workflows/owner-operational-spec-reconstruction.yml'
+      - 'scripts/reconstruct_owner_operational_spec_primary.py'
+      - 'scripts/reconstruct_owner_operational_spec_independent.py'
+      - 'scripts/compare_owner_operational_spec_reconstructions.py'
+      - 'scripts/test_owner_operational_spec_reconstruction_independence.py'
+      - 'docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json'
+      - 'docs/spec/SPEC_READY.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independence-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile reconstruction paths
+        run: >-
+          python -m py_compile
+          scripts/reconstruct_owner_operational_spec_primary.py
+          scripts/reconstruct_owner_operational_spec_independent.py
+          scripts/compare_owner_operational_spec_reconstructions.py
+          scripts/test_owner_operational_spec_reconstruction_independence.py
+      - name: Enforce Path B import boundary and frozen profile
+        run: python scripts/test_owner_operational_spec_reconstruction_independence.py
+
+  real-two-path-reconstruction:
+    if: github.event_name == 'push'
+    needs: independence-boundary
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download sealed annual calibration artifacts
+        run: |
+          for pair in "2024:9282976276" "2025:9283007527"; do
+            YEAR="${pair%%:*}"
+            ARTIFACT_ID="${pair##*:}"
+            mkdir -p "/tmp/arjo-${YEAR}"
+            curl --fail --location --retry 3 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+              -o "/tmp/arjo-${YEAR}.zip"
+            unzip -q "/tmp/arjo-${YEAR}.zip" -d "/tmp/arjo-${YEAR}"
+          done
+      - name: Reconstruct via primary production path
+        run: >-
+          python scripts/reconstruct_owner_operational_spec_primary.py
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --replay-spec research/calibration/aoo_nq_replay_spec.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/spec-reconstruction-primary.json
+      - name: Reconstruct via independent standard-library path
+        run: >-
+          python scripts/reconstruct_owner_operational_spec_independent.py
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --replay-spec research/calibration/aoo_nq_replay_spec.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/spec-reconstruction-independent.json
+      - name: Compare both paths to frozen target
+        run: >-
+          python scripts/compare_owner_operational_spec_reconstructions.py
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --primary /tmp/spec-reconstruction-primary.json
+          --independent /tmp/spec-reconstruction-independent.json
+          --output /tmp/SPEC_READY.json
+      - name: Verify audit claim boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('/tmp/SPEC_READY.json').read_text())
+          assert a['outcome'] == 'PASS'
+          assert a['two_engineer_test'] == 'PASS'
+          assert a['independent_reconstruction'] == 'PASS'
+          assert a['semantic_closure_claimed'] is False
+          assert a['fully_first_party_reconstructed'] is False
+          assert a['owner_operational_conventions_disclosed'] is True
+          assert a['performance_data_used_for_semantic_selection'] is False
+          assert a['holdout_accessed'] is False
+          assert len(a['critical_fields']) == 18
+          assert all(v['status'] == 'PASS' for v in a['critical_fields'].values())
+          print('owner_operational_spec_reconstruction=PASS')
+          print('path_a=' + a['path_a_reconstruction_sha256'])
+          print('path_b=' + a['path_b_reconstruction_sha256'])
+          print('audit=' + a['audit_sha256'])
+          PY
+      - name: Upload reconstruction evidence only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-owner-operational-spec-reconstruction
+          path: |
+            /tmp/spec-reconstruction-primary.json
+            /tmp/spec-reconstruction-independent.json
+            /tmp/SPEC_READY.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local market payloads
+        if: always()
+        run: rm -rf /tmp/arjo-2024 /tmp/arjo-2025 /tmp/arjo-2024.zip /tmp/arjo-2025.zip
