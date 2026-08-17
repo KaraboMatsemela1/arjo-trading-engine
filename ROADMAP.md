@@ -1,85 +1,183 @@
 # Roadmap
 
-## Phase 0 — Governance
+The engineering roadmap is complete through the V2 future-validation harness. The only unfinished project gate is the untouched final V2 validation in Issue #201, which is intentionally blocked by chronology until **2027-03-01T00:00:00Z** and explicit owner dispatch.
 
-**Exit gate:** `GOVERNANCE_BOOTSTRAP_COMPLETE`
+## Completed foundation
 
-Deliver canonical governance documents, repository structure, issue metadata contract, machine-readable project state, deterministic dependency/gate checks, and baseline GitHub Actions.
+### Phase 0 — Governance
 
-## Phase 1 — Source discovery
+**Gate:** `GOVERNANCE_BOOTSTRAP_COMPLETE` — COMPLETE
 
-**Exit gate:** `SOURCE_UNIVERSE_DISCOVERED`
+Canonical governance, issue metadata, dependency validation, project-state generation and CI controls.
 
-Discover the complete relevant public first-party Arjo source universe. Secondary sources may help locate first-party sources but receive zero closure credit.
+### Phases 1–5 — Evidence and deterministic specification foundation
 
-## Phase 2 — Corpus acquisition
+**Gates:**
+- `SOURCE_UNIVERSE_DISCOVERED` — COMPLETE
+- `ACQUISITION_TOOLING_READY` — COMPLETE
+- `CORPUS_ACQUIRED` — COMPLETE
+- `CONCEPT_INVENTORY_READY` — COMPLETE
+- `EVIDENCE_REGISTRY_READY` — COMPLETE
+- `PREDICATE_MATRIX_READY` — COMPLETE
 
-**Exit gate:** `CORPUS_ACQUIRED`
+First-party evidence remains the semantic authority. Owner-operational conventions are explicitly versioned where exact first-party machine semantics could not be recovered.
 
-Acquire metadata, descriptions, chapters, captions/transcripts where publicly retrievable, timestamp the corpus, create frame locators where chart meaning is required, and hash/provenance-bind captured artifacts.
+### Phase 6A — Governed V1 calibration
 
-## Phase 3 — Concept inventory
+**Gates:**
+- `CALIBRATION_PROTOCOL_READY` — COMPLETE
+- `SEMANTIC_SEED_READY` — COMPLETE
+- `CALIBRATION_AUTHORIZED` — COMPLETE
+- `CALIBRATION_PREREGISTRATION_COMPLETE` — COMPLETE
+- `CALIBRATION_DATA_PIPELINE_READY` — COMPLETE
+- `CALIBRATION_REPLAY_HARNESS_READY` — COMPLETE
+- `CALIBRATION_DATA_READY` — COMPLETE
+- `CALIBRATION_OCCURRENCES_READY` — COMPLETE
+- `CALIBRATED_SPEC_FROZEN` — COMPLETE
 
-**Exit gate:** `CONCEPT_INVENTORY_READY`
+The owner-directed OANDA practice `NAS100_USD` source was used for 2024–2025 calibration. It is an OANDA Nasdaq-100 CFD proxy/source, not asserted to be literal CME NQ futures.
 
-Derive Arjo's actual concept taxonomy from the acquired first-party corpus without importing external ICT assumptions.
+Frozen V1 execution selected `SECOND_STING_TOUCH` with stop buffer `0` structurally, not by performance ranking.
 
-## Phase 4 — Field-level evidence
+### V1 independent reconstruction
 
-**Exit gate:** `EVIDENCE_REGISTRY_READY`
+**Gate:** `SPEC_READY` — COMPLETE
 
-Extract atomic evidence records with explicit proof scope and confidence.
+The calibrated owner-operational V1 profile was independently reconstructed by production and isolated standard-library paths.
 
-## Phase 5 — Predicate synthesis
+### V1 protected validation
 
-**Exit gate:** `PREDICATE_MATRIX_READY`
+**Gates:**
+- `PROTECTED_VALIDATION_PROTOCOL_FROZEN` — COMPLETE
+- `PROTECTED_VALIDATION_COMPLETE` — COMPLETE
 
-Map every executable field to first-party evidence, track `SATISFIED`, `PARTIAL`, `MISSING`, `CONTRADICTORY`, and `NOT_APPLICABLE`, calculate minimal closure sets, and generate bounded recovery issues.
+The one-time protected 2026H1 read exposed `VALIDATION_INTEGRITY_FAILURE`: V1 could semantically qualify a second sting while the frozen touch price was not present in that bar. No target/stop outcome was assigned for the defective occurrence and V1 was not refit.
 
-## Phase 5A — Calibration protocol and semantic seed closure
+The 2026H1 interval is consumed and may not be reused for V2 tuning, initialization or validation.
 
-**Exit gates:** `CALIBRATION_PROTOCOL_READY` → `SEMANTIC_SEED_READY` → `CALIBRATION_AUTHORIZED`
+## V2 remediation lifecycle — complete
 
-When direct first-party material prescribes plan-specific study/calibration for otherwise ambiguous execution conventions, lock one narrow semantic seed before outcomes are read. Freeze the calibratable parameters/variants or bounds, calibration and protected holdout windows, measures, acceptance rule, and immutable content hash. This stage may not discover or select semantic candidates from outcomes.
+### V2 execution-observability remediation
 
-If no deterministic replayable seed can be formed without inventing semantics, remain blocked on first-party evidence.
+**Gate:** `V2_REMEDIATION_DESIGN_READY` — COMPLETE
 
-## Phase 5B — Governed calibration
+V2 separates semantic qualification from executable fill observability:
 
-**Exit gate:** `CALIBRATED_SPEC_FROZEN`
+```text
+second_sting_bar.low <= touch_price <= second_sting_bar.high
+```
 
-Acquire only the frozen calibration window, build only the minimum provenance-bound data/replay infrastructure needed by the locked seed, replay only preregistered conventions, and freeze the result under the preregistered acceptance rule. The protected holdout remains unread.
+False produces `NO_EXECUTABLE_ENTRY`, never a synthetic or fallback fill.
 
-Calibration is not a general backtest or optimizer. It cannot add concepts, candidates, variants, windows, measures, or thresholds after outcome access begins, and it cannot convert genuinely missing first-party semantics into a rule because of better performance.
+### V2 independent SPEC reconstruction
 
-## SPEC_READY audit
+**Gate:** `V2_SPEC_FROZEN` — COMPLETE
 
-**Exit gate:** `SPEC_READY`
+Frozen profile:
 
-After any required governed calibration, require complete provenance, deterministic required fields/configuration boundaries, contradiction handling, two-engineer reconstruction, and an independent audit. A completed calibration packet does not automatically imply `SPEC_READY`.
+```text
+ARJO_DERIVED_OWNER_OPERATIONAL_V2
+87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6
+```
 
-Only a passing independent audit authorizes the frozen general strategy specification.
+Production and independent standard-library paths agree on the sealed 2024–2025 developmental reconstruction.
 
-## Phase 6 — Post-SPEC scientific-validation preregistration
+### V2 future-validation protocol
 
-**Exit gate:** `CANDIDATE_PREREGISTERED`
+**Gate:** `V2_FUTURE_VALIDATION_PROTOCOL_READY` — COMPLETE
 
-Commit the immutable post-SPEC candidate configuration and DEV/OOS/CONFIRM boundaries before performance outcomes are observed. This is separate from the earlier calibration preregistration.
+Initial future-validation boundaries, result taxonomy, sample threshold, no-refit policy and explicit authorization gates were frozen before any future-window data access.
 
-## Phase 7 — General implementation
+### Causal cold-start correction
 
-**Entry gate:** `SPEC_READY`
+**Gate:** `V2_CAUSAL_VALIDATION_PROTOCOL_READY` — COMPLETE
 
-Implement normalization, detector, signal ledger, backtester, risk model, and execution simulator with provenance references to the frozen specification. Calibration-only replay code may be promoted/reused only after it conforms to the frozen `SPEC_READY` specification.
+The strategy carries FVG/pivot state, so a scored September 1 start would require forbidden pre-window carry-in. The superseding causal protocol therefore freezes:
 
-## Phases 8–11 — Scientific validation
+```text
+Acquisition:       [2026-09-01, 2027-03-01)
+State at Sep 1:    EMPTY
+Bootstrap:         [2026-09-01, 2026-10-01) — unscored
+Scored validation:[2026-10-01, 2027-03-01)
+```
 
-DEV activity → DEV performance → one-time OOS → one-time CONFIRM. No post-outcome threshold changes or protected-data tuning.
+No pre-start market data, state snapshot or V1 2026H1 state/data may seed V2.
 
-## Phases 12–14 — Paper infrastructure and qualification
+Frozen protocol SHA:
 
-Practice-only broker boundary, risk controls, kill switch, reconciliation, idempotency, persistent state, observability, audit logs, alerts, and runbooks. Paper execution remains disabled until explicit owner authorization.
+```text
+193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38
+```
 
-## Phase 15+ — Future controlled progression
+### M1 execution sequencing
 
-Learning readiness, shadow trading, and controlled live canary each require new preregistered gates. Live trading is never autonomously authorized.
+**Gate:** `V2_EXECUTION_MEASUREMENT_READY` — COMPLETE
+
+The 15-minute V2 observability rule is unchanged. A separate M1 measurement policy establishes causal event timing without inferring unknown OHLC order:
+
+```text
+V2_M1_TOUCH_SEQUENCING_V1
+6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6
+```
+
+Missing M1 touch after 15m observability fails integrity. Stop/target in the entry minute or both in a later minute is `AMBIGUOUS_INTRABAR_ORDER`.
+
+### Complete future-validation harness
+
+**Gate:** `V2_FUTURE_VALIDATION_HARNESS_READY` — COMPLETE
+
+The entire final path is implemented and tested:
+- SHA/date/authorization guards;
+- single-shot, read-only OANDA full-window acquisition;
+- deterministic M1 → 15m/60m/240m normalization;
+- empty-state bootstrap;
+- production semantic/evaluation path;
+- isolated independent standard-library path;
+- V2 observability and M1 sequencing;
+- exact dual-path comparison;
+- preregistered metric and classification computation;
+- SHA-bound final result sealing.
+
+Frozen request-contract SHA:
+
+```text
+edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca
+```
+
+Harness readiness SHA:
+
+```text
+8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79
+```
+
+## Final remaining phase — untouched V2 validation
+
+**Issue:** #201
+
+**Gate:** `V2_FUTURE_VALIDATION_COMPLETE` — PENDING / `EXTERNAL_WAIT`
+
+**Earliest legal execution:** `2027-03-01T00:00:00Z`
+
+The final workflow is already implemented at:
+
+```text
+.github/workflows/v2-future-validation-execution.yml
+```
+
+It intentionally implements no rolling/partial acquisition. After the full window closes, repository owner `KaraboMatsemela1` must explicitly dispatch it with:
+
+```text
+AUTHORIZE_V2_FUTURE_VALIDATION
+```
+
+The workflow then acquires the exact full OANDA window once, runs both independent evaluation paths, compares them, computes the frozen result classification, and seals the final evidence.
+
+The inferential threshold remains **30 resolved executable occurrences**. If the full untouched window produces fewer, the result is `INSUFFICIENT_SAMPLE`; the project does not widen the window or adjust rules afterward.
+
+## Post-validation boundaries
+
+`V2_FUTURE_VALIDATION_COMPLETE` is a research-validation result gate, not automatic trading permission.
+
+Paper execution remains disabled unless the owner separately authorizes a new paper-qualification lifecycle. Live trading is never autonomously authorized. Broker mutation remains disabled.
+
+No further strategy engineering, refit or validation-window modification is planned before #201 executes unless a genuine implementation-integrity defect is discovered.
