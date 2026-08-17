@@ -1,0 +1,15 @@
+{
+  "excerpts": [
+    "4h, AoO → 15m, 2 Sting Entry",
+    "without getting the 2 Stings, too many times price just takes off without giving me the entry."
+  ],
+  "first_party_contacted": true,
+  "notes": "Issue #167 bounded direct first-party web capture; explicitly links 4h AoO to a 15m 2-Sting Entry family and confirms that absence of two stings means no entry under that plan.",
+  "retrieved_at": "2026-08-17T10:10:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_BROKEN_PLAN_20260817",
+  "title": "How to Fix a Broken Trading Plan Immediately",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/how-to-fix-a-broken-trading-plan-immediately/"
+}
