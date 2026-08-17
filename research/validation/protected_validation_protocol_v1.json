@@ -1,0 +1,127 @@
+{
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "change_policy": "Any rule/profile change after holdout access requires a new versioned research/calibration cycle and a future untouched validation window; this 2026 holdout cannot tune that replacement profile.",
+  "dual_path_validation": {
+    "critical_agreement_fields": [
+      "complete_session_count",
+      "detected_fvg_formation_count",
+      "selected_fvg_session_count",
+      "qualification_status_counts",
+      "qualified_occurrence_ids",
+      "occurrence_set_sha256",
+      "execution_outcomes",
+      "execution_outcomes_sha256",
+      "holdout_boundary_ok"
+    ],
+    "independent_path": "INDEPENDENT_STANDARD_LIBRARY_PATH",
+    "primary_path": "PRIMARY_PRODUCTION_PATH",
+    "required": true
+  },
+  "frozen_execution": {
+    "alternate_variants_allowed": false,
+    "performance_status_used_for_selection": false,
+    "provider_price_quantum": "0.1",
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "holdout_access": {
+    "accessed_before_protocol_freeze": false,
+    "authorized_after_gate": "PROTECTED_VALIDATION_PROTOCOL_FROZEN"
+  },
+  "metrics": {
+    "cumulative_realized_r_when_resolved": true,
+    "mean_realized_r_when_resolved": true,
+    "occurrence_rate_per_complete_session": true,
+    "outcome_counts": true,
+    "qualified_occurrence_count": true,
+    "realized_r": {
+      "AMBIGUOUS_INTRABAR_ORDER": null,
+      "STOP_FIRST": -1.0,
+      "TARGET_FIRST": "(target_price-entry_price)/(entry_price-stop_price)",
+      "UNRESOLVED_WINDOW_END": null
+    },
+    "resolved_occurrence_count": "TARGET_FIRST + STOP_FIRST",
+    "target_first_proportion_among_resolved": true,
+    "wilson_interval": {
+      "confidence": 0.95,
+      "defined_when_resolved_count_positive": true,
+      "z": 1.959963984540054
+    }
+  },
+  "no_refit": {
+    "execution_changes_allowed": false,
+    "fva_rule_changes_allowed": false,
+    "fvg_rule_changes_allowed": false,
+    "holdout_reuse_for_new_profile_tuning_allowed": false,
+    "metric_changes_allowed": false,
+    "normalization_changes_allowed": false,
+    "provider_identity_changes_allowed": false,
+    "sample_threshold_changes_allowed": false,
+    "stop_rule_changes_allowed": false,
+    "target_rule_changes_allowed": false,
+    "two_cr_rule_changes_allowed": false,
+    "two_sting_rule_changes_allowed": false,
+    "validation_window_changes_allowed": false,
+    "woo_changes_allowed": false
+  },
+  "outcome_classes": [
+    "TARGET_FIRST",
+    "STOP_FIRST",
+    "AMBIGUOUS_INTRABAR_ORDER",
+    "UNRESOLVED_WINDOW_END"
+  ],
+  "owner_conventions": {
+    "context_sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e",
+    "fvg_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+  },
+  "profile": {
+    "fully_first_party_reconstructed": false,
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+    "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585",
+    "semantic_closure_claimed": false,
+    "spec_ready_audit_sha256": "d022853a24dd0c46293adec61942ced2c5d811d9e63dbc75414aab34c5f25930"
+  },
+  "protocol_id": "ARJO_PROTECTED_VALIDATION_V1",
+  "protocol_sha256": "258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347",
+  "provider_identity": {
+    "complete_bucket_only": true,
+    "derived_granularities_minutes": [
+      15,
+      60,
+      240
+    ],
+    "environment": "practice",
+    "fabricate_missing_minutes": false,
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+    "price_component": "MID",
+    "provider": "OANDA_V20",
+    "provider_price_quantum": "0.1",
+    "provider_price_quantum_classification": "PROVIDER_PRICE_PRECISION_POLICY_NOT_EXCHANGE_TICK",
+    "read_only": true,
+    "source_granularity": "M1",
+    "venue": "OANDA_FXTRADE"
+  },
+  "sample_policy": {
+    "classifications": {
+      "IMPLEMENTATION_DIVERGENCE": "primary and independent critical outputs disagree",
+      "INSUFFICIENT_SAMPLE": "qualified_occurrence_count > 0 AND resolved_occurrence_count < 30",
+      "NO_QUALIFYING_OCCURRENCES": "qualified_occurrence_count == 0",
+      "SUFFICIENT_SAMPLE_NONPOSITIVE": "resolved_occurrence_count >= 30 AND mean_realized_r <= 0",
+      "SUFFICIENT_SAMPLE_POSITIVE": "resolved_occurrence_count >= 30 AND mean_realized_r > 0",
+      "VALIDATION_INTEGRITY_FAILURE": "provider/profile/window/no-refit/invariant failure"
+    },
+    "inferential_resolved_occurrence_threshold": 30
+  },
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_HOLDOUT_ACCESS",
+  "window": {
+    "end_exclusive": "2026-07-01T00:00:00Z",
+    "request_must_not_cross_end": true,
+    "start_inclusive": "2026-01-01T00:00:00Z"
+  }
+}

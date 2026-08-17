@@ -1,0 +1,82 @@
+name: Protected Validation Protocol
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/protected-validation-protocol.yml'
+      - 'research/validation/protected_validation_protocol_v1.json'
+      - 'scripts/check_protected_validation_protocol.py'
+      - 'scripts/test_protected_validation_protocol.py'
+  push:
+    branches:
+      - validation/issue-185-protocol
+    paths:
+      - '.github/workflows/protected-validation-protocol.yml'
+      - 'research/validation/protected_validation_protocol_v1.json'
+      - 'scripts/check_protected_validation_protocol.py'
+      - 'scripts/test_protected_validation_protocol.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  freeze-protected-validation-protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile protocol guard
+        run: python -m py_compile scripts/check_protected_validation_protocol.py scripts/test_protected_validation_protocol.py
+      - name: Run protocol sabotage tests
+        shell: bash
+        run: |
+          set +e
+          python scripts/test_protected_validation_protocol.py > /tmp/protocol-sabotage.log 2>&1
+          STATUS=$?
+          cat /tmp/protocol-sabotage.log
+          exit $STATUS
+      - name: Upload protocol test diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-validation-protocol-diagnostics
+          path: /tmp/protocol-sabotage.log
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
+      - name: Validate exact frozen protocol
+        run: >-
+          python scripts/check_protected_validation_protocol.py
+          --output /tmp/protected-validation-protocol-readiness.json
+      - name: Verify canonical project state has SPEC_READY before holdout access
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python scripts/project_state.py --output /tmp/project_state.json --status-output /tmp/STATUS.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          state = json.loads(Path('/tmp/project_state.json').read_text())
+          readiness = json.loads(Path('/tmp/protected-validation-protocol-readiness.json').read_text())
+          assert state['spec_ready'] is True
+          assert readiness['status'] == 'PROTECTED_VALIDATION_PROTOCOL_FROZEN'
+          assert readiness['protocol_sha256'] == '258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347'
+          assert readiness['holdout_accessed'] is False
+          assert readiness['paper_execution_authorized'] is False
+          assert readiness['live_execution_authorized'] is False
+          print('protected_validation_protocol_freeze=PASS')
+          print('spec_ready=true holdout_accessed=false')
+          PY
+      - name: Upload non-market protocol readiness only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-validation-protocol-readiness
+          path: /tmp/protected-validation-protocol-readiness.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
