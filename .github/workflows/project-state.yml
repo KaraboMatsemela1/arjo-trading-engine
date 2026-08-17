@@ -33,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >-
-          python scripts/project_state.py
+          python scripts/project_state_final.py
           --output generated/project_state.json
           --status-output generated/STATUS.md
 
@@ -85,7 +85,7 @@ jobs:
               --base main \
               --head "$BRANCH" \
               --title "Governance: persist generated Project State" \
-              --body "Mechanically generated project_state.json and STATUS.md from canonical GitHub issue metadata. This PR is reviewed-only: no workflow self-merge, no semantic research changes, and no strategy execution changes. Merge only after normal CI, dependency, claim, provenance, and gate checks pass."
+              --body "Mechanically generated project_state.json and STATUS.md from canonical GitHub issue metadata using the full V1/V2 critical path. This PR is reviewed-only: no workflow self-merge, no semantic research changes, and no strategy execution changes. Merge only after normal CI, dependency, claim, provenance, and gate checks pass."
           fi
 
           scripts/dispatch_autonomous_validation.sh "$BRANCH"
