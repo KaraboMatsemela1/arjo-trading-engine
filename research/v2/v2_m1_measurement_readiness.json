@@ -1,0 +1,31 @@
+{
+  "boundaries": {
+    "broker_mutation_authorized": false,
+    "changes_15m_observability_invariant": false,
+    "changes_semantic_qualification": false,
+    "future_validation_data_accessed": false,
+    "holdout_2026h1_accessed": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false,
+    "performance_comparison_performed": false
+  },
+  "developmental_regression": {
+    "artifact_digest": "sha256:25d68676fdbaf335e5b63c38b069c1e6df1a1b0ec8ca540fa19674069e22f25f",
+    "artifact_id": 9291222637,
+    "entry_ts": "2024-04-26T14:30:00Z",
+    "event_ts": "2024-04-30T15:13:00Z",
+    "execution_outcome": "STOP_FIRST",
+    "head_sha": "0d64ee7a82c3500225efcb3fdb02edd226308fc3",
+    "occurrence_id": "OWNER-CAL-2024-04-26",
+    "report_sha256": "2f6bd6ce9d87fa33b0efc322cc0148e0e278bc604ec725ac169ae04b0938fe5d",
+    "source_occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+    "workflow_run_id": 32037790110
+  },
+  "policy_id": "V2_M1_TOUCH_SEQUENCING_V1",
+  "policy_sha256": "6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "protocol_sha256": "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38",
+  "readiness_sha256": "1b55843921ceb090c85c6bee2571a38de2a6486e37d62782322cbaccea0984b0",
+  "schema_version": 1,
+  "status": "V2_EXECUTION_MEASUREMENT_READY"
+}
