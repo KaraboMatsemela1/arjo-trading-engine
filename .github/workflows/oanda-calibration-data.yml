@@ -7,6 +7,7 @@ on:
       - scripts/oanda_calibration_data.py
       - scripts/test_oanda_calibration_data.py
       - research/calibration/nas100_oanda_request_contract.json
+      - research/calibration/oanda_smoke_validation.json
   push:
     branches:
       - calibration/issue-151-oanda-acquisition
@@ -15,6 +16,7 @@ on:
       - scripts/oanda_calibration_data.py
       - scripts/test_oanda_calibration_data.py
       - research/calibration/nas100_oanda_request_contract.json
+      - research/calibration/oanda_smoke_validation.json
 
 permissions:
   contents: read
@@ -62,8 +64,7 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('/tmp/arjo-oanda-smoke/NAS100_USD.manifest.json')
-          m = json.loads(p.read_text())
+          m = json.loads(Path('/tmp/arjo-oanda-smoke/NAS100_USD.manifest.json').read_text())
           assert m['provider'] == 'OANDA_V20'
           assert m['venue'] == 'OANDA_FXTRADE'
           assert m['instrument'] == 'NAS100_USD'
@@ -131,6 +132,7 @@ jobs:
           year = os.environ['YEAR']
           m = json.loads((Path('/tmp') / f'arjo-oanda-{year}' / 'NAS100_USD.manifest.json').read_text())
           assert m['provider'] == 'OANDA_V20'
+          assert m['venue'] == 'OANDA_FXTRADE'
           assert m['instrument'] == 'NAS100_USD'
           assert m['holdout_requested'] is False
           assert m['holdout_accessed'] is False
