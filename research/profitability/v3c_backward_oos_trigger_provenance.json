@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "V3_ARGUMENTS_BACKWARD_OOS_TRIGGER_PROVENANCE_BOUND",
+  "reference_workflow_run_id": 32051168447,
+  "reference_workflow_head_sha": "888bb98eb868918eee058d4ec248194061f01bac",
+  "artifact_id": 9294860798,
+  "artifact_name": "v3c-backward-oos-trigger-set",
+  "artifact_zip_sha256": "7b8c950eb7dbd9e0ece81226c928bacd38fbf3851d6e8705d150a5e93cb34393",
+  "artifact_size_bytes": 126185,
+  "trigger_set_sha256": "e633ef474c35946ca40e3314cfd5511b2193b4fae387da2e2d75131c5ed7020b",
+  "trigger_report_sha256": "30e722758ab7a3be9a46cfd83d3801d07c5bf31efd6d17998630a010b84e030a",
+  "trigger_count": 2327,
+  "distinct_activation_knowledge_times": 1888,
+  "structure_manifest_sha256": "bacad0d2357655c2fe6faf8b3f3488df2baafa5172212a5b1d307bf3ae1075ed",
+  "structure_retrieval_sha256": "f3365cb49cb119a41f7831d2550f7c871d85771b05aafe19ef257344b8eb30ff",
+  "structure_transport_note": "GitHub historical artifact transport returned transient 503s; canonical trigger evidence was produced from deterministic OANDA structural reacquisition under the already-frozen M15 request contract. The reacquired structure manifest/retrieval hashes exactly matched the earlier Stage-1 evidence.",
+  "m1_data_requested": false,
+  "post_trigger_outcomes_accessed": false,
+  "performance_metrics_accessed": false,
+  "development_2024_2025_outcomes_accessed": false,
+  "v2_2010_2023_trade_outcomes_accessed": false
+}
