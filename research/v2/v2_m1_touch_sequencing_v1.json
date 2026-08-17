@@ -33,7 +33,7 @@
     "touch_interpolation_allowed": false
   },
   "policy_id": "V2_M1_TOUCH_SEQUENCING_V1",
-  "policy_sha256": "9eca51eed0bd19b9ac824545146063647b265da4796ad0796e76a5d80498176c",
+  "policy_sha256": "6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6",
   "profile": {
     "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
     "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6"
