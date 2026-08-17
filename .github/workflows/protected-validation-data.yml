@@ -1,0 +1,143 @@
+name: Protected Validation Data
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/protected-validation-data.yml'
+      - 'research/validation/nas100_oanda_holdout_request_contract.json'
+      - 'research/validation/holdout_access_authorization.json'
+      - 'scripts/oanda_protected_validation_data.py'
+      - 'scripts/test_oanda_protected_validation_data.py'
+  push:
+    branches:
+      - validation/issue-187-holdout
+    paths:
+      - '.github/workflows/protected-validation-data.yml'
+      - 'research/validation/nas100_oanda_holdout_request_contract.json'
+      - 'research/validation/holdout_access_authorization.json'
+      - 'scripts/oanda_protected_validation_data.py'
+      - 'scripts/test_oanda_protected_validation_data.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  offline-protected-data-guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile protected acquisition code
+        run: python -m py_compile scripts/oanda_protected_validation_data.py scripts/test_oanda_protected_validation_data.py
+      - name: Revalidate frozen protected protocol
+        run: python scripts/check_protected_validation_protocol.py
+      - name: Run protected acquisition guard tests
+        run: python scripts/test_oanda_protected_validation_data.py
+
+  acquire-protected-holdout:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[protected-holdout-read]')
+    needs: offline-protected-data-guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Require explicit holdout authorization marker
+        run: |
+          test -f research/validation/holdout_access_authorization.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a = json.loads(Path('research/validation/holdout_access_authorization.json').read_text())
+          assert a['authorized'] is True
+          assert a['entry_gate'] == 'PROTECTED_VALIDATION_PROTOCOL_FROZEN'
+          assert a['protocol_sha256'] == '258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347'
+          assert a['start_inclusive'] == '2026-01-01T00:00:00Z'
+          assert a['end_exclusive'] == '2026-07-01T00:00:00Z'
+          assert a['paper_execution_authorized'] is False
+          assert a['live_execution_authorized'] is False
+          assert a['broker_mutation_authorized'] is False
+          assert a['created_before_first_read'] is True
+          PY
+      - name: Revalidate gate immediately before first protected request
+        run: |
+          python scripts/check_protected_validation_protocol.py --output /tmp/protocol-ready.json
+          python scripts/project_state.py --output /tmp/project_state.json --status-output /tmp/STATUS.md
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('/tmp/protocol-ready.json').read_text())
+          s = json.loads(Path('/tmp/project_state.json').read_text())
+          assert p['status'] == 'PROTECTED_VALIDATION_PROTOCOL_FROZEN'
+          assert p['holdout_accessed'] is False
+          assert s['spec_ready'] is True
+          PY
+      - name: Require read-only OANDA credentials
+        run: |
+          test -n "$OANDA_ACCOUNT_ID"
+          test -n "$OANDA_API_TOKEN"
+      - name: Retrieve exact protected validation interval
+        run: >-
+          python scripts/oanda_protected_validation_data.py
+          --contract research/validation/nas100_oanda_holdout_request_contract.json
+          --protocol research/validation/protected_validation_protocol_v1.json
+          --output-dir /tmp/arjo-holdout-2026
+          --start 2026-01-01T00:00:00Z
+          --end 2026-07-01T00:00:00Z
+      - name: Validate protected holdout manifest
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/arjo-holdout-2026/NAS100_USD.manifest.json').read_text())
+          assert m['validation_protocol_sha256'] == '258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347'
+          assert m['provider'] == 'OANDA_V20'
+          assert m['venue'] == 'OANDA_FXTRADE'
+          assert m['environment'] == 'practice'
+          assert m['instrument'] == 'NAS100_USD'
+          assert m['instrument_identity'] == 'OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED'
+          assert m['price_component'] == 'MID'
+          assert m['provider_price_quantum'] == '0.1'
+          assert m['provider_price_quantum_classification'] == 'PROVIDER_PRICE_PRECISION_POLICY_NOT_EXCHANGE_TICK'
+          assert m['requested_start'] == '2026-01-01T00:00:00Z'
+          assert m['requested_end_exclusive'] == '2026-07-01T00:00:00Z'
+          assert m['protected_validation_accessed'] is True
+          assert m['holdout_accessed'] is True
+          assert m['calibration_window_accessed'] is False
+          assert m['request_inside_protected_window'] is True
+          assert m['mutation_endpoints_used'] is False
+          assert m['paper_trading_authorized'] is False
+          assert m['live_trading_authorized'] is False
+          assert m['m1_rows'] > 0
+          assert m['m1_first'] >= '2026-01-01T00:00:00Z'
+          assert m['m1_last'] < '2026-07-01T00:00:00Z'
+          print('protected_holdout_acquisition=PASS')
+          print('m1_rows=' + str(m['m1_rows']))
+          print('retrieval_sha256=' + m['retrieval_sha256'])
+          print('m1_sha256=' + m['m1_sha256'])
+          for k in ('15','60','240'):
+              print(k + 'm_rows=' + str(m['derived'][k]['rows']))
+              print(k + 'm_sha256=' + m['derived'][k]['sha256'])
+          PY
+      - name: Upload protected validation provider evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-oanda-nas100-protected-validation-2026H1
+          path: /tmp/arjo-holdout-2026
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local protected payloads
+        if: always()
+        run: rm -rf /tmp/arjo-holdout-2026
