@@ -1,17 +1,18 @@
 {
   "base_evidence_record_count": 81,
-  "cited_source_count": 25,
-  "concept_count": 36,
-  "concepts_with_direct_text_evidence": 29,
-  "concepts_with_explicit_construction_gap": 36,
-  "covered_concept_count": 36,
-  "eligible_direct_cited_source_count": 25,
-  "evidence_record_count": 88,
-  "evidence_shard_count": 4,
+  "cited_source_count": 26,
+  "concept_count": 37,
+  "concepts_with_direct_text_evidence": 30,
+  "concepts_with_explicit_construction_gap": 37,
+  "covered_concept_count": 37,
+  "eligible_direct_cited_source_count": 26,
+  "evidence_record_count": 118,
+  "evidence_shard_count": 6,
   "messages_recovered": 25,
   "missing_concepts": [],
-  "recovery_evidence_record_count": 7,
+  "recovery_evidence_record_count": 37,
   "retrieval_failures": [],
   "schema_version": 1,
-  "semantic_synthesis_performed": false
+  "semantic_synthesis_performed": false,
+  "website_payloads_recovered": 10
 }
