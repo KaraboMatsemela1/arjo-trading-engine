@@ -12,27 +12,41 @@ on:
 
 permissions:
   contents: read
-  actions: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
 
 jobs:
   seal:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify no M1/provider/outcome path exists in this stage
+      - name: Verify trigger scanner has no M1/outcome path
         run: python scripts/test_v3c_backward_oos_trigger_seal.py
-      - name: Download sealed 2010-2023 structure artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: profitability-backward-oos-stage1
-          path: /tmp/v3c-oos-structure
-          github-token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          run-id: 32047616340
+      - name: Reacquire exact frozen 2010-2023 M15 structure
+        run: >-
+          python scripts/oanda_backward_oos_structure.py
+          --contract research/profitability/nas100_oanda_backward_oos_request_contract.json
+          --output-dir /tmp/v3c-oos-structure
+          --delay 0.02
+      - name: Prove reacquisition remains structure-only
+        run: |
+          python - <<'PY'
+          import json
+          m=json.load(open('/tmp/v3c-oos-structure/NAS100_USD.manifest.json'))
+          assert m['source_granularity']=='M15'
+          assert m['semantic_price_component']=='MID'
+          assert m['post_entry_outcomes_evaluated'] is False
+          assert m['m1_outcome_data_requested'] is False
+          assert m['mutation_endpoints_used'] is False
+          print('structure_manifest_sha256=' + m['manifest_sha256'])
+          print('structure_retrieval_sha256=' + m['retrieval_sha256'])
+          PY
       - name: Reconstruct and seal V3-C backward-OOS triggers
         run: >-
           python scripts/scan_v3c_backward_oos_triggers.py
