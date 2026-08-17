@@ -6,7 +6,7 @@
   "generic_ict_smc_knowledge_used": false,
   "community_interpretations_used": false,
   "direct_first_party_website_payloads_admitted": 10,
-  "new_evidence_records": 30,
+  "new_evidence_records": 29,
   "expected_post_regeneration_state": {
     "MISSING": 0,
     "PARTIAL": 16,
@@ -34,12 +34,12 @@
     "OPTIONAL_CONDITIONS": "PARTIAL: a December avoid-trading filter is documented; the complete optional-filter set is not stated.",
     "REQUIRED_CONDITIONS": "PARTIAL: competing arguments must be removed and Bias/Narrative/Context/Entry/Risk Management are explicit plan levels; exact rules for every level remain incomplete."
   },
-  "critical_first_party_boundary": "Arjo explicitly states that a trading plan needs an 80/20 rule: 80% objective and 20% subjective. A faithful autonomous engine therefore cannot silently invent the subjective 20%; it must either recover direct operational rules for it or expose those judgments as explicit reviewed configuration/policy.",
+  "critical_first_party_boundary": "Arjo explicitly states in the bounded raw first-party capture that a trading plan needs an 80/20 rule: 80% objective and 20% subjective. That percentage-bearing statement is intentionally excluded from the atomic closure evidence by the pre-SPEC anti-bias guard. A faithful autonomous engine therefore cannot silently invent the subjective portion; it must recover direct operational rules for it or expose those judgments as explicit reviewed configuration/policy.",
   "next_recovery_targets": [
     "Direct long-side stop placement tied to the selected AoO/PD Array entry.",
     "Exact PD Array construction and target tie-breaking for the narrowed NQ plan.",
     "Exact HTF-ready / expansion predicate and LTF entry confirmation timing.",
     "Explicit expiry policy when a parameter is not met inside the configured WoO.",
-    "Evidence identifying which judgments constitute the stated subjective 20%, or an owner-approved deterministic policy for those judgments."
+    "Evidence identifying which judgments constitute the stated subjective portion, or an owner-approved deterministic policy for those judgments."
   ]
 }
