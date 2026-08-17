@@ -3,8 +3,8 @@
   "candidates": [
     {
       "agreement": true,
-      "candidate_registry_hash": "97b5a98dffbfbc385d36c862b2851bfaff048e3b6b648d9d1abc0004b1a87973",
-      "matrix_reconstruction_hash": "97b5a98dffbfbc385d36c862b2851bfaff048e3b6b648d9d1abc0004b1a87973",
+      "candidate_registry_hash": "79ea0d03100656b33a4c3e0b55e44cdca6bd1a82bc9ee0cd06ecc22c671ffe14",
+      "matrix_reconstruction_hash": "79ea0d03100656b33a4c3e0b55e44cdca6bd1a82bc9ee0cd06ecc22c671ffe14",
       "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT"
     },
     {
@@ -38,7 +38,7 @@
       "predicate_id": "PD_ARRAY_2CR_FAILURE_INVOLVEMENT"
     }
   ],
-  "field_override_count": 7,
+  "field_override_count": 20,
   "field_overrides_included": true,
   "independence_scope": "TWO_INDEPENDENT_CODE_PATHS_OVER_THE_SAME_EVIDENCE_ONLY_PACKET",
   "independent_humans_or_models": false,
