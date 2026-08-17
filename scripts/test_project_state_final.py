@@ -17,51 +17,40 @@ STATE: {state}
 -->"""
 
 
-def issue(number: int, gate: str, state: str = "COMPLETE") -> dict:
+def issue(number: int, gate: str, state: str = "COMPLETE", owner: str = "UNCLAIMED") -> dict:
     return {
         "number": number,
         "title": gate,
         "html_url": f"https://example.invalid/issues/{number}",
         "state": "closed" if state == "COMPLETE" else "open",
-        "body": body(f"TEST-{number}", gate, state),
+        "body": body(f"TEST-{number}", gate, state, owner),
     }
 
 
 def main() -> int:
     final_path = project_state.CRITICAL_GATES
-    assert final_path[-9:] == project_state_final.V2_CRITICAL_GATES
-    assert final_path[-1] == "V2_FUTURE_VALIDATION_COMPLETE"
+    assert final_path[-9:] == project_state_final.POST_SPEC_CRITICAL_GATES
+    assert final_path[-1] == project_state_final.TERMINAL_GATE
+    assert project_state_final.OPTIONAL_FUTURE_EXTENSION not in final_path
     assert len(final_path) == len(set(final_path)), "critical path contains duplicate gates"
-    assert "BLOCKED" in project_state.ALLOWED_STATES
-    assert "EXTERNAL_WAIT" in project_state.ALLOWED_STATES
 
-    fixtures = [issue(index + 1, gate) for index, gate in enumerate(final_path[:-1])]
-    fixtures.extend(
-        [
-            {
-                "number": 998,
-                "title": "MASTER umbrella",
-                "html_url": "https://example.invalid/issues/998",
-                "state": "open",
-                "body": body("MASTER", "NONE", "BLOCKED"),
-            },
-            {
-                "number": 999,
-                "title": "Final future validation",
-                "html_url": "https://example.invalid/issues/999",
-                "state": "open",
-                "body": body("FINAL", "V2_FUTURE_VALIDATION_COMPLETE", "EXTERNAL_WAIT", "KaraboMatsemela1"),
-            },
-        ]
-    )
-    state = project_state.derive_state(fixtures)
-    assert state["current_gate"] == "V2_FUTURE_VALIDATION_COMPLETE", state["current_gate"]
-    assert state["spec_ready"] is True
-    assert state["paper_execution_enabled"] is False
-    assert state["live_execution_enabled"] is False
-    assert "V2_FUTURE_VALIDATION_HARNESS_READY" in state["satisfied_gates"]
-    assert "V2_FUTURE_VALIDATION_COMPLETE" not in state["satisfied_gates"]
-    print("final_project_state_critical_path=PASS")
+    pending = [issue(index + 1, gate) for index, gate in enumerate(final_path[:-1])]
+    pending.append(issue(999, project_state_final.TERMINAL_GATE, "IMPLEMENTING", "CHATGPT"))
+    pending_state = project_state.derive_state(pending)
+    assert pending_state["current_gate"] == project_state_final.TERMINAL_GATE
+    assert pending_state["project_complete"] is False
+    assert pending_state["completion_basis"] is None
+
+    complete = [issue(index + 1, gate) for index, gate in enumerate(final_path)]
+    complete_state = project_state.derive_state(complete)
+    assert complete_state["current_gate"] == project_state_final.TERMINAL_GATE
+    assert complete_state["project_complete"] is True
+    assert complete_state["completion_basis"] == "EXISTING_EVIDENCE"
+    assert complete_state["optional_future_validation_gate"] == "V2_FUTURE_VALIDATION_COMPLETE"
+    assert complete_state["spec_ready"] is True
+    assert complete_state["paper_execution_enabled"] is False
+    assert complete_state["live_execution_enabled"] is False
+    print("project_closure_existing_evidence=PASS")
     return 0
 
 
