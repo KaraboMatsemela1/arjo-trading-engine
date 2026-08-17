@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "audit_id": "ARJO_BACKWARD_OOS_UNTOUCHED_AUDIT_V1",
+  "candidate_window": ["2010-01-01T00:00:00Z", "2024-01-01T00:00:00Z"],
+  "provider": "OANDA_V20",
+  "instrument": "NAS100_USD",
+  "audit_basis": [
+    "recursive main-tree inventory",
+    "committed OANDA calibration/protected/future request contracts",
+    "committed readiness/manifests and final disposition"
+  ],
+  "known_governed_market_data_windows": [
+    {"purpose": "calibration/development", "start": "2024-01-01T00:00:00Z", "end_exclusive": "2026-01-01T00:00:00Z"},
+    {"purpose": "consumed V1 protected validation", "start": "2026-01-01T00:00:00Z", "end_exclusive": "2026-07-01T00:00:00Z"},
+    {"purpose": "optional future reservation", "start": "2026-09-01T00:00:00Z", "end_exclusive": "2027-03-01T00:00:00Z"}
+  ],
+  "committed_pre_2024_oanda_market_data_contract_found": false,
+  "committed_pre_2024_oanda_market_data_artifact_found": false,
+  "result": "ELIGIBLE_BACKWARD_OOS_MARKET_DATA_WINDOW",
+  "limitations": [
+    "This proves no repository-controlled OANDA market-data contract/artifact was found for the candidate window; it cannot prove no human ever viewed historical charts externally.",
+    "Arjo first-party educational examples may originate within parts of the same historical era, so this is backward OOS rather than a pristine forward holdout.",
+    "No profitability outcome from this candidate window was inspected during this audit."
+  ]
+}
