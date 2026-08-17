@@ -1121,6 +1121,74 @@
       "number": 125,
       "title": "Autonomy: dispatch exact validation gates for Actions-created PRs",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/125"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          48,
+          101,
+          125
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-WEB-008",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "CHATGPT",
+        "STATE": "REVIEW_READY",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": false,
+      "number": 127,
+      "title": "Recovery: ingest newly reachable Trading MMT first-party rules and unblock SPEC audit",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/127"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          101,
+          125
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-CALIBRATION-GATE-001",
+        "OUTPUT_GATE": "CALIBRATION_PROTOCOL_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "REVIEW_READY",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": false,
+      "number": 130,
+      "title": "Governance: add first-party-prescribed calibration gate before SPEC_READY",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/130"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-32003716533",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "READY",
+        "TYPE": "SPEC_AUDIT_SERVICE"
+      },
+      "metadata_valid": true,
+      "number": 132,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/132"
     }
   ],
   "live_execution_enabled": false,

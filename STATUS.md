@@ -82,6 +82,9 @@ _Generated mechanically by `scripts/project_state.py`._
 | #120 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #122 | GOVERNANCE_HARDENING | COMPLETE | True | True |
 | #125 | GOVERNANCE_HARDENING | COMPLETE | True | True |
+| #127 | PREDICATE_RECOVERY | REVIEW_READY | True | True |
+| #130 | GOVERNANCE_HARDENING | REVIEW_READY | True | True |
+| #132 | SPEC_AUDIT_SERVICE | READY | True | True |
 
 ## Strategy implementation status
 
