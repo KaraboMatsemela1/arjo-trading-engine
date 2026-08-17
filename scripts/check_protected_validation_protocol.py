@@ -13,7 +13,10 @@ EXPECTED_PROFILE_SHA = "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6
 EXPECTED_SPEC_AUDIT_SHA = "d022853a24dd0c46293adec61942ced2c5d811d9e63dbc75414aab34c5f25930"
 EXPECTED_FVG_SHA = "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
 EXPECTED_CONTEXT_SHA = "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e"
-EXPECTED_CALIBRATION_FILE_SHA = "e7ee6ed79290bd9396fc931f11b7cb11bf14e0e5e78a8ea3d34a2dd3e1bcc039"
+EXPECTED_CALIBRATION_RESULT_SHA = "b0119e4c9f3bd3187632691ff369469c65405b38319b3517f0e62fa2588b98a8"
+EXPECTED_REPLAY_RESULTS_SHA = "735338b13dd78bbf83aa9909e1f55a703f39628162fda3fa927b594c0e8aa997"
+EXPECTED_OCCURRENCE_SET_SHA = "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331"
+EXPECTED_CALIBRATION_ARTIFACT_FILE_SHA = "e7ee6ed79290bd9396fc931f11b7cb11bf14e0e5e78a8ea3d34a2dd3e1bcc039"
 EXPECTED_WINDOW = {
     "start_inclusive": "2026-01-01T00:00:00Z",
     "end_exclusive": "2026-07-01T00:00:00Z",
@@ -35,34 +38,17 @@ EXPECTED_PROVIDER = {
     "read_only": True,
 }
 NO_REFIT_FALSE_KEYS = {
-    "execution_changes_allowed",
-    "fva_rule_changes_allowed",
-    "fvg_rule_changes_allowed",
-    "holdout_reuse_for_new_profile_tuning_allowed",
-    "metric_changes_allowed",
-    "normalization_changes_allowed",
-    "provider_identity_changes_allowed",
-    "sample_threshold_changes_allowed",
-    "stop_rule_changes_allowed",
-    "target_rule_changes_allowed",
-    "two_cr_rule_changes_allowed",
-    "two_sting_rule_changes_allowed",
-    "validation_window_changes_allowed",
+    "execution_changes_allowed", "fva_rule_changes_allowed", "fvg_rule_changes_allowed",
+    "holdout_reuse_for_new_profile_tuning_allowed", "metric_changes_allowed",
+    "normalization_changes_allowed", "provider_identity_changes_allowed",
+    "sample_threshold_changes_allowed", "stop_rule_changes_allowed", "target_rule_changes_allowed",
+    "two_cr_rule_changes_allowed", "two_sting_rule_changes_allowed", "validation_window_changes_allowed",
     "woo_changes_allowed",
 }
-EXPECTED_OUTCOME_CLASSES = [
-    "TARGET_FIRST",
-    "STOP_FIRST",
-    "AMBIGUOUS_INTRABAR_ORDER",
-    "UNRESOLVED_WINDOW_END",
-]
+EXPECTED_OUTCOME_CLASSES = ["TARGET_FIRST", "STOP_FIRST", "AMBIGUOUS_INTRABAR_ORDER", "UNRESOLVED_WINDOW_END"]
 EXPECTED_DECISION_CLASSES = {
-    "NO_QUALIFYING_OCCURRENCES",
-    "INSUFFICIENT_SAMPLE",
-    "SUFFICIENT_SAMPLE_POSITIVE",
-    "SUFFICIENT_SAMPLE_NONPOSITIVE",
-    "IMPLEMENTATION_DIVERGENCE",
-    "VALIDATION_INTEGRITY_FAILURE",
+    "NO_QUALIFYING_OCCURRENCES", "INSUFFICIENT_SAMPLE", "SUFFICIENT_SAMPLE_POSITIVE",
+    "SUFFICIENT_SAMPLE_NONPOSITIVE", "IMPLEMENTATION_DIVERGENCE", "VALIDATION_INTEGRITY_FAILURE",
 }
 
 
@@ -73,12 +59,6 @@ class ProtocolError(RuntimeError):
 def canonical_sha256(value: object) -> str:
     payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
     return hashlib.sha256(payload).hexdigest()
-
-
-def file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    digest.update(path.read_bytes())
-    return digest.hexdigest()
 
 
 def canonical_embedded_sha(path: Path, field: str) -> tuple[dict, str]:
@@ -92,39 +72,23 @@ def canonical_embedded_sha(path: Path, field: str) -> tuple[dict, str]:
     return data, actual
 
 
-def validate(
-    *,
-    protocol_path: Path,
-    profile_path: Path,
-    spec_audit_path: Path,
-    fvg_path: Path,
-    context_path: Path,
-    calibration_result_path: Path,
-    seed_path: Path,
-) -> dict:
+def validate(*, protocol_path: Path, profile_path: Path, spec_audit_path: Path, fvg_path: Path,
+             context_path: Path, calibration_result_path: Path, seed_path: Path) -> dict:
     protocol, protocol_sha = canonical_embedded_sha(protocol_path, "protocol_sha256")
     if protocol_sha != EXPECTED_PROTOCOL_SHA:
         raise ProtocolError("protected validation protocol SHA changed")
-    if protocol.get("protocol_id") != "ARJO_PROTECTED_VALIDATION_V1":
-        raise ProtocolError("unexpected validation protocol id")
-    if protocol.get("status") != "FROZEN_BEFORE_HOLDOUT_ACCESS":
-        raise ProtocolError("protocol must be frozen before holdout access")
+    if protocol.get("protocol_id") != "ARJO_PROTECTED_VALIDATION_V1" or protocol.get("status") != "FROZEN_BEFORE_HOLDOUT_ACCESS":
+        raise ProtocolError("unexpected or unfrozen protected validation protocol")
 
     profile, profile_sha = canonical_embedded_sha(profile_path, "profile_sha256")
-    if profile_sha != EXPECTED_PROFILE_SHA:
-        raise ProtocolError("frozen SPEC profile SHA changed")
-    if protocol.get("profile", {}).get("profile_sha256") != profile_sha:
-        raise ProtocolError("protocol does not bind frozen profile SHA")
-    if profile.get("claim_profile", {}).get("semantic_closure_claimed") is not False:
-        raise ProtocolError("profile semantic closure claim changed")
-    if profile.get("claim_profile", {}).get("fully_first_party_reconstructed") is not False:
-        raise ProtocolError("profile first-party reconstruction claim changed")
+    if profile_sha != EXPECTED_PROFILE_SHA or protocol.get("profile", {}).get("profile_sha256") != profile_sha:
+        raise ProtocolError("frozen SPEC profile binding changed")
+    if profile.get("claim_profile", {}).get("semantic_closure_claimed") is not False or profile.get("claim_profile", {}).get("fully_first_party_reconstructed") is not False:
+        raise ProtocolError("profile claim boundary changed")
 
     audit, audit_sha = canonical_embedded_sha(spec_audit_path, "audit_sha256")
-    if audit_sha != EXPECTED_SPEC_AUDIT_SHA:
-        raise ProtocolError("SPEC_READY audit SHA changed")
-    if protocol.get("profile", {}).get("spec_ready_audit_sha256") != audit_sha:
-        raise ProtocolError("protocol does not bind SPEC_READY audit")
+    if audit_sha != EXPECTED_SPEC_AUDIT_SHA or protocol.get("profile", {}).get("spec_ready_audit_sha256") != audit_sha:
+        raise ProtocolError("SPEC_READY audit binding changed")
     if audit.get("outcome") != "PASS" or audit.get("holdout_accessed") is not False:
         raise ProtocolError("SPEC_READY audit is not a clean pre-holdout PASS")
 
@@ -135,29 +99,35 @@ def validate(
     if protocol.get("owner_conventions") != {"fvg_sha256": fvg_sha, "context_sha256": context_sha}:
         raise ProtocolError("protocol owner-convention binding changed")
 
-    if file_sha256(calibration_result_path) != EXPECTED_CALIBRATION_FILE_SHA:
-        raise ProtocolError("calibration result file SHA changed")
     calibration = json.loads(calibration_result_path.read_text(encoding="utf-8"))
+    if calibration.get("status") != "CALIBRATION_COMPLETE":
+        raise ProtocolError("calibration result status changed")
+    if calibration.get("calibration_result_sha256") != EXPECTED_CALIBRATION_RESULT_SHA:
+        raise ProtocolError("canonical calibration result SHA changed")
+    if calibration.get("replay_results_sha256") != EXPECTED_REPLAY_RESULTS_SHA:
+        raise ProtocolError("calibration replay-results SHA changed")
+    if calibration.get("occurrence_set_sha256") != EXPECTED_OCCURRENCE_SET_SHA:
+        raise ProtocolError("calibration occurrence-set SHA changed")
     selection = calibration.get("selection", {})
     frozen_execution = protocol.get("frozen_execution", {})
     if selection.get("second_sting_fill_event") != "SECOND_STING_TOUCH" or selection.get("stop_buffer_ticks") != 0:
         raise ProtocolError("calibrated execution selection changed")
-    if frozen_execution.get("second_sting_fill_event") != selection.get("second_sting_fill_event"):
-        raise ProtocolError("protocol fill event differs from calibration")
-    if frozen_execution.get("stop_buffer_ticks") != selection.get("stop_buffer_ticks"):
-        raise ProtocolError("protocol stop buffer differs from calibration")
-    if frozen_execution.get("alternate_variants_allowed") is not False:
-        raise ProtocolError("holdout may not evaluate alternate variants for selection")
-    if frozen_execution.get("performance_status_used_for_selection") is not False:
-        raise ProtocolError("calibrated selection must remain non-performance-based")
+    if frozen_execution.get("second_sting_fill_event") != selection.get("second_sting_fill_event") or frozen_execution.get("stop_buffer_ticks") != selection.get("stop_buffer_ticks"):
+        raise ProtocolError("protocol execution differs from calibration")
+    if frozen_execution.get("alternate_variants_allowed") is not False or frozen_execution.get("performance_status_used_for_selection") is not False:
+        raise ProtocolError("holdout execution/selection boundary changed")
     if calibration.get("holdout_accessed") is not False:
         raise ProtocolError("calibration result indicates holdout access")
 
     seed = json.loads(seed_path.read_text(encoding="utf-8"))
-    if seed.get("stage") != "CALIBRATION_COMPLETE":
-        raise ProtocolError("seed must remain CALIBRATION_COMPLETE")
-    if seed.get("dataset", {}).get("holdout_accessed") is not False:
-        raise ProtocolError("seed indicates holdout access before protocol freeze")
+    if seed.get("stage") != "CALIBRATION_COMPLETE" or seed.get("dataset", {}).get("holdout_accessed") is not False:
+        raise ProtocolError("seed lifecycle/holdout state changed")
+    if seed.get("calibration_result_sha256") != EXPECTED_CALIBRATION_RESULT_SHA:
+        raise ProtocolError("seed canonical calibration result SHA changed")
+    if seed.get("calibration_result_hash_classification") != "CANONICAL_INTERNAL_RESULT_SHA_NOT_JSON_BYTE_SHA":
+        raise ProtocolError("seed calibration hash classification changed")
+    if seed.get("calibration_result_artifact_id") != 9286062012 or seed.get("calibration_result_artifact_file_sha256") != EXPECTED_CALIBRATION_ARTIFACT_FILE_SHA:
+        raise ProtocolError("seed calibration artifact provenance changed")
 
     if protocol.get("window") != EXPECTED_WINDOW:
         raise ProtocolError("protected validation window changed")
@@ -165,19 +135,14 @@ def validate(
         raise ProtocolError("protected provider/normalization identity changed")
 
     no_refit = protocol.get("no_refit")
-    if not isinstance(no_refit, dict) or set(no_refit) != NO_REFIT_FALSE_KEYS:
-        raise ProtocolError("no-refit key set changed")
-    if any(no_refit.get(key) is not False for key in NO_REFIT_FALSE_KEYS):
-        raise ProtocolError("all no-refit mutations must remain false")
-
+    if not isinstance(no_refit, dict) or set(no_refit) != NO_REFIT_FALSE_KEYS or any(no_refit.get(k) is not False for k in NO_REFIT_FALSE_KEYS):
+        raise ProtocolError("no-refit boundary changed")
     if protocol.get("outcome_classes") != EXPECTED_OUTCOME_CLASSES:
         raise ProtocolError("protected outcome classes changed")
-    sample = protocol.get("sample_policy", {})
-    if sample.get("inferential_resolved_occurrence_threshold") != 30:
-        raise ProtocolError("sample sufficiency threshold changed")
-    if set(sample.get("classifications", {})) != EXPECTED_DECISION_CLASSES:
-        raise ProtocolError("validation decision class set changed")
 
+    sample = protocol.get("sample_policy", {})
+    if sample.get("inferential_resolved_occurrence_threshold") != 30 or set(sample.get("classifications", {})) != EXPECTED_DECISION_CLASSES:
+        raise ProtocolError("sample sufficiency/decision policy changed")
     metrics = protocol.get("metrics", {})
     if metrics.get("resolved_occurrence_count") != "TARGET_FIRST + STOP_FIRST":
         raise ProtocolError("resolved occurrence definition changed")
@@ -186,16 +151,11 @@ def validate(
         raise ProtocolError("Wilson interval policy changed")
 
     dual = protocol.get("dual_path_validation", {})
-    if dual.get("required") is not True:
-        raise ProtocolError("dual-path holdout validation must remain required")
-    if dual.get("primary_path") != "PRIMARY_PRODUCTION_PATH" or dual.get("independent_path") != "INDEPENDENT_STANDARD_LIBRARY_PATH":
-        raise ProtocolError("validation reconstruction path identity changed")
-
+    if dual.get("required") is not True or dual.get("primary_path") != "PRIMARY_PRODUCTION_PATH" or dual.get("independent_path") != "INDEPENDENT_STANDARD_LIBRARY_PATH":
+        raise ProtocolError("dual-path validation boundary changed")
     access = protocol.get("holdout_access", {})
-    if access.get("accessed_before_protocol_freeze") is not False:
-        raise ProtocolError("protocol records pre-freeze holdout access")
-    if access.get("authorized_after_gate") != "PROTECTED_VALIDATION_PROTOCOL_FROZEN":
-        raise ProtocolError("holdout authorization gate changed")
+    if access.get("accessed_before_protocol_freeze") is not False or access.get("authorized_after_gate") != "PROTECTED_VALIDATION_PROTOCOL_FROZEN":
+        raise ProtocolError("holdout authorization boundary changed")
 
     authorization = protocol.get("authorization", {})
     for key in ("paper_execution_authorized", "live_execution_authorized", "broker_mutation_authorized"):
@@ -208,6 +168,7 @@ def validate(
         "protocol_sha256": protocol_sha,
         "profile_sha256": profile_sha,
         "spec_ready_audit_sha256": audit_sha,
+        "calibration_result_sha256": EXPECTED_CALIBRATION_RESULT_SHA,
         "holdout_accessed": False,
         "holdout_start": EXPECTED_WINDOW["start_inclusive"],
         "holdout_end_exclusive": EXPECTED_WINDOW["end_exclusive"],
@@ -230,12 +191,8 @@ def main() -> int:
     args = parser.parse_args()
     try:
         result = validate(
-            protocol_path=Path(args.protocol),
-            profile_path=Path(args.profile),
-            spec_audit_path=Path(args.spec_audit),
-            fvg_path=Path(args.fvg),
-            context_path=Path(args.context),
-            calibration_result_path=Path(args.calibration_result),
+            protocol_path=Path(args.protocol), profile_path=Path(args.profile), spec_audit_path=Path(args.spec_audit),
+            fvg_path=Path(args.fvg), context_path=Path(args.context), calibration_result_path=Path(args.calibration_result),
             seed_path=Path(args.seed),
         )
     except (OSError, json.JSONDecodeError, ProtocolError) as exc:
