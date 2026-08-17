@@ -1,0 +1,37 @@
+name: Calibration Data Foundation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/nq_calibration_data.py'
+      - 'scripts/test_nq_calibration_data.py'
+      - 'research/calibration/nq_databento_request_contract.json'
+      - 'research/calibration/nq_raw_manifest.schema.json'
+      - '.gitignore'
+      - '.github/workflows/calibration-data-foundation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile NQ calibration data module
+        run: python -m py_compile scripts/nq_calibration_data.py scripts/test_nq_calibration_data.py
+      - name: Run offline NQ calibration data tests
+        env:
+          DATABENTO_API_KEY: ''
+        run: python scripts/test_nq_calibration_data.py
+      - name: Guard against committed licensed DBN payloads
+        shell: bash
+        run: |
+          if git ls-files '*.dbn' '*.dbn.zst' | grep -q .; then
+            echo 'Licensed/raw DBN payload found in git' >&2
+            exit 1
+          fi
