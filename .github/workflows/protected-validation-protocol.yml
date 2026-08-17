@@ -33,7 +33,22 @@ jobs:
       - name: Compile protocol guard
         run: python -m py_compile scripts/check_protected_validation_protocol.py scripts/test_protected_validation_protocol.py
       - name: Run protocol sabotage tests
-        run: python scripts/test_protected_validation_protocol.py
+        shell: bash
+        run: |
+          set +e
+          python scripts/test_protected_validation_protocol.py > /tmp/protocol-sabotage.log 2>&1
+          STATUS=$?
+          cat /tmp/protocol-sabotage.log
+          exit $STATUS
+      - name: Upload protocol test diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-validation-protocol-diagnostics
+          path: /tmp/protocol-sabotage.log
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
       - name: Validate exact frozen protocol
         run: >-
           python scripts/check_protected_validation_protocol.py
