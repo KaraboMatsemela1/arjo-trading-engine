@@ -1,0 +1,37 @@
+{
+  "calibration_data_accessed": true,
+  "calibration_result_sha256": "b0119e4c9f3bd3187632691ff369469c65405b38319b3517f0e62fa2588b98a8",
+  "holdout_accessed": false,
+  "occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+  "outcome_window": "Frozen calibration 15m bars from each entry event forward through the calibration dataset only; evaluator stops at first stop/target event and never reads protected holdout.",
+  "owner_operational_conventions_disclosed": true,
+  "performance_leaderboard_performed": false,
+  "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+  "preregistration_sha256": "dbd2b9e943d5e60d35a4de5e9e697ec5eacdf118f285659a1414eb557e8bf557",
+  "protocol": "FIRST_PARTY_PRESCRIBED_CALIBRATION_V1",
+  "replay_results": [
+    {"entry_price": 17713.3, "entry_ts": "2024-04-26T14:45:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_15M_CLOSE", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 0, "stop_price": 17653.9, "target_price": 18497.0},
+    {"entry_price": 17713.3, "entry_ts": "2024-04-26T14:45:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_15M_CLOSE", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 1, "stop_price": 17653.800000000003, "target_price": 18497.0},
+    {"entry_price": 17713.3, "entry_ts": "2024-04-26T14:45:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_15M_CLOSE", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 2, "stop_price": 17653.7, "target_price": 18497.0},
+    {"entry_price": 17678.3, "entry_ts": "2024-04-26T14:30:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_TOUCH", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 0, "stop_price": 17653.9, "target_price": 18497.0},
+    {"entry_price": 17678.3, "entry_ts": "2024-04-26T14:30:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_TOUCH", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 1, "stop_price": 17653.800000000003, "target_price": 18497.0},
+    {"entry_price": 17678.3, "entry_ts": "2024-04-26T14:30:00+00:00", "event_ts": "2024-04-30T15:00:00+00:00", "fill_event": "SECOND_STING_TOUCH", "occurrence_id": "OWNER-CAL-2024-04-26", "status": "STOP_FIRST", "stop_buffer_ticks": 2, "stop_price": 17653.7, "target_price": 18497.0}
+  ],
+  "replay_results_sha256": "735338b13dd78bbf83aa9909e1f55a703f39628162fda3fa927b594c0e8aa997",
+  "schema_version": 1,
+  "selection": {
+    "basis": {
+      "second_sting_fill_event": "NARROWEST_SEMANTIC_EXTENSION: touch is the already-required second-sting interaction and adds no 15m close-confirmation condition.",
+      "stop_buffer_ticks": "NARROWEST_SEMANTIC_EXTENSION: zero buffer preserves the exact operational Order Flow leg-low anchor and adds no provider-price quantum offset."
+    },
+    "performance_status_used_for_selection": false,
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "selected_variant_status": "STOP_FIRST",
+    "stop_buffer_ticks": 0,
+    "tie_handling": "Replay outcome status does not rank candidates. Structural narrowness applies the preregistered acceptance rule; contradictory observability would fail closed."
+  },
+  "semantic_candidate_comparison_performed": false,
+  "status": "CALIBRATION_COMPLETE",
+  "status_counts": {"STOP_FIRST": 6},
+  "variant_result_count": 6
+}
