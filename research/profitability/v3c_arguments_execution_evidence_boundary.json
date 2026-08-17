@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "boundary_id": "ARJO_V3C_ARGUMENTS_EXECUTION_EVIDENCE_BOUNDARY_V1",
+  "status": "FROZEN_BEFORE_V3C_OUTCOME_ACCESS",
+  "direct_first_party": [
+    {
+      "source_id": "WEB_MMT_ARGUMENTS_20260817",
+      "path": "research/recovery/issue_127_payloads/web_mmt_arguments_20260817.json",
+      "git_blob_sha": "f59474bdb4e7754a4647d5e160619c49773f7207",
+      "supports": [
+        "4h Swing High context",
+        "monitor 1h 2CR",
+        "rejection high intact means respect",
+        "rejection high run means disrespect/failure",
+        "2CR failure leaves a bullish one-sided argument"
+      ],
+      "does_not_support": ["exact market fill", "stop selector", "target selector", "expiry", "concurrency policy"]
+    },
+    {
+      "source_id": "WEB_MMT_2CR_EXACT_20260817",
+      "path": "research/recovery/issue_167_payloads/web_mmt_2cr_exact_20260817.json",
+      "git_blob_sha": "004088c1a2cbf2d81c739c5c44d2699a1e512067",
+      "supports": [
+        "select rejection candle high",
+        "run can be observed by a candle close above rejection high"
+      ],
+      "does_not_support": ["exact market fill", "stop selector", "target selector", "expiry", "concurrency policy"]
+    }
+  ],
+  "owner_operational_measurement_conventions": [
+    "next complete M1 ASK-open entry after activation H1 close",
+    "rejection-candle-low structural stop anchor",
+    "fixed 2R target",
+    "1440 complete-M1-bar expiry",
+    "one open long position maximum",
+    "0.5 point per-side base slippage and 1.0 point stress slippage",
+    "financing stress in R units",
+    "same-M1 stop-and-target resolves STOP_FIRST conservatively"
+  ],
+  "semantic_claim": "No owner-operational measurement convention is represented as Arjo's exact execution semantics.",
+  "post_trigger_outcomes_accessed": false,
+  "performance_metrics_accessed": false,
+  "backward_oos_outcomes_accessed": false
+}
