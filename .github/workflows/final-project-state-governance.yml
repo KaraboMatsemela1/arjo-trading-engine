@@ -1,0 +1,44 @@
+name: Final Project State Governance
+
+on:
+  pull_request:
+    paths:
+      - scripts/project_state_final.py
+      - scripts/test_project_state_final.py
+      - .github/workflows/project-state.yml
+      - .github/workflows/final-project-state-governance.yml
+      - README.md
+      - ROADMAP.md
+  push:
+    branches:
+      - governance/issue-203-final-state
+    paths:
+      - scripts/project_state_final.py
+      - scripts/test_project_state_final.py
+      - .github/workflows/project-state.yml
+      - .github/workflows/final-project-state-governance.yml
+      - README.md
+      - ROADMAP.md
+
+permissions:
+  contents: read
+
+jobs:
+  final-governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile final project-state wrapper
+        run: python -m py_compile scripts/project_state.py scripts/project_state_final.py scripts/test_project_state_final.py
+      - name: Verify critical path reaches V2 final validation
+        run: PYTHONPATH=scripts python scripts/test_project_state_final.py
+      - name: Reject stale current-state claims
+        run: |
+          ! grep -q 'SPEC_READY.*false' README.md
+          ! grep -q 'protected.*holdout.*remains unread' README.md
+          grep -q 'V2_FUTURE_VALIDATION_COMPLETE' README.md
+          grep -q 'V2_FUTURE_VALIDATION_COMPLETE' ROADMAP.md
