@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "status": "OWNER_OPERATIONAL_FVG_READY",
+  "classification": "OWNER_OPERATIONAL_CONVENTION_NOT_ARJO_SEMANTIC_CLOSURE",
+  "convention_id": "OWNER_OPERATIONAL_FVG_V1",
+  "convention_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e",
+  "provider": "OANDA_V20",
+  "instrument": "NAS100_USD",
+  "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+  "source_artifacts": [
+    {
+      "year": 2024,
+      "artifact_id": 9282976276,
+      "manifest_sha256": "6a4c8b41fae77a6bbd0bb1a809cabae63944a00339f30912ca57685aeff65dd7",
+      "retrieval_sha256": "cf78702b709e6099cbf097347e80f167649783988b62e337c14deb72087849c2"
+    },
+    {
+      "year": 2025,
+      "artifact_id": 9283007527,
+      "manifest_sha256": "4f038884fe18f1cdaa9d05a4eabb1aa820491f118f0d34f94b32d77e35fc5f02",
+      "retrieval_sha256": "4a53100460c78af9bc216c96ccf853df4b43f0a5b9cd7a9098c55b4191faeb0f"
+    }
+  ],
+  "verification": {
+    "workflow_run_id": 32021780959,
+    "head_sha": "08e290cb4a8931ae8fbb9d7eaa423bbc75b3babd",
+    "workflow_conclusion": "success",
+    "artifact_id": 9285611539,
+    "artifact_digest": "sha256:9ed25d98556cfcedc56d65a9c94104a87b15d6e2afff97aca7e76a33e7893aaa",
+    "detected_formation_count": 347,
+    "session_count": 515,
+    "selected_session_count": 513,
+    "no_active_fvg_session_count": 2,
+    "no_active_fvg_sessions": [
+      "2024-01-02",
+      "2024-01-03"
+    ],
+    "session_anchors_sha256": "5277a36e777cdac36aa4f27b42435257c6ecd46a1a7c8bf852f1bc9e4f908166"
+  },
+  "anti_bias": {
+    "future_session_bars_used": false,
+    "post_woo_outcomes_used": false,
+    "holdout_accessed": false,
+    "performance_fields_used": false,
+    "performance_based_selection_used": false
+  },
+  "claim_boundary": "This readiness gate freezes an owner-directed FVG operational convention so calibration can proceed. It does not claim that the exact FVG inequalities, fill rule, or selector were authored by Arjo."
+}
