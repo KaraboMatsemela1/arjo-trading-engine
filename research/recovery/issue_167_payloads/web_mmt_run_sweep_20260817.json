@@ -1,0 +1,16 @@
+{
+  "excerpts": [
+    "Swing Points: Swing Highs and Lows.",
+    "Previous Candle Highs/Lows (PCH/L), because these on the Lower Timeframe are Swing Points.",
+    "you ideally want to wait for that 2nd sting below it."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party MMT page capture for Issue #167. Only semantic excerpts are retained; no performance content is included.",
+  "retrieved_at": "2026-08-17T09:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_RUN_SWEEP_20260817",
+  "title": "Run vs Sweep of Liquidity",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/run-vs-sweep-of-liquidity/"
+}
