@@ -1,0 +1,66 @@
+name: Profitability Backward OOS Occurrence Scan
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-221-backward-oos-occurrences
+    paths:
+      - 'research/profitability/nas100_oanda_backward_oos_request_contract.json'
+      - 'scripts/oanda_backward_oos_structure.py'
+      - 'scripts/check_oanda_m15_semantic_parity.py'
+      - 'scripts/scan_backward_oos_occurrences_primary.py'
+      - 'scripts/scan_backward_oos_occurrences_independent.py'
+      - 'scripts/seal_backward_oos_occurrences.py'
+      - 'scripts/test_backward_oos_occurrence_scan.py'
+      - '.github/workflows/profitability-backward-oos-occurrence-scan.yml'
+
+permissions:
+  contents: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run outcome-blind sabotage tests
+        run: python scripts/test_backward_oos_occurrence_scan.py
+      - name: Verify direct M15 semantic parity on permitted 2024 development data
+        run: python scripts/check_oanda_m15_semantic_parity.py
+      - name: Acquire backward-OOS M15 structure only
+        run: python scripts/oanda_backward_oos_structure.py --output-dir /tmp/backward-oos
+      - name: Run primary occurrence scan
+        run: python scripts/scan_backward_oos_occurrences_primary.py --data-dir /tmp/backward-oos --output /tmp/primary.json
+      - name: Run independent occurrence scan
+        run: python scripts/scan_backward_oos_occurrences_independent.py --data-dir /tmp/backward-oos --output /tmp/independent.json
+      - name: Seal exact dual-path occurrence set
+        run: python scripts/seal_backward_oos_occurrences.py --primary /tmp/primary.json --independent /tmp/independent.json --output /tmp/backward-oos-readiness.json
+      - name: Prove Stage 1 never accessed outcomes
+        run: |
+          python - <<'PY'
+          import json
+          for p in ['/tmp/backward-oos/NAS100_USD.manifest.json','/tmp/primary.json','/tmp/independent.json','/tmp/backward-oos-readiness.json']:
+              x=json.load(open(p))
+              assert x.get('post_entry_outcomes_evaluated', x.get('post_entry_outcomes_accessed')) is False
+              assert x.get('m1_outcome_data_requested', x.get('m1_outcome_data_accessed')) is False
+          print('Stage 1 outcome boundary verified')
+          PY
+      - name: Stage sealed reports with structure artifact
+        run: |
+          cp /tmp/primary.json /tmp/backward-oos/primary-occurrence-scan.json
+          cp /tmp/independent.json /tmp/backward-oos/independent-occurrence-scan.json
+          cp /tmp/backward-oos-readiness.json /tmp/backward-oos/backward-oos-readiness.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: profitability-backward-oos-stage1
+          path: /tmp/backward-oos
+          if-no-files-found: error
+          retention-days: 90

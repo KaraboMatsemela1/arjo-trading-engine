@@ -1,0 +1,23 @@
+{
+  "account_id_env": "OANDA_ACCOUNT_ID",
+  "api_token_env": "OANDA_API_TOKEN",
+  "base_url": "https://api-fxpractice.oanda.com",
+  "contract_id": "ARJO_V2_BACKWARD_OOS_M15_MBA_V1",
+  "derived_granularities_minutes": [60, 240],
+  "end_exclusive": "2024-01-01T00:00:00Z",
+  "environment": "practice",
+  "instrument": "NAS100_USD",
+  "instrument_identity": "OANDA US Nas 100 CFD/proxy; not CME NQ futures equivalence",
+  "mutation_endpoints_authorized": false,
+  "page_candles": 4500,
+  "post_entry_outcome_evaluation_authorized": false,
+  "price_component": "MBA",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "protocol_sha256": "3bbed5663762a5d484935de8383d02b4aa3d320e0d4ef02af9cf5469e3eddefe",
+  "provider": "OANDA_V20",
+  "schema_version": 1,
+  "semantic_price_component": "M",
+  "source_granularity": "M15",
+  "start": "2010-01-01T00:00:00Z",
+  "venue": "OANDA_FXTRADE"
+}
