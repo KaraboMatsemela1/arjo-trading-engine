@@ -73,7 +73,8 @@ def main() -> int:
     assert contract["mutation_endpoints_authorized"] is False
     assert contract["paper_trading_authorized"] is False
     assert contract["live_trading_authorized"] is False
-    assert "token" not in json.dumps(contract).lower().replace("api_token_env", "")
+    assert contract["account_id_env"] == "OANDA_ACCOUNT_ID"
+    assert contract["api_token_env"] == "OANDA_API_TOKEN"
 
     # Only the exact protected interval or strict subranges inside it are legal.
     assert bounded_interval(contract, VALIDATION_START, VALIDATION_END) == (VALIDATION_START, VALIDATION_END)
@@ -158,10 +159,13 @@ def main() -> int:
         assert "test-token" not in text
         assert "test-account" not in text
 
-    # Contract content is itself stable and does not contain credentials.
+    # Contract content may name GitHub secret variables but must never contain credential values or auth headers.
     contract_text = CONTRACT.read_text(encoding="utf-8")
+    assert "OANDA_ACCOUNT_ID" in contract_text
+    assert "OANDA_API_TOKEN" in contract_text
     assert "Bearer " not in contract_text
     assert "test-token" not in contract_text
+    assert "test-account" not in contract_text
     assert canonical_sha256({"b": 2, "a": 1}) == canonical_sha256({"a": 1, "b": 2})
     assert parse_utc("2026-01-01T00:00:00Z") == datetime(2026, 1, 1, tzinfo=UTC)
 
