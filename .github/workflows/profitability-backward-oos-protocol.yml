@@ -1,0 +1,34 @@
+name: Profitability Backward OOS Protocol
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-218-profitability-protocol
+    paths:
+      - 'research/profitability/**'
+      - 'scripts/check_profitability_backward_oos_protocol.py'
+      - '.github/workflows/profitability-backward-oos-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen backward-OOS protocol
+        run: python scripts/check_profitability_backward_oos_protocol.py
+      - name: Prove no execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('research/profitability/backward_oos_protocol_v1.json'))
+          assert p['authorization']=={'paper_execution':False,'live_execution':False,'broker_mutation':False}
+          assert p['stages']['stage_1_occurrence_frequency']['outcomes_allowed'] is False
+          print('fail-closed authorization and stage-1 outcome boundary verified')
+          PY
