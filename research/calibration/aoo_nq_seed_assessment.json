@@ -3,16 +3,12 @@
   "protocol": "FIRST_PARTY_PRESCRIBED_CALIBRATION_V1",
   "packet_id": "AOO-NQ-SEED-001",
   "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
-  "stage": "PREREGISTERED",
+  "stage": "CALIBRATION_COMPLETE",
   "semantic_candidate_locked": true,
   "seed_plan": {
     "replayability_status": "REPLAYABLE",
     "instrument": "NQ",
-    "timeframes": [
-      "4h",
-      "1h",
-      "15m"
-    ],
+    "timeframes": ["4h", "1h", "15m"],
     "rule_summary": "Parameterized replay contract: NQ long only; 4h FVG plus 1h FVA context; opposing resistance/2CR rejection high must be run; execute the first-party 15m 2-Sting entry family using only a preregistered fill convention; anchor risk to the relevant bullish Order Flow leg low using only a preregistered tick buffer; target the documented next HTF premium-array/ATH context; evaluate eligibility only inside the frozen 09:30-11:00 America/New_York calibration WoO; if the required parameter is not met within that opportunity window, do nothing and move on.",
     "evidence_ids": [
       "EV_206F710B56DFDA5FF5393600",
@@ -30,25 +26,14 @@
     {
       "name": "second_sting_fill_event",
       "semantic_role": "Operationalizes the exact executable event after the first-party-required second sting without changing the 2-Sting entry family.",
-      "basis_evidence_ids": [
-        "EV_AED1F1512355C2B3B6DEAB4D"
-      ],
-      "predeclared_candidates": [
-        "SECOND_STING_TOUCH",
-        "SECOND_STING_15M_CLOSE"
-      ]
+      "basis_evidence_ids": ["EV_AED1F1512355C2B3B6DEAB4D"],
+      "predeclared_candidates": ["SECOND_STING_TOUCH", "SECOND_STING_15M_CLOSE"]
     },
     {
       "name": "stop_buffer_ticks",
       "semantic_role": "Operationalizes order placement around the first-party Order Flow leg-low stop anchor without changing that anchor.",
-      "basis_evidence_ids": [
-        "EV_58E144AEBF95808F39138E22"
-      ],
-      "predeclared_candidates": [
-        0,
-        1,
-        2
-      ]
+      "basis_evidence_ids": ["EV_58E144AEBF95808F39138E22"],
+      "predeclared_candidates": [0, 1, 2]
     }
   ],
   "operational_configuration": {
@@ -58,10 +43,7 @@
       "end_exclusive": "11:00:00",
       "timezone": "America/New_York",
       "classification": "CONFIGURED_POLICY_FROM_FIRST_PARTY_EXAMPLE",
-      "basis_evidence_ids": [
-        "EV_6065BAEFC53803A9239A6CF6",
-        "EV_917488CD997BF1BEF1288B2A"
-      ]
+      "basis_evidence_ids": ["EV_6065BAEFC53803A9239A6CF6", "EV_917488CD997BF1BEF1288B2A"]
     }
   },
   "dataset": {
@@ -70,7 +52,7 @@
     "calibration_end": "2025-12-31",
     "holdout_start": "2026-01-01",
     "holdout_end": "2026-06-30",
-    "calibration_data_accessed": false,
+    "calibration_data_accessed": true,
     "holdout_accessed": false
   },
   "objective": {
@@ -87,5 +69,24 @@
   },
   "outcome_access_authorized": true,
   "preregistration_ref": "research/calibration/aoo_nq_replay_spec.json",
-  "preregistration_sha256": "dbd2b9e943d5e60d35a4de5e9e697ec5eacdf118f285659a1414eb557e8bf557"
+  "preregistration_sha256": "dbd2b9e943d5e60d35a4de5e9e697ec5eacdf118f285659a1414eb557e8bf557",
+  "calibration_result_ref": "research/calibration/owner_operational_calibration_result.json",
+  "calibration_result_sha256": "e7ee6ed79290bd9396fc931f11b7cb11bf14e0e5e78a8ea3d34a2dd3e1bcc039",
+  "calibrated_selection": {
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0,
+    "selection_uses_performance_status": false,
+    "basis": "Apply the preregistered narrowest-convention rule: touch adds no bar-close confirmation beyond the required second sting; zero buffer adds no provider-price quantum beyond the operational Order Flow leg-low anchor."
+  },
+  "owner_operational_convention_refs": {
+    "semantic_closure_claimed": false,
+    "fvg": {
+      "ref": "research/calibration/owner_operational_fvg_v1.json",
+      "sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+    },
+    "context": {
+      "ref": "research/calibration/owner_operational_context_v1.json",
+      "sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e"
+    }
+  }
 }
