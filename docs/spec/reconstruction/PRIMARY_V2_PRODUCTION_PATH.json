@@ -1,0 +1,36 @@
+{
+  "broker_mutation_authorized": false,
+  "executable_occurrence_ids": [
+    "OWNER-CAL-2024-04-26"
+  ],
+  "fully_first_party_reconstructed": false,
+  "future_validation_data_accessed": false,
+  "holdout_2026h1_accessed": false,
+  "live_execution_authorized": false,
+  "observability_rows_sha256": "9333a761e38e1f38d59c37cae7de2979aa754f6b3929db0d05082b72cf823d80",
+  "observability_status_counts": {
+    "EXECUTABLE_ENTRY": 1
+  },
+  "paper_execution_authorized": false,
+  "path_id": "PRIMARY_V2_PRODUCTION_PATH",
+  "performance_comparison_performed": false,
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "qualification_rows_sha256": "5e02865a26656789c0c22dadf35cf3c1644ec729b84e7f596b3d5b705f4e65ce",
+  "qualification_status_counts": {
+    "NO_2CR_REJECTION": 59,
+    "NO_2_STING": 14,
+    "NO_FVA_OVERLAP": 413,
+    "NO_FVG": 2,
+    "NO_RUN": 26,
+    "QUALIFIED": 1
+  },
+  "qualified_occurrence_ids": [
+    "OWNER-CAL-2024-04-26"
+  ],
+  "reconstruction_sha256": "4ae7891689b5b792e569955334191a77e3e19d490efbca709429a210e4025334",
+  "reconstruction_status": "PASS",
+  "schema_version": 1,
+  "semantic_closure_claimed": false,
+  "semantic_occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331"
+}

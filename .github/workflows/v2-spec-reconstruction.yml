@@ -1,0 +1,116 @@
+name: V2 SPEC Reconstruction
+
+on:
+  pull_request:
+    paths:
+      - docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+      - docs/spec/reconstruction/**
+      - scripts/reconstruct_v2_spec_primary.py
+      - scripts/reconstruct_v2_spec_independent.py
+      - scripts/compare_v2_spec_reconstructions.py
+      - scripts/test_v2_spec_reconstruction_independence.py
+      - .github/workflows/v2-spec-reconstruction.yml
+  push:
+    branches:
+      - v2/issue-190-spec-reconstruction
+    paths:
+      - docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+      - docs/spec/reconstruction/**
+      - scripts/reconstruct_v2_spec_primary.py
+      - scripts/reconstruct_v2_spec_independent.py
+      - scripts/compare_v2_spec_reconstructions.py
+      - scripts/test_v2_spec_reconstruction_independence.py
+      - .github/workflows/v2-spec-reconstruction.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independence-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile V2 reconstruction scripts
+        run: python -m py_compile scripts/reconstruct_v2_spec_primary.py scripts/reconstruct_v2_spec_independent.py scripts/compare_v2_spec_reconstructions.py scripts/test_v2_spec_reconstruction_independence.py
+      - name: Enforce independent Path B imports
+        run: python scripts/test_v2_spec_reconstruction_independence.py
+
+  reconstruct-development:
+    if: github.event_name == 'push'
+    needs: independence-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download sealed 2024 calibration artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: arjo-oanda-nas100-calibration-2024
+          path: /tmp/arjo-2024
+          github-token: ${{ github.token }}
+          repository: KaraboMatsemela1/arjo-trading-engine
+          run-id: 32014398864
+      - name: Download sealed 2025 calibration artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: arjo-oanda-nas100-calibration-2025
+          path: /tmp/arjo-2025
+          github-token: ${{ github.token }}
+          repository: KaraboMatsemela1/arjo-trading-engine
+          run-id: 32014398864
+      - name: Run primary V2 reconstruction
+        run: >-
+          python scripts/reconstruct_v2_spec_primary.py
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/v2-reconstruction/PRIMARY_V2_PRODUCTION_PATH.json
+      - name: Run independent V2 reconstruction
+        run: >-
+          python scripts/reconstruct_v2_spec_independent.py
+          --v2-profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+          --v1-profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/v2-reconstruction/INDEPENDENT_V2_STANDARD_LIBRARY_PATH.json
+      - name: Compare frozen V2 paths
+        run: >-
+          python scripts/compare_v2_spec_reconstructions.py
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2.json
+          --primary /tmp/v2-reconstruction/PRIMARY_V2_PRODUCTION_PATH.json
+          --independent /tmp/v2-reconstruction/INDEPENDENT_V2_STANDARD_LIBRARY_PATH.json
+          --output /tmp/v2-reconstruction/V2_SPEC_AUDIT.json
+      - name: Verify no protected or future data access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path('/tmp/v2-reconstruction').glob('*.json'):
+              result = json.loads(path.read_text())
+              assert result.get('holdout_2026h1_accessed') is False
+              assert result.get('future_validation_data_accessed') is False
+              assert result.get('paper_execution_authorized') is False
+              assert result.get('live_execution_authorized') is False
+              assert result.get('broker_mutation_authorized') is False
+          print('v2_reconstruction_data_boundary=PASS')
+          PY
+      - name: Upload V2 reconstruction evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-v2-spec-reconstruction
+          path: /tmp/v2-reconstruction
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9

@@ -1,0 +1,42 @@
+{
+  "audit_sha256": "dfec0d64d76bb48905aec4d7663f5981561234f8446f6f34accbc2ed47995265",
+  "broker_mutation_authorized": false,
+  "critical_fields": [
+    "profile_sha256",
+    "semantic_occurrence_set_sha256",
+    "qualification_rows_sha256",
+    "qualification_status_counts",
+    "qualified_occurrence_ids",
+    "observability_rows_sha256",
+    "observability_status_counts",
+    "executable_occurrence_ids",
+    "holdout_2026h1_accessed",
+    "future_validation_data_accessed",
+    "performance_comparison_performed",
+    "paper_execution_authorized",
+    "live_execution_authorized",
+    "broker_mutation_authorized"
+  ],
+  "executable_occurrence_ids": [
+    "OWNER-CAL-2024-04-26"
+  ],
+  "fully_first_party_reconstructed": false,
+  "future_validation_data_accessed": false,
+  "holdout_2026h1_accessed": false,
+  "implementation_agreement": true,
+  "independent_reconstruction_sha256": "c94f63da69df5a7bf79d89da7aff6ac66b89c3d508d4d8b49423d8a3c6099ed9",
+  "live_execution_authorized": false,
+  "observability_rows_sha256": "9333a761e38e1f38d59c37cae7de2979aa754f6b3929db0d05082b72cf823d80",
+  "observability_status_counts": {
+    "EXECUTABLE_ENTRY": 1
+  },
+  "paper_execution_authorized": false,
+  "primary_reconstruction_sha256": "4ae7891689b5b792e569955334191a77e3e19d490efbca709429a210e4025334",
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "qualification_rows_sha256": "5e02865a26656789c0c22dadf35cf3c1644ec729b84e7f596b3d5b705f4e65ce",
+  "schema_version": 1,
+  "semantic_closure_claimed": false,
+  "semantic_occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+  "status": "V2_SPEC_FROZEN"
+}
