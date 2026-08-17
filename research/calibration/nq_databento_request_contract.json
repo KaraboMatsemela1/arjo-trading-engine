@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "provider": "databento",
+  "dataset": "GLBX.MDP3",
+  "schema": "ohlcv-1m",
+  "symbols": ["NQ.v.0"],
+  "stype_in": "continuous",
+  "stype_out": "instrument_id",
+  "start": "2024-01-01T00:00:00Z",
+  "end_exclusive": "2026-01-01T00:00:00Z",
+  "protected_holdout_start": "2026-01-01T00:00:00Z",
+  "price_adjustment": "NONE_UNADJUSTED_PROVIDER_PRICES",
+  "raw_format": "dbn.zst",
+  "credential_env": "DATABENTO_API_KEY",
+  "session_timezone": "America/New_York",
+  "window_of_opportunity": {"start": "09:30", "end_exclusive": "11:00"},
+  "aggregation": {
+    "source_minutes": 1,
+    "targets_minutes": [15, 60, 240],
+    "alignment": "UTC_EPOCH_FLOOR",
+    "require_complete_bucket": true,
+    "reject_mixed_instrument_id_bucket": true
+  },
+  "safety": {
+    "network_allowed_in_ci": false,
+    "holdout_request_allowed": false,
+    "licensed_payloads_committed": false
+  }
+}

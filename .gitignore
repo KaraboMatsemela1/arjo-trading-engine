@@ -1,3 +1,9 @@
 # Local content-addressed source payload cache. Durable provenance lives in the
 # acquisition manifest; raw public-source payloads are not committed by default.
 .research-cache/
+
+# Licensed/raw calibration market data must never be committed. Only frozen
+# request contracts, schemas, and provenance manifests belong in git.
+.calibration-data/
+*.dbn
+*.dbn.zst
