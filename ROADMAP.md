@@ -1,6 +1,12 @@
 # Roadmap
 
-The engineering roadmap is complete through the V2 future-validation harness. The only unfinished project gate is the untouched final V2 validation in Issue #201, which is intentionally blocked by chronology until **2027-03-01T00:00:00Z** and explicit owner dispatch.
+The engineering roadmap is complete. The project is wrapped on the frozen V2 research baseline with status:
+
+```text
+DEVELOPMENT_COMPLETE_VALIDATION_DEFERRED
+```
+
+Untouched V2 future validation is preserved as an optional future scientific follow-up, not a blocking project deliverable.
 
 ## Completed foundation
 
@@ -53,7 +59,7 @@ The calibrated owner-operational V1 profile was independently reconstructed by p
 
 The one-time protected 2026H1 read exposed `VALIDATION_INTEGRITY_FAILURE`: V1 could semantically qualify a second sting while the frozen touch price was not present in that bar. No target/stop outcome was assigned for the defective occurrence and V1 was not refit.
 
-The 2026H1 interval is consumed and may not be reused for V2 tuning, initialization or validation.
+The 2026H1 interval is consumed and may not be reused for V2 tuning, initialization or future-validation evidence.
 
 ## V2 remediation lifecycle — complete
 
@@ -80,28 +86,19 @@ ARJO_DERIVED_OWNER_OPERATIONAL_V2
 87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6
 ```
 
-Production and independent standard-library paths agree on the sealed 2024–2025 developmental reconstruction.
+Production and independent standard-library paths agree on the sealed developmental reconstruction.
 
 ### V2 future-validation protocol
 
 **Gate:** `V2_FUTURE_VALIDATION_PROTOCOL_READY` — COMPLETE
 
-Initial future-validation boundaries, result taxonomy, sample threshold, no-refit policy and explicit authorization gates were frozen before any future-window data access.
+Future-validation boundaries, result taxonomy, sample threshold, no-refit policy and authorization boundaries were frozen before future-window access.
 
 ### Causal cold-start correction
 
 **Gate:** `V2_CAUSAL_VALIDATION_PROTOCOL_READY` — COMPLETE
 
-The strategy carries FVG/pivot state, so a scored September 1 start would require forbidden pre-window carry-in. The superseding causal protocol therefore freezes:
-
-```text
-Acquisition:       [2026-09-01, 2027-03-01)
-State at Sep 1:    EMPTY
-Bootstrap:         [2026-09-01, 2026-10-01) — unscored
-Scored validation:[2026-10-01, 2027-03-01)
-```
-
-No pre-start market data, state snapshot or V1 2026H1 state/data may seed V2.
+The strategy carries FVG/pivot state, so any later untouched validation uses a frozen empty-state bootstrap design rather than forbidden historical carry-in.
 
 Frozen protocol SHA:
 
@@ -113,30 +110,18 @@ Frozen protocol SHA:
 
 **Gate:** `V2_EXECUTION_MEASUREMENT_READY` — COMPLETE
 
-The 15-minute V2 observability rule is unchanged. A separate M1 measurement policy establishes causal event timing without inferring unknown OHLC order:
+The M1 measurement policy establishes causal event timing without inferring unknown OHLC order:
 
 ```text
 V2_M1_TOUCH_SEQUENCING_V1
 6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6
 ```
 
-Missing M1 touch after 15m observability fails integrity. Stop/target in the entry minute or both in a later minute is `AMBIGUOUS_INTRABAR_ORDER`.
-
-### Complete future-validation harness
+### Future-validation harness
 
 **Gate:** `V2_FUTURE_VALIDATION_HARNESS_READY` — COMPLETE
 
-The entire final path is implemented and tested:
-- SHA/date/authorization guards;
-- single-shot, read-only OANDA full-window acquisition;
-- deterministic M1 → 15m/60m/240m normalization;
-- empty-state bootstrap;
-- production semantic/evaluation path;
-- isolated independent standard-library path;
-- V2 observability and M1 sequencing;
-- exact dual-path comparison;
-- preregistered metric and classification computation;
-- SHA-bound final result sealing.
+The sealed optional validation path is fully implemented and tested, including SHA/date/authorization guards, single-shot read-only OANDA acquisition, deterministic normalization, causal bootstrap, dual independent evaluation paths, observability/sequencing checks, preregistered classification, and SHA-bound result sealing.
 
 Frozen request-contract SHA:
 
@@ -150,34 +135,47 @@ Harness readiness SHA:
 8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79
 ```
 
-## Final remaining phase — untouched V2 validation
+## Project completion boundary
 
-**Issue:** #201
+The project is complete as an engineering/research build at the current V2 state.
 
-**Gate:** `V2_FUTURE_VALIDATION_COMPLETE` — PENDING / `EXTERNAL_WAIT`
+The following is deliberately **not** claimed:
 
-**Earliest legal execution:** `2027-03-01T00:00:00Z`
+```text
+V2_FUTURE_VALIDATION_COMPLETE = false / not asserted
+```
 
-The final workflow is already implemented at:
+This does not block current project completion. It only limits the claims that may be made about the frozen V2 profile.
+
+The current V2 profile may be retained as a reproducible research implementation and baseline. It must not be described as future-validated, proven profitable, production-ready, or execution-qualified.
+
+## Optional future re-entry
+
+The workflow remains preserved at:
 
 ```text
 .github/workflows/v2-future-validation-execution.yml
 ```
 
-It intentionally implements no rolling/partial acquisition. After the full window closes, repository owner `KaraboMatsemela1` must explicitly dispatch it with:
+If the project is revisited after the original chronology boundary, the frozen optional protocol remains:
 
 ```text
-AUTHORIZE_V2_FUTURE_VALIDATION
+Acquisition:        [2026-09-01, 2027-03-01)
+Bootstrap:          [2026-09-01, 2026-10-01) — unscored
+Scored validation:  [2026-10-01, 2027-03-01)
+Earliest full read: 2027-03-01T00:00:00Z
 ```
 
-The workflow then acquires the exact full OANDA window once, runs both independent evaluation paths, compares them, computes the frozen result classification, and seals the final evidence.
+That future work must be opened as a new bounded lifecycle. Closing the previous wait issue does not satisfy or assert `V2_FUTURE_VALIDATION_COMPLETE`.
 
-The inferential threshold remains **30 resolved executable occurrences**. If the full untouched window produces fewer, the result is `INSUFFICIENT_SAMPLE`; the project does not widen the window or adjust rules afterward.
+## Execution boundaries at wrap
 
-## Post-validation boundaries
+```text
+PAPER_EXECUTION_ENABLED = false
+LIVE_TRADING_AUTHORIZED = false
+BROKER_MUTATION          = false
+```
 
-`V2_FUTURE_VALIDATION_COMPLETE` is a research-validation result gate, not automatic trading permission.
+Paper or live work, if ever desired, requires a separate explicit authorization and qualification lifecycle.
 
-Paper execution remains disabled unless the owner separately authorizes a new paper-qualification lifecycle. Live trading is never autonomously authorized. Broker mutation remains disabled.
-
-No further strategy engineering, refit or validation-window modification is planned before #201 executes unless a genuine implementation-integrity defect is discovered.
+No further work is required for the current project wrap.
