@@ -1,0 +1,87 @@
+name: V3 Development Coverage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-223-v3-coverage
+    paths:
+      - 'research/profitability/v3_coverage_candidate_a.json'
+      - 'scripts/diagnose_v3_coverage_candidate.py'
+      - 'scripts/test_v3_coverage_candidate.py'
+      - '.github/workflows/v3-development-coverage.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run V3 anti-outcome tests
+        run: python scripts/test_v3_coverage_candidate.py
+      - name: Download sealed 2024-2025 development artifacts
+        run: |
+          for pair in "2024:9282976276" "2025:9283007527"; do
+            YEAR="${pair%%:*}"; ARTIFACT_ID="${pair##*:}"
+            mkdir -p "/tmp/arjo-${YEAR}"
+            curl --fail --location --retry 3 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+              -o "/tmp/arjo-${YEAR}.zip"
+            unzip -q "/tmp/arjo-${YEAR}.zip" -d "/tmp/arjo-${YEAR}"
+          done
+      - name: Reproduce frozen V2 baseline funnel
+        run: >-
+          python scripts/build_owner_operational_context_occurrences.py
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/v2-baseline.json
+      - name: Evaluate preregistered V3-A coverage only
+        run: >-
+          python scripts/diagnose_v3_coverage_candidate.py
+          --candidate research/profitability/v3_coverage_candidate_a.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/v3-coverage.json
+      - name: Verify frozen baseline and no outcome access
+        run: |
+          python - <<'PY'
+          import json
+          v2=json.load(open('/tmp/v2-baseline.json'))
+          v3=json.load(open('/tmp/v3-coverage.json'))
+          assert v2['session_count']==515
+          assert v2['qualified_occurrence_count']==1
+          assert v2['status_counts']=={'NO_2CR_REJECTION':59,'NO_2_STING':14,'NO_FVA_OVERLAP':413,'NO_FVG':2,'NO_RUN':26,'QUALIFIED':1}
+          assert v2['outcome_fields_present'] is False and v2['post_woo_bars_used'] is False
+          for key in ('post_entry_outcomes_accessed','performance_metrics_accessed','backward_oos_outcomes_accessed','candidate_selection_uses_performance'):
+              assert v3[key] is False
+          assert v3['session_count']==515
+          print('V3 development coverage boundary verified')
+          print('v3_executable_occurrences=' + str(v3['executable_occurrence_count']))
+          print('v3_coverage_feasible=' + str(v3['coverage_feasible']))
+          print('v3_report_sha256=' + v3['report_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3-development-coverage
+          path: |
+            /tmp/v2-baseline.json
+            /tmp/v3-coverage.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Delete runner-local provider payloads
+        if: always()
+        run: rm -rf /tmp/arjo-2024 /tmp/arjo-2025 /tmp/arjo-2024.zip /tmp/arjo-2025.zip

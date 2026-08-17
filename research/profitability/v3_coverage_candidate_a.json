@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V3_COVERAGE_A",
+  "status": "PREREGISTERED_BEFORE_DEVELOPMENT_COVERAGE_COUNT",
+  "authority": "OWNER_DIRECTED_OPERATIONAL_CONVENTION",
+  "classification": "V3_COVERAGE_CANDIDATE_NOT_ARJO_SEMANTIC_CLOSURE",
+  "parent_profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+  "parent_profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "purpose": "Test whether one minimal owner-operational FVA/FVG relationship change makes the Arjo seed statistically testable without using post-entry outcomes.",
+  "change_set": {
+    "changed_field": "fva.required_relationship_to_4h_fvg",
+    "v2_value": "zones must overlap inclusively",
+    "v3_value": "both contexts must independently exist by 09:30 America/New_York; geometric overlap is not required",
+    "all_other_owner_operational_predicates": "UNCHANGED",
+    "v2_execution_observability_invariant": "UNCHANGED",
+    "v2_m1_execution_measurement": "UNCHANGED"
+  },
+  "evidence_boundary": {
+    "seed_requirement": "4h FVG plus 1h FVA context",
+    "first_party_fva_boundary": "FVA is an area from a high to a low, or vice versa",
+    "exact_fva_selector_is_owner_operational": true,
+    "geometric_fvg_fva_overlap_is_direct_first_party_requirement": false,
+    "semantic_closure_claimed": false
+  },
+  "development_only_evaluation": {
+    "window": ["2024-01-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "post_entry_outcomes_allowed": false,
+    "coverage_metrics": ["complete_sessions", "qualification_status_counts", "qualified_occurrence_count", "executable_occurrence_count"],
+    "coverage_feasibility_floor_per_2y": 30,
+    "selection_rule": "Freeze V3-A only if it preserves all direct first-party requirements and produces >=30 executable development occurrences without outcome access; otherwise fail closed and do not expose backward-OOS outcomes."
+  },
+  "backward_oos_boundary": {
+    "2010_2023_post_entry_outcomes_accessed": false,
+    "2010_2023_occurrence_ids_may_not_be_used_to_modify_candidate": true
+  },
+  "authorization": {"paper_execution": false, "live_execution": false, "broker_mutation": false},
+  "candidate_sha256": "21907522648f957ad620a0d0d9e3f1c3f9de4f222e92866b1db37bb91271c305"
+}
