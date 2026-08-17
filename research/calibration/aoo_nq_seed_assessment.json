@@ -21,7 +21,7 @@
       "EV_53110264054D0997F8C055BD",
       "EV_8259279C63C178C23819BC9A",
       "EV_6065BAEFC53803A9239A6CF6",
-      "EV_DE2F50C2FB863386182ACEE1"
+      "EV_917488CD997BF1BEF1288B2A"
     ]
   },
   "calibratable_parameters": [
@@ -59,7 +59,7 @@
       "classification": "CONFIGURED_POLICY_FROM_FIRST_PARTY_EXAMPLE",
       "basis_evidence_ids": [
         "EV_6065BAEFC53803A9239A6CF6",
-        "EV_DE2F50C2FB863386182ACEE1"
+        "EV_917488CD997BF1BEF1288B2A"
       ]
     }
   },
@@ -86,5 +86,5 @@
   },
   "outcome_access_authorized": true,
   "preregistration_ref": "research/calibration/aoo_nq_replay_spec.json",
-  "preregistration_sha256": "e3b73a3c28ecd34d25f2f91f5f212671d9438c349accce32aef04f883532c0f8"
+  "preregistration_sha256": "dbd2b9e943d5e60d35a4de5e9e697ec5eacdf118f285659a1414eb557e8bf557"
 }
