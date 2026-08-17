@@ -1,5 +1,5 @@
 {
-  "boundary": "The variants above operationalize first-party semantic ambiguity for preregistered calibration; they are not asserted to be Arjo-authored exact fill/buffer rules.",
+  "boundary": "The variants above operationalize first-party semantic ambiguity for preregistered calibration; they are not asserted to be Arjo-authored exact fill/buffer rules. The WoO clock below is an explicit project calibration configuration chosen from a first-party permitted example, not a universal Arjo session rule.",
   "calibration_only_conventions": {
     "second_sting_fill_event": [
       "SECOND_STING_TOUCH",
@@ -25,6 +25,19 @@
     "target_context": "next HTF premium array / ATH in the documented NQ context"
   },
   "instrument": "NQ",
+  "operational_configuration": {
+    "window_of_opportunity": {
+      "basis_evidence_ids": [
+        "EV_6065BAEFC53803A9239A6CF6",
+        "EV_DE2F50C2FB863386182ACEE1"
+      ],
+      "classification": "CONFIGURED_POLICY_FROM_FIRST_PARTY_EXAMPLE",
+      "end_exclusive": "11:00:00",
+      "mode": "PRESET_SESSION",
+      "start_inclusive": "09:30:00",
+      "timezone": "America/New_York"
+    }
+  },
   "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
   "schema_version": 1,
   "spec_id": "AOO-NQ-SEED-REPLAY-001"
