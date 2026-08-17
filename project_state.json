@@ -1,15 +1,36 @@
 {
-  "blocked_reasons": [],
+  "blocked_reasons": [
+    "Issue #1 blocked: MASTER: autonomous project lifecycle"
+  ],
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
+    "ACQUISITION_TOOLING_READY",
     "CORPUS_ACQUIRED",
     "CONCEPT_INVENTORY_READY",
     "EVIDENCE_REGISTRY_READY",
     "PREDICATE_MATRIX_READY",
-    "SPEC_READY"
+    "CALIBRATION_PROTOCOL_READY",
+    "SEMANTIC_SEED_READY",
+    "CALIBRATION_AUTHORIZED",
+    "CALIBRATION_PREREGISTRATION_COMPLETE",
+    "CALIBRATION_DATA_PIPELINE_READY",
+    "CALIBRATION_REPLAY_HARNESS_READY",
+    "CALIBRATION_DATA_READY",
+    "CALIBRATION_OCCURRENCES_READY",
+    "CALIBRATED_SPEC_FROZEN",
+    "SPEC_READY",
+    "PROTECTED_VALIDATION_PROTOCOL_FROZEN",
+    "PROTECTED_VALIDATION_COMPLETE",
+    "V2_REMEDIATION_DESIGN_READY",
+    "V2_SPEC_FROZEN",
+    "V2_FUTURE_VALIDATION_PROTOCOL_READY",
+    "V2_CAUSAL_VALIDATION_PROTOCOL_READY",
+    "V2_EXECUTION_MEASUREMENT_READY",
+    "V2_FUTURE_VALIDATION_HARNESS_READY",
+    "V2_FUTURE_VALIDATION_COMPLETE"
   ],
-  "current_gate": "SPEC_READY",
+  "current_gate": "V2_FUTURE_VALIDATION_COMPLETE",
   "issues": [
     {
       "dependencies_satisfied": true,
@@ -22,7 +43,7 @@
         "ISSUE_ID": "ARJO-MASTER",
         "OUTPUT_GATE": "NONE",
         "OWNER": "UNCLAIMED",
-        "STATE": "READY",
+        "STATE": "BLOCKED",
         "TYPE": "MASTER"
       },
       "metadata_valid": true,
@@ -1121,6 +1142,851 @@
       "number": 125,
       "title": "Autonomy: dispatch exact validation gates for Actions-created PRs",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/125"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          48,
+          101,
+          125
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-REC-WEB-008",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "PREDICATE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 127,
+      "title": "Recovery: ingest newly reachable Trading MMT first-party rules and unblock SPEC audit",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/127"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8,
+          101,
+          125
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-CALIBRATION-GATE-001",
+        "OUTPUT_GATE": "CALIBRATION_PROTOCOL_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 130,
+      "title": "Governance: add first-party-prescribed calibration gate before SPEC_READY",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/130"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          8
+        ],
+        "ENTRY_GATE": "PREDICATE_MATRIX_READY",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-32003716533",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "SUPERSEDED",
+        "TYPE": "SPEC_AUDIT_SERVICE"
+      },
+      "metadata_valid": false,
+      "number": 132,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/132"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          127,
+          130
+        ],
+        "ENTRY_GATE": "CALIBRATION_PROTOCOL_READY",
+        "ISSUE_ID": "ARJO-SEED-NQ-001",
+        "OUTPUT_GATE": "SEMANTIC_SEED_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "SEMANTIC_SEED_CLOSURE"
+      },
+      "metadata_valid": true,
+      "number": 136,
+      "title": "Seed closure: operationalize NQ AoO 2-Sting replay contract",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/136"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          136
+        ],
+        "ENTRY_GATE": "CALIBRATION_AUTHORIZED",
+        "ISSUE_ID": "ARJO-CAL-NQ-001",
+        "OUTPUT_GATE": "CALIBRATED_SPEC_FROZEN",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION"
+      },
+      "metadata_valid": true,
+      "number": 138,
+      "title": "Phase 6A: calibrate locked NQ AoO execution parameters",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/138"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          136
+        ],
+        "ENTRY_GATE": "CALIBRATION_AUTHORIZED",
+        "ISSUE_ID": "ARJO-CAL-WOO-001",
+        "OUTPUT_GATE": "CALIBRATION_PREREGISTRATION_COMPLETE",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "PREREGISTRATION_CORRECTION"
+      },
+      "metadata_valid": true,
+      "number": 139,
+      "title": "Pre-calibration correction: freeze deterministic WoO configuration",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/139"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          139
+        ],
+        "ENTRY_GATE": "CALIBRATION_PREREGISTRATION_COMPLETE",
+        "ISSUE_ID": "ARJO-CAL-DATA-001",
+        "OUTPUT_GATE": "CALIBRATION_DATA_PIPELINE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION_DATA_FOUNDATION"
+      },
+      "metadata_valid": true,
+      "number": 140,
+      "title": "Phase 6A data foundation: provenance-bound Databento NQ ingestion and replay normalization",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/140"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          130,
+          136
+        ],
+        "ENTRY_GATE": "CALIBRATION_PROTOCOL_READY",
+        "ISSUE_ID": "ARJO-TRACKER-CAL-001",
+        "OUTPUT_GATE": "TRACKER_CALIBRATION_ALIGNED",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "GOVERNANCE_DOC_ALIGNMENT"
+      },
+      "metadata_valid": true,
+      "number": 141,
+      "title": "Tracker/roadmap alignment: insert governed calibration gates before SPEC_READY",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/141"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          127,
+          130,
+          136
+        ],
+        "ENTRY_GATE": "CALIBRATION_AUTHORIZED",
+        "ISSUE_ID": "ARJO-CLEANUP-SPEC-SERVICE-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "QUEUE_HYGIENE"
+      },
+      "metadata_valid": true,
+      "number": 142,
+      "title": "Cleanup: retire stale independent SPEC audit service issue",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/142"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-DISCARDED-143",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "QUEUE_HYGIENE"
+      },
+      "metadata_valid": true,
+      "number": 143,
+      "title": "Discarded accidental marker",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/143"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-DISCARDED-144",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "QUEUE_HYGIENE"
+      },
+      "metadata_valid": true,
+      "number": 144,
+      "title": "Discarded accidental marker",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/144"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          136
+        ],
+        "ENTRY_GATE": "SEMANTIC_SEED_READY",
+        "ISSUE_ID": "ARJO-GATE-CAL-AUTH-001",
+        "OUTPUT_GATE": "CALIBRATION_AUTHORIZED",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "GATE_DECLARATION"
+      },
+      "metadata_valid": true,
+      "number": 146,
+      "title": "Gate: publish CALIBRATION_AUTHORIZED from completed NQ seed closure",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/146"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-32005589370",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 149,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/149"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          140
+        ],
+        "ENTRY_GATE": "CALIBRATION_DATA_PIPELINE_READY",
+        "ISSUE_ID": "ARJO-CAL-DATA-ACQ-001",
+        "OUTPUT_GATE": "CALIBRATION_DATA_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION_DATA_ACQUISITION"
+      },
+      "metadata_valid": true,
+      "number": 151,
+      "title": "Phase 6A data acquisition: retrieve and provenance-bind OANDA NAS100 calibration dataset",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/151"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-152",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 152,
+      "title": "Phase 6A tracker: complete Databento calibration data pipeline gate",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/152"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-153",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 153,
+      "title": "Phase 6A data pipeline deliverables",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/153"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-154",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 154,
+      "title": "Phase 6A data pipeline tests",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/154"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-155",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 155,
+      "title": "Phase 6A data pipeline CI wiring",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/155"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-156",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 156,
+      "title": "Phase 6A data pipeline contract freeze",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/156"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-157",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 157,
+      "title": "Phase 6A data pipeline implementation branch checkpoint",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/157"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-158",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 158,
+      "title": "Phase 6A data pipeline provider adapter checkpoint",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/158"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-159",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 159,
+      "title": "TEMP duplicate tracker cleanup marker",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/159"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-160",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 160,
+      "title": "ignore",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/160"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-NOOP-162",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 162,
+      "title": "Phase 6A acquisition runner guard",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/162"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          136,
+          140
+        ],
+        "ENTRY_GATE": "CALIBRATION_AUTHORIZED",
+        "ISSUE_ID": "ARJO-CAL-REPLAY-001",
+        "OUTPUT_GATE": "CALIBRATION_REPLAY_HARNESS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION_REPLAY_FOUNDATION"
+      },
+      "metadata_valid": true,
+      "number": 164,
+      "title": "Phase 6A replay foundation: evaluate locked NQ calibration variants offline",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/164"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          151,
+          164
+        ],
+        "ENTRY_GATE": "CALIBRATION_DATA_READY",
+        "ISSUE_ID": "ARJO-CAL-OCCURRENCES-001",
+        "OUTPUT_GATE": "CALIBRATION_OCCURRENCES_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION_OCCURRENCE_QUALIFICATION"
+      },
+      "metadata_valid": true,
+      "number": 167,
+      "title": "Phase 6A occurrence qualification: materialize locked NQ-seed calibration occurrences",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/167"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          151
+        ],
+        "ENTRY_GATE": "CALIBRATION_DATA_READY",
+        "ISSUE_ID": "ARJO-CAL-OCCURRENCE-SOURCE-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "FIRST_PARTY_SOURCE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 170,
+      "title": "Recovery: acquire official MMC PDFs for occurrence-selector semantics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/170"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-32018293135",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 172,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/172"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-AUTO-SPEC-AUDIT-32019499790",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "SUPERSEDED_TRACKER_NOOP"
+      },
+      "metadata_valid": true,
+      "number": 175,
+      "title": "Service completed independent SPEC audit branch",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/175"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          164,
+          167
+        ],
+        "ENTRY_GATE": "CALIBRATION_OCCURRENCES_READY",
+        "ISSUE_ID": "ARJO-CAL-EXEC-001",
+        "OUTPUT_GATE": "CALIBRATED_SPEC_FROZEN",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "CALIBRATION_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 181,
+      "title": "Phase 6A calibration execution: replay frozen operational occurrence",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/181"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          181
+        ],
+        "ENTRY_GATE": "CALIBRATED_SPEC_FROZEN",
+        "ISSUE_ID": "ARJO-SPEC-RECON-001",
+        "OUTPUT_GATE": "SPEC_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "INDEPENDENT_OPERATIONAL_SPEC_RECONSTRUCTION"
+      },
+      "metadata_valid": true,
+      "number": 183,
+      "title": "SPEC reconstruction: independently reproduce calibrated owner-operational profile",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/183"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          183
+        ],
+        "ENTRY_GATE": "SPEC_READY",
+        "ISSUE_ID": "ARJO-VAL-PROTOCOL-001",
+        "OUTPUT_GATE": "PROTECTED_VALIDATION_PROTOCOL_FROZEN",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "PROTECTED_VALIDATION_PROTOCOL"
+      },
+      "metadata_valid": true,
+      "number": 185,
+      "title": "Protected validation protocol: freeze no-refit 2026 holdout evaluation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/185"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          185
+        ],
+        "ENTRY_GATE": "PROTECTED_VALIDATION_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-VAL-EXEC-001",
+        "OUTPUT_GATE": "PROTECTED_VALIDATION_COMPLETE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "PROTECTED_VALIDATION_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 187,
+      "title": "Protected validation execution: acquire and evaluate 2026 holdout",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/187"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          187
+        ],
+        "ENTRY_GATE": "PROTECTED_VALIDATION_COMPLETE",
+        "ISSUE_ID": "ARJO-V2-OBSERVABILITY-001",
+        "OUTPUT_GATE": "V2_REMEDIATION_DESIGN_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "POST_VALIDATION_REMEDIATION"
+      },
+      "metadata_valid": true,
+      "number": 189,
+      "title": "V2 remediation: make execution-event observability fail closed",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/189"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          189
+        ],
+        "ENTRY_GATE": "V2_REMEDIATION_DESIGN_READY",
+        "ISSUE_ID": "ARJO-V2-SPEC-001",
+        "OUTPUT_GATE": "V2_SPEC_FROZEN",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "V2_SPEC_RECONSTRUCTION"
+      },
+      "metadata_valid": true,
+      "number": 190,
+      "title": "V2 SPEC: independently reconstruct execution-observability profile",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/190"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          190
+        ],
+        "ENTRY_GATE": "V2_SPEC_FROZEN",
+        "ISSUE_ID": "ARJO-V2-VAL-PROTOCOL-001",
+        "OUTPUT_GATE": "V2_FUTURE_VALIDATION_PROTOCOL_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "V2_FUTURE_VALIDATION_PROTOCOL"
+      },
+      "metadata_valid": true,
+      "number": 193,
+      "title": "V2 future validation: freeze untouched no-refit protocol",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/193"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          193,
+          196,
+          198
+        ],
+        "ENTRY_GATE": "V2_EXECUTION_MEASUREMENT_READY",
+        "ISSUE_ID": "ARJO-V2-VAL-HARNESS-001",
+        "OUTPUT_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "V2_FUTURE_VALIDATION_HARNESS"
+      },
+      "metadata_valid": true,
+      "number": 195,
+      "title": "V2 future validation: prebuild acquisition, dual evaluation and result sealing",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/195"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          193
+        ],
+        "ENTRY_GATE": "V2_FUTURE_VALIDATION_PROTOCOL_READY",
+        "ISSUE_ID": "ARJO-V2-VAL-CAUSAL-001",
+        "OUTPUT_GATE": "V2_CAUSAL_VALIDATION_PROTOCOL_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "V2_CAUSAL_VALIDATION_PROTOCOL"
+      },
+      "metadata_valid": true,
+      "number": 196,
+      "title": "V2 future validation: freeze causal cold-start bootstrap protocol",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/196"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          196
+        ],
+        "ENTRY_GATE": "V2_CAUSAL_VALIDATION_PROTOCOL_READY",
+        "ISSUE_ID": "ARJO-V2-EXEC-MEASURE-001",
+        "OUTPUT_GATE": "V2_EXECUTION_MEASUREMENT_READY",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "V2_EXECUTION_MEASUREMENT_POLICY"
+      },
+      "metadata_valid": true,
+      "number": 198,
+      "title": "V2 execution integrity: freeze M1 touch sequencing measurement",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/198"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          195
+        ],
+        "ENTRY_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
+        "ISSUE_ID": "ARJO-V2-FINAL-VAL-001",
+        "OUTPUT_GATE": "V2_FUTURE_VALIDATION_COMPLETE",
+        "OWNER": "KaraboMatsemela1",
+        "STATE": "EXTERNAL_WAIT",
+        "TYPE": "FINAL_FUTURE_VALIDATION_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 201,
+      "title": "FINAL: execute sealed V2 future validation after March 1, 2027",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/201"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          195
+        ],
+        "ENTRY_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
+        "ISSUE_ID": "ARJO-FINAL-GOV-001",
+        "OUTPUT_GATE": "PROJECT_FINALIZED_AWAITING_VALIDATION",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "FINAL_GOVERNANCE_PERSISTENCE"
+      },
+      "metadata_valid": true,
+      "number": 203,
+      "title": "Final governance: persist development-complete repository state",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/203"
     }
   ],
   "live_execution_enabled": false,
@@ -1131,14 +1997,34 @@
     "ACQUISITION_TOOLING_READY",
     "ACTIONS_CI_AVAILABLE",
     "ACTIONS_PR_CREATION_ENABLED",
+    "CALIBRATED_SPEC_FROZEN",
+    "CALIBRATION_AUTHORIZED",
+    "CALIBRATION_DATA_PIPELINE_READY",
+    "CALIBRATION_DATA_READY",
+    "CALIBRATION_OCCURRENCES_READY",
+    "CALIBRATION_PREREGISTRATION_COMPLETE",
+    "CALIBRATION_PROTOCOL_READY",
+    "CALIBRATION_REPLAY_HARNESS_READY",
     "CONCEPT_INVENTORY_READY",
     "CORPUS_ACQUIRED",
     "EVIDENCE_REGISTRY_READY",
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "PREDICATE_MATRIX_READY",
+    "PROJECT_FINALIZED_AWAITING_VALIDATION",
+    "PROTECTED_VALIDATION_COMPLETE",
+    "PROTECTED_VALIDATION_PROTOCOL_FROZEN",
     "REPO_CREATED",
-    "SOURCE_UNIVERSE_DISCOVERED"
+    "SEMANTIC_SEED_READY",
+    "SOURCE_UNIVERSE_DISCOVERED",
+    "SPEC_READY",
+    "TRACKER_CALIBRATION_ALIGNED",
+    "V2_CAUSAL_VALIDATION_PROTOCOL_READY",
+    "V2_EXECUTION_MEASUREMENT_READY",
+    "V2_FUTURE_VALIDATION_HARNESS_READY",
+    "V2_FUTURE_VALIDATION_PROTOCOL_READY",
+    "V2_REMEDIATION_DESIGN_READY",
+    "V2_SPEC_FROZEN"
   ],
   "schema_version": 1,
-  "spec_ready": false
+  "spec_ready": true
 }
