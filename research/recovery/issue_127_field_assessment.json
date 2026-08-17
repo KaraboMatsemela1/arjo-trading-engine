@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "issue": 127,
+  "candidate": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+  "performance_data_consulted": false,
+  "generic_ict_smc_knowledge_used": false,
+  "community_interpretations_used": false,
+  "direct_first_party_website_payloads_admitted": 10,
+  "new_evidence_records": 30,
+  "expected_post_regeneration_state": {
+    "MISSING": 0,
+    "PARTIAL": 16,
+    "SATISFIED": 0,
+    "CONTRADICTORY": 0,
+    "NOT_APPLICABLE": 0,
+    "spec_ready": false
+  },
+  "material_change": "All seven fields that were MISSING before Issue #127 now have direct first-party evidence, but the evidence does not justify promoting the complete candidate to an executable deterministic rule.",
+  "field_assessment": {
+    "INPUTS": "PARTIAL: observable FVG/FVA/PD Array/2CR constructions remain incomplete.",
+    "INSTRUMENTS": "PARTIAL: direct Gold and NQ examples exist, with Metals/Indices/JPY pairs named as favorable classes; universal eligibility is not defined.",
+    "TIMEFRAME": "PARTIAL: direct 4h/1h and 4h-FVG/1h-FVA/15m-execution examples exist; no universal hierarchy is defined.",
+    "HIGHER_TIMEFRAME_CONTEXT": "PARTIAL: LTF entry inside HTF expansion is explicit; HTF-ready construction remains incomplete.",
+    "DIRECTION": "PARTIAL: recovered long examples map resistance/2CR-high runs to bullish continuation; the complete direction algorithm remains incomplete.",
+    "PRECONDITIONS": "PARTIAL: opposing arguments must be removed; full argument inventory and weighting are incomplete.",
+    "SETUP": "PARTIAL: AoO is Trigger-to-Target and HTF/LTF placement is explicit; exact PD Array selection remains incomplete.",
+    "TRIGGER": "PARTIAL: Run on Liquidity / Run 2CR High is explicit with close-above and two-sting examples; Arjo presents more than one valid run construction.",
+    "ENTRY": "PARTIAL: trade-into-AoO implies entry and 15m execution is directly exemplified; order/fill/confirmation timing is not uniquely specified.",
+    "STOP": "PARTIAL: stop belongs where the setup becomes low-probability and a bearish Swing-High example is explicit; the long-side numeric rule is not directly specified.",
+    "TARGET": "PARTIAL: target must be a PD Array and an NQ long example targets the next ATH; PD Array taxonomy/tie-breaks remain incomplete.",
+    "INVALIDATION": "PARTIAL: a rejection-high run invalidates respect; post-entry invalidation remains under-specified.",
+    "EXPIRY": "PARTIAL: unmet parameters are abandoned and trading is limited to WoO; no universal exact bar/clock expiry is stated.",
+    "SESSION/TIME_RULE": "PARTIAL: trading within WoO is required, but WoO may be a configured session or alert-driven rather than one universal clock interval.",
+    "OPTIONAL_CONDITIONS": "PARTIAL: a December avoid-trading filter is documented; the complete optional-filter set is not stated.",
+    "REQUIRED_CONDITIONS": "PARTIAL: competing arguments must be removed and Bias/Narrative/Context/Entry/Risk Management are explicit plan levels; exact rules for every level remain incomplete."
+  },
+  "critical_first_party_boundary": "Arjo explicitly states that a trading plan needs an 80/20 rule: 80% objective and 20% subjective. A faithful autonomous engine therefore cannot silently invent the subjective 20%; it must either recover direct operational rules for it or expose those judgments as explicit reviewed configuration/policy.",
+  "next_recovery_targets": [
+    "Direct long-side stop placement tied to the selected AoO/PD Array entry.",
+    "Exact PD Array construction and target tie-breaking for the narrowed NQ plan.",
+    "Exact HTF-ready / expansion predicate and LTF entry confirmation timing.",
+    "Explicit expiry policy when a parameter is not met inside the configured WoO.",
+    "Evidence identifying which judgments constitute the stated subjective 20%, or an owner-approved deterministic policy for those judgments."
+  ]
+}
