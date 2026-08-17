@@ -4,7 +4,11 @@
 The validator does not discover FVGs, FVAs, 2CRs, Order Flow legs, targets, or
 2-Sting events. Those fields remain semantic annotations until direct
 first-party rules make their selection machine-deterministic. This module only
-checks independent annotation consensus and data-verifiable invariants.
+checks two isolated annotation-pass agreement plus data-verifiable invariants.
+
+The current protocol uses two non-cross-referencing passes from the same model.
+Agreement is therefore a reproducibility check and MUST NOT be represented as
+independent-human consensus.
 """
 
 from __future__ import annotations
@@ -29,27 +33,24 @@ EXPECTED_PROVIDER = {
     "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
 }
 EXPECTED_CONTRACT_SHA = "8923d63d27df107fd422b9bab97490c8403d656ffb9c3577cc3e4f67474c4a51"
+EXPECTED_ANNOTATOR_CLASS = "GPT_5_6_SOL"
+EXPECTED_ISOLATION_MODE = "SAME_MODEL_SEPARATE_PASS_NO_CROSS_REFERENCE"
+EXPECTED_PASS_IDS = {"PASS_A", "PASS_B"}
 REQUIRED_EVIDENCE = {
     "four_h_fvg": {"EV_427DA06DF5EBFA7F4CFB170A"},
     "one_h_fva": {"EV_88AB61A79C3864A7767B6A11"},
-    "rejection_high": {"EV_E2CA3E5215E4B2C2044D7BC9"},
+    "rejection_high": {"EV_E2CA3E5215E4B2C2044D7BC9", "EV_7F8AE2B63C992516199935EE"},
     "order_flow_leg_low": {"EV_58E144AEBF95808F39138E22"},
     "target": {"EV_53110264054D0997F8C055BD"},
-    "second_sting": {"EV_AED1F1512355C2B3B6DEAB4D"},
+    "second_sting": {
+        "EV_AED1F1512355C2B3B6DEAB4D",
+        "EV_0FDC8E9BEC515E440157F18B",
+        "EV_75D4CB1715AC2752B8F4AD1B",
+    },
 }
 FORBIDDEN_OUTCOME_KEYS = {
-    "pnl",
-    "profit",
-    "loss",
-    "win",
-    "return",
-    "performance",
-    "target_hit",
-    "stop_hit",
-    "rr",
-    "expectancy",
-    "score",
-    "rank",
+    "pnl", "profit", "loss", "win", "return", "performance", "target_hit",
+    "stop_hit", "rr", "expectancy", "score", "rank",
 }
 
 
@@ -118,13 +119,22 @@ def validate_provider(packet: dict) -> None:
 def validate_annotations(packet: dict) -> dict:
     annotations = packet.get("annotations")
     if not isinstance(annotations, list) or len(annotations) != 2:
-        raise OccurrenceValidationError("exactly two independent annotations are required")
+        raise OccurrenceValidationError("exactly two isolated annotation passes are required")
     ids = [str(item.get("annotator_id", "")) for item in annotations if isinstance(item, dict)]
     if len(ids) != 2 or not all(ids) or len(set(ids)) != 2:
-        raise OccurrenceValidationError("two distinct annotator_id values are required")
+        raise OccurrenceValidationError("two distinct pass-scoped annotator_id values are required")
+    pass_ids = {str(item.get("pass_id", "")) for item in annotations if isinstance(item, dict)}
+    if pass_ids != EXPECTED_PASS_IDS:
+        raise OccurrenceValidationError("annotations must contain exactly PASS_A and PASS_B")
 
     canonical_anchors: list[dict] = []
     for annotation in annotations:
+        if annotation.get("annotator_class") != EXPECTED_ANNOTATOR_CLASS:
+            raise OccurrenceValidationError("unexpected annotator_class")
+        if annotation.get("independent_human_annotator_claimed") is not False:
+            raise OccurrenceValidationError("independent-human consensus claim is prohibited")
+        if annotation.get("isolation_mode") != EXPECTED_ISOLATION_MODE:
+            raise OccurrenceValidationError("unexpected annotation isolation_mode")
         if annotation.get("outcome_blind") is not True:
             raise OccurrenceValidationError("each annotation must be outcome_blind=true")
         if annotation.get("method") != "EVIDENCE_CONSTRAINED_SEMANTIC_ANNOTATION":
@@ -137,10 +147,14 @@ def validate_annotations(packet: dict) -> dict:
         canonical_anchors.append(anchors)
 
     if canonical_sha256(canonical_anchors[0]) != canonical_sha256(canonical_anchors[1]):
-        raise OccurrenceValidationError("independent annotations do not agree on semantic anchors")
+        raise OccurrenceValidationError("isolated annotation passes do not agree on semantic anchors")
     anchors = canonical_anchors[0]
     if packet.get("consensus_anchors_sha256") != canonical_sha256(anchors):
         raise OccurrenceValidationError("consensus anchor SHA mismatch")
+    if packet.get("independent_human_consensus_claimed") is not False:
+        raise OccurrenceValidationError("packet must explicitly deny independent-human consensus")
+    if packet.get("same_model_reproducibility_only") is not True:
+        raise OccurrenceValidationError("packet must mark same-model reproducibility boundary")
     return anchors
 
 
@@ -247,12 +261,14 @@ def validate_packet(packet: dict) -> dict:
 
     return {
         "occurrence_id": packet.get("occurrence_id"),
-        "status": "QUALIFIED_ANCHOR_CONSENSUS",
+        "status": "QUALIFIED_ANCHOR_REPRODUCIBILITY_CONSENSUS",
         "consensus_anchors_sha256": packet["consensus_anchors_sha256"],
         "provider": EXPECTED_PROVIDER["provider"],
         "instrument": EXPECTED_PROVIDER["instrument"],
         "outcome_fields_present": False,
         "holdout_accessed": False,
+        "same_model_reproducibility_only": True,
+        "independent_human_consensus_claimed": False,
     }
 
 
