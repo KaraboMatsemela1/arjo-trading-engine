@@ -1,0 +1,127 @@
+{
+  "broker_mutation_authorized": false,
+  "complete_session_count": 126,
+  "critical_agreement": {
+    "complete_session_count": {
+      "status": "PASS",
+      "value_sha256": "dbb1ded63a00c062ace500d3a51889d373bf6a56c6a3e038c3ba7342ed93f544"
+    },
+    "detected_fvg_formation_count": {
+      "status": "PASS",
+      "value_sha256": "31fc9ee8fbccfdc72871b96640628328c5d8782cdabb3afaa655284ee67ade57"
+    },
+    "execution_outcomes": {
+      "status": "PASS",
+      "value_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e7b1a24e0b313b6a27e136"
+    },
+    "execution_outcomes_sha256": {
+      "status": "PASS",
+      "value_sha256": "b982c9799696b0993a75ef2db8f957b1d210cd09733c180a75e1843b19bf16d4"
+    },
+    "frozen_execution": {
+      "status": "PASS",
+      "value_sha256": "478fa1d9611ca392945572515192485cd325154560379be36e126433643757a8"
+    },
+    "holdout_boundary_ok": {
+      "status": "PASS",
+      "value_sha256": "b5bea41b6c623f7c09f1bf24dcae58eb396bc5a27bf32713f098aad387a756c3"
+    },
+    "holdout_formed_fvg_count": {
+      "status": "PASS",
+      "value_sha256": "7b1a278f5abe8e9d310517e73c270ae8b64b1a679ddb4300075055cb506a955a"
+    },
+    "integrity_failures": {
+      "status": "PASS",
+      "value_sha256": "27743af98ae62eb2705913dbc0a8853a8f37d1e66d5576c989f2974a6ef12644"
+    },
+    "integrity_failures_sha256": {
+      "status": "PASS",
+      "value_sha256": "b1e635de4d2b51e40a073bdbcd94a88e435860910883e3e3805462c541315518"
+    },
+    "occurrence_set_sha256": {
+      "status": "PASS",
+      "value_sha256": "eaa61420304d6c0ff6a6d064cae965b2dde1c15010aa78bc142d7b44e4a66f5b"
+    },
+    "qualification_rows_sha256": {
+      "status": "PASS",
+      "value_sha256": "44b99c42d931635575e202f4aa0dc87ffda60774efc69608b4de08674839fecd"
+    },
+    "qualification_status_counts": {
+      "status": "PASS",
+      "value_sha256": "2f0967a1b1467a2c95364a665c8fb325391e5dd28e9e10c4ac2f912b4ef9810e"
+    },
+    "qualified_occurrence_ids": {
+      "status": "PASS",
+      "value_sha256": "c0d1390e71cf61fb68d42426669d936ba6b91b24d4371b4794190c1a1692fd99"
+    },
+    "selected_fvg_session_count": {
+      "status": "PASS",
+      "value_sha256": "dbb1ded63a00c062ace500d3a51889d373bf6a56c6a3e038c3ba7342ed93f544"
+    }
+  },
+  "detected_fvg_formation_count": 443,
+  "execution_outcomes": [],
+  "execution_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e7b1a24e0b313b6a27e136",
+  "holdout_accessed": true,
+  "holdout_formed_fvg_count": 96,
+  "holdout_window": {
+    "end_exclusive": "2026-07-01T00:00:00Z",
+    "request_must_not_cross_end": true,
+    "start_inclusive": "2026-01-01T00:00:00Z"
+  },
+  "implementation_agreement": true,
+  "independent_report_sha256": "db8b285791f6bc51b5d420e4f092ef780208f64a75d16de6980edc141562f8e8",
+  "integrity_failures": [
+    {
+      "bar_high": "29693.4",
+      "bar_low": "29578.0",
+      "kind": "UNOBSERVABLE_SECOND_STING_TOUCH",
+      "occurrence_id": "OWNER-VAL-2026-06-23",
+      "second_sting_ts_utc": "2026-06-23T14:45:00Z",
+      "touch_price": "29698.1"
+    }
+  ],
+  "integrity_failures_sha256": "d68b2ecd93f19db09af4a32a5d6aa66090052309aa0e261a6bdb46610a2ede82",
+  "live_execution_authorized": false,
+  "metrics": {
+    "cumulative_realized_r_when_resolved": null,
+    "inferential_resolved_occurrence_threshold": 30,
+    "mean_realized_r_when_resolved": null,
+    "occurrence_rate_per_complete_session": 0.007936507936507936,
+    "outcome_counts": {
+      "AMBIGUOUS_INTRABAR_ORDER": 0,
+      "STOP_FIRST": 0,
+      "TARGET_FIRST": 0,
+      "UNRESOLVED_WINDOW_END": 0
+    },
+    "qualified_occurrence_count": 1,
+    "realized_r": [],
+    "resolved_occurrence_count": 0,
+    "target_first_proportion_among_resolved": null,
+    "target_first_wilson_interval_95": null
+  },
+  "mismatches": [],
+  "no_refit_performed": true,
+  "occurrence_set_sha256": "be83b83b4bc4ca4807e43397d0bb977f2779281db685b0c1a04e71641a027cd8",
+  "paper_execution_authorized": false,
+  "primary_report_sha256": "40911d352e79ac1a512bef58354414047ad3c440536a4361a5db06f9c3ea7597",
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+  "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585",
+  "qualification_rows_sha256": "0707ea9fcca783a33102804e3b76a8d388b415662f3b7e831dc43f237442bfd6",
+  "qualification_status_counts": {
+    "NO_2CR_REJECTION": 16,
+    "NO_FVA_OVERLAP": 101,
+    "NO_RUN": 8,
+    "QUALIFIED": 1
+  },
+  "qualified_occurrence_ids": [
+    "OWNER-VAL-2026-06-23"
+  ],
+  "schema_version": 1,
+  "selected_fvg_session_count": 126,
+  "status": "PROTECTED_VALIDATION_COMPLETE",
+  "validation_classification": "VALIDATION_INTEGRITY_FAILURE",
+  "validation_protocol_id": "ARJO_PROTECTED_VALIDATION_V1",
+  "validation_protocol_sha256": "258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347",
+  "validation_result_sha256": "a3f1afbaf1a9206fef4b6e11b3f0b42d6eba022f67b94e0a756708cc3323e474"
+}

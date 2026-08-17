@@ -1,0 +1,65 @@
+name: Protected Validation Result
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/protected-validation-result.yml'
+      - 'research/validation/PROTECTED_VALIDATION.json'
+      - 'research/validation/protected_holdout_data_readiness.json'
+      - 'research/validation/reconstruction/PRIMARY_PROTECTED_VALIDATION_PATH.json'
+      - 'research/validation/reconstruction/INDEPENDENT_PROTECTED_VALIDATION_PATH.json'
+      - 'scripts/check_protected_validation_result.py'
+      - 'scripts/compare_protected_validation_paths.py'
+  push:
+    branches:
+      - validation/issue-187-holdout
+    paths:
+      - '.github/workflows/protected-validation-result.yml'
+      - 'research/validation/PROTECTED_VALIDATION.json'
+      - 'research/validation/protected_holdout_data_readiness.json'
+      - 'research/validation/reconstruction/PRIMARY_PROTECTED_VALIDATION_PATH.json'
+      - 'research/validation/reconstruction/INDEPENDENT_PROTECTED_VALIDATION_PATH.json'
+      - 'scripts/check_protected_validation_result.py'
+      - 'scripts/compare_protected_validation_paths.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-sealed-protected-result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile protected result checker
+        run: python -m py_compile scripts/check_protected_validation_result.py scripts/compare_protected_validation_paths.py
+      - name: Verify sealed protected result and no-refit boundary
+        run: python scripts/check_protected_validation_result.py --output /tmp/protected-validation-readiness.json
+      - name: Verify completed classification does not authorize execution
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('/tmp/protected-validation-readiness.json').read_text())
+          assert r['status'] == 'PROTECTED_VALIDATION_COMPLETE'
+          assert r['validation_classification'] == 'VALIDATION_INTEGRITY_FAILURE'
+          assert r['validation_result_sha256'] == 'a3f1afbaf1a9206fef4b6e11b3f0b42d6eba022f67b94e0a756708cc3323e474'
+          assert r['integrity_failure'] == 'UNOBSERVABLE_SECOND_STING_TOUCH'
+          assert r['holdout_accessed'] is True
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          print('sealed_protected_validation_result=PASS')
+          PY
+      - name: Upload non-market readiness summary
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-validation-readiness
+          path: /tmp/protected-validation-readiness.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
