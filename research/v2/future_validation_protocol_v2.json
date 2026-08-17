@@ -1,0 +1,203 @@
+{
+  "access_gates": {
+    "market_data_acquisition": {
+      "authorization_default": false,
+      "authorization_id": "ARJO_V2_FUTURE_VALIDATION_DATA_ACCESS_V1",
+      "explicit_authorization_required": true,
+      "not_before": "2026-09-01T00:00:00Z"
+    },
+    "outcome_evaluation": {
+      "authorization_default": false,
+      "authorization_id": "ARJO_V2_FUTURE_VALIDATION_EVALUATION_V1",
+      "explicit_authorization_required": true,
+      "not_before": "2027-03-01T00:00:00Z",
+      "partial_window_peeking_allowed": false
+    }
+  },
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "future_validation_data_access_authorized": false,
+    "future_validation_evaluation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "change_policy": "After any reserved-window market data is first accessed, this causal initialization policy, profile, rule, window, metric and threshold set is immutable. Any change requires a new versioned research cycle and new untouched future validation reservation.",
+  "dual_path_validation": {
+    "critical_agreement_fields": [
+      "complete_session_count",
+      "detected_fvg_formation_count",
+      "selected_fvg_session_count",
+      "qualification_status_counts",
+      "qualified_occurrence_ids",
+      "semantic_occurrence_set_sha256",
+      "observability_rows_sha256",
+      "observability_status_counts",
+      "executable_occurrence_ids",
+      "execution_outcomes",
+      "execution_outcomes_sha256",
+      "metrics",
+      "validation_classification",
+      "future_validation_boundary_ok"
+    ],
+    "independent_path": "INDEPENDENT_V2_STANDARD_LIBRARY_PATH",
+    "primary_path": "PRIMARY_V2_PRODUCTION_PATH",
+    "required": true
+  },
+  "frozen_execution": {
+    "alternate_variants_allowed": false,
+    "performance_status_used_for_selection": false,
+    "provider_price_quantum": "0.1",
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "initialization_policy": {
+    "bootstrap_end_exclusive": "2026-10-01T00:00:00Z",
+    "bootstrap_outcomes_evaluated": false,
+    "bootstrap_performance_inspected": false,
+    "bootstrap_purpose": "BUILD_CAUSAL_FVG_PIVOT_AND_INTERNAL_STATE_ONLY",
+    "bootstrap_sessions_scored": false,
+    "bootstrap_start_inclusive": "2026-09-01T00:00:00Z",
+    "classification": "OPERATIONAL_DEPLOYMENT_INITIALIZATION_POLICY_NOT_ARJO_SEMANTIC_CLAIM",
+    "policy_id": "V2_COLD_START_BOOTSTRAP_V1",
+    "pre_start_market_data_allowed": false,
+    "pre_start_state_snapshot_allowed": false,
+    "scored_start_inclusive": "2026-10-01T00:00:00Z",
+    "state_at_acquisition_start": "EMPTY",
+    "state_transition": "BOOTSTRAP_STATE_CONTINUES_CAUSALLY_INTO_SCORED_WINDOW",
+    "v1_holdout_state_or_data_allowed": false
+  },
+  "lineage": {
+    "future_validation_reservation_sha256": "77cb50d000e4eecfaff6890d60ae296e5a06381b220debcb868240711c525853",
+    "v1_post_validation_disposition_sha256": "71f1c1b67399fb297d037d0b8cb9bb0699afb3b2c894c0659042486a55bfc949",
+    "v2_observability_invariant_sha256": "1822f7aa9f43cdabfa4f50d10c932e7eb600e5ffd6821615f8fff440cbe9c2c5",
+    "v2_remediation_readiness_sha256": "ad74e7bf4dee89e6bbed4b8efbe07d87723c9e4dca529126c7d4e7917ad1c960"
+  },
+  "metrics": {
+    "complete_session_count": true,
+    "cumulative_realized_r_when_resolved": true,
+    "executable_entry_count": true,
+    "executable_rate_per_qualified_occurrence": true,
+    "mean_realized_r_when_resolved": true,
+    "no_executable_entry_count": true,
+    "occurrence_rate_per_complete_session": true,
+    "outcome_counts_for_executable_entries": true,
+    "qualified_occurrence_count": true,
+    "realized_r": {
+      "AMBIGUOUS_INTRABAR_ORDER": null,
+      "NO_EXECUTABLE_ENTRY": null,
+      "STOP_FIRST": -1.0,
+      "TARGET_FIRST": "(target_price-entry_price)/(entry_price-stop_price)",
+      "UNRESOLVED_WINDOW_END": null
+    },
+    "resolved_executable_occurrence_count": "TARGET_FIRST + STOP_FIRST",
+    "target_first_proportion_among_resolved": true,
+    "wilson_interval": {
+      "confidence": 0.95,
+      "defined_when_resolved_count_positive": true,
+      "z": 1.959963984540054
+    }
+  },
+  "no_refit": {
+    "bootstrap_performance_inspection_allowed": false,
+    "bootstrap_window_changes_allowed": false,
+    "consumed_v1_holdout_reuse_allowed": false,
+    "execution_changes_allowed": false,
+    "fva_rule_changes_allowed": false,
+    "fvg_rule_changes_allowed": false,
+    "initialization_policy_changes_allowed": false,
+    "metric_changes_allowed": false,
+    "normalization_changes_allowed": false,
+    "observability_rule_changes_allowed": false,
+    "partial_window_rule_adjustment_allowed": false,
+    "profile_changes_allowed": false,
+    "provider_identity_changes_allowed": false,
+    "sample_threshold_changes_allowed": false,
+    "scored_window_changes_allowed": false,
+    "stop_rule_changes_allowed": false,
+    "target_rule_changes_allowed": false,
+    "two_cr_rule_changes_allowed": false,
+    "two_sting_rule_changes_allowed": false,
+    "validation_window_changes_allowed": false,
+    "woo_changes_allowed": false
+  },
+  "observability": {
+    "alternate_fill_allowed": false,
+    "close_fallback_allowed": false,
+    "future_bar_fallback_allowed": false,
+    "invariant_id": "V2_SECOND_STING_TOUCH_OBSERVABILITY_V1",
+    "observable_status": "EXECUTABLE_ENTRY",
+    "predicate": "second_sting_bar.low <= touch_price <= second_sting_bar.high",
+    "target_stop_evaluation_when_unobservable_allowed": false,
+    "unobservable_fill_allowed": false,
+    "unobservable_status": "NO_EXECUTABLE_ENTRY"
+  },
+  "profile": {
+    "fully_first_party_reconstructed": false,
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+    "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+    "semantic_closure_claimed": false,
+    "spec_audit_sha256": "dfec0d64d76bb48905aec4d7663f5981561234f8446f6f34accbc2ed47995265"
+  },
+  "protocol_id": "ARJO_V2_FUTURE_VALIDATION_PROTOCOL_V2",
+  "protocol_sha256": "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38",
+  "provider_identity": {
+    "complete_bucket_only": true,
+    "derived_granularities_minutes": [
+      15,
+      60,
+      240
+    ],
+    "environment": "practice",
+    "fabricate_missing_minutes": false,
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+    "price_component": "MID",
+    "provider": "OANDA_V20",
+    "provider_price_quantum": "0.1",
+    "provider_price_quantum_classification": "PROVIDER_PRICE_PRECISION_POLICY_NOT_EXCHANGE_TICK",
+    "read_only": true,
+    "source_granularity": "M1",
+    "venue": "OANDA_FXTRADE"
+  },
+  "result_taxonomy": {
+    "execution_outcome_classes": [
+      "TARGET_FIRST",
+      "STOP_FIRST",
+      "AMBIGUOUS_INTRABAR_ORDER",
+      "UNRESOLVED_WINDOW_END"
+    ],
+    "no_executable_entry_is_win_or_loss": false,
+    "observability_classes": [
+      "EXECUTABLE_ENTRY",
+      "NO_EXECUTABLE_ENTRY"
+    ]
+  },
+  "sample_policy": {
+    "classifications": {
+      "IMPLEMENTATION_DIVERGENCE": "primary and independent critical outputs disagree",
+      "INSUFFICIENT_SAMPLE": "resolved_executable_occurrence_count < 30 after full window",
+      "NO_EXECUTABLE_ENTRIES": "qualified_occurrence_count > 0 AND executable_entry_count == 0",
+      "NO_QUALIFYING_OCCURRENCES": "qualified_occurrence_count == 0",
+      "SUFFICIENT_SAMPLE_NONPOSITIVE": "resolved_executable_occurrence_count >= 30 AND mean_realized_r <= 0",
+      "SUFFICIENT_SAMPLE_POSITIVE": "resolved_executable_occurrence_count >= 30 AND mean_realized_r > 0",
+      "VALIDATION_INTEGRITY_FAILURE": "provider/profile/window/no-refit/observability invariant failure"
+    },
+    "inferential_resolved_executable_occurrence_threshold": 30
+  },
+  "schema_version": 2,
+  "status": "FROZEN_BEFORE_FUTURE_VALIDATION_ACCESS",
+  "supersedes": {
+    "protocol_id": "ARJO_V2_FUTURE_VALIDATION_PROTOCOL_V1",
+    "protocol_sha256": "8231a335a6b5beb1784fa308a0e8b4f80c516ef7bff9d696217d123f3bd378dd",
+    "reason": "V1 did not define a causal state initialization policy for a stateful FVG/pivot strategy while consumed 2026H1 carry-in reuse is prohibited."
+  },
+  "window": {
+    "acquisition_start_inclusive": "2026-09-01T00:00:00Z",
+    "bootstrap_end_exclusive": "2026-10-01T00:00:00Z",
+    "consumed_v1_2026h1_reuse_prohibited": true,
+    "end_exclusive": "2027-03-01T00:00:00Z",
+    "request_must_not_cross_end": true,
+    "request_must_not_precede_acquisition_start": true,
+    "scored_start_inclusive": "2026-10-01T00:00:00Z"
+  }
+}
