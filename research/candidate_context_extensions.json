@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "performance_data_consulted": false,
+  "extensions": [
+    {
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "concepts": [
+        "ARGUMENTS_FRAMEWORK",
+        "LIQUIDITY_RUN_SWEEP",
+        "PD_ARRAYS",
+        "TARGET_BIAS",
+        "WINDOW_OF_OPPORTUNITY"
+      ],
+      "rationale": "Issue #127 direct first-party Trading MMT pages establish these concepts as bounded execution context for the recovered AoO chain: arguments govern participation, liquidity runs supply trigger semantics, PD Arrays supply targets, Target/Bias supplies the worked objective, and WoO supplies the time boundary. They are admitted only as supporting context and do not become automatically satisfied fields."
+    }
+  ]
+}
