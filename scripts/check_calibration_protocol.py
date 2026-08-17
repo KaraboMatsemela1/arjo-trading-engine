@@ -173,13 +173,13 @@ def validate_packet(packet: dict, evidence: dict[str, dict]) -> list[str]:
     if stage == "SEED_ASSESSMENT" and outcome_authorized is not False:
         errors.append(prefix + "SEED_ASSESSMENT can never authorize outcome access")
     if outcome_authorized is True:
-        if stage != "PREREGISTERED":
-            errors.append(prefix + "outcome authorization is issued only from a PREREGISTERED packet")
+        if stage not in {"PREREGISTERED", "CALIBRATION_COMPLETE"}:
+            errors.append(prefix + "outcome authorization requires a preregistered calibration lifecycle")
         if replayability != "REPLAYABLE":
             errors.append(prefix + "outcome access requires a REPLAYABLE seed plan")
         if not parameters:
             errors.append(prefix + "outcome access requires at least one preregistered calibration parameter")
-        if calibration_data_accessed is not False:
+        if stage == "PREREGISTERED" and calibration_data_accessed is not False:
             errors.append(prefix + "authorization packet must be frozen before calibration data is accessed")
         frozen_sha = str(packet.get("preregistration_sha256", ""))
         if not HEX64.match(frozen_sha):
