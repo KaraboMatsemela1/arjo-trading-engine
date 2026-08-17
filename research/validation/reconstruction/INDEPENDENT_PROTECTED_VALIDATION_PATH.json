@@ -1,0 +1,42 @@
+{
+  "complete_session_count": 126,
+  "detected_fvg_formation_count": 443,
+  "execution_outcomes": [],
+  "execution_outcomes_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e7b1a24e0b313b6a27e136",
+  "frozen_execution": {
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "holdout_accessed": true,
+  "holdout_boundary_ok": true,
+  "holdout_formed_fvg_count": 96,
+  "integrity_failures": [
+    {
+      "bar_high": "29693.4",
+      "bar_low": "29578.0",
+      "kind": "UNOBSERVABLE_SECOND_STING_TOUCH",
+      "occurrence_id": "OWNER-VAL-2026-06-23",
+      "second_sting_ts_utc": "2026-06-23T14:45:00Z",
+      "touch_price": "29698.1"
+    }
+  ],
+  "integrity_failures_sha256": "d68b2ecd93f19db09af4a32a5d6aa66090052309aa0e261a6bdb46610a2ede82",
+  "no_refit_performed": true,
+  "occurrence_set_sha256": "be83b83b4bc4ca4807e43397d0bb977f2779281db685b0c1a04e71641a027cd8",
+  "path_id": "INDEPENDENT_STANDARD_LIBRARY_PATH",
+  "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585",
+  "protocol_sha256": "258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347",
+  "qualification_rows_sha256": "0707ea9fcca783a33102804e3b76a8d388b415662f3b7e831dc43f237442bfd6",
+  "qualification_status_counts": {
+    "NO_2CR_REJECTION": 16,
+    "NO_FVA_OVERLAP": 101,
+    "NO_RUN": 8,
+    "QUALIFIED": 1
+  },
+  "qualified_occurrence_ids": [
+    "OWNER-VAL-2026-06-23"
+  ],
+  "report_sha256": "db8b285791f6bc51b5d420e4f092ef780208f64a75d16de6980edc141562f8e8",
+  "schema_version": 1,
+  "selected_fvg_session_count": 126
+}
