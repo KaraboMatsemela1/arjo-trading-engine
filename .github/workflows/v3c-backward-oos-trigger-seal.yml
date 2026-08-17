@@ -1,0 +1,76 @@
+name: V3-C Backward OOS Trigger Seal
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-231-v3c-oos-trigger-seal
+    paths:
+      - 'scripts/scan_v3c_backward_oos_triggers.py'
+      - 'scripts/test_v3c_backward_oos_trigger_seal.py'
+      - '.github/workflows/v3c-backward-oos-trigger-seal.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify no M1/provider/outcome path exists in this stage
+        run: python scripts/test_v3c_backward_oos_trigger_seal.py
+      - name: Download sealed 2010-2023 structure artifact
+        run: |
+          mkdir -p /tmp/v3c-oos-structure
+          curl --fail --location --retry 3 \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9293573972/zip" \
+            -o /tmp/v3c-oos-structure.zip
+          unzip -q /tmp/v3c-oos-structure.zip -d /tmp/v3c-oos-structure
+      - name: Reconstruct and seal V3-C backward-OOS triggers
+        run: >-
+          python scripts/scan_v3c_backward_oos_triggers.py
+          --artifact-dir /tmp/v3c-oos-structure
+          --candidate research/profitability/v3c_arguments_trigger_candidate.json
+          --protocol research/profitability/v3c_arguments_execution_protocol_v1.json
+          --output /tmp/v3c-oos-trigger-set.json
+      - name: Verify exact no-outcome boundary and sample necessary condition
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/v3c-oos-trigger-set.json'))
+          assert r['dual_path_exact_match'] is True
+          assert r['m1_data_requested'] is False
+          assert r['post_trigger_price_traversal_accessed'] is False
+          assert r['performance_metrics_accessed'] is False
+          assert r['development_2024_2025_outcomes_accessed'] is False
+          assert r['v2_2010_2023_trade_outcomes_accessed'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          assert r['sample_necessary_condition_met'] is True, 'frozen 100-trade necessary condition not met'
+          print('triggers=' + str(r['trigger_count']))
+          print('distinct_knowledge_times=' + str(r['distinct_activation_knowledge_times']))
+          print('trigger_set_sha256=' + r['trigger_set_sha256'])
+          print('report_sha256=' + r['report_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3c-backward-oos-trigger-set
+          path: /tmp/v3c-oos-trigger-set.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Delete runner-local structure payloads
+        if: always()
+        run: rm -rf /tmp/v3c-oos-structure /tmp/v3c-oos-structure.zip
