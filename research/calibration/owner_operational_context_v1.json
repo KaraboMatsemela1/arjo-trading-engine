@@ -1,0 +1,71 @@
+{
+  "anti_bias": {
+    "future_session_bars_allowed": false,
+    "holdout_allowed": false,
+    "performance_based_selection_allowed": false,
+    "post_woo_outcomes_allowed": false,
+    "rule_adjustment_after_diagnostic_counts_allowed": false,
+    "semantic_candidate_ranking_allowed": false
+  },
+  "authority": "OWNER_DIRECTED_OPERATIONAL_CONVENTION",
+  "claim_boundary": "All exact predicates in this file are owner operational conventions. First-party Arjo/MMT evidence supports the surrounding concepts and hierarchy but does not receive exact-construction closure credit for these predicates.",
+  "classification": "OWNER_OPERATIONAL_CONVENTION_NOT_ARJO_SEMANTIC_CLOSURE",
+  "convention_id": "OWNER_OPERATIONAL_CONTEXT_V1",
+  "convention_sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e",
+  "depends_on": {
+    "fvg_convention_id": "OWNER_OPERATIONAL_FVG_V1",
+    "fvg_convention_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+  },
+  "fva": {
+    "confirmation_time": "right.ts_start_utc + 60 minutes",
+    "dual_pivot_bar_policy": "SKIP_AMBIGUOUS_CENTER_BAR",
+    "pivot_high": "center.high > left.high AND center.high > right.high",
+    "pivot_low": "center.low < left.low AND center.low < right.low",
+    "pivot_window": "THREE_CONTIGUOUS_COMPLETE_BARS",
+    "required_relationship_to_4h_fvg": "zones must overlap inclusively",
+    "session_selection": "latest confirmed pivot high AND latest confirmed pivot low known by 09:30 America/New_York",
+    "timeframe_minutes": 60,
+    "zone": "[min(pivot_high.price,pivot_low.price), max(pivot_high.price,pivot_low.price)]"
+  },
+  "order_flow_stop_anchor": {
+    "proxy": "minimum 15m low from activation bar through second sting bar inclusive",
+    "role": "owner operational proxy for low of relevant bullish Order Flow leg"
+  },
+  "purpose": "Operationalize residual FVA, 2CR/run, 2-Sting, Order Flow stop-anchor, and target selection after OWNER_OPERATIONAL_FVG_V1 so Phase 6A can materialize occurrences without performance-derived semantic selection.",
+  "schema_version": 1,
+  "session_outcomes": [
+    "QUALIFIED",
+    "NO_FVG",
+    "NO_FVA_PIVOT",
+    "NO_FVA_OVERLAP",
+    "NO_2CR_REJECTION",
+    "NO_RUN",
+    "NO_2_STING",
+    "NO_TARGET_ABOVE_ENTRY",
+    "INVALID_STOP_ORDERING"
+  ],
+  "status": "FROZEN_BEFORE_OCCURRENCE_REPLAY_OUTCOME_ACCESS",
+  "target": {
+    "eligibility": "target must be strictly above both second-sting touch and second-sting close entry prices",
+    "proxy": "maximum high of all complete 4h bars whose end time is <= 09:30 America/New_York session selection time",
+    "role": "causal prior-known 4h ATH proxy for documented next-ATH/HTF-premium context"
+  },
+  "two_candle_rejection": {
+    "pair_selection": "earliest adjacent two-bar pair containing a rejection; choose first bar if first rejects, otherwise second",
+    "rejection_high": "selected rejection bar.high",
+    "rejection_predicate": "bar.high >= FVA.zone_high AND bar.close < FVA.zone_high",
+    "resistance_boundary": "selected 1h FVA zone_high",
+    "run_confirmation": "first later complete 15m bar with close > rejection_high",
+    "search_window": "frozen WoO only, adjacent complete bars",
+    "timeframe_minutes": 15
+  },
+  "two_sting": {
+    "search_end": "11:00 America/New_York exclusive",
+    "search_start": "strictly after activation/run-confirmation bar",
+    "second_sting_close_price": "second sting bar.close",
+    "second_sting_touch_price": "FVA.zone_high",
+    "selection": "first two qualifying distinct complete 15m bars in chronological order",
+    "sting_predicate": "bar.low <= FVA.zone_high AND bar.high >= FVA.zone_low AND bar.close > FVA.zone_low",
+    "timeframe_minutes": 15
+  }
+}
