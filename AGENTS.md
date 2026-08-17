@@ -7,7 +7,7 @@ This repository is designed for approximately 99% autonomous operation. Agents e
 ## Canonical authority order
 
 1. `PROJECT_BIBLE.md`
-2. frozen/versioned specifications
+2. frozen/versioned specifications and calibration preregistrations
 3. machine-readable gate state and issue metadata
 4. GitHub master lifecycle issue
 5. bounded task issue
@@ -67,25 +67,36 @@ Allowed states:
 - Do not infer generic ICT semantics into Arjo terminology.
 - Do not upgrade `STRONG_PARTIAL` evidence to `DIRECT` through interpretation.
 - Research recovery work must target a specific predicate field and stop condition.
+- Calibration cannot manufacture semantic evidence. It may refine only an explicitly preregistered convention inside a locked first-party-supported semantic seed.
 
 ## Pre-SPEC_READY prohibition
 
-While `SPEC_READY = false`, agents must not create or expose:
+While `SPEC_READY = false`, agents must not create or expose general strategy-performance analysis, including:
 
-- strategy trade counts;
-- win rate;
+- unrestricted strategy trade counts;
+- win-rate leaderboards;
 - P&L;
 - expectancy;
 - Sharpe;
 - profit factor;
-- parameter optimization;
+- semantic-candidate optimization;
 - market optimization;
 - time optimization;
 - instrument optimization.
 
+The sole narrow exception is a valid `FIRST_PARTY_PRESCRIBED_CALIBRATION_V1` lifecycle after `CALIBRATION_AUTHORIZED`. In that state an agent may:
+
+- acquire only the frozen calibration window, never the protected holdout;
+- build the minimum deterministic data/replay infrastructure required for the locked seed;
+- replay only preregistered parameter candidates or bounds;
+- compute only the preregistered calibration observations/measures required by the frozen acceptance rule;
+- freeze the calibration result without adding concepts, candidates, variants, windows, measures, or thresholds after outcome access begins.
+
+Calibration completion never directly authorizes general implementation or sets `SPEC_READY`.
+
 ## Protected execution boundaries
 
-- OOS and CONFIRM require deterministic one-time access guards.
+- Calibration holdout, OOS, and CONFIRM require their explicit one-time access gates.
 - Paper execution requires explicit owner authorization.
 - Live execution may never be autonomously enabled.
 - Live brokerage endpoints must remain technically blocked.
@@ -93,5 +104,7 @@ While `SPEC_READY = false`, agents must not create or expose:
 ## Stop behavior
 
 When semantics cannot be closed from first-party evidence, emit `BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE` and create a bounded recovery issue if appropriate.
+
+When an authorized calibration cannot select a convention under its frozen acceptance rule, emit a fail-closed calibration state rather than changing the preregistration after outcomes are visible.
 
 Escalate only for the reasons enumerated in `PROJECT_BIBLE.md`.
