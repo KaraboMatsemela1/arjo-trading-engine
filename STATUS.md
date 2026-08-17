@@ -147,7 +147,7 @@ _Generated mechanically by `scripts/project_state.py`._
 | #206 | FINAL_PROJECT_WRAP | COMPLETE | True | True |
 | #208 | PROJECT_CLOSURE_EXISTING_EVIDENCE | COMPLETE | True | True |
 | #211 | FINAL_STATE_HARDENING | COMPLETE | True | True |
-| #214 | FINAL_STATE_PERSISTENCE | IMPLEMENTING | True | True |
+| #214 | FINAL_STATE_PERSISTENCE | COMPLETE | True | True |
 
 ## Strategy implementation status
 
