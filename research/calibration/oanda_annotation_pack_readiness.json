@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "ANNOTATION_PACK_PIPELINE_PREREGISTERED",
+  "provider": "OANDA_V20",
+  "instrument": "NAS100_USD",
+  "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+  "window_of_opportunity": {
+    "timezone": "America/New_York",
+    "start_inclusive": "09:30:00",
+    "end_exclusive": "11:00:00"
+  },
+  "anti_leak_boundary": {
+    "post_woo_bars_included": false,
+    "holdout_accessed": false,
+    "performance_fields_included": false,
+    "semantic_discovery_performed": false
+  },
+  "annual_expectations": [
+    {
+      "year": 2024,
+      "source_artifact_id": 9282976276,
+      "source_annual_manifest_sha256": "6a4c8b41fae77a6bbd0bb1a809cabae63944a00339f30912ca57685aeff65dd7",
+      "complete_session_pack_count": 258,
+      "excluded_incomplete_sessions": ["2024-05-20"],
+      "expected_packs_sha256": "4b0866fdf91de83a0125fcfc5c387a3b9f2b55c66a2ee69d974181c0d03937b9"
+    },
+    {
+      "year": 2025,
+      "source_artifact_id": 9283007527,
+      "source_annual_manifest_sha256": "4f038884fe18f1cdaa9d05a4eabb1aa820491f118f0d34f94b32d77e35fc5f02",
+      "complete_session_pack_count": 257,
+      "excluded_incomplete_sessions": [],
+      "expected_packs_sha256": "40ad01fd00c2d0c478e6d7f5372765d04b103d7d5fe5f9367af4c725b53c286d"
+    }
+  ],
+  "total_complete_session_pack_count": 515,
+  "classification": "OUTCOME_BLIND_CONTEXT_SLICING_ONLY_NOT_ARJO_SEMANTIC_DISCOVERY"
+}
