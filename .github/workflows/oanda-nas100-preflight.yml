@@ -1,0 +1,87 @@
+name: OANDA NAS100 Calibration Preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - calibration/issue-151-oanda-pivot
+    paths:
+      - .github/workflows/oanda-nas100-preflight.yml
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OANDA_ENV: practice
+      OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+    steps:
+      - name: Verify secret presence and NAS100_USD availability
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          account_id = os.getenv("OANDA_ACCOUNT_ID", "")
+          token = os.getenv("OANDA_API_TOKEN", "")
+          result = {
+              "schema_version": 1,
+              "provider": "OANDA_V20",
+              "environment": "practice",
+              "credential_value_exposed": False,
+              "account_id_present": bool(account_id),
+              "api_token_present": bool(token),
+              "instrument": "NAS100_USD",
+              "status": None,
+          }
+          if not account_id or not token:
+              result["status"] = "MISSING_CREDENTIAL"
+              print(json.dumps(result, sort_keys=True))
+              sys.exit(0)
+
+          base = "https://api-fxpractice.oanda.com"
+          url = f"{base}/v3/accounts/{urllib.parse.quote(account_id, safe='')}/instruments?instruments=NAS100_USD"
+          req = urllib.request.Request(
+              url,
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept-Datetime-Format": "RFC3339",
+              },
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=20) as response:
+                  payload = json.load(response)
+                  result["http_status"] = response.status
+          except urllib.error.HTTPError as exc:
+              result["status"] = "OANDA_HTTP_ERROR"
+              result["http_status"] = exc.code
+              print(json.dumps(result, sort_keys=True))
+              sys.exit(0)
+          instruments = payload.get("instruments", [])
+          if not instruments:
+              result["status"] = "INSTRUMENT_NOT_AVAILABLE"
+              print(json.dumps(result, sort_keys=True))
+              sys.exit(0)
+
+          inst = instruments[0]
+          result.update({
+              "status": "READY",
+              "display_name": inst.get("displayName"),
+              "type": inst.get("type"),
+              "pip_location": inst.get("pipLocation"),
+              "display_precision": inst.get("displayPrecision"),
+              "trade_units_precision": inst.get("tradeUnitsPrecision"),
+              "minimum_trade_size": inst.get("minimumTradeSize"),
+          })
+          print(json.dumps(result, sort_keys=True))
+          PY
