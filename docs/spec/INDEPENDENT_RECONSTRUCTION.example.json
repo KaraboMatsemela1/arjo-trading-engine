@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "candidate_packets": [
+    {
+      "predicate_id": "EXAMPLE_PREDICATE_ID",
+      "predicate_matrix_sha256": "<sha256 of the exact 16-row candidate matrix>",
+      "frozen_spec_ref": "docs/spec/<frozen-spec-file>.json",
+      "frozen_spec_sha256": "<sha256 of frozen spec bytes>",
+      "engineers": [
+        {
+          "id": "independent-a",
+          "independent": true,
+          "evidence_only": true,
+          "community_interpretations_used": false,
+          "generic_ict_smc_knowledge_used": false,
+          "performance_data_consulted": false,
+          "trade_counts_consulted": false,
+          "reconstruction_sha256": "<same frozen spec sha256>",
+          "predicate_matrix_sha256": "<same candidate matrix sha256>"
+        },
+        {
+          "id": "independent-b",
+          "independent": true,
+          "evidence_only": true,
+          "community_interpretations_used": false,
+          "generic_ict_smc_knowledge_used": false,
+          "performance_data_consulted": false,
+          "trade_counts_consulted": false,
+          "reconstruction_sha256": "<same frozen spec sha256>",
+          "predicate_matrix_sha256": "<same candidate matrix sha256>"
+        }
+      ]
+    }
+  ]
+}
