@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "convention_id": "OWNER_OPERATIONAL_FVG_V1",
+  "status": "FROZEN_BEFORE_OCCURRENCE_REPLAY_OUTCOME_ACCESS",
+  "authority": "OWNER_DIRECTED_OPERATIONAL_CONVENTION",
+  "classification": "OWNER_OPERATIONAL_CONVENTION_NOT_ARJO_SEMANTIC_CLOSURE",
+  "purpose": "Operationalize the unresolved 4h FVG construction/selection so Phase 6A can continue without claiming recovered Arjo-exact FVG semantics.",
+  "provider_identity": {
+    "provider": "OANDA_V20",
+    "venue": "OANDA_FXTRADE",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+    "price_component": "MID"
+  },
+  "calibration_boundary": {
+    "start_inclusive": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-01-01T00:00:00Z",
+    "holdout_access_allowed": false
+  },
+  "source_artifacts": [
+    9282976276,
+    9283007527
+  ],
+  "geometry": {
+    "timeframe_minutes": 240,
+    "requires_three_contiguous_complete_buckets": true,
+    "contiguous_bucket_delta_minutes": 240,
+    "bullish_predicate": "c3.low > c1.high",
+    "bullish_zone": [
+      "c1.high",
+      "c3.low"
+    ],
+    "bearish_predicate": "c3.high < c1.low",
+    "bearish_zone": [
+      "c3.high",
+      "c1.low"
+    ],
+    "candle_colour_requirement": "NONE"
+  },
+  "active_state": {
+    "confirmation_time": "formation_end = c3.ts_start_utc + 240 minutes",
+    "fill_observation_timeframe_minutes": 15,
+    "fill_observation_requires_complete_bar": true,
+    "same_timestamp_event_order": [
+      "15m_fill_confirmation",
+      "4h_fvg_formation",
+      "session_selection"
+    ],
+    "bullish_full_traverse_predicate": "completed_15m.low <= zone_low",
+    "bearish_full_traverse_predicate": "completed_15m.high >= zone_high",
+    "partial_touch_keeps_active": true
+  },
+  "session_selection": {
+    "timezone": "America/New_York",
+    "selection_time": "09:30:00",
+    "predicate": "formation_end <= session_selection_time AND not fully traversed by a completed 15m bar before/equal selection time",
+    "tie_break": "MAX_FORMATION_END_THEN_GAP_ID",
+    "no_active_gap_classification": "NO_QUALIFIED_OCCURRENCE"
+  },
+  "anti_bias": {
+    "future_session_bars_allowed": false,
+    "post_woo_outcomes_allowed": false,
+    "holdout_allowed": false,
+    "performance_based_selection_allowed": false,
+    "semantic_candidate_ranking_allowed": false
+  },
+  "supporting_context": {
+    "source": "The MMT public Fair Value Gap beginner guide and Arjo/MMT FVG articles",
+    "role": "Supports only the broad three-candle/FVG context. Exact inequalities, fill rule, and chronological selector are owner operationalization.",
+    "semantic_closure_credit": false
+  },
+  "convention_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+}
