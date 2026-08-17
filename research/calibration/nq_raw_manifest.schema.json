@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NQ calibration raw artifact manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","provider","request_contract_sha256","retrieved_at_utc","artifact_path","artifact_sha256","artifact_bytes","dataset","schema","symbols","stype_in","stype_out","start","end_exclusive","protected_holdout_start","instrument_ids","raw_symbols"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "provider": {"const": "databento"},
+    "request_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "retrieved_at_utc": {"type": "string", "format": "date-time"},
+    "artifact_path": {"type": "string", "minLength": 1},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_bytes": {"type": "integer", "minimum": 1},
+    "dataset": {"const": "GLBX.MDP3"},
+    "schema": {"const": "ohlcv-1m"},
+    "symbols": {"const": ["NQ.v.0"]},
+    "stype_in": {"const": "continuous"},
+    "stype_out": {"const": "instrument_id"},
+    "start": {"const": "2024-01-01T00:00:00Z"},
+    "end_exclusive": {"const": "2026-01-01T00:00:00Z"},
+    "protected_holdout_start": {"const": "2026-01-01T00:00:00Z"},
+    "instrument_ids": {"type": "array", "items": {"type": "integer"}, "uniqueItems": true},
+    "raw_symbols": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "mapping_metadata_sha256": {"type": ["string","null"], "pattern": "^[0-9a-f]{64}$"}
+  }
+}
