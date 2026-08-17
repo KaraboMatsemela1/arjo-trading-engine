@@ -5,8 +5,8 @@
     "you ideally want to wait for that 2nd sting below it."
   ],
   "first_party_contacted": true,
-  "notes": "Bounded first-party MMT page capture for Issue #167. Only semantic excerpts are retained; no performance content is included.",
-  "retrieved_at": "2026-08-17T09:55:00Z",
+  "notes": "Issue #167 bounded direct first-party web capture; clarifies liquidity/swing vocabulary and second-sting run confirmation without defining the full 2-Sting entry pattern.",
+  "retrieved_at": "2026-08-17T10:10:00Z",
   "schema_version": 1,
   "semantic_extraction_performed": false,
   "source_id": "WEB_MMT_RUN_SWEEP_20260817",
