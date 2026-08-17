@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "protocol_id": "AOO-NQ-OCCURRENCE-ANNOTATION-001",
+  "status": "FROZEN_BEFORE_SEMANTIC_PASS_OUTPUTS",
+  "purpose": "Qualify locked-seed occurrences from outcome-blind packs without inventing unresolved Arjo selectors.",
+  "pack_universe": {
+    "total_sessions": 515,
+    "annual": [
+      {
+        "year": 2024,
+        "pack_count": 258,
+        "packs_sha256": "4b0866fdf91de83a0125fcfc5c387a3b9f2b55c66a2ee69d974181c0d03937b9",
+        "source_readiness_artifact_id": 9284706980
+      },
+      {
+        "year": 2025,
+        "pack_count": 257,
+        "packs_sha256": "40ad01fd00c2d0c478e6d7f5372765d04b103d7d5fe5f9367af4c725b53c286d",
+        "source_readiness_artifact_id": 9284709349
+      }
+    ],
+    "post_woo_bars_visible": false,
+    "holdout_visible": false,
+    "performance_fields_visible": false
+  },
+  "passes": [
+    {
+      "pass_id": "PASS_A",
+      "annotator_class": "GPT_5_6_SOL",
+      "independent_human_annotator_claimed": false,
+      "isolation_mode": "SAME_MODEL_SEPARATE_PASS_NO_CROSS_REFERENCE",
+      "processing_order": "PACK_SHA256_ASCENDING"
+    },
+    {
+      "pass_id": "PASS_B",
+      "annotator_class": "GPT_5_6_SOL",
+      "independent_human_annotator_claimed": false,
+      "isolation_mode": "SAME_MODEL_SEPARATE_PASS_NO_CROSS_REFERENCE",
+      "processing_order": "PACK_SHA256_DESCENDING"
+    }
+  ],
+  "allowed_decisions": [
+    "QUALIFIED",
+    "NO_QUALIFIED_OCCURRENCE",
+    "UNRESOLVED"
+  ],
+  "qualified_requirements": {
+    "exact_anchor_consensus_required": true,
+    "required_anchors": [
+      "four_h_fvg",
+      "one_h_fva",
+      "rejection_high",
+      "order_flow_leg_low",
+      "target",
+      "second_sting"
+    ],
+    "selection_classification": "SEMANTIC_ANNOTATION_NOT_MACHINE_DISCOVERY",
+    "required_evidence_by_anchor": {
+      "four_h_fvg": ["EV_427DA06DF5EBFA7F4CFB170A"],
+      "one_h_fva": ["EV_88AB61A79C3864A7767B6A11"],
+      "rejection_high": ["EV_E2CA3E5215E4B2C2044D7BC9", "EV_7F8AE2B63C992516199935EE"],
+      "order_flow_leg_low": ["EV_58E144AEBF95808F39138E22"],
+      "target": ["EV_53110264054D0997F8C055BD"],
+      "second_sting": ["EV_AED1F1512355C2B3B6DEAB4D", "EV_0FDC8E9BEC515E440157F18B", "EV_75D4CB1715AC2752B8F4AD1B"]
+    }
+  },
+  "consensus_policy": {
+    "both_qualified_same_anchor_sha": "QUALIFIED",
+    "both_no_qualified_occurrence": "NO_QUALIFIED_OCCURRENCE",
+    "any_unresolved_or_any_disagreement": "UNRESOLVED",
+    "unresolved_may_not_be_repaired_by_heuristic": true,
+    "qualified_occurrence_set_must_be_non_empty": true
+  },
+  "anti_bias": {
+    "post_woo_outcome_access_allowed": false,
+    "holdout_access_allowed": false,
+    "performance_based_selection_allowed": false,
+    "generic_ict_smc_substitution_allowed": false,
+    "third_party_selector_rules_allowed": false,
+    "cross_pass_visibility_allowed": false,
+    "pass_output_editing_after_consensus_visibility_allowed": false
+  },
+  "boundary": "Two same-model isolated passes are a reproducibility check, not a claim of independent human agreement. Residual ambiguity remains unresolved and fails closed."
+}
