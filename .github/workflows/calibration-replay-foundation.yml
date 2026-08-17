@@ -1,0 +1,26 @@
+name: Calibration Replay Foundation
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/nq_calibration_replay.py'
+      - 'scripts/test_nq_calibration_replay.py'
+      - 'research/calibration/aoo_nq_replay_spec.json'
+      - '.github/workflows/calibration-replay-foundation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile replay evaluator
+        run: python -m py_compile scripts/nq_calibration_replay.py scripts/test_nq_calibration_replay.py
+      - name: Run synthetic replay tests
+        run: python scripts/test_nq_calibration_replay.py
