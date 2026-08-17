@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "V3_MULTI_INDEX_CANDIDATE_REJECTED_INSUFFICIENT_COVERAGE",
+  "candidate_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V3_MULTI_INDEX_B",
+  "candidate_sha256": "c40cf7223bcb956d0e668e48dfeb29fbb7aa529fe45350710bbe5aaf2c2160b9",
+  "development_window": ["2024-01-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+  "available_instruments": ["NAS100_USD", "SPX500_USD", "US30_USD"],
+  "unavailable_instruments": [],
+  "replacement_instruments_used": false,
+  "coverage_feasibility_floor": 30,
+  "raw_executable_occurrence_count": 1,
+  "unique_executable_signal_dates": 1,
+  "same_date_cluster_count": 0,
+  "coverage_feasible": false,
+  "executable_signal_dates": {
+    "2024-04-26": ["NAS100_USD"]
+  },
+  "per_instrument": {
+    "NAS100_USD": {
+      "complete_sessions": 515,
+      "detected_fvgs": 351,
+      "selected_fvg_sessions": 514,
+      "qualified_occurrence_count": 1,
+      "executable_occurrence_count": 1,
+      "qualification_status_counts": {
+        "NO_2CR_REJECTION": 58,
+        "NO_2_STING": 14,
+        "NO_FVA_OVERLAP": 415,
+        "NO_FVG": 1,
+        "NO_RUN": 26,
+        "QUALIFIED": 1
+      },
+      "dual_path_exact_match": true
+    },
+    "SPX500_USD": {
+      "complete_sessions": 515,
+      "detected_fvgs": 350,
+      "selected_fvg_sessions": 514,
+      "qualified_occurrence_count": 1,
+      "executable_occurrence_count": 0,
+      "qualification_status_counts": {
+        "NO_2CR_REJECTION": 71,
+        "NO_2_STING": 15,
+        "NO_FVA_OVERLAP": 408,
+        "NO_FVG": 1,
+        "NO_RUN": 18,
+        "NO_TARGET_ABOVE_ENTRY": 1,
+        "QUALIFIED": 1
+      },
+      "dual_path_exact_match": true
+    },
+    "US30_USD": {
+      "complete_sessions": 515,
+      "detected_fvgs": 346,
+      "selected_fvg_sessions": 490,
+      "qualified_occurrence_count": 0,
+      "executable_occurrence_count": 0,
+      "qualification_status_counts": {
+        "NO_2CR_REJECTION": 60,
+        "NO_2_STING": 2,
+        "NO_FVA_OVERLAP": 401,
+        "NO_FVG": 25,
+        "NO_RUN": 27
+      },
+      "dual_path_exact_match": true
+    }
+  },
+  "report_sha256": "30405e48329f3362e711c7e1fec6fbd7d661115e9ab37f8103f8d13673a9158d",
+  "decision": "DO_NOT_FREEZE_V3_B_AS_PROFITABILITY_VALIDATION_CANDIDATE",
+  "reason": "The preregistered three-index transfer preserved every V2 strategy predicate but produced only one execution-observable signal date across 1,545 instrument-sessions. Instrument breadth does not solve the V2 sparsity problem.",
+  "post_entry_outcomes_accessed": false,
+  "backward_oos_outcomes_accessed": false,
+  "performance_metrics_accessed": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
