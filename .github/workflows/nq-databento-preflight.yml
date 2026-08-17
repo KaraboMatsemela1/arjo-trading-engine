@@ -1,0 +1,36 @@
+name: NQ Databento Acquisition Preflight
+
+on:
+  push:
+    branches:
+      - calibration/issue-151-databento-acquisition
+    paths:
+      - 'scripts/nq_databento_preflight.py'
+      - 'research/calibration/nq_databento_request_contract.json'
+      - '.github/workflows/nq-databento-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official Databento client
+        run: python -m pip install --disable-pip-version-check databento
+      - name: Check frozen request credential availability and estimated cost
+        env:
+          DATABENTO_API_KEY: ${{ secrets.DATABENTO_API_KEY }}
+        run: python scripts/nq_databento_preflight.py
+      - name: Upload non-secret preflight result
+        uses: actions/upload-artifact@v4
+        with:
+          name: nq-databento-preflight
+          path: .calibration-data/nq_databento_preflight.json
+          if-no-files-found: error
+          retention-days: 7
