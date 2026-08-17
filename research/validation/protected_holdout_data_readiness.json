@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "status": "PROTECTED_HOLDOUT_DATA_READY",
+  "validation_protocol_id": "ARJO_PROTECTED_VALIDATION_V1",
+  "validation_protocol_sha256": "258f4f27736f66d2a83e020e7c04e89f0d78de0372c3320e95011b2617883347",
+  "provider": "OANDA_V20",
+  "venue": "OANDA_FXTRADE",
+  "environment": "practice",
+  "instrument": "NAS100_USD",
+  "instrument_identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED",
+  "price_component": "MID",
+  "provider_price_quantum": "0.1",
+  "provider_price_quantum_classification": "PROVIDER_PRICE_PRECISION_POLICY_NOT_EXCHANGE_TICK",
+  "requested_start": "2026-01-01T00:00:00Z",
+  "requested_end_exclusive": "2026-07-01T00:00:00Z",
+  "holdout_accessed": true,
+  "calibration_window_accessed_by_holdout_job": false,
+  "mutation_endpoints_used": false,
+  "workflow_run_id": 32025848406,
+  "workflow_head_sha": "c28c30e14cb6a57e29cfeb339f52142a4be7d6d3",
+  "artifact_id": 9287054804,
+  "artifact_digest": "sha256:7a1b8bed4992c32864a844c8fb262710741def0919197affd9c6730b2edb4ef5",
+  "manifest_byte_sha256": "0268ffde29b961b1f86cc43894c92c6097660ae3b39745740d3386de25b5149e",
+  "retrieval_sha256": "213ec9eb938b3ea45a8fe3a29ed810b51d4bf2d31619c939edc311394188f330",
+  "raw_page_count": 58,
+  "m1": {
+    "rows": 175253,
+    "first": "2026-01-01T23:00:00Z",
+    "last": "2026-06-30T23:59:00Z",
+    "sha256": "a2e917413b1865d5d48b37c88fcc2bef83cb070c06eba159d8730034d2658e10"
+  },
+  "derived": {
+    "15": {
+      "rows": 11681,
+      "omitted_incomplete_buckets": 4,
+      "sha256": "c82b19b96790867a5b8e07f7030c46cc89d3a236aa26a29bf2e2539a7d84ae4c"
+    },
+    "60": {
+      "rows": 2918,
+      "omitted_incomplete_buckets": 5,
+      "sha256": "5d4e22044b0d04917e22b2563995a3e8316457cbbf5b669818b95fabdb572fb3"
+    },
+    "240": {
+      "rows": 633,
+      "omitted_incomplete_buckets": 159,
+      "sha256": "1509f7eb9bf2e2c7a64ca56354869657f1c51ff84b9fa609f9446b4ac3aee6de"
+    }
+  },
+  "authorization": {
+    "profile_refit_authorized": false,
+    "alternate_variant_selection_authorized": false,
+    "paper_execution_authorized": false,
+    "live_execution_authorized": false,
+    "broker_mutation_authorized": false
+  }
+}
