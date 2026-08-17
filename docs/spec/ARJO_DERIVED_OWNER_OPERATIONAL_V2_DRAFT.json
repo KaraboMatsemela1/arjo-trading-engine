@@ -1,0 +1,50 @@
+{
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "claim_profile": {
+    "arjo_derived": true,
+    "description": "V1 semantic and owner-operational profile unchanged; V2 adds a fail-closed execution-event observability invariant only.",
+    "fully_first_party_reconstructed": false,
+    "owner_operational_conventions_present": true,
+    "semantic_closure_claimed": false
+  },
+  "development_boundary": {
+    "holdout_2026h1_access_allowed": false,
+    "occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+    "performance_comparison_allowed": false,
+    "source_artifact_id": 9285916066
+  },
+  "execution_observability": {
+    "invariant_id": "V2_SECOND_STING_TOUCH_OBSERVABILITY_V1",
+    "invariant_sha256": "1822f7aa9f43cdabfa4f50d10c932e7eb600e5ffd6821615f8fff440cbe9c2c5",
+    "ref": "research/v2/execution_observability_invariant_v1.json"
+  },
+  "future_validation_reservation": {
+    "ref": "research/v2/future_validation_reservation_v1.json",
+    "reservation_sha256": "77cb50d000e4eecfaff6890d60ae296e5a06381b220debcb868240711c525853"
+  },
+  "inherited_execution": {
+    "changed_from_v1": false,
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "inherited_owner_conventions": {
+    "context_sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e",
+    "fvg_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+  },
+  "inherits_profile": {
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+    "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585"
+  },
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2_DRAFT",
+  "profile_sha256": "fa691a1dd5468a66c67c9e1636acb12984cbecb5e22f55549d67622253702202",
+  "schema_version": 1,
+  "status": "DRAFT_REMEDIATION_DESIGN",
+  "v1_disposition": {
+    "disposition_sha256": "71f1c1b67399fb297d037d0b8cb9bb0699afb3b2c894c0659042486a55bfc949",
+    "ref": "research/v2/v1_post_validation_disposition.json"
+  }
+}
