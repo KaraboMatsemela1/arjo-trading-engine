@@ -158,6 +158,11 @@
         "PARTIAL": 9,
         "SATISFIED": 0
       },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
+      },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "invalid_states": [],
@@ -238,6 +243,11 @@
         "NOT_APPLICABLE": 0,
         "PARTIAL": 3,
         "SATISFIED": 0
+      },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
@@ -360,6 +370,11 @@
         "NOT_APPLICABLE": 0,
         "PARTIAL": 6,
         "SATISFIED": 0
+      },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
@@ -497,6 +512,11 @@
         "PARTIAL": 6,
         "SATISFIED": 0
       },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
+      },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "invalid_states": [],
@@ -632,6 +652,11 @@
         "NOT_APPLICABLE": 0,
         "PARTIAL": 4,
         "SATISFIED": 0
+      },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
@@ -783,6 +808,11 @@
         "NOT_APPLICABLE": 0,
         "PARTIAL": 7,
         "SATISFIED": 0
+      },
+      "independent_packet_validation": {
+        "errors": [],
+        "frozen_spec_ref": null,
+        "status": "NOT_EVALUATED"
       },
       "independent_reconstruction": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
       "independent_two_engineer_test": "NOT_ATTEMPTED_INCOMPLETE_REQUIRED_FIELDS",
