@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "The best LTF entries happen inside an HTF expansion.",
+    "HTF ready to expand → LTF gives a great entry within the expansion.",
+    "This is because the LTF there picks up momentum, gets out of the consolidation, and that’s where the entry is.",
+    "Smaller retracements at the extremes → about to expand."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_LTF_ENTRIES_20260817",
+  "title": "The Best LTF Entries Happen Here",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/the-best-ltf-entries-happen-here/"
+}
