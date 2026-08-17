@@ -1,6 +1,6 @@
 {
   "blocked_reasons": [],
-  "completion_basis": "EXISTING_EVIDENCE",
+  "completion_basis": "CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE",
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -27,9 +27,19 @@
     "V2_CAUSAL_VALIDATION_PROTOCOL_READY",
     "V2_EXECUTION_MEASUREMENT_READY",
     "V2_FUTURE_VALIDATION_HARNESS_READY",
-    "PROJECT_CLOSED_EXISTING_EVIDENCE"
+    "PROJECT_CLOSED_EXISTING_EVIDENCE",
+    "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
+    "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
+    "V3_COVERAGE_DIAGNOSIS_COMPLETE",
+    "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE",
+    "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
+    "V3_ARGUMENTS_EXECUTION_PROTOCOL_FROZEN",
+    "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
+    "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
+    "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
   ],
-  "current_gate": "PROJECT_CLOSED_EXISTING_EVIDENCE",
+  "current_gate": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "historical_existing_evidence_closure": true,
   "issues": [
     {
       "dependencies_satisfied": true,
@@ -2073,6 +2083,216 @@
       "number": 214,
       "title": "FINAL STATE: persist wrapped project_state and STATUS",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/214"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          208
+        ],
+        "ENTRY_GATE": "PROJECT_CLOSED_EXISTING_EVIDENCE",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-001",
+        "OUTPUT_GATE": "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PROFITABILITY_VALIDATION_PROTOCOL"
+      },
+      "metadata_valid": true,
+      "number": 218,
+      "title": "Profitability validation: freeze backward OOS protocol and untouched-window audit",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/218"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          218
+        ],
+        "ENTRY_GATE": "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-002",
+        "OUTPUT_GATE": "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PROFITABILITY_BACKWARD_OOS_OCCURRENCE_SCAN"
+      },
+      "metadata_valid": true,
+      "number": 221,
+      "title": "Profitability validation: acquire backward OOS structure and seal V2 occurrence frequency",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/221"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          221
+        ],
+        "ENTRY_GATE": "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-003",
+        "OUTPUT_GATE": "V3_COVERAGE_DIAGNOSIS_COMPLETE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_OUTCOME_BLIND_SPARSITY_REMEDIATION"
+      },
+      "metadata_valid": true,
+      "number": 223,
+      "title": "V3 research: diagnose V2 sparsity and freeze outcome-blind coverage candidate",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/223"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          223
+        ],
+        "ENTRY_GATE": "V3_COVERAGE_DIAGNOSIS_COMPLETE",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-004",
+        "OUTPUT_GATE": "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_MULTI_INSTRUMENT_COVERAGE"
+      },
+      "metadata_valid": true,
+      "number": 225,
+      "title": "V3 portfolio research: freeze multi-index V2 transfer and coverage gate",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/225"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          225
+        ],
+        "ENTRY_GATE": "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-005",
+        "OUTPUT_GATE": "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_ARGUMENTS_FAMILY_COVERAGE"
+      },
+      "metadata_valid": true,
+      "number": 227,
+      "title": "V3-C research: freeze 4h Swing High \u2192 1h 2CR failure trigger family",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/227"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          227
+        ],
+        "ENTRY_GATE": "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-006",
+        "OUTPUT_GATE": "V3_ARGUMENTS_EXECUTION_PROTOCOL_FROZEN",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_ARGUMENTS_EXECUTION_RISK_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 229,
+      "title": "V3-C execution: freeze causal entry, risk, target and cost model before outcomes",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/229"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          229
+        ],
+        "ENTRY_GATE": "V3_ARGUMENTS_EXECUTION_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-007",
+        "OUTPUT_GATE": "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_ARGUMENTS_BACKWARD_OOS_TRIGGER_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 231,
+      "title": "V3-C profitability: seal 2010-2023 backward-OOS trigger set before M1 outcomes",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/231"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          231
+        ],
+        "ENTRY_GATE": "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
+        "ISSUE_ID": "ARJO-PROFIT-VAL-008",
+        "OUTPUT_GATE": "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V3_ARGUMENTS_BACKWARD_OOS_PROFITABILITY_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 232,
+      "title": "V3-C profitability: execute sealed 2010-2023 M1 BID/ASK economic validation",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/232"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          232
+        ],
+        "ENTRY_GATE": "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
+        "ISSUE_ID": "ARJO-RESEARCH-DISPOSITION-009",
+        "OUTPUT_GATE": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "POST_V3_CURRENT_EVIDENCE_RESEARCH_BOUNDARY"
+      },
+      "metadata_valid": true,
+      "number": 235,
+      "title": "Post-V3 research boundary: seal no validated profitable edge on current evidence",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/235"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          235
+        ],
+        "ENTRY_GATE": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "ISSUE_ID": "ARJO-GOV-STATE-010",
+        "OUTPUT_GATE": "POST_V3_TERMINAL_STATE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "POST_V3_FINAL_STATE_HARDENING"
+      },
+      "metadata_valid": true,
+      "number": 237,
+      "title": "Governance: extend terminal project state through post-V3 evidence boundary",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/237"
     }
   ],
   "live_execution_enabled": false,
@@ -2095,9 +2315,13 @@
     "CALIBRATION_REPLAY_HARNESS_READY",
     "CONCEPT_INVENTORY_READY",
     "CORPUS_ACQUIRED",
+    "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
     "EVIDENCE_REGISTRY_READY",
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
+    "POST_V3_TERMINAL_STATE_READY",
     "PREDICATE_MATRIX_READY",
+    "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
+    "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
     "PROJECT_CLOSED_EXISTING_EVIDENCE",
     "PROJECT_FINALIZED_AWAITING_VALIDATION",
     "PROTECTED_VALIDATION_COMPLETE",
@@ -2112,7 +2336,13 @@
     "V2_FUTURE_VALIDATION_HARNESS_READY",
     "V2_FUTURE_VALIDATION_PROTOCOL_READY",
     "V2_REMEDIATION_DESIGN_READY",
-    "V2_SPEC_FROZEN"
+    "V2_SPEC_FROZEN",
+    "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
+    "V3_ARGUMENTS_EXECUTION_PROTOCOL_FROZEN",
+    "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
+    "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
+    "V3_COVERAGE_DIAGNOSIS_COMPLETE",
+    "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE"
   ],
   "schema_version": 1,
   "spec_ready": true
