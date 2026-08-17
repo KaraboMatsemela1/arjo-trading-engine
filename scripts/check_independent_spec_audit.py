@@ -56,6 +56,8 @@ def main() -> int:
         errors.append("implementation_authorized must exactly equal spec_ready")
     if audit.get("spec_ready") is False and audit.get("frozen_spec_ref") is not None:
         errors.append("failed audit must not freeze a spec")
+    if audit.get("spec_ready") is True and not audit.get("frozen_spec_ref"):
+        errors.append("successful audit must reference a frozen spec")
 
     candidates = audit.get("candidates", [])
     audit_rows = {str(row.get("predicate_id", "")): row for row in candidates}
@@ -109,11 +111,16 @@ def main() -> int:
         if "two_engineer_test" in row:
             errors.append(f"{predicate_id}: legacy two_engineer_test field conflates Phase 5 and independent audit")
         if row.get("executable_semantics_reconstructed") is not False:
-            errors.append(f"{predicate_id}: executable semantics must remain false in V2 audit")
+            errors.append(f"{predicate_id}: audit code must not itself reconstruct executable semantics")
 
         recovery_task_id = row.get("recovery_task_id")
         if actual_unresolved and recovery_task_id not in recovery_ids:
             errors.append(f"{predicate_id}: unresolved candidate has no bounded recovery task")
+
+        packet_validation = row.get("independent_packet_validation")
+        if not isinstance(packet_validation, dict):
+            errors.append(f"{predicate_id}: missing independent_packet_validation")
+            packet_validation = {}
 
         outcome = str(row.get("outcome", ""))
         candidate_outcomes.append(outcome)
@@ -126,6 +133,12 @@ def main() -> int:
                 errors.append(f"{predicate_id}: PASS without independent two-engineer PASS")
             if row.get("independent_reconstruction") != "PASS":
                 errors.append(f"{predicate_id}: PASS without independent reconstruction PASS")
+            if packet_validation.get("status") != "PASS":
+                errors.append(f"{predicate_id}: PASS without validated independent packet")
+            if packet_validation.get("errors"):
+                errors.append(f"{predicate_id}: PASS packet contains validation errors")
+            if not packet_validation.get("frozen_spec_ref"):
+                errors.append(f"{predicate_id}: PASS packet lacks frozen spec reference")
         elif actual_unresolved:
             if outcome != "BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE":
                 errors.append(f"{predicate_id}: unresolved candidate must need first-party evidence")
@@ -134,6 +147,8 @@ def main() -> int:
                 errors.append(f"{predicate_id}: independent two-engineer test must not run on incomplete fields")
             if row.get("independent_reconstruction") != expected:
                 errors.append(f"{predicate_id}: independent reconstruction must not run on incomplete fields")
+            if packet_validation.get("status") != "NOT_EVALUATED":
+                errors.append(f"{predicate_id}: independent packet must not be evaluated before structural completion")
         elif all_satisfied:
             expected = "REQUIRES_INDEPENDENT_RECONSTRUCTION_PACKET"
             if outcome != "BLOCKED_NEEDS_INDEPENDENT_RECONSTRUCTION_PACKET":
@@ -142,6 +157,8 @@ def main() -> int:
                 errors.append(f"{predicate_id}: independent two-engineer state must await packet")
             if row.get("independent_reconstruction") != expected:
                 errors.append(f"{predicate_id}: reconstruction state must await packet")
+            if packet_validation.get("status") != "FAIL":
+                errors.append(f"{predicate_id}: missing/invalid independent packet must fail validation")
 
     if audit.get("spec_ready") is not any_pass:
         errors.append("overall spec_ready must equal whether any candidate passed")
