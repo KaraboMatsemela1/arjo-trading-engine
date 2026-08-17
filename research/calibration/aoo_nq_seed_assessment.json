@@ -20,6 +20,8 @@
       "EV_E2CA3E5215E4B2C2044D7BC9",
       "EV_53110264054D0997F8C055BD",
       "EV_8259279C63C178C23819BC9A",
+      "EV_AED1F1512355C2B3B6DEAB4D",
+      "EV_58E144AEBF95808F39138E22",
       "EV_6065BAEFC53803A9239A6CF6",
       "EV_917488CD997BF1BEF1288B2A"
     ]
@@ -29,8 +31,7 @@
       "name": "second_sting_fill_event",
       "semantic_role": "Operationalizes the exact executable event after the first-party-required second sting without changing the 2-Sting entry family.",
       "basis_evidence_ids": [
-        "EV_206F710B56DFDA5FF5393600",
-        "EV_53110264054D0997F8C055BD"
+        "EV_AED1F1512355C2B3B6DEAB4D"
       ],
       "predeclared_candidates": [
         "SECOND_STING_TOUCH",
@@ -41,7 +42,7 @@
       "name": "stop_buffer_ticks",
       "semantic_role": "Operationalizes order placement around the first-party Order Flow leg-low stop anchor without changing that anchor.",
       "basis_evidence_ids": [
-        "EV_8259279C63C178C23819BC9A"
+        "EV_58E144AEBF95808F39138E22"
       ],
       "predeclared_candidates": [
         0,

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "boundary_id": "ARJO-CAL-OCCURRENCE-BOUNDARY-001",
+  "status": "FAIL_CLOSED_SEMANTIC_ANCHORS_REQUIRED",
+  "purpose": "Separate first-party semantic anchor selection from deterministic verification against sealed OANDA calibration bars.",
+  "provider_identity": {
+    "provider": "OANDA_V20",
+    "venue": "OANDA_FXTRADE",
+    "instrument": "NAS100_USD",
+    "identity": "OANDA_NASDAQ100_CFD_PROXY_FOR_LOCKED_NQ_SEED"
+  },
+  "machine_verifiable_without_new_semantics": [
+    {
+      "field": "calibration_window_and_holdout",
+      "evidence": [],
+      "rule": "timestamps must be within 2024-01-01 <= t < 2026-01-01"
+    },
+    {
+      "field": "window_of_opportunity",
+      "evidence": ["EV_917488CD997BF1BEF1288B2A"],
+      "rule": "entry-family timestamps must be within configured 09:30 <= America/New_York < 11:00"
+    },
+    {
+      "field": "run_confirmation_close_above",
+      "evidence": ["EV_4C80F21E8802AD529D83DB98"],
+      "rule": "when close-above route is selected, observed candle close must be strictly above supplied rejection high"
+    },
+    {
+      "field": "direction_after_run",
+      "evidence": ["EV_8B0F5A4366459E7D6E782D39", "EV_E2CA3E5215E4B2C2044D7BC9"],
+      "rule": "locked worked plan remains long after supplied 2CR rejection-high run"
+    },
+    {
+      "field": "target_ordering",
+      "evidence": ["EV_53110264054D0997F8C055BD"],
+      "rule": "supplied target must be above supplied long entry prices"
+    },
+    {
+      "field": "stop_ordering",
+      "evidence": ["EV_58E144AEBF95808F39138E22"],
+      "rule": "supplied bullish Order Flow leg-low stop anchor must be below supplied long entry prices"
+    }
+  ],
+  "semantic_anchor_selection_not_machine_defined": [
+    {
+      "field": "selected_4h_fvg",
+      "reason": "first-party evidence establishes the worked 4h FVG context but repository evidence still lacks exact Arjo FVG geometry/selection rules",
+      "evidence": ["EV_427DA06DF5EBFA7F4CFB170A"]
+    },
+    {
+      "field": "selected_1h_fva",
+      "reason": "FVA is bounded high-to-low and ITH/ITL hierarchy is partially defined, but base Swing High/Low selection and exact relevant FVA choice remain unresolved",
+      "evidence": ["EV_88AB61A79C3864A7767B6A11", "EV_6D5404329BFAF17754EC0A42"]
+    },
+    {
+      "field": "selected_2cr_rejection_high",
+      "reason": "2CR branches are first-party supported but rejection wick/body thresholds and exact rejection-candle selection remain unresolved",
+      "evidence": ["EV_C5A4328CD761FAA6E9EEE55B", "EV_09ABEBB9831C8501802DB739"]
+    },
+    {
+      "field": "selected_order_flow_leg_low",
+      "reason": "the bullish leg low is explicitly the no-return/stop anchor, but the relevant leg is not algorithmically selected by direct evidence",
+      "evidence": ["EV_58E144AEBF95808F39138E22"]
+    },
+    {
+      "field": "selected_target",
+      "reason": "the worked plan targets next ATH / PD Array, but complete PD-array construction and target tie-breaking remain unresolved",
+      "evidence": ["EV_53110264054D0997F8C055BD", "EV_A5FDF5358232B28E3F99AF3B"]
+    },
+    {
+      "field": "second_sting_semantic_events",
+      "reason": "2-Sting is required by the seed, but exact semantic identification of each sting is not first-party machine-defined; only execution timing after an annotated second sting is preregistered",
+      "evidence": ["EV_AED1F1512355C2B3B6DEAB4D"]
+    }
+  ],
+  "prohibited_shortcuts": [
+    "generic ICT/SMC FVG formula",
+    "third-party Arjo-inspired indicators as semantic authority",
+    "performance-based anchor selection",
+    "automatic anchor choice from protected holdout",
+    "post-outcome addition of semantic concepts"
+  ],
+  "required_resolution": "Occurrence packets must carry explicit semantic anchors with independent provenance/consensus; the verifier may confirm those anchors against sealed bars but may not invent them."
+}

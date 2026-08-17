@@ -1,0 +1,15 @@
+{
+  "excerpts": [
+    "A Fair Value Area is an area from a high to a low, or vice versa.",
+    "Liquidity is at the FVA low."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #167. Only short semantic excerpts are retained; no performance/trade-count content is included.",
+  "retrieved_at": "2026-08-17T09:27:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_FVA_ALL_TELLING_20260817",
+  "title": "The All-Telling Concept",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/the-all-telling-concept/"
+}

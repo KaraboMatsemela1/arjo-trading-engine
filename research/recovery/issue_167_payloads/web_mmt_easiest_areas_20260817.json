@@ -1,0 +1,14 @@
+{
+  "excerpts": [
+    "An ITL is a Swing Low with a higher Swing Low to the left and right. Invert it for an ITH."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #167. The higher-order swing relationship is retained; base Swing Low/High selection remains unresolved.",
+  "retrieved_at": "2026-08-17T09:34:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_EASIEST_AREAS_20260817",
+  "title": "The Easiest Areas to Trade",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/the-easiest-areas-to-trade/"
+}

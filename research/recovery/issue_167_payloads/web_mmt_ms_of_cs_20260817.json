@@ -1,0 +1,15 @@
+{
+  "excerpts": [
+    "where price shouldn’t retrace back to (the low of the Order Flow Leg).",
+    "In other words; an Entry and your Stop Loss."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #167. Only short semantic excerpts are retained; no performance/trade-count content is included.",
+  "retrieved_at": "2026-08-17T09:27:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_MS_OF_CS_20260817",
+  "title": "Market Structure -> Order Flow -> Candle Science",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/market-structure-order-flow-candle-science/"
+}
