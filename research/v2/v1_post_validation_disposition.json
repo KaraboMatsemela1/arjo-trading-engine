@@ -1,0 +1,19 @@
+{
+  "broker_mutation_authorized": false,
+  "consumed_holdout": {
+    "end_exclusive": "2026-07-01T00:00:00Z",
+    "reuse_for_v2_tuning_or_validation_allowed": false,
+    "start_inclusive": "2026-01-01T00:00:00Z"
+  },
+  "disposition_id": "ARJO_V1_POST_VALIDATION_DISPOSITION",
+  "disposition_sha256": "71f1c1b67399fb297d037d0b8cb9bb0699afb3b2c894c0659042486a55bfc949",
+  "execution_eligible": false,
+  "live_execution_authorized": false,
+  "paper_execution_authorized": false,
+  "protected_validation_result_sha256": "a3f1afbaf1a9206fef4b6e11b3f0b42d6eba022f67b94e0a756708cc3323e474",
+  "schema_version": 1,
+  "v1_immutable": true,
+  "v1_profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+  "v1_profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585",
+  "validation_classification": "VALIDATION_INTEGRITY_FAILURE"
+}
