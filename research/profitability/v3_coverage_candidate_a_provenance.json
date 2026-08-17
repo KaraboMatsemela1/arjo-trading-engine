@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "V3_COVERAGE_PROVENANCE_BOUND",
+  "workflow_run_id": 32048734193,
+  "workflow_head_sha": "e2178dffa2c9a6552fb05685aab846b8795a7ad7",
+  "artifact_id": 9293836075,
+  "artifact_name": "v3-development-coverage",
+  "artifact_zip_sha256": "d5cc05aab5eac78b1d55812e7facea67b28a9dbd1ffd96f8937bd392030148e3",
+  "candidate_sha256": "21907522648f957ad620a0d0d9e3f1c3f9de4f222e92866b1db37bb91271c305",
+  "v3_report_sha256": "3b4c76c73779d99d4dc274adbb97b05cdb3aeb4ddb80bbe650ef85ed0a53d1b7",
+  "development_sessions": 515,
+  "qualified_occurrences": 7,
+  "executable_occurrences": 4,
+  "coverage_feasible": false,
+  "post_entry_outcomes_accessed": false,
+  "backward_oos_outcomes_accessed": false,
+  "performance_metrics_accessed": false
+}
