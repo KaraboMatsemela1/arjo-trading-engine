@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "issue": 242,
+  "protocol_id": "ARJO_V4_SHARP_TURN_D1_H1_EXECUTION_V1",
+  "protocol_sha256": "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd",
+  "status": "FROZEN_BEFORE_V4_MARKET_OUTCOME_ACCESS",
+  "source_recovery_issue": 239,
+  "source_recovery_merged": true,
+  "v4_market_data_requested": false,
+  "v4_triggers_enumerated": false,
+  "v4_economic_outcomes_accessed": false,
+  "v4_performance_metrics_accessed": false,
+  "v3c_outcomes_used_for_v4_rule_selection": false,
+  "historical_window_is_untouched_family_holdout": false,
+  "historical_window_label": "BACKWARD_HISTORICAL_DEVELOPMENT_NOT_UNTOUCHED_FAMILY_HOLDOUT",
+  "source_rules_vs_engine_conventions_separated": true,
+  "engine_conventions_frozen_before_v4_outcomes": [
+    "FVG-only Monthly/Weekly/Daily direction proxy",
+    "latest completed unmitigated FVG selection",
+    "H1 inbound-gap intersection with Daily FVG",
+    "H1 outbound close beyond Daily FVG boundary",
+    "immediate M1 market entry after outbound H1 confirmation",
+    "full known H1 interval-extreme stop",
+    "no killzone/session filter",
+    "first qualifying outbound FVG only",
+    "one open position maximum",
+    "no break-even or trailing",
+    "fixed 2R target",
+    "conservative stop-first same-M1 ordering"
+  ],
+  "provider_contract": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "structure": "MID M/W/D/H1",
+    "execution": "M1 BID/ASK",
+    "daily_alignment_hour": 17,
+    "alignment_timezone": "America/New_York",
+    "weekly_alignment": "Friday",
+    "no_request_in_issue_242": true
+  },
+  "authorization": {
+    "market_data_execution": false,
+    "backtest_execution": false,
+    "paper_execution": false,
+    "live_execution": false,
+    "broker_mutation": false
+  },
+  "next_gate": "V4 trigger/occurrence reconstruction may begin only after this protocol is merged and its exact SHA is verified; M1 economic data remains prohibited until the trigger set is separately sealed."
+}
