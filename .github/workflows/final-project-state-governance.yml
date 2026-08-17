@@ -13,6 +13,7 @@ on:
   push:
     branches:
       - governance/issue-208-project-closure-v2
+      - governance/issue-237-post-v3-terminal-state
     paths:
       - scripts/project_state_final.py
       - scripts/test_project_state_final.py
@@ -36,7 +37,7 @@ jobs:
           python-version: '3.12'
       - name: Compile final project-state wrapper
         run: python -m py_compile scripts/project_state.py scripts/project_state_final.py scripts/test_project_state_final.py
-      - name: Verify terminal existing-evidence closure
+      - name: Verify current-evidence terminal boundary
         run: PYTHONPATH=scripts python scripts/test_project_state_final.py
       - name: Verify wrapped-project claims
         run: |
