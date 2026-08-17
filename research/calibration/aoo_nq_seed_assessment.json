@@ -3,13 +3,13 @@
   "protocol": "FIRST_PARTY_PRESCRIBED_CALIBRATION_V1",
   "packet_id": "AOO-NQ-SEED-001",
   "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
-  "stage": "SEED_ASSESSMENT",
+  "stage": "PREREGISTERED",
   "semantic_candidate_locked": true,
   "seed_plan": {
-    "replayability_status": "BLOCKED_UNRESOLVED_EXECUTION_PARAMETERS",
+    "replayability_status": "REPLAYABLE",
     "instrument": "NQ",
     "timeframes": ["4h", "1h", "15m"],
-    "rule_summary": "First-party worked long context: NQ, 4h FVG plus 1h FVA context, 15m execution, wait for resistance/2CR-high disrespect, then seek continuation toward the next ATH/AoO target.",
+    "rule_summary": "Parameterized replay contract: NQ long only; 4h FVG plus 1h FVA context; opposing resistance/2CR rejection high must be run; execute the first-party 15m 2-Sting entry family using only a preregistered fill convention; anchor risk to the relevant bullish Order Flow leg low using only a preregistered tick buffer; target the documented next HTF premium-array/ATH context; if the required parameter is not met in the configured opportunity window, do nothing and move on.",
     "evidence_ids": [
       "EV_206F710B56DFDA5FF5393600",
       "EV_427DA06DF5EBFA7F4CFB170A",
@@ -18,16 +18,33 @@
       "EV_8259279C63C178C23819BC9A"
     ]
   },
-  "calibratable_parameters": [],
+  "calibratable_parameters": [
+    {
+      "name": "second_sting_fill_event",
+      "semantic_role": "Operationalizes the exact executable event after the first-party-required second sting without changing the 2-Sting entry family.",
+      "basis_evidence_ids": ["EV_206F710B56DFDA5FF5393600", "EV_53110264054D0997F8C055BD"],
+      "predeclared_candidates": ["SECOND_STING_TOUCH", "SECOND_STING_15M_CLOSE"]
+    },
+    {
+      "name": "stop_buffer_ticks",
+      "semantic_role": "Operationalizes order placement around the first-party Order Flow leg-low stop anchor without changing that anchor.",
+      "basis_evidence_ids": ["EV_8259279C63C178C23819BC9A"],
+      "predeclared_candidates": [0, 1, 2]
+    }
+  ],
   "dataset": {
-    "windows_declared": false,
+    "windows_declared": true,
+    "calibration_start": "2024-01-01",
+    "calibration_end": "2025-12-31",
+    "holdout_start": "2026-01-01",
+    "holdout_end": "2026-06-30",
     "calibration_data_accessed": false,
     "holdout_accessed": false
   },
   "objective": {
     "kind": "FIRST_PARTY_PARAMETER_REFINEMENT",
-    "predeclared_measure": "No calibration measure is authorized until the seed becomes replayable and parameter families are preregistered.",
-    "acceptance_rule": "Remain blocked; do not inspect outcomes while entry/stop execution parameters remain unresolved."
+    "predeclared_measure": "Replay each preregistered execution convention only on occurrences of the locked NQ seed and record deterministic entry observability, missed qualifying continuations, stop-anchor violations, and unresolved cases. Do not compare semantic candidates or introduce concepts after outcomes are visible.",
+    "acceptance_rule": "Freeze one execution convention per calibratable parameter only from the preregistered candidate set. Prefer deterministic observability and the narrowest convention consistent with the first-party semantic anchor; ties or contradictory evidence remain unresolved and fail closed. Holdout data remains untouched until after the calibrated spec is frozen and independently reconstructed."
   },
   "anti_bias": {
     "candidate_discovery_allowed": false,
@@ -36,5 +53,6 @@
     "holdout_use_during_calibration_allowed": false,
     "performance_leaderboard_allowed": false
   },
-  "outcome_access_authorized": false
+  "outcome_access_authorized": true,
+  "preregistration_sha256": "b4dc8d16176d849ac0fca914a2357db09ff0a1d253dc83f82237c13b83223567"
 }
