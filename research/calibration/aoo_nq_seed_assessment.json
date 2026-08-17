@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "protocol": "FIRST_PARTY_PRESCRIBED_CALIBRATION_V1",
+  "packet_id": "AOO-NQ-SEED-001",
+  "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+  "stage": "SEED_ASSESSMENT",
+  "semantic_candidate_locked": true,
+  "seed_plan": {
+    "replayability_status": "BLOCKED_UNRESOLVED_EXECUTION_PARAMETERS",
+    "instrument": "NQ",
+    "timeframes": ["4h", "1h", "15m"],
+    "rule_summary": "First-party worked long context: NQ, 4h FVG plus 1h FVA context, 15m execution, wait for resistance/2CR-high disrespect, then seek continuation toward the next ATH/AoO target.",
+    "evidence_ids": [
+      "EV_206F710B56DFDA5FF5393600",
+      "EV_427DA06DF5EBFA7F4CFB170A",
+      "EV_E2CA3E5215E4B2C2044D7BC9",
+      "EV_53110264054D0997F8C055BD",
+      "EV_8259279C63C178C23819BC9A"
+    ]
+  },
+  "calibratable_parameters": [],
+  "dataset": {
+    "windows_declared": false,
+    "calibration_data_accessed": false,
+    "holdout_accessed": false
+  },
+  "objective": {
+    "kind": "FIRST_PARTY_PARAMETER_REFINEMENT",
+    "predeclared_measure": "No calibration measure is authorized until the seed becomes replayable and parameter families are preregistered.",
+    "acceptance_rule": "Remain blocked; do not inspect outcomes while entry/stop execution parameters remain unresolved."
+  },
+  "anti_bias": {
+    "candidate_discovery_allowed": false,
+    "new_concepts_after_outcome_access_allowed": false,
+    "semantic_candidate_selection_by_performance_allowed": false,
+    "holdout_use_during_calibration_allowed": false,
+    "performance_leaderboard_allowed": false
+  },
+  "outcome_access_authorized": false
+}
