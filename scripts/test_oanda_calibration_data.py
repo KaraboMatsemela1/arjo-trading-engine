@@ -36,12 +36,13 @@ def expect_error(fn, needle: str) -> None:
 
 def payload(times: list[datetime], *, close_shift: Decimal = Decimal("0")) -> bytes:
     candles = []
-    for i, ts in enumerate(times):
-        base = Decimal("20000") + i
+    for ts in times:
+        slot = int(ts.timestamp() // 60) % 10000
+        base = Decimal("20000") + slot
         candles.append(
             {
                 "complete": True,
-                "volume": 10 + i,
+                "volume": 10 + slot,
                 "time": ts.isoformat().replace("+00:00", "Z"),
                 "mid": {
                     "o": str(base),
