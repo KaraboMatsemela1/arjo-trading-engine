@@ -10,4 +10,4 @@ The protected holdout begins at `2026-01-01T00:00:00Z`; requests or normalizatio
 
 Licensed/raw DBN payloads stay outside git. CI runs only synthetic/offline tests and never receives a Databento credential.
 
-Repository tracker state is canonicalized around #138 (Phase 6A umbrella), #140 (this pipeline lane), and #151 (actual licensed-data acquisition). Superseded duplicate checkpoint issues are closed with explicit no-op project metadata so dependency validation remains deterministic.
+Repository tracker state is canonicalized around #138 (Phase 6A umbrella), #140 (the sole current implementation claim), and #151 (actual licensed-data acquisition follow-on). The umbrella does not consume a second implementation lane. Superseded duplicate checkpoint issues are closed with explicit no-op project metadata so dependency and claim validation remain deterministic.
