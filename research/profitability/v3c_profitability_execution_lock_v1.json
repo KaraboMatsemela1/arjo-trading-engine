@@ -14,7 +14,8 @@
     "strict_end_exclusive": "2024-01-01T00:00:00Z",
     "preserve_gaps": true,
     "forward_fill": false,
-    "conflicting_duplicate": "DATA_INTEGRITY_FAILURE"
+    "conflicting_duplicate": "DATA_INTEGRITY_FAILURE",
+    "bounded_prefetch": "for each non-concurrent signal, fetch up to the frozen 1440-complete-bar horizon before local event evaluation; prefetch may read bars after an earlier stop/target but cannot alter any frozen parameter or admit data beyond the strict OOS end"
   },
   "dedup": {
     "same_activation_known_at": "keep latest swing_confirmed_at_utc; tie lexicographically greatest trigger_id"
@@ -37,5 +38,5 @@
   "paper_execution_authorized": false,
   "live_execution_authorized": false,
   "broker_mutation_authorized": false,
-  "spec_sha256": "ba37fb3fe144bffa7481279b53af764f1614a42fdd63b4a2a493737f1867abd5"
+  "spec_sha256": "cc1b6aa88a318c26fbc653751ab34c7c399241770a0db954fc3809c1fa0d17c7"
 }
