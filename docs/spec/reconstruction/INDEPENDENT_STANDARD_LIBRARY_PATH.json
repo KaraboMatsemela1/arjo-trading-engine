@@ -1,0 +1,48 @@
+{
+  "calibrated_execution": {
+    "performance_status_used_for_selection": false,
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "context_convention_sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e",
+  "detected_fvg_formation_count": 347,
+  "fvg_convention_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e",
+  "fvg_session_anchors_sha256": "5277a36e777cdac36aa4f27b42435257c6ecd46a1a7c8bf852f1bc9e4f908166",
+  "holdout_accessed": false,
+  "no_active_fvg_session_count": 2,
+  "no_active_fvg_sessions": [
+    "2024-01-02",
+    "2024-01-03"
+  ],
+  "occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+  "owner_operational_conventions_present": true,
+  "path_id": "INDEPENDENT_STANDARD_LIBRARY_PATH",
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+  "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585",
+  "qualification_rows_sha256": "5e02865a26656789c0c22dadf35cf3c1644ec729b84e7f596b3d5b705f4e65ce",
+  "qualified_occurrence_ids": [
+    "OWNER-CAL-2024-04-26"
+  ],
+  "reconstruction_sha256": "102dac4b77a53ce1a12d2085fe04cd04d144d807b672f7b3a6da06f4791df138",
+  "reconstruction_status": "PASS",
+  "replay_event_timestamps": [
+    "2024-04-30T15:00:00+00:00"
+  ],
+  "replay_results_sha256": "735338b13dd78bbf83aa9909e1f55a703f39628162fda3fa927b594c0e8aa997",
+  "replay_status_counts": {
+    "STOP_FIRST": 6
+  },
+  "schema_version": 1,
+  "selected_fvg_session_count": 513,
+  "semantic_closure_claimed": false,
+  "session_count": 515,
+  "status_counts": {
+    "NO_2CR_REJECTION": 59,
+    "NO_2_STING": 14,
+    "NO_FVA_OVERLAP": 413,
+    "NO_FVG": 2,
+    "NO_RUN": 26,
+    "QUALIFIED": 1
+  },
+  "variant_result_count": 6
+}
