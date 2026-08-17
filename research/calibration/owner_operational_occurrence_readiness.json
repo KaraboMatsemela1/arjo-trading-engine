@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "CALIBRATION_OCCURRENCES_READY",
+  "classification": "OWNER_OPERATIONAL_CONVENTION_NOT_ARJO_SEMANTIC_CLOSURE",
+  "semantic_closure_claimed": false,
+  "owner_fvg_convention_sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e",
+  "owner_context_convention_sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e",
+  "fvg_session_anchors_sha256": "5277a36e777cdac36aa4f27b42435257c6ecd46a1a7c8bf852f1bc9e4f908166",
+  "verification": {
+    "workflow_run_id": 32022634834,
+    "head_sha": "0aa3b17634ddb545f25af78ab89b40b116d188ab",
+    "artifact_id": 9285916066,
+    "artifact_digest": "sha256:d8c1aa83a6e3a56644a2e21f6204ff839f1ffa5bd1fd1e4b8e999d73fd685d07",
+    "session_count": 515,
+    "qualified_occurrence_count": 1,
+    "qualified_occurrence_ids": [
+      "OWNER-CAL-2024-04-26"
+    ],
+    "status_counts": {
+      "NO_2CR_REJECTION": 59,
+      "NO_2_STING": 14,
+      "NO_FVA_OVERLAP": 413,
+      "NO_FVG": 2,
+      "NO_RUN": 26,
+      "QUALIFIED": 1
+    },
+    "qualification_rows_sha256": "5e02865a26656789c0c22dadf35cf3c1644ec729b84e7f596b3d5b705f4e65ce",
+    "occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331"
+  },
+  "anti_bias": {
+    "outcome_fields_present": false,
+    "post_woo_bars_used": false,
+    "holdout_accessed": false,
+    "performance_comparison_performed": false,
+    "rules_adjusted_after_diagnostic_counts": false
+  },
+  "claim_boundary": "The occurrence set is reproducible under frozen owner operational conventions. It is not presented as a fully first-party-reconstructed Arjo occurrence set."
+}
