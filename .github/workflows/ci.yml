@@ -28,6 +28,10 @@ jobs:
         run: python scripts/test_evidence_registry.py
       - name: Run independent SPEC audit regression tests
         run: python scripts/test_independent_spec_audit.py
+      - name: Run calibration protocol regression tests
+        run: python scripts/test_calibration_protocol.py
+      - name: Validate current NQ AoO seed assessment
+        run: python scripts/check_calibration_protocol.py --packet research/calibration/aoo_nq_seed_assessment.json
       - name: Run Issue 48 recovery regression tests
         run: python scripts/test_issue48_recovery.py
       - name: Run SPEC audit service-issue publication regression tests
