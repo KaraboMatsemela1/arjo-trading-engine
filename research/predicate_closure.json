@@ -6,9 +6,9 @@
       "closure_distance": 16,
       "closure_rank": 1,
       "closure_tuple_missing_contradictory_partial": [
-        7,
         0,
-        9
+        0,
+        16
       ],
       "concepts": [
         "AREA_OF_OPPORTUNITY",
@@ -19,9 +19,9 @@
       "executable_rule_complete": false,
       "field_state_counts": {
         "CONTRADICTORY": 0,
-        "MISSING": 7,
+        "MISSING": 0,
         "NOT_APPLICABLE": 0,
-        "PARTIAL": 9,
+        "PARTIAL": 16,
         "SATISFIED": 0
       },
       "minimal_recovery_bundle_ids": [
