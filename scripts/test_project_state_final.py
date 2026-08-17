@@ -5,14 +5,14 @@ import project_state
 import project_state_final
 
 
-def body(issue_id: str, output_gate: str, state: str = "COMPLETE") -> str:
+def body(issue_id: str, output_gate: str, state: str = "COMPLETE", owner: str = "UNCLAIMED") -> str:
     return f"""<!-- project-meta
 ISSUE_ID: {issue_id}
 TYPE: TEST
 DEPENDENCIES: []
 ENTRY_GATE: NONE
 OUTPUT_GATE: {output_gate}
-OWNER: UNCLAIMED
+OWNER: {owner}
 STATE: {state}
 -->"""
 
@@ -32,16 +32,27 @@ def main() -> int:
     assert final_path[-9:] == project_state_final.V2_CRITICAL_GATES
     assert final_path[-1] == "V2_FUTURE_VALIDATION_COMPLETE"
     assert len(final_path) == len(set(final_path)), "critical path contains duplicate gates"
+    assert "BLOCKED" in project_state.ALLOWED_STATES
+    assert "EXTERNAL_WAIT" in project_state.ALLOWED_STATES
 
     fixtures = [issue(index + 1, gate) for index, gate in enumerate(final_path[:-1])]
-    fixtures.append(
-        {
-            "number": 999,
-            "title": "Final future validation",
-            "html_url": "https://example.invalid/issues/999",
-            "state": "open",
-            "body": body("FINAL", "V2_FUTURE_VALIDATION_COMPLETE", "EXTERNAL_WAIT"),
-        }
+    fixtures.extend(
+        [
+            {
+                "number": 998,
+                "title": "MASTER umbrella",
+                "html_url": "https://example.invalid/issues/998",
+                "state": "open",
+                "body": body("MASTER", "NONE", "BLOCKED"),
+            },
+            {
+                "number": 999,
+                "title": "Final future validation",
+                "html_url": "https://example.invalid/issues/999",
+                "state": "open",
+                "body": body("FINAL", "V2_FUTURE_VALIDATION_COMPLETE", "EXTERNAL_WAIT", "KaraboMatsemela1"),
+            },
+        ]
     )
     state = project_state.derive_state(fixtures)
     assert state["current_gate"] == "V2_FUTURE_VALIDATION_COMPLETE", state["current_gate"]
