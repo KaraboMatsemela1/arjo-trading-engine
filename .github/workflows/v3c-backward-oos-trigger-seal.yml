@@ -1,0 +1,86 @@
+name: V3-C Backward OOS Trigger Seal
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-231-v3c-oos-trigger-seal
+    paths:
+      - 'scripts/scan_v3c_backward_oos_triggers.py'
+      - 'scripts/test_v3c_backward_oos_trigger_seal.py'
+      - '.github/workflows/v3c-backward-oos-trigger-seal.yml'
+
+permissions:
+  contents: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify trigger scanner has no M1/outcome path
+        run: python scripts/test_v3c_backward_oos_trigger_seal.py
+      - name: Reacquire exact frozen 2010-2023 M15 structure
+        run: >-
+          python scripts/oanda_backward_oos_structure.py
+          --contract research/profitability/nas100_oanda_backward_oos_request_contract.json
+          --output-dir /tmp/v3c-oos-structure
+          --delay 0.02
+      - name: Prove reacquisition remains structure-only
+        run: |
+          python - <<'PY'
+          import json
+          m=json.load(open('/tmp/v3c-oos-structure/NAS100_USD.manifest.json'))
+          assert m['source_granularity']=='M15'
+          assert m['semantic_price_component']=='MID'
+          assert m['post_entry_outcomes_evaluated'] is False
+          assert m['m1_outcome_data_requested'] is False
+          assert m['mutation_endpoints_used'] is False
+          print('structure_manifest_sha256=' + m['manifest_sha256'])
+          print('structure_retrieval_sha256=' + m['retrieval_sha256'])
+          PY
+      - name: Reconstruct and seal V3-C backward-OOS triggers
+        run: >-
+          python scripts/scan_v3c_backward_oos_triggers.py
+          --artifact-dir /tmp/v3c-oos-structure
+          --candidate research/profitability/v3c_arguments_trigger_candidate.json
+          --protocol research/profitability/v3c_arguments_execution_protocol_v1.json
+          --output /tmp/v3c-oos-trigger-set.json
+      - name: Verify exact no-outcome boundary and sample necessary condition
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/v3c-oos-trigger-set.json'))
+          assert r['dual_path_exact_match'] is True
+          assert r['m1_data_requested'] is False
+          assert r['post_trigger_price_traversal_accessed'] is False
+          assert r['performance_metrics_accessed'] is False
+          assert r['development_2024_2025_outcomes_accessed'] is False
+          assert r['v2_2010_2023_trade_outcomes_accessed'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          assert r['sample_necessary_condition_met'] is True, 'frozen 100-trade necessary condition not met'
+          print('triggers=' + str(r['trigger_count']))
+          print('distinct_knowledge_times=' + str(r['distinct_activation_knowledge_times']))
+          print('trigger_set_sha256=' + r['trigger_set_sha256'])
+          print('report_sha256=' + r['report_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3c-backward-oos-trigger-set
+          path: /tmp/v3c-oos-trigger-set.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Delete runner-local structure payloads
+        if: always()
+        run: rm -rf /tmp/v3c-oos-structure
