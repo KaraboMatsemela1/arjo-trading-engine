@@ -1,0 +1,93 @@
+name: Owner Calibration Execution
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/owner-calibration-execution.yml'
+      - 'scripts/run_owner_operational_calibration.py'
+      - 'research/calibration/aoo_nq_seed_assessment.json'
+      - 'research/calibration/owner_operational_calibration_result.json'
+  push:
+    branches:
+      - calibration/issue-181-execution
+    paths:
+      - '.github/workflows/owner-calibration-execution.yml'
+      - 'scripts/run_owner_operational_calibration.py'
+      - 'research/calibration/aoo_nq_seed_assessment.json'
+      - 'research/calibration/owner_operational_calibration_result.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  execute-frozen-calibration:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile calibration execution
+        run: python -m py_compile scripts/run_owner_operational_calibration.py
+      - name: Download sealed annual calibration artifacts
+        run: |
+          for pair in "2024:9282976276" "2025:9283007527"; do
+            YEAR="${pair%%:*}"
+            ARTIFACT_ID="${pair##*:}"
+            mkdir -p "/tmp/arjo-${YEAR}"
+            curl --fail --location --retry 3 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+              -o "/tmp/arjo-${YEAR}.zip"
+            unzip -q "/tmp/arjo-${YEAR}.zip" -d "/tmp/arjo-${YEAR}"
+          done
+      - name: Execute exactly six preregistered variants
+        run: >-
+          python scripts/run_owner_operational_calibration.py
+          --replay-spec research/calibration/aoo_nq_replay_spec.json
+          --context-convention research/calibration/owner_operational_context_v1.json
+          --fvg-convention research/calibration/owner_operational_fvg_v1.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/owner-operational-calibration-result.json
+      - name: Verify calibration safety and selection basis
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/owner-operational-calibration-result.json').read_text())
+          assert m['status'] == 'CALIBRATION_COMPLETE'
+          assert m['occurrence_set_sha256'] == 'af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331'
+          assert m['variant_result_count'] == 6
+          assert m['status_counts'] == {'STOP_FIRST': 6}
+          assert m['selection']['second_sting_fill_event'] == 'SECOND_STING_TOUCH'
+          assert m['selection']['stop_buffer_ticks'] == 0
+          assert m['selection']['performance_status_used_for_selection'] is False
+          assert m['semantic_candidate_comparison_performed'] is False
+          assert m['performance_leaderboard_performed'] is False
+          assert m['holdout_accessed'] is False
+          events = {row['event_ts'] for row in m['replay_results']}
+          assert events == {'2024-04-30T15:00:00+00:00'}
+          print('owner_calibration_execution=PASS')
+          print('replay_results_sha256=' + m['replay_results_sha256'])
+          print('calibration_result_sha256=' + m['calibration_result_sha256'])
+          PY
+      - name: Upload calibration evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-owner-operational-calibration-result
+          path: /tmp/owner-operational-calibration-result.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local provider payloads
+        if: always()
+        run: rm -rf /tmp/arjo-2024 /tmp/arjo-2025 /tmp/arjo-2024.zip /tmp/arjo-2025.zip
