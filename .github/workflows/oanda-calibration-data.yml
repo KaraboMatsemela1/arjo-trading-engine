@@ -1,0 +1,157 @@
+name: OANDA Calibration Data
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/oanda-calibration-data.yml
+      - scripts/oanda_calibration_data.py
+      - scripts/test_oanda_calibration_data.py
+      - research/calibration/nas100_oanda_request_contract.json
+      - research/calibration/oanda_smoke_validation.json
+  push:
+    branches:
+      - calibration/issue-151-oanda-acquisition
+    paths:
+      - .github/workflows/oanda-calibration-data.yml
+      - scripts/oanda_calibration_data.py
+      - scripts/test_oanda_calibration_data.py
+      - research/calibration/nas100_oanda_request_contract.json
+      - research/calibration/oanda_smoke_validation.json
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Compile OANDA calibration scripts
+        run: python -m py_compile scripts/oanda_calibration_data.py scripts/test_oanda_calibration_data.py
+      - name: Run offline acquisition guards
+        run: python scripts/test_oanda_calibration_data.py
+
+  live-2024-smoke:
+    if: github.event_name == 'push'
+    needs: offline-contract-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Require read-only OANDA credentials
+        run: |
+          test -n "$OANDA_ACCOUNT_ID"
+          test -n "$OANDA_API_TOKEN"
+      - name: Retrieve one bounded calibration day
+        run: >-
+          python scripts/oanda_calibration_data.py
+          --output-dir /tmp/arjo-oanda-smoke
+          --start 2024-03-11T00:00:00Z
+          --end 2024-03-12T00:00:00Z
+          --delay 0
+      - name: Validate smoke manifest safety boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/arjo-oanda-smoke/NAS100_USD.manifest.json').read_text())
+          assert m['provider'] == 'OANDA_V20'
+          assert m['venue'] == 'OANDA_FXTRADE'
+          assert m['instrument'] == 'NAS100_USD'
+          assert m['provider_instrument_type'] == 'CFD'
+          assert m['price_component'] == 'MID'
+          assert m['holdout_requested'] is False
+          assert m['holdout_accessed'] is False
+          assert m['mutation_endpoints_used'] is False
+          assert m['m1_rows'] > 0
+          print('oanda_calibration_smoke=PASS')
+          print('m1_rows=' + str(m['m1_rows']))
+          print('retrieval_sha256=' + m['retrieval_sha256'])
+          PY
+      - name: Upload smoke provider evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-oanda-nas100-smoke-2024-03-11
+          path: /tmp/arjo-oanda-smoke
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 9
+      - name: Delete runner-local provider payloads
+        if: always()
+        run: rm -rf /tmp/arjo-oanda-smoke
+
+  full-frozen-calibration-window:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[full-oanda-calibration]')
+    needs: live-2024-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - year: 2024
+            start: 2024-01-01T00:00:00Z
+            end: 2025-01-01T00:00:00Z
+          - year: 2025
+            start: 2025-01-01T00:00:00Z
+            end: 2026-01-01T00:00:00Z
+    env:
+      OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12"
+      - name: Require read-only OANDA credentials
+        run: |
+          test -n "$OANDA_ACCOUNT_ID"
+          test -n "$OANDA_API_TOKEN"
+      - name: Retrieve frozen calibration shard
+        run: >-
+          python scripts/oanda_calibration_data.py
+          --output-dir /tmp/arjo-oanda-${{ matrix.year }}
+          --start ${{ matrix.start }}
+          --end ${{ matrix.end }}
+      - name: Validate frozen shard boundary
+        run: |
+          YEAR=${{ matrix.year }} python - <<'PY'
+          import json, os
+          from pathlib import Path
+          year = os.environ['YEAR']
+          m = json.loads((Path('/tmp') / f'arjo-oanda-{year}' / 'NAS100_USD.manifest.json').read_text())
+          assert m['provider'] == 'OANDA_V20'
+          assert m['venue'] == 'OANDA_FXTRADE'
+          assert m['instrument'] == 'NAS100_USD'
+          assert m['holdout_requested'] is False
+          assert m['holdout_accessed'] is False
+          assert m['mutation_endpoints_used'] is False
+          assert m['m1_rows'] > 0
+          if year == '2025':
+              assert m['requested_end_exclusive'] == '2026-01-01T00:00:00Z'
+          print('frozen_shard_validation=PASS year=' + year)
+          print('m1_rows=' + str(m['m1_rows']))
+          print('retrieval_sha256=' + m['retrieval_sha256'])
+          PY
+      - name: Upload frozen provider evidence shard
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-oanda-nas100-calibration-${{ matrix.year }}
+          path: /tmp/arjo-oanda-${{ matrix.year }}
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local provider payloads
+        if: always()
+        run: rm -rf /tmp/arjo-oanda-${{ matrix.year }}
