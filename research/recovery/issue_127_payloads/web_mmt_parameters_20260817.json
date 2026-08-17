@@ -1,0 +1,17 @@
+{
+  "excerpts": [
+    "if my parameter is met, I look for an entry.",
+    "For me, the parameter is where an opposing argument is removed, leaving us with only one-sided arguments.",
+    "So my parameter gets met when we run the Rejection High.",
+    "And if the parameter doesn’t get met, we move on to the next one."
+  ],
+  "first_party_contacted": true,
+  "notes": "Bounded first-party page capture for Issue #127. Only short semantic excerpts are retained; performance/trade-count content is excluded.",
+  "retrieved_at": "2026-08-17T04:55:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_PARAMETERS_20260817",
+  "title": "Let ‘Parameters’ Transform Your Trading",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/let-parameters-transform-your-trading/"
+}
