@@ -1,0 +1,1 @@
+Evidence recovery + provenance union + independent reconstruction packet gate only. No detector, backtest, performance, broker, paper, or live trading logic.
