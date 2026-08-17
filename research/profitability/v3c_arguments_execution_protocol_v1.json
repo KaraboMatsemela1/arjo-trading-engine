@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "protocol_id": "ARJO_V3C_ARGUMENTS_EXECUTION_MEASUREMENT_V1",
+  "status": "FROZEN_BEFORE_V3C_POST_TRIGGER_OUTCOME_ACCESS",
+  "classification": "OWNER_OPERATIONAL_MEASUREMENT_STRATEGY_NOT_ARJO_EXACT_EXECUTION_SEMANTICS",
+  "trigger": {
+    "candidate_id": "ARJO_ARGUMENTS_4H_SWING_1H_2CR_V3C",
+    "candidate_sha256": "de51f2c721aaedd0f6587755ebcab31ac2b264188d3de1f5531ec7057fb53b7b",
+    "development_trigger_set_sha256": "47061979163219481611286b8268c02be1eee9bee0ed4188077ae0921a27a2fc",
+    "direct_first_party_core": [
+      "4h Swing High context monitored with 1h 2CR",
+      "rejection high run/close-above is a bullish failure observable"
+    ]
+  },
+  "semantic_boundary": {
+    "direct_first_party_entry_fill": false,
+    "direct_first_party_stop_selector_for_arguments_family": false,
+    "direct_first_party_target_selector_for_arguments_family": false,
+    "measurement_conventions_are_not_arjo_semantic_closure": true
+  },
+  "market_data": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA US Nas 100 CFD/proxy; not CME NQ futures equivalence",
+    "trigger_semantics_price": "MID H1/H4",
+    "execution_measurement_price": "M1 BID/ASK",
+    "backward_oos_start": "2010-01-01T00:00:00Z",
+    "backward_oos_end_exclusive": "2024-01-01T00:00:00Z",
+    "development_2024_2025_outcomes_must_remain_unread": true,
+    "request_m1_only_after_backward_oos_trigger_set_is_sealed": true
+  },
+  "entry": {
+    "direction": "LONG",
+    "knowledge_time": "activation H1 bar close",
+    "entry_bar": "first complete OANDA M1 bar whose start is >= activation H1 bar close",
+    "base_fill": "ASK open plus 0.5 index points adverse slippage",
+    "stress_fill": "ASK open plus 1.0 index points adverse slippage",
+    "max_wait_for_first_m1_elapsed_hours": 72,
+    "missing_entry_data": "DATA_INTEGRITY_FAILURE"
+  },
+  "risk": {
+    "stop_anchor": "selected 1h rejection candle low",
+    "classification": "owner-operational structural measurement convention",
+    "risk_r_points": "slipped_entry_price - stop_anchor",
+    "invalid_if_risk_nonpositive": true,
+    "stop_event": "first later/current entry M1 bar with BID low <= stop_anchor",
+    "stop_fill": "if BID open <= stop_anchor use BID open, else stop_anchor; subtract applicable adverse exit slippage"
+  },
+  "target": {
+    "multiple_r": 2.0,
+    "target_price": "slipped_entry_price + 2 * risk_r_points",
+    "classification": "fixed measurement convention selected before outcomes",
+    "target_event": "first later/current entry M1 bar with BID high >= target_price",
+    "target_fill": "target_price minus applicable adverse exit slippage; favorable gap improvement is not credited"
+  },
+  "intrabar_order": {
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "entry_minute_events": "entry occurs at ASK open; subsequent BID high/low events are eligible in that M1 bar",
+    "missing_internal_m1_sequence": "DATA_INTEGRITY_FAILURE"
+  },
+  "expiry": {
+    "max_complete_m1_bars_from_entry_inclusive": 1440,
+    "reason": "fixed one-trading-day-equivalent measurement horizon, frozen before outcomes",
+    "unresolved_exit": "market measurement at final eligible M1 BID close minus adverse exit slippage"
+  },
+  "signal_portfolio_policy": {
+    "same_knowledge_time_deduplication": "keep trigger with latest swing_confirmed_at_utc; tie break lexicographic trigger_id",
+    "concurrent_positions": "ONE_OPEN_LONG_POSITION_MAXIMUM",
+    "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+    "new_signal_after_exit": "eligible at its own causal knowledge time only; skipped signals are never replayed later"
+  },
+  "economics": {
+    "spread": "historical OANDA ASK entry / BID exit",
+    "base_slippage_points_per_side": 0.5,
+    "stress_slippage_points_per_side": 1.0,
+    "financing_base_r_per_1440_complete_m1_bars": 0.005,
+    "financing_stress_r_per_1440_complete_m1_bars": 0.01,
+    "financing_deduction": "rate * (complete_m1_bars_held / 1440)",
+    "gross_r": "(exit_fill_before_financing - entry_fill) / risk_r_points",
+    "net_r": "gross_r - financing_deduction"
+  },
+  "backward_oos_sequence": {
+    "stage_1": "reconstruct V3-C triggers on sealed 2010-2023 MID H1/H4 structure only",
+    "stage_2": "seal trigger IDs and timestamps before M1 BID/ASK retrieval",
+    "stage_3": "retrieve only M1 windows needed to measure sealed triggers and one-position-at-a-time sequence",
+    "stage_4": "evaluate base and stress economics exactly once",
+    "no_refit_after_stage_1": true,
+    "no_execution_parameter_selection_after_outcomes": true
+  },
+  "metrics": {
+    "primary_unit": "R",
+    "minimum_resolved_executed_trades": 100,
+    "required": [
+      "resolved_executed_trades",
+      "skipped_concurrent_signals",
+      "data_integrity_failures",
+      "base_net_expectancy_r",
+      "base_profit_factor",
+      "base_win_rate",
+      "base_max_drawdown_r",
+      "stress_net_expectancy_r",
+      "stress_profit_factor",
+      "bootstrap_95pct_ci_net_expectancy_r",
+      "calendar_year_net_expectancy_r",
+      "unique_entry_dates"
+    ],
+    "bootstrap": {
+      "method": "IID executed-trade bootstrap",
+      "replicates": 10000,
+      "seed": 20260817
+    }
+  },
+  "classification": {
+    "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED": "resolved_executed_trades < 100",
+    "EDGE_NOT_ESTABLISHED": "sample >=100 and one or more PRELIMINARY_EDGE conditions fail",
+    "PRELIMINARY_PROFITABLE_EDGE": {
+      "resolved_executed_trades_gte": 100,
+      "base_net_expectancy_r_gt": 0.0,
+      "base_profit_factor_gt": 1.2,
+      "bootstrap_95pct_ci_lower_net_expectancy_r_gt": 0.0,
+      "stress_net_expectancy_r_gt": 0.0,
+      "stress_profit_factor_gt": 1.0,
+      "data_integrity_failures_eq": 0,
+      "synthetic_fills_eq": 0
+    },
+    "STRONG_HISTORICAL_EDGE": {
+      "resolved_executed_trades_gte": 250,
+      "base_profit_factor_gt": 1.3,
+      "bootstrap_95pct_ci_lower_net_expectancy_r_gt": 0.0,
+      "stress_net_expectancy_r_gt": 0.0,
+      "positive_calendar_year_fraction_gte": 0.7,
+      "data_integrity_failures_eq": 0
+    }
+  },
+  "interpretation": {
+    "profitable_edge_claim_applies_to": "this frozen owner-operational V3-C measurement strategy on OANDA NAS100_USD backward historical OOS",
+    "does_not_establish_exact_arjo_execution_semantics": true,
+    "does_not_establish_live_trading_readiness": true,
+    "does_not_authorize_paper_or_live_execution": true
+  },
+  "authorization": {
+    "paper_execution": false,
+    "live_execution": false,
+    "broker_mutation": false
+  },
+  "protocol_sha256": "0b3a6a5e217e7e4c279f7384c14579e97bf6821bc59deefac3086e7b4ce4ba7a"
+}
