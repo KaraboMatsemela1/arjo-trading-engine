@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "issue": 127,
+  "stop_condition": "Do not promote SPEC_READY until every canonical field is deterministic and the independent reconstruction packet passes.",
+  "current_disposition": "RECOVERY_EVIDENCE_ADMITTED_AWAITING_CI",
+  "auto_merge_allowed": false
+}
