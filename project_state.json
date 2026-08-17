@@ -47,7 +47,7 @@
       },
       "metadata_valid": true,
       "number": 1,
-      "title": "MASTER: autonomous project lifecycle \u2014 WRAPPED",
+      "title": "MASTER: autonomous project lifecycle \u2014 CLOSED",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/1"
     },
     {
@@ -2052,6 +2052,27 @@
       "number": 211,
       "title": "FINAL HARDENING: persist explicit existing-evidence terminal state",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/211"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          208
+        ],
+        "ENTRY_GATE": "PROJECT_CLOSED_EXISTING_EVIDENCE",
+        "ISSUE_ID": "ARJO-FINAL-STATE-PERSIST-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "ChatGPT",
+        "STATE": "IMPLEMENTING",
+        "TYPE": "FINAL_STATE_PERSISTENCE"
+      },
+      "metadata_valid": true,
+      "number": 214,
+      "title": "FINAL STATE: persist wrapped project_state and STATUS",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/214"
     }
   ],
   "live_execution_enabled": false,
