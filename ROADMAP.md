@@ -1,183 +1,80 @@
-# Roadmap
+# Roadmap — Closed
 
-The engineering roadmap is complete through the V2 future-validation harness. The only unfinished project gate is the untouched final V2 validation in Issue #201, which is intentionally blocked by chronology until **2027-03-01T00:00:00Z** and explicit owner dispatch.
+The current Arjo Trading Engine project lifecycle is complete.
 
-## Completed foundation
+Terminal gate: `PROJECT_CLOSED_EXISTING_EVIDENCE`.
 
-### Phase 0 — Governance
+The owner chose on **2026-08-17** to close the project using the evidence already acquired and sealed rather than keep completion blocked on a future untouched-validation window.
 
-**Gate:** `GOVERNANCE_BOOTSTRAP_COMPLETE` — COMPLETE
+## Completed lifecycle
 
-Canonical governance, issue metadata, dependency validation, project-state generation and CI controls.
+### Governance, source recovery and evidence synthesis
 
-### Phases 1–5 — Evidence and deterministic specification foundation
+Complete:
+- `GOVERNANCE_BOOTSTRAP_COMPLETE`
+- `SOURCE_UNIVERSE_DISCOVERED`
+- `ACQUISITION_TOOLING_READY`
+- `CORPUS_ACQUIRED`
+- `CONCEPT_INVENTORY_READY`
+- `EVIDENCE_REGISTRY_READY`
+- `PREDICATE_MATRIX_READY`
 
-**Gates:**
-- `SOURCE_UNIVERSE_DISCOVERED` — COMPLETE
-- `ACQUISITION_TOOLING_READY` — COMPLETE
-- `CORPUS_ACQUIRED` — COMPLETE
-- `CONCEPT_INVENTORY_READY` — COMPLETE
-- `EVIDENCE_REGISTRY_READY` — COMPLETE
-- `PREDICATE_MATRIX_READY` — COMPLETE
+### V1 calibration and reconstruction
 
-First-party evidence remains the semantic authority. Owner-operational conventions are explicitly versioned where exact first-party machine semantics could not be recovered.
-
-### Phase 6A — Governed V1 calibration
-
-**Gates:**
-- `CALIBRATION_PROTOCOL_READY` — COMPLETE
-- `SEMANTIC_SEED_READY` — COMPLETE
-- `CALIBRATION_AUTHORIZED` — COMPLETE
-- `CALIBRATION_PREREGISTRATION_COMPLETE` — COMPLETE
-- `CALIBRATION_DATA_PIPELINE_READY` — COMPLETE
-- `CALIBRATION_REPLAY_HARNESS_READY` — COMPLETE
-- `CALIBRATION_DATA_READY` — COMPLETE
-- `CALIBRATION_OCCURRENCES_READY` — COMPLETE
-- `CALIBRATED_SPEC_FROZEN` — COMPLETE
-
-The owner-directed OANDA practice `NAS100_USD` source was used for 2024–2025 calibration. It is an OANDA Nasdaq-100 CFD proxy/source, not asserted to be literal CME NQ futures.
-
-Frozen V1 execution selected `SECOND_STING_TOUCH` with stop buffer `0` structurally, not by performance ranking.
-
-### V1 independent reconstruction
-
-**Gate:** `SPEC_READY` — COMPLETE
-
-The calibrated owner-operational V1 profile was independently reconstructed by production and isolated standard-library paths.
+Complete:
+- `CALIBRATION_PROTOCOL_READY`
+- `SEMANTIC_SEED_READY`
+- `CALIBRATION_AUTHORIZED`
+- `CALIBRATION_PREREGISTRATION_COMPLETE`
+- `CALIBRATION_DATA_PIPELINE_READY`
+- `CALIBRATION_REPLAY_HARNESS_READY`
+- `CALIBRATION_DATA_READY`
+- `CALIBRATION_OCCURRENCES_READY`
+- `CALIBRATED_SPEC_FROZEN`
+- `SPEC_READY`
 
 ### V1 protected validation
 
-**Gates:**
-- `PROTECTED_VALIDATION_PROTOCOL_FROZEN` — COMPLETE
-- `PROTECTED_VALIDATION_COMPLETE` — COMPLETE
+Complete:
+- `PROTECTED_VALIDATION_PROTOCOL_FROZEN`
+- `PROTECTED_VALIDATION_COMPLETE`
 
-The one-time protected 2026H1 read exposed `VALIDATION_INTEGRITY_FAILURE`: V1 could semantically qualify a second sting while the frozen touch price was not present in that bar. No target/stop outcome was assigned for the defective occurrence and V1 was not refit.
+Result: `VALIDATION_INTEGRITY_FAILURE`.
 
-The 2026H1 interval is consumed and may not be reused for V2 tuning, initialization or validation.
+The protected 2026H1 test exposed that V1 could qualify `SECOND_STING_TOUCH` when the touch price was outside the designated second-sting 15-minute bar. V1 was not refit and is not execution eligible.
 
-## V2 remediation lifecycle — complete
+### V2 remediation and deterministic reconstruction
 
-### V2 execution-observability remediation
+Complete:
+- `V2_REMEDIATION_DESIGN_READY`
+- `V2_SPEC_FROZEN`
+- `V2_FUTURE_VALIDATION_PROTOCOL_READY`
+- `V2_CAUSAL_VALIDATION_PROTOCOL_READY`
+- `V2_EXECUTION_MEASUREMENT_READY`
+- `V2_FUTURE_VALIDATION_HARNESS_READY`
 
-**Gate:** `V2_REMEDIATION_DESIGN_READY` — COMPLETE
+V2 fixes the execution-observability defect and freezes deterministic M1 sequencing without converting that sequencing policy into an Arjo semantic claim.
 
-V2 separates semantic qualification from executable fill observability:
+## Project closure
 
-```text
-second_sting_bar.low <= touch_price <= second_sting_bar.high
-```
+Complete:
+- `PROJECT_CLOSED_EXISTING_EVIDENCE`
 
-False produces `NO_EXECUTABLE_ENTRY`, never a synthetic or fallback fill.
+Final scientific interpretation:
 
-### V2 independent SPEC reconstruction
+- deterministic research implementation: complete;
+- V1 protected validation: failed on execution integrity;
+- V2 mechanical remediation: complete;
+- V2 untouched future validation: not performed;
+- validated profitable edge: not established;
+- paper/live/broker authorization: not granted.
 
-**Gate:** `V2_SPEC_FROZEN` — COMPLETE
+See [`FINAL_DISPOSITION.md`](FINAL_DISPOSITION.md).
 
-Frozen profile:
+## Optional future work — not part of this roadmap
 
-```text
-ARJO_DERIVED_OWNER_OPERATIONAL_V2
-87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6
-```
+The frozen V2 future-validation workflow remains available as optional later research infrastructure. Issue #201 is closed as `not planned` for this project version.
 
-Production and independent standard-library paths agree on the sealed 2024–2025 developmental reconstruction.
+If the project is revisited later, future validation must be treated as a new/reopened extension and must not retroactively change the existing-evidence closure record.
 
-### V2 future-validation protocol
-
-**Gate:** `V2_FUTURE_VALIDATION_PROTOCOL_READY` — COMPLETE
-
-Initial future-validation boundaries, result taxonomy, sample threshold, no-refit policy and explicit authorization gates were frozen before any future-window data access.
-
-### Causal cold-start correction
-
-**Gate:** `V2_CAUSAL_VALIDATION_PROTOCOL_READY` — COMPLETE
-
-The strategy carries FVG/pivot state, so a scored September 1 start would require forbidden pre-window carry-in. The superseding causal protocol therefore freezes:
-
-```text
-Acquisition:       [2026-09-01, 2027-03-01)
-State at Sep 1:    EMPTY
-Bootstrap:         [2026-09-01, 2026-10-01) — unscored
-Scored validation:[2026-10-01, 2027-03-01)
-```
-
-No pre-start market data, state snapshot or V1 2026H1 state/data may seed V2.
-
-Frozen protocol SHA:
-
-```text
-193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38
-```
-
-### M1 execution sequencing
-
-**Gate:** `V2_EXECUTION_MEASUREMENT_READY` — COMPLETE
-
-The 15-minute V2 observability rule is unchanged. A separate M1 measurement policy establishes causal event timing without inferring unknown OHLC order:
-
-```text
-V2_M1_TOUCH_SEQUENCING_V1
-6de757b7957a48c85b72e215c986defee5aebca4e317f3f839b04b47cdf064d6
-```
-
-Missing M1 touch after 15m observability fails integrity. Stop/target in the entry minute or both in a later minute is `AMBIGUOUS_INTRABAR_ORDER`.
-
-### Complete future-validation harness
-
-**Gate:** `V2_FUTURE_VALIDATION_HARNESS_READY` — COMPLETE
-
-The entire final path is implemented and tested:
-- SHA/date/authorization guards;
-- single-shot, read-only OANDA full-window acquisition;
-- deterministic M1 → 15m/60m/240m normalization;
-- empty-state bootstrap;
-- production semantic/evaluation path;
-- isolated independent standard-library path;
-- V2 observability and M1 sequencing;
-- exact dual-path comparison;
-- preregistered metric and classification computation;
-- SHA-bound final result sealing.
-
-Frozen request-contract SHA:
-
-```text
-edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca
-```
-
-Harness readiness SHA:
-
-```text
-8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79
-```
-
-## Final remaining phase — untouched V2 validation
-
-**Issue:** #201
-
-**Gate:** `V2_FUTURE_VALIDATION_COMPLETE` — PENDING / `EXTERNAL_WAIT`
-
-**Earliest legal execution:** `2027-03-01T00:00:00Z`
-
-The final workflow is already implemented at:
-
-```text
-.github/workflows/v2-future-validation-execution.yml
-```
-
-It intentionally implements no rolling/partial acquisition. After the full window closes, repository owner `KaraboMatsemela1` must explicitly dispatch it with:
-
-```text
-AUTHORIZE_V2_FUTURE_VALIDATION
-```
-
-The workflow then acquires the exact full OANDA window once, runs both independent evaluation paths, compares them, computes the frozen result classification, and seals the final evidence.
-
-The inferential threshold remains **30 resolved executable occurrences**. If the full untouched window produces fewer, the result is `INSUFFICIENT_SAMPLE`; the project does not widen the window or adjust rules afterward.
-
-## Post-validation boundaries
-
-`V2_FUTURE_VALIDATION_COMPLETE` is a research-validation result gate, not automatic trading permission.
-
-Paper execution remains disabled unless the owner separately authorizes a new paper-qualification lifecycle. Live trading is never autonomously authorized. Broker mutation remains disabled.
-
-No further strategy engineering, refit or validation-window modification is planned before #201 executes unless a genuine implementation-integrity defect is discovered.
+There is no remaining active implementation phase in the current roadmap.
