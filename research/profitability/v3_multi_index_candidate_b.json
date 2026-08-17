@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V3_MULTI_INDEX_B",
+  "status": "PREREGISTERED_BEFORE_INSTRUMENT_AVAILABILITY_AND_COVERAGE",
+  "authority": "OWNER_DIRECTED_INSTRUMENT_CLASS_TRANSFER",
+  "classification": "V3_MULTI_INSTRUMENT_RESEARCH_CANDIDATE_NOT_ARJO_UNIVERSAL_SEMANTICS",
+  "parent_profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+  "parent_profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "first_party_basis": {
+    "source_id": "WEB_MMT_EASIEST_INSTRUMENTS_20260817",
+    "source_claims": [
+      "4h FVG and 1h FVA context with 15m execution is described on NQ",
+      "the same first-party page gives broader example classes: Metals, Indices, JPY pairs"
+    ],
+    "universal_transfer_claimed": false
+  },
+  "change_set": {
+    "changed_dimension": "instrument_eligibility_only",
+    "fixed_candidate_instruments": ["NAS100_USD", "SPX500_USD", "US30_USD"],
+    "unavailable_instrument_policy": "RECORD_UNAVAILABLE_AND_EXCLUDE_WITHOUT_REPLACEMENT",
+    "all_v2_strategy_predicates": "UNCHANGED",
+    "v3_a_overlap_removal": "NOT_INCLUDED",
+    "v2_execution_observability": "UNCHANGED"
+  },
+  "development_coverage": {
+    "start": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-01-01T00:00:00Z",
+    "pricing": "MBA",
+    "semantic_price_component": "MID",
+    "source_granularity": "M15",
+    "higher_timeframes": ["H1", "H4"],
+    "post_entry_outcomes_allowed": false,
+    "performance_metrics_allowed": false,
+    "portfolio_executable_occurrence_floor": 30,
+    "same_date_cluster_reporting": true,
+    "coverage_selection_rule": "coverage feasibility only; no outcome performance"
+  },
+  "backward_oos_boundary": {
+    "2010_2023_v2_outcomes_remain_unread": true,
+    "candidate_may_not_be_changed_using_backward_oos_occurrence_ids": true
+  },
+  "authorization": {"paper_execution": false, "live_execution": false, "broker_mutation": false},
+  "candidate_sha256": "c40cf7223bcb956d0e668e48dfeb29fbb7aa529fe45350710bbe5aaf2c2160b9"
+}
