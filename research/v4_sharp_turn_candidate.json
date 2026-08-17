@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "issue": 239,
+  "candidate_id": "V4_SHARP_TURN_FVG",
+  "family_independence": {
+    "independent_of": "V3_C_ARGUMENTS_2CR",
+    "reason": "Selection and semantics come from newly reachable Sharp Turn/FVG source material rather than any V3-C outcome or parameter modification.",
+    "v3c_outcomes_consulted_for_selection": false
+  },
+  "evidence_grades": {
+    "A": "Arjo-authored X text carried by mirror transport",
+    "B": "Transcript witness of Arjo public YouTube content; derived transport, not silently promoted to direct authored text"
+  },
+  "required_fields": [
+    "INPUTS",
+    "INSTRUMENTS",
+    "TIMEFRAME",
+    "HIGHER_TIMEFRAME_CONTEXT",
+    "DIRECTION",
+    "PRECONDITIONS",
+    "SETUP",
+    "TRIGGER",
+    "ENTRY",
+    "STOP",
+    "TARGET",
+    "INVALIDATION",
+    "EXPIRY",
+    "SESSION/TIME_RULE",
+    "OPTIONAL_CONDITIONS",
+    "REQUIRED_CONDITIONS"
+  ],
+  "fields": {
+    "INPUTS": {
+      "state": "RECOVERED_GRADED",
+      "grade": "B",
+      "rule": "OHLC candles sufficient to construct three-candle swings, order-flow legs and three-candle FVGs.",
+      "ambiguity": "Exact executable subtype thresholds remain incomplete."
+    },
+    "INSTRUMENTS": {
+      "state": "RECOVERED_GRADED",
+      "grade": "B",
+      "rule": "Arjo states the FVG principles apply across markets; no instrument-specific requirement is established.",
+      "ambiguity": null
+    },
+    "TIMEFRAME": {
+      "state": "RECOVERED_GRADED",
+      "grade": "B",
+      "rule": "Sharp Turn baseline mapping recovered as Monthly->Daily, Weekly->4H, Daily->1H, 4H->15m, 1H->5m, 15m->1m.",
+      "ambiguity": "The transcript witness repeatedly mistranscribes 15m as 50m; cross-witness corroboration resolves the apparent typo but direct caption acquisition remains preferable."
+    },
+    "HIGHER_TIMEFRAME_CONTEXT": {
+      "state": "RECOVERED_GRADED",
+      "grade": "A+B",
+      "rule": "Establish Bias on higher timeframes, identify a Narrative/Context PD Array or directional FVG, and only look for the Sharp Turn after price reaches that higher-timeframe area.",
+      "ambiguity": "A single universal deterministic Bias/DOL selector is not fully specified by Grade A text alone."
+    },
+    "DIRECTION": {
+      "state": "RECOVERED_GRADED",
+      "grade": "B",
+      "rule": "Use the direction of the most recent order-flow leg containing the relevant FVG, with higher-timeframe alignment preferred.",
+      "ambiguity": "Conflict-resolution across misaligned higher timeframes is qualitative rather than fully deterministic."
+    },
+    "PRECONDITIONS": {
+      "state": "RECOVERED_GRADED",
+      "grade": "A+B",
+      "rule": "Bias/DOL known; directional HTF FVG/Narrative identified; price reaches that HTF area; narrative and entry timeframe aligned.",
+      "ambiguity": "Whether only unmitigated FVGs are mandatory for all Sharp Turn variants is transcript-supported rather than Grade-A explicit."
+    },
+    "SETUP": {
+      "state": "RECOVERED",
+      "grade": "A",
+      "rule": "Sharp Turn = entry-timeframe FVG into the higher-timeframe FVG followed by an entry-timeframe FVG out of the higher-timeframe FVG; the two lower-timeframe FVGs need not overlap.",
+      "ambiguity": null
+    },
+    "TRIGGER": {
+      "state": "RECOVERED",
+      "grade": "A",
+      "rule": "Formation of the second/outbound FVG completes the Sharp Turn trigger.",
+      "ambiguity": "Earliest causal trigger time is inferable as completion of the third candle but is not explicitly timestamped in Grade-A text."
+    },
+    "ENTRY": {
+      "state": "UNRESOLVED",
+      "grade": "A+B",
+      "rule": "Authored text says enter on the second FVG; transcript describes entering from/inside the FVG in consolidation cases.",
+      "ambiguity": "No unique executable fill price is specified: third-candle close, proximal edge, midpoint, first retracement touch, limit order and market execution cannot be distinguished without invention."
+    },
+    "STOP": {
+      "state": "PARTIAL",
+      "grade": "A+B",
+      "rule": "Beginner guidance places the stop at the relevant swing extreme or swing bodies; worked transcript entry covers the order-flow-leg extreme.",
+      "ambiguity": "Body-vs-wick choice, equal-extrema tie handling and universal long/short symmetry are not uniquely frozen."
+    },
+    "TARGET": {
+      "state": "RECOVERED",
+      "grade": "A+B",
+      "rule": "1:2 / 2R is explicit beginner rejection guidance; Context Target is the first opposing PD Array.",
+      "ambiguity": "A future protocol must choose one target mode before outcome access rather than mix them adaptively."
+    },
+    "INVALIDATION": {
+      "state": "PARTIAL",
+      "grade": "A+B",
+      "rule": "Structural failure is represented by violating the selected stop reference; FVG hold/fail can also be confirmed by lower-timeframe FVG creation.",
+      "ambiguity": "No pre-entry invalidation rule is uniquely specified for every Sharp Turn variant."
+    },
+    "EXPIRY": {
+      "state": "UNRESOLVED",
+      "grade": null,
+      "rule": null,
+      "ambiguity": "No maximum signal age or pending-entry wait is specified."
+    },
+    "SESSION/TIME_RULE": {
+      "state": "UNRESOLVED_OPTIONALITY",
+      "grade": "A",
+      "rule": "The recovered modern Sharp Turn threads do not make a session filter part of the five-step entry definition.",
+      "ambiguity": "Absence from the thread does not prove that killzone/session filtering is universally forbidden or irrelevant."
+    },
+    "OPTIONAL_CONDITIONS": {
+      "state": "PARTIAL",
+      "grade": "A+B",
+      "rule": "Higher Confirmation Entry, FVG subtype confirmation, and break-even management are optional refinements described separately from the core Sharp Turn chain.",
+      "ambiguity": "Exact optional-vs-required boundary for each refinement requires a protocol decision before testing."
+    },
+    "REQUIRED_CONDITIONS": {
+      "state": "RECOVERED_CORE",
+      "grade": "A",
+      "rule": "Bias/DOL; directional HTF FVG; timeframe alignment; FVG into HTF FVG; FVG out; participation on second FVG; structural stop reference.",
+      "ambiguity": "Executable fill/expiry details remain unresolved and therefore block economic testing."
+    }
+  },
+  "verdict": "V4_SHARP_TURN_STILL_INCOMPLETE",
+  "blocking_fields": [
+    "ENTRY",
+    "EXPIRY",
+    "STOP",
+    "DIRECTION",
+    "SESSION/TIME_RULE"
+  ],
+  "next_recovery_targets": [
+    "Direct Arjo material specifying market-vs-limit execution and exact price within the outbound FVG.",
+    "Direct Arjo material specifying pending-entry lifetime or proving entry is always immediate at FVG completion.",
+    "Direct Arjo material resolving stop wick-vs-body selection as a deterministic rule.",
+    "Direct Arjo material defining conflict resolution when Monthly/Weekly/Daily/4H bias inputs disagree.",
+    "Direct Arjo material establishing whether session/killzone is required for this Sharp Turn generation."
+  ],
+  "permissions": {
+    "backtest": false,
+    "paper_execution": false,
+    "live_execution": false,
+    "broker_mutation": false
+  }
+}
