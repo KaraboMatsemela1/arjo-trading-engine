@@ -4,7 +4,7 @@ _Generated mechanically by `scripts/project_state.py`._
 
 ## Current objective gate
 
-`V2_FUTURE_VALIDATION_COMPLETE`
+`PROJECT_CLOSED_EXISTING_EVIDENCE`
 
 ## Safety state
 
@@ -30,6 +30,7 @@ _Generated mechanically by `scripts/project_state.py`._
 - `EVIDENCE_REGISTRY_READY`
 - `GOVERNANCE_BOOTSTRAP_COMPLETE`
 - `PREDICATE_MATRIX_READY`
+- `PROJECT_CLOSED_EXISTING_EVIDENCE`
 - `PROJECT_FINALIZED_AWAITING_VALIDATION`
 - `PROTECTED_VALIDATION_COMPLETE`
 - `PROTECTED_VALIDATION_PROTOCOL_FROZEN`
@@ -49,7 +50,7 @@ _Generated mechanically by `scripts/project_state.py`._
 
 | Issue | Type | State | Dependencies ready | Entry gate ready |
 |---|---|---|---|---|
-| #1 | MASTER | BLOCKED | True | True |
+| #1 | MASTER | COMPLETE | True | True |
 | #2 | GOVERNANCE_AUTOMATION | COMPLETE | True | True |
 | #3 | SOURCE_DISCOVERY | COMPLETE | True | True |
 | #4 | ACQUISITION_TOOLING | COMPLETE | True | True |
@@ -141,8 +142,11 @@ _Generated mechanically by `scripts/project_state.py`._
 | #195 | V2_FUTURE_VALIDATION_HARNESS | COMPLETE | True | True |
 | #196 | V2_CAUSAL_VALIDATION_PROTOCOL | COMPLETE | True | True |
 | #198 | V2_EXECUTION_MEASUREMENT_POLICY | COMPLETE | True | True |
-| #201 | FINAL_FUTURE_VALIDATION_EXECUTION | EXTERNAL_WAIT | True | True |
+| #201 | FINAL_FUTURE_VALIDATION_EXECUTION | COMPLETE | True | True |
 | #203 | FINAL_GOVERNANCE_PERSISTENCE | COMPLETE | True | True |
+| #206 | FINAL_PROJECT_WRAP | COMPLETE | True | True |
+| #208 | PROJECT_CLOSURE_EXISTING_EVIDENCE | COMPLETE | True | True |
+| #211 | FINAL_STATE_HARDENING | COMPLETE | True | True |
 
 ## Strategy implementation status
 
