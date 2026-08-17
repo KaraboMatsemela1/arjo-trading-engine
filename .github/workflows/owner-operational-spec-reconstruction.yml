@@ -113,7 +113,7 @@ jobs:
           assert a['owner_operational_conventions_disclosed'] is True
           assert a['performance_data_used_for_semantic_selection'] is False
           assert a['holdout_accessed'] is False
-          assert len(a['critical_fields']) == 18
+          assert len(a['critical_fields']) == 19
           assert all(v['status'] == 'PASS' for v in a['critical_fields'].values())
           print('owner_operational_spec_reconstruction=PASS')
           print('path_a=' + a['path_a_reconstruction_sha256'])
