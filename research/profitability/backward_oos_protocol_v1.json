@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "protocol_id": "ARJO_V2_PROFITABILITY_BACKWARD_OOS_V1",
+  "status": "FROZEN_BEFORE_BACKWARD_OOS_ACCESS",
+  "strategy": {
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+    "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+    "no_refit": true,
+    "no_parameter_selection": true
+  },
+  "data": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA US Nas 100 CFD/proxy; not CME NQ futures equivalence",
+    "start_inclusive": "2010-01-01T00:00:00Z",
+    "end_exclusive": "2024-01-01T00:00:00Z",
+    "pricing": "MBA",
+    "semantic_price_component": "MID",
+    "execution_price_components": ["BID", "ASK"],
+    "base_granularity": "M15",
+    "higher_timeframes": ["H1", "H4"],
+    "m1_execution_fetch": "QUALIFIED_OCCURRENCES_ONLY_AFTER_OCCURRENCE_SET_IS_SEALED",
+    "provider_availability_adjustment": "start may move forward only if OANDA proves no earlier data; never based on outcomes",
+    "known_repo_market_data_windows_excluded": [
+      ["2024-01-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+      ["2026-01-01T00:00:00Z", "2026-07-01T00:00:00Z"],
+      ["2026-09-01T00:00:00Z", "2027-03-01T00:00:00Z"]
+    ]
+  },
+  "stages": {
+    "stage_1_occurrence_frequency": {
+      "outcomes_allowed": false,
+      "purpose": "Reconstruct V2 semantic/execution-observability occurrences over backward OOS history without reading post-entry outcomes.",
+      "minimum_executable_occurrences_for_profitability_inference": 30,
+      "if_below_minimum": "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED"
+    },
+    "stage_2_execution_and_economics": {
+      "entry_for_long": "ASK at first M1 candle whose ask-range contains the frozen touch after V2 15m observability passes",
+      "exit_for_long": "BID at first causally ordered stop/target event under frozen M1 sequencing",
+      "same_m1_stop_and_target": "AMBIGUOUS_INTRABAR_ORDER",
+      "slippage_stress_points_per_side": [0.0, 0.5, 1.0],
+      "financing_stress_r_per_utc_day": [0.0, 0.005, 0.01],
+      "no_synthetic_fill": true
+    }
+  },
+  "metrics": {
+    "unit": "R",
+    "required": [
+      "executable_occurrences",
+      "resolved_trades",
+      "net_expectancy_r",
+      "median_net_r",
+      "profit_factor",
+      "win_rate",
+      "max_drawdown_r",
+      "calendar_year_expectancy_r",
+      "bootstrap_95pct_expectancy_ci",
+      "cost_stress_grid"
+    ],
+    "bootstrap": {"method": "IID trade bootstrap", "replicates": 10000, "seed": 20260817}
+  },
+  "classification": {
+    "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED": "executable_occurrences < 30",
+    "EDGE_NOT_ESTABLISHED": "sample >=30 and any core acceptance condition fails",
+    "PRELIMINARY_EDGE": {
+      "min_resolved_trades": 30,
+      "base_net_expectancy_r_gt": 0.0,
+      "base_profit_factor_gt": 1.2,
+      "median_net_r_gt": 0.0,
+      "stress_0_5pt_0_005r_day_expectancy_gt": 0.0,
+      "rule_violations_eq": 0,
+      "synthetic_fills_eq": 0
+    },
+    "STRONGER_HISTORICAL_EDGE": {
+      "min_resolved_trades": 100,
+      "bootstrap_95pct_expectancy_ci_lower_gt": 0.0,
+      "positive_expectancy_each_calendar_year": true,
+      "stress_1pt_0_01r_day_expectancy_gt": 0.0,
+      "base_profit_factor_gt": 1.2
+    }
+  },
+  "interpretation": {
+    "backward_oos_not_pristine_forward_holdout": true,
+    "source_era_example_contamination_risk_disclosed": true,
+    "validated_profitable_edge_requires_at_least_preliminary_edge": true,
+    "production_or_live_readiness_implied": false
+  },
+  "authorization": {"paper_execution": false, "live_execution": false, "broker_mutation": false}
+}
