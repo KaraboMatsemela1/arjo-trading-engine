@@ -1,0 +1,112 @@
+name: Calibration Annotation Packs
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/calibration-annotation-packs.yml'
+      - 'scripts/build_occurrence_annotation_packs.py'
+      - 'scripts/test_build_occurrence_annotation_packs.py'
+      - 'research/calibration/oanda_annotation_pack_readiness.json'
+  push:
+    branches:
+      - calibration/issue-167-html-consensus
+    paths:
+      - '.github/workflows/calibration-annotation-packs.yml'
+      - 'scripts/build_occurrence_annotation_packs.py'
+      - 'scripts/test_build_occurrence_annotation_packs.py'
+      - 'research/calibration/oanda_annotation_pack_readiness.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  synthetic-anti-leak-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile annotation pack builder
+        run: python -m py_compile scripts/build_occurrence_annotation_packs.py scripts/test_build_occurrence_annotation_packs.py
+      - name: Run annotation anti-leak tests
+        run: python scripts/test_build_occurrence_annotation_packs.py
+
+  real-frozen-pack-verification:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[real-annotation-packs]')
+    needs: synthetic-anti-leak-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - year: 2024
+            artifact_id: 9282976276
+            expected_count: 258
+            expected_packs_sha256: 4b0866fdf91de83a0125fcfc5c387a3b9f2b55c66a2ee69d974181c0d03937b9
+          - year: 2025
+            artifact_id: 9283007527
+            expected_count: 257
+            expected_packs_sha256: 40ad01fd00c2d0c478e6d7f5372765d04b103d7d5fe5f9367af4c725b53c286d
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download sealed annual calibration artifact
+        env:
+          ARTIFACT_ID: ${{ matrix.artifact_id }}
+          YEAR: ${{ matrix.year }}
+        run: |
+          mkdir -p "/tmp/arjo-${YEAR}"
+          curl --fail --location --retry 3 \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+            -o "/tmp/arjo-${YEAR}.zip"
+          unzip -q "/tmp/arjo-${YEAR}.zip" -d "/tmp/arjo-${YEAR}"
+      - name: Build outcome-blind annotation packs
+        run: >-
+          python scripts/build_occurrence_annotation_packs.py
+          --derived-dir /tmp/arjo-${{ matrix.year }}
+          --manifest /tmp/arjo-${{ matrix.year }}/NAS100_USD.manifest.json
+          --artifact-id ${{ matrix.artifact_id }}
+          --output-dir /tmp/packs-${{ matrix.year }}
+      - name: Verify real frozen pack manifest
+        env:
+          YEAR: ${{ matrix.year }}
+          EXPECTED_COUNT: ${{ matrix.expected_count }}
+          EXPECTED_SHA: ${{ matrix.expected_packs_sha256 }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          y = os.environ['YEAR']
+          m = json.loads(Path(f'/tmp/packs-{y}/manifest.json').read_text())
+          assert m['status'] == 'OUTCOME_BLIND_ANNOTATION_PACKS_READY'
+          assert m['pack_count'] == int(os.environ['EXPECTED_COUNT'])
+          assert m['packs_sha256'] == os.environ['EXPECTED_SHA']
+          assert m['post_woo_bars_included'] is False
+          assert m['holdout_accessed'] is False
+          assert m['performance_fields_included'] is False
+          print(f"real_annotation_packs=PASS year={y} count={m['pack_count']} sha={m['packs_sha256']}")
+          PY
+      - name: Retain only non-price readiness manifest
+        run: |
+          cp /tmp/packs-${{ matrix.year }}/manifest.json /tmp/annotation-pack-manifest-${{ matrix.year }}.json
+          rm -rf /tmp/packs-${{ matrix.year }} /tmp/arjo-${{ matrix.year }} /tmp/arjo-${{ matrix.year }}.zip
+      - name: Upload readiness manifest only
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-outcome-blind-annotation-pack-manifest-${{ matrix.year }}
+          path: /tmp/annotation-pack-manifest-${{ matrix.year }}.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
