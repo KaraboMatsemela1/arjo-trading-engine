@@ -1,7 +1,5 @@
 {
-  "blocked_reasons": [
-    "Issue #1 blocked: MASTER: autonomous project lifecycle"
-  ],
+  "blocked_reasons": [],
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -35,20 +33,20 @@
     {
       "dependencies_satisfied": true,
       "entry_gate_satisfied": true,
-      "github_state": "OPEN",
+      "github_state": "CLOSED",
       "mechanically_ready": true,
       "meta": {
         "DEPENDENCIES": [],
         "ENTRY_GATE": "REPO_CREATED",
         "ISSUE_ID": "ARJO-MASTER",
         "OUTPUT_GATE": "NONE",
-        "OWNER": "UNCLAIMED",
-        "STATE": "BLOCKED",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
         "TYPE": "MASTER"
       },
       "metadata_valid": true,
       "number": 1,
-      "title": "MASTER: autonomous project lifecycle",
+      "title": "MASTER: autonomous project lifecycle \u2014 WRAPPED",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/1"
     },
     {
@@ -1949,7 +1947,7 @@
     {
       "dependencies_satisfied": true,
       "entry_gate_satisfied": true,
-      "github_state": "OPEN",
+      "github_state": "CLOSED",
       "mechanically_ready": true,
       "meta": {
         "DEPENDENCIES": [
@@ -1957,14 +1955,14 @@
         ],
         "ENTRY_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
         "ISSUE_ID": "ARJO-V2-FINAL-VAL-001",
-        "OUTPUT_GATE": "V2_FUTURE_VALIDATION_COMPLETE",
-        "OWNER": "KaraboMatsemela1",
-        "STATE": "EXTERNAL_WAIT",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
         "TYPE": "FINAL_FUTURE_VALIDATION_EXECUTION"
       },
       "metadata_valid": true,
       "number": 201,
-      "title": "FINAL: execute sealed V2 future validation after March 1, 2027",
+      "title": "DEFERRED: optional sealed V2 future validation",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/201"
     },
     {
@@ -1987,6 +1985,51 @@
       "number": 203,
       "title": "Final governance: persist development-complete repository state",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/203"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          195,
+          196,
+          198,
+          203
+        ],
+        "ENTRY_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
+        "ISSUE_ID": "ARJO-FINAL-WRAP-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "FINAL_PROJECT_WRAP"
+      },
+      "metadata_valid": true,
+      "number": 206,
+      "title": "FINAL: wrap project on current V2 evidence baseline",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/206"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          195
+        ],
+        "ENTRY_GATE": "V2_FUTURE_VALIDATION_HARNESS_READY",
+        "ISSUE_ID": "ARJO-FINAL-CLOSURE-001",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PROJECT_CLOSURE_EXISTING_EVIDENCE"
+      },
+      "metadata_valid": true,
+      "number": 208,
+      "title": "FINAL CLOSURE: freeze project disposition using existing evidence",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/208"
     }
   ],
   "live_execution_enabled": false,
