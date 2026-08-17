@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "provider": "OANDA_V20",
+  "venue": "OANDA_FXTRADE",
+  "instrument": "NAS100_USD",
+  "provider_instrument_type": "CFD",
+  "price_component": "MID",
+  "workflow_run_id": 32014297855,
+  "job_id": 95340391993,
+  "artifact_id": 9282909755,
+  "artifact_zip_sha256": "42f07aa818ed836b2b6a466b3db51d957b3d24b81337330eb322abe18dfd511c",
+  "requested_start": "2024-03-11T00:00:00Z",
+  "requested_end_exclusive": "2024-03-12T00:00:00Z",
+  "m1_rows": 1380,
+  "retrieval_sha256": "ec959a729dc7b60f38eb56b9e744cff16ad395bc23e3951a261c13bdf8e20435",
+  "holdout_requested": false,
+  "holdout_accessed": false,
+  "mutation_endpoints_used": false,
+  "credential_values_exposed": false,
+  "status": "PASS"
+}
