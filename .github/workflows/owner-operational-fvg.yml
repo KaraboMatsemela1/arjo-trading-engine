@@ -1,0 +1,104 @@
+name: Owner Operational FVG
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/owner-operational-fvg.yml'
+      - 'scripts/build_owner_operational_fvg_anchors.py'
+      - 'scripts/test_owner_operational_fvg_anchors.py'
+      - 'research/calibration/owner_operational_fvg_v1.json'
+  push:
+    branches:
+      - calibration/issue-167-owner-fvg-v1
+    paths:
+      - '.github/workflows/owner-operational-fvg.yml'
+      - 'scripts/build_owner_operational_fvg_anchors.py'
+      - 'scripts/test_owner_operational_fvg_anchors.py'
+      - 'research/calibration/owner_operational_fvg_v1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  synthetic-causality-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile owner FVG scripts
+        run: python -m py_compile scripts/build_owner_operational_fvg_anchors.py scripts/test_owner_operational_fvg_anchors.py
+      - name: Run owner FVG causality and tamper tests
+        run: python scripts/test_owner_operational_fvg_anchors.py
+
+  real-frozen-verification:
+    if: github.event_name == 'push'
+    needs: synthetic-causality-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download sealed annual calibration artifacts
+        run: |
+          for pair in "2024:9282976276" "2025:9283007527"; do
+            YEAR="${pair%%:*}"
+            ARTIFACT_ID="${pair##*:}"
+            mkdir -p "/tmp/arjo-${YEAR}"
+            curl --fail --location --retry 3 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+              -o "/tmp/arjo-${YEAR}.zip"
+            unzip -q "/tmp/arjo-${YEAR}.zip" -d "/tmp/arjo-${YEAR}"
+          done
+      - name: Build streaming owner FVG session anchors
+        run: >-
+          python scripts/build_owner_operational_fvg_anchors.py
+          --convention research/calibration/owner_operational_fvg_v1.json
+          --artifact-dir /tmp/arjo-2024
+          --artifact-dir /tmp/arjo-2025
+          --output /tmp/owner-fvg-session-anchors.json
+      - name: Verify frozen deterministic result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/owner-fvg-session-anchors.json').read_text())
+          assert m['status'] == 'OWNER_OPERATIONAL_FVG_SESSION_ANCHORS_READY'
+          assert m['classification'] == 'OWNER_OPERATIONAL_CONVENTION_NOT_ARJO_SEMANTIC_CLOSURE'
+          assert m['convention_sha256'] == 'cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e'
+          assert m['session_count'] == 515
+          assert m['selected_session_count'] == 513
+          assert m['no_active_fvg_session_count'] == 2
+          assert m['detected_formation_count'] == 347
+          assert m['session_anchors_sha256'] == '5277a36e777cdac36aa4f27b42435257c6ecd46a1a7c8bf852f1bc9e4f908166'
+          assert m['future_session_bars_used'] is False
+          assert m['holdout_accessed'] is False
+          assert m['performance_fields_used'] is False
+          missing = [r['session_date_ny'] for r in m['sessions'] if r['selected_fvg'] is None]
+          assert missing == ['2024-01-02', '2024-01-03']
+          print('owner_operational_fvg_real=PASS')
+          print('sessions=515 selected=513 formations=347')
+          print('session_anchors_sha256=' + m['session_anchors_sha256'])
+          PY
+      - name: Upload owner FVG anchor evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-owner-operational-fvg-session-anchors
+          path: /tmp/owner-fvg-session-anchors.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local provider payloads
+        if: always()
+        run: rm -rf /tmp/arjo-2024 /tmp/arjo-2025 /tmp/arjo-2024.zip /tmp/arjo-2025.zip
