@@ -71,7 +71,10 @@
   "preregistration_ref": "research/calibration/aoo_nq_replay_spec.json",
   "preregistration_sha256": "dbd2b9e943d5e60d35a4de5e9e697ec5eacdf118f285659a1414eb557e8bf557",
   "calibration_result_ref": "research/calibration/owner_operational_calibration_result.json",
-  "calibration_result_sha256": "e7ee6ed79290bd9396fc931f11b7cb11bf14e0e5e78a8ea3d34a2dd3e1bcc039",
+  "calibration_result_sha256": "b0119e4c9f3bd3187632691ff369469c65405b38319b3517f0e62fa2588b98a8",
+  "calibration_result_hash_classification": "CANONICAL_INTERNAL_RESULT_SHA_NOT_JSON_BYTE_SHA",
+  "calibration_result_artifact_id": 9286062012,
+  "calibration_result_artifact_file_sha256": "e7ee6ed79290bd9396fc931f11b7cb11bf14e0e5e78a8ea3d34a2dd3e1bcc039",
   "calibrated_selection": {
     "second_sting_fill_event": "SECOND_STING_TOUCH",
     "stop_buffer_ticks": 0,
