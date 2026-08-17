@@ -1,0 +1,16 @@
+{
+  "excerpts": [
+    "Determine which one is the rejection, take that candle’s high if it’s a Bearish PD Array.",
+    "We know we Run the high when we’re comfortable above the high.",
+    "a candle close above the high or FVGs created above the high."
+  ],
+  "first_party_contacted": true,
+  "notes": "Issue #167 bounded direct first-party web recapture; makes the 2CR rejection-high and close-above run route explicit while leaving qualitative rejection classification bounded.",
+  "retrieved_at": "2026-08-17T10:10:00Z",
+  "schema_version": 1,
+  "semantic_extraction_performed": false,
+  "source_id": "WEB_MMT_2CR_EXACT_20260817",
+  "title": "How To Find The Best Area To Trade",
+  "transport": "OPENAI_WEB_DIRECT_FIRST_PARTY_PAGE",
+  "url": "https://tradingmmt.com/how-to-find-the-best-area-to-trade/"
+}
