@@ -1,0 +1,36 @@
+{
+  "boundaries": {
+    "broker_mutation_authorized": false,
+    "execution_fill_rule_changed": false,
+    "holdout_2026h1_accessed": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false,
+    "performance_comparison_performed": false,
+    "semantic_rules_changed": false
+  },
+  "developmental_regression": {
+    "artifact_digest": "sha256:fb8eaa3c5e01f39987a746621b6d26d046329859454f9a980c44d4763962783c",
+    "artifact_id": 9290230879,
+    "executable_occurrence_ids": [
+      "OWNER-CAL-2024-04-26"
+    ],
+    "head_sha": "17102aeef26bbc7982664947ecaa990cc14a6482",
+    "observability_rows_sha256": "9333a761e38e1f38d59c37cae7de2979aa754f6b3929db0d05082b72cf823d80",
+    "occurrence_count": 1,
+    "report_sha256": "a4c37aa2a78eb9b8d01f8db622d45c19edf33b3885f6c13e1755c8e71182f5f4",
+    "source_occurrence_artifact_id": 9285916066,
+    "source_occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331",
+    "status_counts": {
+      "EXECUTABLE_ENTRY": 1
+    },
+    "workflow_run_id": 32034781825
+  },
+  "draft_profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2_DRAFT",
+  "draft_profile_sha256": "fa691a1dd5468a66c67c9e1636acb12984cbecb5e22f55549d67622253702202",
+  "execution_observability_invariant_sha256": "1822f7aa9f43cdabfa4f50d10c932e7eb600e5ffd6821615f8fff440cbe9c2c5",
+  "future_validation_reservation_sha256": "77cb50d000e4eecfaff6890d60ae296e5a06381b220debcb868240711c525853",
+  "readiness_sha256": "ad74e7bf4dee89e6bbed4b8efbe07d87723c9e4dca529126c7d4e7917ad1c960",
+  "schema_version": 1,
+  "status": "V2_REMEDIATION_DESIGN_READY",
+  "v1_post_validation_disposition_sha256": "71f1c1b67399fb297d037d0b8cb9bb0699afb3b2c894c0659042486a55bfc949"
+}

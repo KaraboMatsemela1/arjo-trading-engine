@@ -1,0 +1,16 @@
+{
+  "broker_mutation_authorized": false,
+  "data_access_authorized": false,
+  "data_accessed": false,
+  "live_execution_authorized": false,
+  "paper_execution_authorized": false,
+  "reservation_id": "ARJO_V2_FUTURE_VALIDATION_RESERVATION_V1",
+  "reservation_sha256": "77cb50d000e4eecfaff6890d60ae296e5a06381b220debcb868240711c525853",
+  "schema_version": 1,
+  "v1_2026h1_reuse_prohibited": true,
+  "window": {
+    "end_exclusive": "2027-03-01T00:00:00Z",
+    "future_only_at_freeze": true,
+    "start_inclusive": "2026-09-01T00:00:00Z"
+  }
+}

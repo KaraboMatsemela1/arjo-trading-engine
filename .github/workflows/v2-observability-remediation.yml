@@ -1,0 +1,86 @@
+name: V2 Observability Remediation
+
+on:
+  pull_request:
+    paths:
+      - research/v2/**
+      - docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2_DRAFT.json
+      - scripts/check_v2_execution_observability.py
+      - scripts/test_v2_execution_observability.py
+      - .github/workflows/v2-observability-remediation.yml
+  push:
+    branches:
+      - v2/issue-189-observability-remediation
+    paths:
+      - research/v2/**
+      - docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V2_DRAFT.json
+      - scripts/check_v2_execution_observability.py
+      - scripts/test_v2_execution_observability.py
+      - .github/workflows/v2-observability-remediation.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  offline-contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile V2 observability scripts
+        run: python -m py_compile scripts/check_v2_execution_observability.py scripts/test_v2_execution_observability.py
+      - name: Run fail-closed observability tests
+        run: python scripts/test_v2_execution_observability.py
+
+  developmental-regression:
+    if: github.event_name == 'push'
+    needs: offline-contract-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download sealed V1 2024-2025 occurrence artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: arjo-calibration-occurrences-owner-operational-v1
+          path: /tmp/v1-occurrences
+          github-token: ${{ github.token }}
+          repository: KaraboMatsemela1/arjo-trading-engine
+          run-id: 32022634834
+      - name: Apply V2 execution observability invariant
+        run: >-
+          python scripts/check_v2_execution_observability.py
+          --source /tmp/v1-occurrences/calibration-occurrences.json
+          --output /tmp/v2-observability.json
+      - name: Verify developmental boundary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/v2-observability.json').read_text())
+          assert r['source_occurrence_set_sha256'] == 'af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331'
+          assert r['occurrence_count'] == 1
+          assert r['status_counts'] == {'EXECUTABLE_ENTRY': 1}
+          assert r['executable_occurrence_ids'] == ['OWNER-CAL-2024-04-26']
+          assert r['observability_rows_sha256'] == '9333a761e38e1f38d59c37cae7de2979aa754f6b3929db0d05082b72cf823d80'
+          assert r['holdout_accessed'] is False
+          assert r['performance_comparison_performed'] is False
+          assert r['semantic_rules_changed'] is False
+          assert r['execution_fill_rule_changed'] is False
+          print('v2_developmental_observability=PASS')
+          PY
+      - name: Upload developmental observability evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-v2-developmental-observability
+          path: /tmp/v2-observability.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9

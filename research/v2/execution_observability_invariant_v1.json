@@ -1,0 +1,22 @@
+{
+  "classification": "EXECUTION_INTEGRITY_INVARIANT_NOT_SEMANTIC_REFIT",
+  "execution_fill_rule_changed": false,
+  "false_behavior": {
+    "alternate_fill_allowed": false,
+    "close_fallback_allowed": false,
+    "future_bar_fallback_allowed": false,
+    "status": "NO_EXECUTABLE_ENTRY",
+    "synthetic_fill_allowed": false,
+    "target_stop_evaluation_allowed": false
+  },
+  "invariant_id": "V2_SECOND_STING_TOUCH_OBSERVABILITY_V1",
+  "invariant_sha256": "1822f7aa9f43cdabfa4f50d10c932e7eb600e5ffd6821615f8fff440cbe9c2c5",
+  "performance_selection_used": false,
+  "predicate": "second_sting_bar.low <= touch_price <= second_sting_bar.high",
+  "schema_version": 1,
+  "semantic_rules_changed": false,
+  "true_behavior": {
+    "status": "EXECUTABLE_ENTRY",
+    "target_stop_evaluation_allowed": true
+  }
+}
