@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "spec_id": "ARJO_V3C_PROFITABILITY_EXECUTION_LOCK_V1",
+  "status": "FROZEN_BEFORE_FIRST_M1_RESPONSE",
+  "parent_protocol_sha256": "0b3a6a5e217e7e4c279f7384c14579e97bf6821bc59deefac3086e7b4ce4ba7a",
+  "canonical_trigger_set_sha256": "e633ef474c35946ca40e3314cfd5511b2193b4fae387da2e2d75131c5ed7020b",
+  "provider_mechanics": {
+    "granularity": "M1",
+    "price": "BA",
+    "smooth": false,
+    "includeFirst": true,
+    "chunk_calendar_days": 3,
+    "origin_utc": "2010-01-01T00:00:00Z",
+    "strict_end_exclusive": "2024-01-01T00:00:00Z",
+    "preserve_gaps": true,
+    "forward_fill": false,
+    "conflicting_duplicate": "DATA_INTEGRITY_FAILURE"
+  },
+  "dedup": {
+    "same_activation_known_at": "keep latest swing_confirmed_at_utc; tie lexicographically greatest trigger_id"
+  },
+  "portfolio": {
+    "open_interval_equality": "a signal with knowledge_time <= prior exit M1 start is skipped concurrent; this conservatively treats the exit minute as occupied",
+    "invalid_risk": "entry_price <= rejection_low => INVALID_RISK_ORDERING, excluded from resolved metrics and not a provider integrity failure",
+    "right_censored": "insufficient bars before strict OOS end => RIGHT_CENSORED_OOS_END, excluded from resolved metrics"
+  },
+  "metric_definitions": {
+    "win": "net_r > 0",
+    "calendar_year": "entry timestamp UTC year",
+    "profit_factor": "sum positive net_r / abs(sum negative net_r); if no negative net_r and positive sum, treat as +infinity for threshold comparisons and serialize null with no_negative_trades=true",
+    "max_drawdown_r": "maximum peak-to-trough decline of cumulative chronological net_r",
+    "bootstrap": "IID resample executed resolved net_r, 10000 replicates, seed 20260817, 2.5/97.5 percentiles"
+  },
+  "scenario_independence": "base and stress process concurrency independently against the same immutable provider cache",
+  "parameter_changes_after_first_m1_response": false,
+  "development_2024_2025_outcomes_accessed": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false,
+  "spec_sha256": "ba37fb3fe144bffa7481279b53af764f1614a42fdd63b4a2a493737f1867abd5"
+}
