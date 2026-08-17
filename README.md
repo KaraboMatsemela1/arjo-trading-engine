@@ -1,137 +1,109 @@
 # Arjo Trading Engine
 
-Research-grade, evidence-first project for translating Arjo's public first-party trading education into deterministic, machine-executable specifications and evaluating them scientifically.
+Research-grade, evidence-first project for translating Arjo's public first-party trading education into deterministic, machine-replayable specifications and evaluating them scientifically.
 
-> **Current research state:** `NEW_FIRST_PARTY_EVIDENCE_REQUIRED`
+> **Current lifecycle state:** governed calibration
+>
+> **CALIBRATION_AUTHORIZED:** `true` for the locked NQ AoO seed only
 >
 > **SPEC_READY:** `false`
 >
-> **Strategy implementation:** **PROHIBITED** until at least one predicate passes the independent `SPEC_READY` audit.
+> **General strategy implementation:** prohibited until the independent `SPEC_READY` audit passes.
 
 ## Core rule
 
 **Evidence before code.**
 
-No detector, backtester, strategy candidate, trade counter, optimizer, performance evaluator, or broker execution logic may be implemented before at least one predicate passes the independent `SPEC_READY` audit.
+First-party evidence remains the semantic authority. The repository now supports one narrow pre-`SPEC_READY` exception: after a locked seed reaches `CALIBRATION_AUTHORIZED`, the project may build only the minimum provenance-bound data/replay infrastructure needed to execute its SHA-bound `FIRST_PARTY_PRESCRIBED_CALIBRATION_V1` packet. That calibration cannot invent semantics, expand its candidate set after outcome access, inspect its protected holdout, or authorize paper/live trading.
 
-## Project Progress
-
-> Bars are qualitative stage indicators, not percentage estimates. Completed objective gates are full; blocked or unauthorized stages are empty.
+## Objective project progress
 
 ```text
-ENGINEERING FOUNDATION / GOVERNANCE
-████████████████████   COMPLETE
-
-FIRST-PARTY SOURCE UNIVERSE
-████████████████████   COMPLETE
-
-ACQUISITION TOOLING
-████████████████████   COMPLETE
-
-PUBLIC CORPUS ACQUISITION
-████████████████████   COMPLETE — 1,175 / 1,175 sources terminally dispositioned
-
-CONCEPT INVENTORY
-████████████████████   COMPLETE — 36 source-bound concepts
-
-ATOMIC EVIDENCE REGISTRY
-████████████████████   COMPLETE — 88 records across 4 evidence shards
-
-PREDICATE SYNTHESIS / MATRIX
-████████████████████   COMPLETE — 6 bounded candidates; required fields still incomplete
-
-INDEPENDENT SPEC AUDIT
-████████████████████   COMPLETE — BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE
-
-FIRST-PARTY PREDICATE RECOVERY
-████████████████████   COMPLETE — bounded pass exhausted across all 6 candidates
-
-PUBLIC YOUTUBE ACCESS RECOVERY
-████████████████████   COMPLETE — semantic payload unavailable on allowed public routes
-
-NEW FIRST-PARTY EVIDENCE DISCOVERY
-░░░░░░░░░░░░░░░░░░░░   REQUIRED — current evidence ceiling blocks further semantic closure
-
-SPEC FREEZE / v0.1
-░░░░░░░░░░░░░░░░░░░░   BLOCKED — SPEC_READY = false
-
-NEXT DETERMINISTIC CANDIDATE
-░░░░░░░░░░░░░░░░░░░░   BLOCKED — no evidence-complete predicate
-
-DETERMINISTIC DETECTOR
-░░░░░░░░░░░░░░░░░░░░   NOT AUTHORIZED — requires SPEC_READY
-
-BACKTESTER / ACTIVITY VALIDATION
-░░░░░░░░░░░░░░░░░░░░   NOT AUTHORIZED — requires frozen deterministic spec
-
-PERFORMANCE VALIDATION
-░░░░░░░░░░░░░░░░░░░░   NOT AUTHORIZED — no pre-SPEC outcome optimization
-
-OOS
-░░░░░░░░░░░░░░░░░░░░   UNOPENED
-
-CONFIRM
-░░░░░░░░░░░░░░░░░░░░   UNOPENED
-
-PAPER EXECUTION INFRASTRUCTURE
-░░░░░░░░░░░░░░░░░░░░   NOT STARTED — downstream of deterministic validation
-
-PAPER TRADING
-░░░░░░░░░░░░░░░░░░░░   BLOCKED — requires qualification + explicit owner authorization
-
-LEARNING ENGINE
-░░░░░░░░░░░░░░░░░░░░   NOT STARTED — requires sufficient deterministic/paper labels
-
-SHADOW TRADING
-░░░░░░░░░░░░░░░░░░░░   NOT STARTED — requires paper readiness
-
-CONTROLLED LIVE
-░░░░░░░░░░░░░░░░░░░░   NOT AUTHORIZED — explicit future canary/risk approval required
+GOVERNANCE_BOOTSTRAP_COMPLETE       COMPLETE
+SOURCE_UNIVERSE_DISCOVERED          COMPLETE
+ACQUISITION_TOOLING_READY           COMPLETE
+CORPUS_ACQUIRED                     COMPLETE
+CONCEPT_INVENTORY_READY             COMPLETE
+EVIDENCE_REGISTRY_READY             COMPLETE
+PREDICATE_MATRIX_READY              COMPLETE
+CALIBRATION_PROTOCOL_READY          COMPLETE
+SEMANTIC_SEED_READY                 COMPLETE
+CALIBRATION_AUTHORIZED              COMPLETE — locked NQ AoO seed only
+CALIBRATION_PREREGISTRATION         ACTIVE — deterministic WoO freeze
+CALIBRATION_DATA_READY              PENDING
+CALIBRATED_SPEC_FROZEN              PENDING
+SPEC_READY                          false
+GENERAL IMPLEMENTATION              NOT AUTHORIZED
+PROTECTED VALIDATION                UNOPENED
+PAPER EXECUTION                     NOT AUTHORIZED
+LIVE EXECUTION                      NOT AUTHORIZED
 ```
 
-### Current predicate closure
+Progress is reported by objective gates and explicit readiness states rather than arbitrary percentages.
 
-| Candidate | Current state | Readiness |
-|---|---:|---|
-| `AOO_FVA_2CR_FVG_LONG_CONTEXT` | 7 MISSING / 9 PARTIAL | incomplete |
-| `PD_ARRAY_2CR_FAILURE_INVOLVEMENT` | 9 MISSING / 7 PARTIAL | incomplete |
-| `MMBM_LRLR_SHORT_CONTEXT` | 10 MISSING / 6 PARTIAL | incomplete |
-| `ORDER_BLOCK_MT_HOLD_CONTEXT` | 10 MISSING / 6 PARTIAL | incomplete |
-| `ORDER_FLOW_TARGET_BIAS` | 12 MISSING / 4 PARTIAL | incomplete |
-| `EQUILIBRIUM_STOP_RUN_CONTEXT` | 13 MISSING / 3 PARTIAL | incomplete |
+## Current locked calibration seed
 
-No candidate has a `SATISFIED` deterministic field set or an executable rule. Closure ranking is evidence-completeness only and never uses performance.
+The current bounded study is NQ long context only:
 
-### Current research position
+- 4h FVG + 1h FVA context;
+- opposing resistance / 2CR rejection high must be run before seeking the long;
+- 15m `2 Sting Entry` family;
+- bullish Order Flow leg-low stop anchor;
+- next HTF premium-array / ATH target context;
+- no required parameter inside the frozen Window of Opportunity means no trade / move on.
 
-- Governance, source discovery, acquisition tooling, corpus acquisition, concept inventory, evidence registry, predicate synthesis, bounded predicate recovery, and independent audit processes are complete.
-- All six current candidates have received bounded first-party recovery passes. None is evidence-complete.
-- The refreshed independent evidence-only audit remains `SPEC_READY = false` with outcome `BLOCKED_NEEDS_FIRST_PARTY_EVIDENCE`.
-- The allowed unauthenticated public YouTube routes were separately tested. Watch pages are bot-challenged in the runner; public embed/oEmbed responses expose availability/metadata but no semantic caption payload. Those surfaces receive zero semantic closure credit.
-- The next research lane is **genuinely new direct first-party evidence discovery/acquisition**. Existing exhausted source sets should not be recycled unless the public payload/access conditions materially change.
-- No detector, backtester, trade-count analysis, optimizer, performance evaluation, paper execution, live execution, or broker logic is authorized yet.
+Only these execution conventions are calibratable:
+
+- `second_sting_fill_event`: `SECOND_STING_TOUCH` or `SECOND_STING_15M_CLOSE`;
+- `stop_buffer_ticks`: `0`, `1`, or `2`.
+
+Calibration dates are frozen to **2024-01-01 through 2025-12-31**. The protected calibration holdout is **2026-01-01 through 2026-06-30** and remains unread.
+
+## Current critical path
+
+`PREDICATE_MATRIX_READY`
+→ `CALIBRATION_PROTOCOL_READY`
+→ `SEMANTIC_SEED_READY`
+→ `CALIBRATION_AUTHORIZED`
+→ `CALIBRATION_PREREGISTRATION_COMPLETE`
+→ `CALIBRATION_DATA_READY`
+→ `CALIBRATED_SPEC_FROZEN`
+→ independent reconstruction / `SPEC_AUDIT`
+→ `SPEC_READY`
+→ post-SPEC scientific-validation preregistration
+→ general implementation
+→ DEV / OOS / CONFIRM
+→ controlled paper qualification.
+
+## What calibration is allowed to do
+
+A valid pre-SPEC calibration may:
+
+- use only its frozen semantic seed;
+- read only its frozen calibration window;
+- replay only preregistered execution variants/bounds;
+- compute only the preregistered calibration observations/measures;
+- freeze one result under the preregistered acceptance rule;
+- fail closed on ties, contradictions, missing data, or unreplayable semantics.
+
+It may **not** use outcomes to create concepts, discover a different semantic candidate, move windows, add variants, lower acceptance rules, inspect the holdout, or treat better profitability as semantic proof.
 
 ## Canonical state
 
 - GitHub Issues are the execution queue.
-- Repository files are durable state.
+- `PROJECT_BIBLE.md` is the highest repository governance authority.
+- Frozen specifications and calibration preregistrations bind executable work.
 - `project_state.json` is machine-generated state.
-- `STATUS.md` is the human-readable gate summary.
-- `PROJECT_BIBLE.md` defines immutable safeguards and lifecycle rules.
+- `STATUS.md` is the derived human-readable gate summary.
+- Issue #1 is the canonical project tracker / lifecycle dashboard.
 - No agent may maintain a hidden competing roadmap.
-
-## Critical path
-
-`GOVERNANCE_BOOTSTRAP_COMPLETE` → `SOURCE_UNIVERSE_DISCOVERED` → `ACQUISITION_TOOLING_READY` → `CORPUS_ACQUIRED` → `CONCEPT_INVENTORY_READY` → `EVIDENCE_REGISTRY_READY` → `PREDICATE_MATRIX_READY` → `INDEPENDENT_SPEC_AUDIT` → `BOUNDED_PREDICATE_RECOVERY_COMPLETE` → **new direct first-party evidence required** → `SPEC_READY`
-
-Engineering infrastructure that cannot influence strategy semantics may proceed independently.
 
 ## Safety boundaries
 
-The autonomous system may research public evidence, build acquisition/provenance tooling, maintain project state, run CI, repair CI, open PRs, and merge dependency-safe green changes.
+The autonomous system may research lawful public first-party evidence, maintain provenance, build bounded calibration/research infrastructure, run/repair CI, open PRs, and merge dependency-safe green changes.
 
-It may **not** invent strategy semantics, optimize interpretations toward profitability, inspect protected datasets early, lower preregistered thresholds, authorize paper execution, authorize live trading, or access live brokerage endpoints.
+It may **not** invent strategy semantics, optimize semantic interpretations toward profitability, inspect protected datasets early, authorize paper execution, authorize live trading, or access live brokerage endpoints.
 
 ## Project status
 
-See [`STATUS.md`](STATUS.md). Progress is reported by objective gates and explicit readiness states, not arbitrary completion percentages.
+See [`STATUS.md`](STATUS.md) and the master lifecycle issue for the mechanically current state.
