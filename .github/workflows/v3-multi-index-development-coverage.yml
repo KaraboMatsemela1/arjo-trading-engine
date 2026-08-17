@@ -1,0 +1,70 @@
+name: V3 Multi Index Development Coverage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-225-v3-multi-index
+    paths:
+      - 'research/profitability/v3_multi_index_candidate_b.json'
+      - 'scripts/oanda_v3_multi_index_development.py'
+      - 'scripts/scan_v3_multi_index_coverage.py'
+      - 'scripts/test_v3_multi_index_coverage.py'
+      - '.github/workflows/v3-multi-index-development-coverage.yml'
+
+permissions:
+  contents: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen candidate and anti-outcome boundary
+        run: python scripts/test_v3_multi_index_coverage.py
+      - name: Acquire fixed multi-index development structure
+        run: >-
+          python scripts/oanda_v3_multi_index_development.py
+          --candidate research/profitability/v3_multi_index_candidate_b.json
+          --output-dir /tmp/v3-multi-index
+      - name: Run exact production and independent V2 coverage scans
+        run: >-
+          python scripts/scan_v3_multi_index_coverage.py
+          --data-dir /tmp/v3-multi-index
+          --candidate research/profitability/v3_multi_index_candidate_b.json
+          --output /tmp/v3-multi-index-coverage.json
+      - name: Prove no post-entry or backward-OOS outcome access
+        run: |
+          python - <<'PY'
+          import json
+          summary=json.load(open('/tmp/v3-multi-index/multi-index-summary.json'))
+          report=json.load(open('/tmp/v3-multi-index-coverage.json'))
+          assert summary['replacement_instruments_used'] is False
+          assert summary['post_entry_outcomes_evaluated'] is False
+          assert summary['performance_metrics_accessed'] is False
+          for key in ('post_entry_outcomes_accessed','performance_metrics_accessed','backward_oos_outcomes_accessed','candidate_selection_uses_performance'):
+              assert report[key] is False
+          assert report['fixed_candidate_instruments']==['NAS100_USD','SPX500_USD','US30_USD']
+          print('available=' + ','.join(report['available_instruments']))
+          print('unavailable=' + ','.join(report['unavailable_instruments']))
+          print('raw_executable=' + str(report['raw_executable_occurrence_count']))
+          print('unique_signal_dates=' + str(report['unique_executable_signal_dates']))
+          print('coverage_feasible=' + str(report['coverage_feasible']))
+          print('report_sha256=' + report['report_sha256'])
+          PY
+      - name: Stage coverage report
+        run: cp /tmp/v3-multi-index-coverage.json /tmp/v3-multi-index/v3-multi-index-coverage.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3-multi-index-development-coverage
+          path: /tmp/v3-multi-index
+          if-no-files-found: error
+          retention-days: 90

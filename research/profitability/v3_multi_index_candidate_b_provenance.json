@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "V3_MULTI_INDEX_COVERAGE_PROVENANCE_BOUND",
+  "workflow_run_id": 32049351912,
+  "workflow_head_sha": "e394fbbd9013a17bc020679a8df844819cd62f27",
+  "artifact_id": 9294096855,
+  "artifact_name": "v3-multi-index-development-coverage",
+  "artifact_zip_sha256": "69f8a56407eb98622bd4e83b600eb66012bb61281a8202e0eac56edbc9b71d1c",
+  "artifact_size_bytes": 9649617,
+  "artifact_expires_at": "2026-11-15T17:13:14Z",
+  "candidate_sha256": "c40cf7223bcb956d0e668e48dfeb29fbb7aa529fe45350710bbe5aaf2c2160b9",
+  "data_summary_sha256": "507cb47a1e17ac6b55b56a921c8080349b7618404d88712503f2463b7763abf8",
+  "coverage_report_sha256": "30405e48329f3362e711c7e1fec6fbd7d661115e9ab37f8103f8d13673a9158d",
+  "available_instruments": ["NAS100_USD", "SPX500_USD", "US30_USD"],
+  "raw_executable_occurrences": 1,
+  "unique_executable_signal_dates": 1,
+  "coverage_feasible": false,
+  "post_entry_outcomes_accessed": false,
+  "backward_oos_outcomes_accessed": false,
+  "performance_metrics_accessed": false
+}
