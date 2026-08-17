@@ -18,7 +18,7 @@ EXPECTED_WOO = {
     "classification": "CONFIGURED_POLICY_FROM_FIRST_PARTY_EXAMPLE",
     "basis_evidence_ids": [
         "EV_6065BAEFC53803A9239A6CF6",
-        "EV_DE2F50C2FB863386182ACEE1",
+        "EV_917488CD997BF1BEF1288B2A",
     ],
 }
 
