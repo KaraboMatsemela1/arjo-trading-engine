@@ -1,0 +1,93 @@
+{
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "claim_profile": {
+    "arjo_derived": true,
+    "description": "V1 semantic and owner-operational profile unchanged; V2 adds fail-closed execution-event observability only.",
+    "fully_first_party_reconstructed": false,
+    "owner_operational_conventions_present": true,
+    "semantic_closure_claimed": false
+  },
+  "data_boundary": {
+    "consumed_v1_holdout_2026h1_access_allowed": false,
+    "development_end_exclusive": "2026-01-01T00:00:00Z",
+    "development_start_inclusive": "2024-01-01T00:00:00Z",
+    "future_validation_data_access_allowed": false,
+    "source_artifact_ids": [
+      9282976276,
+      9283007527
+    ]
+  },
+  "expected_reconstruction": {
+    "executable_occurrence_ids": [
+      "OWNER-CAL-2024-04-26"
+    ],
+    "observability_rows_sha256": "9333a761e38e1f38d59c37cae7de2979aa754f6b3929db0d05082b72cf823d80",
+    "observability_status_counts": {
+      "EXECUTABLE_ENTRY": 1
+    },
+    "qualification_rows_sha256": "5e02865a26656789c0c22dadf35cf3c1644ec729b84e7f596b3d5b705f4e65ce",
+    "qualification_status_counts": {
+      "NO_2CR_REJECTION": 59,
+      "NO_2_STING": 14,
+      "NO_FVA_OVERLAP": 413,
+      "NO_FVG": 2,
+      "NO_RUN": 26,
+      "QUALIFIED": 1
+    },
+    "qualified_occurrence_ids": [
+      "OWNER-CAL-2024-04-26"
+    ],
+    "semantic_occurrence_set_sha256": "af363ac2bc08aaa3605a99b6fef688d284fc9df576d371a83e948271df5ba331"
+  },
+  "inherited_execution": {
+    "changed_from_v1": false,
+    "second_sting_fill_event": "SECOND_STING_TOUCH",
+    "stop_buffer_ticks": 0
+  },
+  "inherited_owner_conventions": {
+    "context": {
+      "id": "OWNER_OPERATIONAL_CONTEXT_V1",
+      "sha256": "dba7892337e391ba6673de5b9df932a271c3af28103e10cecaa0163a9995bc5e"
+    },
+    "fvg": {
+      "id": "OWNER_OPERATIONAL_FVG_V1",
+      "sha256": "cf12a1ce30d35dced52ef4f3c9bbb3ed11ab6509d6ada33e2f04089c68fafe7e"
+    }
+  },
+  "inherits_v1": {
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V1",
+    "profile_sha256": "7f768d392175275df9aceb854802234c0abc9918ac0d016853c691f6b45a9585"
+  },
+  "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+  "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6",
+  "reconstruction_acceptance": {
+    "all_critical_fields_must_match": true,
+    "path_b_forbidden_imports": [
+      "build_owner_operational_fvg_anchors",
+      "build_owner_operational_context_occurrences",
+      "nq_calibration_replay",
+      "run_owner_operational_calibration",
+      "check_v2_execution_observability",
+      "reconstruct_v2_spec_primary"
+    ],
+    "path_b_may_import_primary_strategy_builders": false,
+    "required_paths": [
+      "PRIMARY_V2_PRODUCTION_PATH",
+      "INDEPENDENT_V2_STANDARD_LIBRARY_PATH"
+    ]
+  },
+  "schema_version": 1,
+  "status": "FROZEN_FOR_INDEPENDENT_RECONSTRUCTION",
+  "v2_remediation": {
+    "draft_profile_sha256": "fa691a1dd5468a66c67c9e1636acb12984cbecb5e22f55549d67622253702202",
+    "future_validation_reservation_sha256": "77cb50d000e4eecfaff6890d60ae296e5a06381b220debcb868240711c525853",
+    "invariant_id": "V2_SECOND_STING_TOUCH_OBSERVABILITY_V1",
+    "invariant_sha256": "1822f7aa9f43cdabfa4f50d10c932e7eb600e5ffd6821615f8fff440cbe9c2c5",
+    "readiness_sha256": "ad74e7bf4dee89e6bbed4b8efbe07d87723c9e4dca529126c7d4e7917ad1c960",
+    "v1_disposition_sha256": "71f1c1b67399fb297d037d0b8cb9bb0699afb3b2c894c0659042486a55bfc949"
+  }
+}
