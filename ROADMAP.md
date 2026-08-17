@@ -36,21 +36,41 @@ Extract atomic evidence records with explicit proof scope and confidence.
 
 Map every executable field to first-party evidence, track `SATISFIED`, `PARTIAL`, `MISSING`, `CONTRADICTORY`, and `NOT_APPLICABLE`, calculate minimal closure sets, and generate bounded recovery issues.
 
+## Phase 5A — Calibration protocol and semantic seed closure
+
+**Exit gates:** `CALIBRATION_PROTOCOL_READY` → `SEMANTIC_SEED_READY` → `CALIBRATION_AUTHORIZED`
+
+When direct first-party material prescribes plan-specific study/calibration for otherwise ambiguous execution conventions, lock one narrow semantic seed before outcomes are read. Freeze the calibratable parameters/variants or bounds, calibration and protected holdout windows, measures, acceptance rule, and immutable content hash. This stage may not discover or select semantic candidates from outcomes.
+
+If no deterministic replayable seed can be formed without inventing semantics, remain blocked on first-party evidence.
+
+## Phase 5B — Governed calibration
+
+**Exit gate:** `CALIBRATED_SPEC_FROZEN`
+
+Acquire only the frozen calibration window, build only the minimum provenance-bound data/replay infrastructure needed by the locked seed, replay only preregistered conventions, and freeze the result under the preregistered acceptance rule. The protected holdout remains unread.
+
+Calibration is not a general backtest or optimizer. It cannot add concepts, candidates, variants, windows, measures, or thresholds after outcome access begins, and it cannot convert genuinely missing first-party semantics into a rule because of better performance.
+
 ## SPEC_READY audit
 
 **Exit gate:** `SPEC_READY`
 
-At least one predicate passes all required fields, contradiction handling, complete provenance, two-engineer test, and independent evidence-only reconstruction. Freeze and version the passing specification.
+After any required governed calibration, require complete provenance, deterministic required fields/configuration boundaries, contradiction handling, two-engineer reconstruction, and an independent audit. A completed calibration packet does not automatically imply `SPEC_READY`.
 
-## Phase 6 — Candidate preregistration
+Only a passing independent audit authorizes the frozen general strategy specification.
+
+## Phase 6 — Post-SPEC scientific-validation preregistration
 
 **Exit gate:** `CANDIDATE_PREREGISTERED`
 
-Commit immutable candidate configuration and DEV/OOS/CONFIRM boundaries before observing outcomes.
+Commit the immutable post-SPEC candidate configuration and DEV/OOS/CONFIRM boundaries before performance outcomes are observed. This is separate from the earlier calibration preregistration.
 
-## Phase 7 — Implementation
+## Phase 7 — General implementation
 
-Implement normalization, detector, signal ledger, backtester, risk model, and execution simulator with provenance references to the frozen spec.
+**Entry gate:** `SPEC_READY`
+
+Implement normalization, detector, signal ledger, backtester, risk model, and execution simulator with provenance references to the frozen specification. Calibration-only replay code may be promoted/reused only after it conforms to the frozen `SPEC_READY` specification.
 
 ## Phases 8–11 — Scientific validation
 
