@@ -31,9 +31,10 @@ jobs:
           import hashlib,json
           x=json.load(open('research/profitability/v3c_profitability_execution_lock_v1.json')); recorded=x.pop('spec_sha256')
           raw=json.dumps(x,sort_keys=True,separators=(',',':')).encode()
-          assert hashlib.sha256(raw).hexdigest()==recorded=='ba37fb3fe144bffa7481279b53af764f1614a42fdd63b4a2a493737f1867abd5'
+          assert hashlib.sha256(raw).hexdigest()==recorded=='cc1b6aa88a318c26fbc653751ab34c7c399241770a0db954fc3809c1fa0d17c7'
           assert x['status']=='FROZEN_BEFORE_FIRST_M1_RESPONSE'
           assert x['parameter_changes_after_first_m1_response'] is False
+          assert '1440-complete-bar horizon' in x['provider_mechanics']['bounded_prefetch']
           assert not x['paper_execution_authorized'] and not x['live_execution_authorized'] and not x['broker_mutation_authorized']
           print('V3-C profitability execution lock verified')
           PY
