@@ -1,0 +1,159 @@
+name: Protected Validation Evaluation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/protected-validation-evaluation.yml'
+      - 'research/validation/protected_holdout_data_readiness.json'
+      - 'scripts/run_protected_validation_primary.py'
+      - 'scripts/run_protected_validation_independent.py'
+      - 'scripts/compare_protected_validation_paths.py'
+      - 'scripts/test_protected_validation_independence.py'
+  push:
+    branches:
+      - validation/issue-187-holdout
+    paths:
+      - '.github/workflows/protected-validation-evaluation.yml'
+      - 'research/validation/protected_holdout_data_readiness.json'
+      - 'scripts/run_protected_validation_primary.py'
+      - 'scripts/run_protected_validation_independent.py'
+      - 'scripts/compare_protected_validation_paths.py'
+      - 'scripts/test_protected_validation_independence.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independence-and-compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile validation paths
+        run: >-
+          python -m py_compile
+          scripts/run_protected_validation_primary.py
+          scripts/run_protected_validation_independent.py
+          scripts/compare_protected_validation_paths.py
+          scripts/test_protected_validation_independence.py
+      - name: Enforce Path B import boundary
+        run: python scripts/test_protected_validation_independence.py
+      - name: Revalidate frozen protocol
+        run: python scripts/check_protected_validation_protocol.py
+
+  real-protected-validation:
+    if: github.event_name == 'push'
+    needs: independence-and-compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Download frozen calibration context and protected holdout artifacts
+        run: |
+          for pair in "cal2024:9282976276" "cal2025:9283007527" "holdout:9287054804"; do
+            NAME="${pair%%:*}"
+            ARTIFACT_ID="${pair##*:}"
+            mkdir -p "/tmp/${NAME}"
+            curl --fail --location --retry 3 \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/${ARTIFACT_ID}/zip" \
+              -o "/tmp/${NAME}.zip"
+            unzip -q "/tmp/${NAME}.zip" -d "/tmp/${NAME}"
+          done
+      - name: Run primary protected validation path
+        run: >-
+          python scripts/run_protected_validation_primary.py
+          --protocol research/validation/protected_validation_protocol_v1.json
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --readiness research/validation/protected_holdout_data_readiness.json
+          --calibration-dir /tmp/cal2024
+          --calibration-dir /tmp/cal2025
+          --holdout-dir /tmp/holdout
+          --output /tmp/protected-primary.json
+      - name: Run independent protected validation path
+        run: >-
+          python scripts/run_protected_validation_independent.py
+          --protocol research/validation/protected_validation_protocol_v1.json
+          --profile docs/spec/ARJO_DERIVED_OWNER_OPERATIONAL_V1.json
+          --readiness research/validation/protected_holdout_data_readiness.json
+          --calibration-dir /tmp/cal2024
+          --calibration-dir /tmp/cal2025
+          --holdout-dir /tmp/holdout
+          --output /tmp/protected-independent.json
+      - name: Compare protected paths and compute frozen metrics
+        run: >-
+          python scripts/compare_protected_validation_paths.py
+          --protocol research/validation/protected_validation_protocol_v1.json
+          --primary /tmp/protected-primary.json
+          --independent /tmp/protected-independent.json
+          --output /tmp/PROTECTED_VALIDATION.json
+      - name: Verify exact protected validation result
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path('/tmp/PROTECTED_VALIDATION.json').read_text())
+          assert r['status'] == 'PROTECTED_VALIDATION_COMPLETE'
+          assert r['validation_classification'] == 'VALIDATION_INTEGRITY_FAILURE'
+          assert r['implementation_agreement'] is True
+          assert all(v['status'] == 'PASS' for v in r['critical_agreement'].values())
+          assert r['complete_session_count'] == 126
+          assert r['detected_fvg_formation_count'] == 443
+          assert r['holdout_formed_fvg_count'] == 96
+          assert r['selected_fvg_session_count'] == 126
+          assert r['qualification_status_counts'] == {
+              'NO_2CR_REJECTION': 16,
+              'NO_FVA_OVERLAP': 101,
+              'NO_RUN': 8,
+              'QUALIFIED': 1,
+          }
+          assert r['qualified_occurrence_ids'] == ['OWNER-VAL-2026-06-23']
+          assert len(r['integrity_failures']) == 1
+          failure = r['integrity_failures'][0]
+          assert failure['kind'] == 'UNOBSERVABLE_SECOND_STING_TOUCH'
+          assert failure['touch_price'] == '29698.1'
+          assert failure['bar_low'] == '29578.0'
+          assert failure['bar_high'] == '29693.4'
+          assert r['execution_outcomes'] == []
+          assert r['metrics']['qualified_occurrence_count'] == 1
+          assert r['metrics']['resolved_occurrence_count'] == 0
+          assert r['metrics']['mean_realized_r_when_resolved'] is None
+          assert r['metrics']['cumulative_realized_r_when_resolved'] is None
+          assert r['metrics']['inferential_resolved_occurrence_threshold'] == 30
+          assert r['holdout_accessed'] is True
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          print('protected_validation_two_path=PASS')
+          print('classification=' + r['validation_classification'])
+          print('occurrence_set_sha256=' + r['occurrence_set_sha256'])
+          print('integrity_failures_sha256=' + r['integrity_failures_sha256'])
+          print('validation_result_sha256=' + r['validation_result_sha256'])
+          PY
+      - name: Upload protected validation reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-validation-result-2026H1
+          path: |
+            /tmp/protected-primary.json
+            /tmp/protected-independent.json
+            /tmp/PROTECTED_VALIDATION.json
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+      - name: Delete runner-local market payloads
+        if: always()
+        run: rm -rf /tmp/cal2024 /tmp/cal2025 /tmp/holdout /tmp/cal2024.zip /tmp/cal2025.zip /tmp/holdout.zip
