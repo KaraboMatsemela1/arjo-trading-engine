@@ -1,0 +1,61 @@
+name: Calibration Occurrence Consensus
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/calibration-occurrence-consensus.yml'
+      - 'scripts/reconcile_occurrence_annotation_passes.py'
+      - 'scripts/test_reconcile_occurrence_annotation_passes.py'
+      - 'scripts/validate_calibration_occurrence.py'
+      - 'scripts/test_validate_calibration_occurrence.py'
+      - 'research/calibration/occurrence_annotation_protocol.json'
+  push:
+    branches:
+      - calibration/issue-167-consensus-execution
+    paths:
+      - '.github/workflows/calibration-occurrence-consensus.yml'
+      - 'scripts/reconcile_occurrence_annotation_passes.py'
+      - 'scripts/test_reconcile_occurrence_annotation_passes.py'
+      - 'scripts/validate_calibration_occurrence.py'
+      - 'scripts/test_validate_calibration_occurrence.py'
+      - 'research/calibration/occurrence_annotation_protocol.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consensus-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile consensus tooling
+        run: >-
+          python -m py_compile
+          scripts/reconcile_occurrence_annotation_passes.py
+          scripts/test_reconcile_occurrence_annotation_passes.py
+          scripts/validate_calibration_occurrence.py
+          scripts/test_validate_calibration_occurrence.py
+      - name: Run reconciliation sabotage tests
+        run: python scripts/test_reconcile_occurrence_annotation_passes.py
+      - name: Run occurrence validator sabotage tests
+        run: python scripts/test_validate_calibration_occurrence.py
+      - name: Validate frozen protocol transparency
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('research/calibration/occurrence_annotation_protocol.json').read_text())
+          assert p['status'] == 'FROZEN_BEFORE_SEMANTIC_PASS_OUTPUTS'
+          assert p['pack_universe']['total_sessions'] == 515
+          assert p['anti_bias']['post_woo_outcome_access_allowed'] is False
+          assert p['anti_bias']['holdout_access_allowed'] is False
+          assert p['anti_bias']['cross_pass_visibility_allowed'] is False
+          assert all(x['independent_human_annotator_claimed'] is False for x in p['passes'])
+          assert {x['pass_id'] for x in p['passes']} == {'PASS_A', 'PASS_B'}
+          print('occurrence_annotation_protocol=PASS')
+          PY
