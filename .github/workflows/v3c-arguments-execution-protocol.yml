@@ -1,0 +1,40 @@
+name: V3-C Arguments Execution Protocol
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - validation/issue-229-v3c-execution-freeze
+    paths:
+      - 'research/profitability/v3c_arguments_execution_protocol_v1.json'
+      - 'research/profitability/v3c_arguments_execution_evidence_boundary.json'
+      - 'scripts/check_v3c_arguments_execution_protocol.py'
+      - '.github/workflows/v3c-arguments-execution-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen V3-C execution/economics protocol
+        run: python scripts/check_v3c_arguments_execution_protocol.py
+      - name: Prove no outcome or execution authorization
+        run: |
+          python - <<'PY'
+          import json
+          p=json.load(open('research/profitability/v3c_arguments_execution_protocol_v1.json'))
+          b=json.load(open('research/profitability/v3c_arguments_execution_evidence_boundary.json'))
+          assert p['status']=='FROZEN_BEFORE_V3C_POST_TRIGGER_OUTCOME_ACCESS'
+          assert p['market_data']['development_2024_2025_outcomes_must_remain_unread'] is True
+          assert p['backward_oos_sequence']['no_execution_parameter_selection_after_outcomes'] is True
+          assert p['authorization']=={'paper_execution':False,'live_execution':False,'broker_mutation':False}
+          assert b['post_trigger_outcomes_accessed'] is False
+          assert b['performance_metrics_accessed'] is False
+          print('V3-C outcome and authorization boundaries verified')
+          PY
