@@ -1,0 +1,53 @@
+{
+  "authorization": {
+    "broker_mutation_authorized": false,
+    "future_validation_data_access_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "boundary": {
+    "changes_15m_observability_invariant": false,
+    "changes_semantic_qualification": false,
+    "changes_stop_or_target": false,
+    "changes_touch_price": false,
+    "performance_used_to_select_policy": false
+  },
+  "classification": "EXECUTION_MEASUREMENT_POLICY_NOT_ARJO_SEMANTIC_CLAIM",
+  "measurement": {
+    "designated_entry_interval": "second_sting_ts_utc <= m1.ts_start_utc < second_sting_ts_utc + 15 minutes",
+    "entry_interval_complete_m1_count": 15,
+    "entry_minute_rule": "EARLIEST_COMPLETE_M1_CANDLE_WITH_LOW_LE_TOUCH_LE_HIGH",
+    "entry_minute_same_bar_event_rule": "AMBIGUOUS_INTRABAR_ORDER_IF_STOP_OR_TARGET_REACHED",
+    "later_m1_event_rules": {
+      "stop_and_target": "AMBIGUOUS_INTRABAR_ORDER",
+      "stop_only": "STOP_FIRST",
+      "target_only": "TARGET_FIRST"
+    },
+    "m1_entry_interval_incomplete": "VALIDATION_INTEGRITY_FAILURE:M1_ENTRY_INTERVAL_INCOMPLETE",
+    "m1_touch_missing_after_15m_observable": "VALIDATION_INTEGRITY_FAILURE:M1_TOUCH_NOT_OBSERVED",
+    "no_executable_entry_behavior": "NO_M1_ENTRY_OR_OUTCOME_EVALUATION",
+    "no_future_event_behavior": "UNRESOLVED_WINDOW_END",
+    "same_minute_order_inference_allowed": false,
+    "source_granularity": "M1",
+    "strictly_later_outcome_scan_after_entry_minute": true,
+    "touch_interpolation_allowed": false
+  },
+  "policy_id": "V2_M1_TOUCH_SEQUENCING_V1",
+  "policy_sha256": "9eca51eed0bd19b9ac824545146063647b265da4796ad0796e76a5d80498176c",
+  "profile": {
+    "profile_id": "ARJO_DERIVED_OWNER_OPERATIONAL_V2",
+    "profile_sha256": "87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6"
+  },
+  "protocol": {
+    "protocol_id": "ARJO_V2_FUTURE_VALIDATION_PROTOCOL_V2",
+    "protocol_sha256": "193beab06f415d1117e79ce6142ef13f5ce67f3448b4be44c025ffdd00142d38"
+  },
+  "provider": {
+    "instrument": "NAS100_USD",
+    "price_component": "MID",
+    "provider": "OANDA_V20",
+    "source_granularity": "M1"
+  },
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_FUTURE_VALIDATION_ACCESS"
+}
