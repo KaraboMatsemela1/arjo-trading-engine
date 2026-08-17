@@ -1,0 +1,54 @@
+name: Calibration Occurrence Foundation
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/calibration-occurrence-foundation.yml'
+      - 'scripts/validate_calibration_occurrence.py'
+      - 'scripts/test_validate_calibration_occurrence.py'
+      - 'research/calibration/occurrence_semantic_boundary.json'
+      - 'research/evidence_registry_recovery_006.jsonl'
+      - 'research/source_registry_recovery_003.csv'
+      - 'research/acquisition_manifest_recovery_003.jsonl'
+      - 'research/recovery/issue_167_payloads/**'
+  push:
+    branches:
+      - calibration/issue-167-occurrence-qualification
+    paths:
+      - '.github/workflows/calibration-occurrence-foundation.yml'
+      - 'scripts/validate_calibration_occurrence.py'
+      - 'scripts/test_validate_calibration_occurrence.py'
+      - 'research/calibration/occurrence_semantic_boundary.json'
+      - 'research/evidence_registry_recovery_006.jsonl'
+      - 'research/source_registry_recovery_003.csv'
+      - 'research/acquisition_manifest_recovery_003.jsonl'
+      - 'research/recovery/issue_167_payloads/**'
+
+permissions:
+  contents: read
+
+jobs:
+  occurrence-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile occurrence validator
+        run: python -m py_compile scripts/validate_calibration_occurrence.py scripts/test_validate_calibration_occurrence.py
+      - name: Run fail-closed occurrence validator tests
+        run: python scripts/test_validate_calibration_occurrence.py
+      - name: Confirm semantic boundary remains fail-closed
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('research/calibration/occurrence_semantic_boundary.json')
+          data = json.loads(p.read_text())
+          assert data['status'] == 'FAIL_CLOSED_SEMANTIC_ANCHORS_REQUIRED'
+          assert 'generic ICT/SMC FVG formula' in data['prohibited_shortcuts']
+          assert len(data['semantic_anchor_selection_not_machine_defined']) >= 6
+          print('occurrence_semantic_boundary=PASS')
+          PY
