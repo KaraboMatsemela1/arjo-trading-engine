@@ -9,9 +9,10 @@ on:
       - .github/workflows/final-project-state-governance.yml
       - README.md
       - ROADMAP.md
+      - FINAL_DISPOSITION.md
   push:
     branches:
-      - governance/issue-203-final-state
+      - governance/issue-208-project-closure-v2
     paths:
       - scripts/project_state_final.py
       - scripts/test_project_state_final.py
@@ -19,6 +20,7 @@ on:
       - .github/workflows/final-project-state-governance.yml
       - README.md
       - ROADMAP.md
+      - FINAL_DISPOSITION.md
 
 permissions:
   contents: read
@@ -34,11 +36,15 @@ jobs:
           python-version: '3.12'
       - name: Compile final project-state wrapper
         run: python -m py_compile scripts/project_state.py scripts/project_state_final.py scripts/test_project_state_final.py
-      - name: Verify critical path reaches V2 final validation
+      - name: Verify terminal existing-evidence closure
         run: PYTHONPATH=scripts python scripts/test_project_state_final.py
-      - name: Reject stale current-state claims
+      - name: Verify wrapped-project claims
         run: |
-          ! grep -q 'SPEC_READY.*false' README.md
-          ! grep -q 'protected.*holdout.*remains unread' README.md
-          grep -q 'V2_FUTURE_VALIDATION_COMPLETE' README.md
-          grep -q 'V2_FUTURE_VALIDATION_COMPLETE' ROADMAP.md
+          grep -q 'Future untouched validation is preserved as an optional scientific follow-up' FINAL_DISPOSITION.md
+          grep -q 'does \*\*not\*\* mean the strategy has been proven profitable' FINAL_DISPOSITION.md
+          grep -q 'V2_FUTURE_VALIDATION_COMPLETE.*DEFERRED / NOT ASSERTED' README.md
+          grep -q 'No further work is required for the current project wrap' ROADMAP.md
+          grep -q 'Paper execution.*false' README.md
+          grep -q 'Live execution.*false' README.md
+          ! grep -q 'only substantive unfinished task' README.md
+          ! grep -q 'only unfinished project gate' ROADMAP.md
