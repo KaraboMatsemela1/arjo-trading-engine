@@ -316,9 +316,16 @@
       ],
       "represented_in_candidate": true,
       "review_state": "REPRESENTED"
+    },
+    {
+      "bounded_examples": [],
+      "concept_id": "WINDOW_OF_OPPORTUNITY",
+      "operational_cue_evidence_ids": [],
+      "represented_in_candidate": false,
+      "review_state": "NO_OPERATIONAL_CUE_IN_CURRENT_DIRECT_TEXT"
     }
   ],
-  "inventory_concept_count": 36,
+  "inventory_concept_count": 37,
   "method": "LEXICAL_OMISSION_AUDIT_ONLY",
   "performance_data_consulted": false,
   "represented_concept_count": 13,
