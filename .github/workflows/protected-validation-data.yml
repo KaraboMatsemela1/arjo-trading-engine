@@ -37,7 +37,22 @@ jobs:
       - name: Revalidate frozen protected protocol
         run: python scripts/check_protected_validation_protocol.py
       - name: Run protected acquisition guard tests
-        run: python scripts/test_oanda_protected_validation_data.py
+        shell: bash
+        run: |
+          set +e
+          python scripts/test_oanda_protected_validation_data.py > /tmp/protected-data-guards.log 2>&1
+          STATUS=$?
+          cat /tmp/protected-data-guards.log
+          exit $STATUS
+      - name: Upload protected guard diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: arjo-protected-data-guard-diagnostics
+          path: /tmp/protected-data-guards.log
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 9
 
   acquire-protected-holdout:
     if: github.event_name == 'push' && contains(github.event.head_commit.message, '[protected-holdout-read]')
