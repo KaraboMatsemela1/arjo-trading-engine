@@ -32,6 +32,10 @@ jobs:
         run: python scripts/test_calibration_protocol.py
       - name: Validate current NQ AoO seed assessment
         run: python scripts/check_calibration_protocol.py --packet research/calibration/aoo_nq_seed_assessment.json
+      - name: Run NQ calibration preregistration regression tests
+        run: python scripts/test_nq_calibration_preregistration.py
+      - name: Validate frozen NQ calibration WoO
+        run: python scripts/check_nq_calibration_preregistration.py
       - name: Run Issue 48 recovery regression tests
         run: python scripts/test_issue48_recovery.py
       - name: Run SPEC audit service-issue publication regression tests
