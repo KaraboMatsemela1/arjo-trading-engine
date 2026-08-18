@@ -1,0 +1,9 @@
+{
+  "authorization": "AUTHORIZE_V6_H1_M15_TRIGGER_SEAL",
+  "issue": 266,
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "m1_authorized": false,
+  "bid_ask_authorized": false,
+  "economic_outcomes_authorized": false,
+  "broker_mutation_authorized": false
+}
