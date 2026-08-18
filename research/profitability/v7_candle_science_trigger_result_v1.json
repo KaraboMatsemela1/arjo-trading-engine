@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V7_NQ_CANDLE_SCIENCE_H1_FVG_REJECTION_TO_OPPOSING_FVG_SYMMETRIC",
+  "issue": 276,
+  "workflow_run_id": 32170680428,
+  "source_head": "80a133f2186abaf84091c7f650d5ff291c7a93c2",
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
+  "classification": "TRIGGER_SAMPLE_NECESSARY_CONDITION_MET",
+  "trigger_count": 5212,
+  "distinct_knowledge_timestamps": 4972,
+  "trigger_set_sha256": "0286fc800d0b20399848945b2ae6b7520a6d314767a4ef8bb043b476bb3d2c98",
+  "readiness_sha256": "5d929529a3c386081cb45042e1fff1041eb795d1cc2ef92a30ad4bc2d8f8dd3b",
+  "structure_manifest_sha256": "a61ef4aa9deb1ed3de36611a12c9afd83ca25aeb8e55cd63004fd2328a39b414",
+  "independent_reconstruction_exact": true,
+  "primary_stats": {
+    "h1_fvgs": 18667,
+    "aligned_fvgs": 10547,
+    "bias_changed_before_rejection": 552,
+    "qualifying_rejections": 6744,
+    "without_target": 1532,
+    "signals": 5212
+  },
+  "m1_accessed": false,
+  "bid_ask_accessed": false,
+  "fills_evaluated": false,
+  "economic_outcomes_accessed": false,
+  "paper_execution": false,
+  "live_execution": false,
+  "broker_mutation": false
+}
