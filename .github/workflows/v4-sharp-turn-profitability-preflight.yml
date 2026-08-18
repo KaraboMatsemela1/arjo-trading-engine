@@ -2,12 +2,19 @@ name: V4 Sharp Turn Profitability Preflight
 
 on:
   workflow_dispatch:
-  push:
-    branches: [validation/issue-247-v4-sharp-turn-economic-execution]
+  pull_request:
     paths:
       - 'research/profitability/v4_sharp_turn_profitability_execution_lock_v1.json'
       - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
       - 'research/profitability/v4_sharp_turn_trigger_readiness_v1.json'
+      - 'scripts/v4_sharp_turn_profitability_engine.py'
+      - 'scripts/test_v4_sharp_turn_profitability_engine.py'
+      - 'scripts/check_v4_sharp_turn_profitability_lock.py'
+      - '.github/workflows/v4-sharp-turn-profitability-preflight.yml'
+  push:
+    branches: [validation/issue-247-v4-sharp-turn-economic-execution]
+    paths:
+      - 'research/profitability/v4_sharp_turn_profitability_execution_lock_v1.json'
       - 'scripts/v4_sharp_turn_profitability_engine.py'
       - 'scripts/test_v4_sharp_turn_profitability_engine.py'
       - 'scripts/check_v4_sharp_turn_profitability_lock.py'
