@@ -1,0 +1,168 @@
+{
+  "bootstrap": {
+    "method": "IID_EXECUTED_TRADE_BOOTSTRAP",
+    "replicates": 10000,
+    "seed": 20260818
+  },
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "engine_conventions": {
+    "alignment_timezone": "America/New_York",
+    "base_swing": {
+      "radius": 1,
+      "swing_high": "middle HIGH strictly greater than adjacent H1 HIGHs; known at close of right adjacent H1 candle",
+      "swing_low": "middle LOW strictly less than adjacent H1 LOWs; known at close of right adjacent H1 candle"
+    },
+    "context_timeframe": "H1",
+    "costs": {
+      "base_adverse_slippage_points_per_side": 0.5,
+      "base_financing_r_per_1440_complete_m1_bars": 0.005,
+      "stress_adverse_slippage_points_per_side": 1.0,
+      "stress_financing_r_per_1440_complete_m1_bars": 0.01
+    },
+    "daily_alignment": 17,
+    "directional_context": {
+      "long": "most recent H1 FVG before disturbance is bullish and a confirmed ITH target exists above the H1 close",
+      "short": "most recent H1 FVG before disturbance is bearish and a confirmed ITL target exists below the H1 close",
+      "target_frozen_at": "aligned-context H1 FVG knowledge time",
+      "target_must_remain_unreached": true,
+      "target_selector": "nearest already-confirmed ITH above price for long; nearest already-confirmed ITL below price for short"
+    },
+    "disturbance": {
+      "cycle_deadline": "120 complete H1 candles after disturbance knowledge time",
+      "long": "first bearish H1 FVG after the aligned bullish H1 FVG while the frozen ITH target remains unreached",
+      "one_signal_max_per_disturbance": true,
+      "short": "first bullish H1 FVG after the aligned bearish H1 FVG while the frozen ITL target remains unreached"
+    },
+    "economic_timeframe": "M1_BID_ASK",
+    "entry_stop_target": {
+      "invalid_if_stop_or_target_ordering_not_strict": true,
+      "long_entry": "first complete M1 ASK open at or after trigger knowledge time, plus adverse entry slippage",
+      "long_stop": "L3.price",
+      "minimum_reward_r_filter": null,
+      "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+      "short_entry": "first complete M1 BID open at or after trigger knowledge time, minus adverse entry slippage",
+      "short_stop": "H3.price",
+      "target": "frozen causal H1 ITH/ITL target"
+    },
+    "execution_structure_timeframe": "M15",
+    "forward_confirmation_window_end_exclusive": "2026-08-01T00:00:00Z",
+    "forward_confirmation_window_start_inclusive": "2024-01-01T00:00:00Z",
+    "h1_fvg": {
+      "bearish": "for H1 candles C1,C2,C3, C1.low > C3.high; known at C3 close",
+      "bullish": "for H1 candles C1,C2,C3, C1.high < C3.low; known at C3 close"
+    },
+    "historical_window_end_exclusive": "2024-01-01T00:00:00Z",
+    "historical_window_start_inclusive": "2010-01-01T00:00:00Z",
+    "holding": {
+      "expiry_complete_m1_bars": 1440,
+      "max_elapsed_hours_to_first_eligible_m1": 72,
+      "right_censored_at_historical_end_excluded_from_resolved_metrics": true
+    },
+    "instrument": "NAS100_USD",
+    "ith_itl": {
+      "ith": "an H1 swing high strictly above the immediately preceding and immediately following H1 swing highs; known only when following swing high is itself confirmed",
+      "itl": "an H1 swing low strictly below the immediately preceding and immediately following H1 swing lows; known only when following swing low is itself confirmed"
+    },
+    "m15_pivots": {
+      "radius": 1,
+      "swing_high": "middle HIGH strictly greater than adjacent M15 HIGHs; known at close of right adjacent M15 candle",
+      "swing_low": "middle LOW strictly less than adjacent M15 LOWs; known at close of right adjacent M15 candle"
+    },
+    "portfolio": {
+      "long_short_symmetric": true,
+      "one_open_position_maximum": true,
+      "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST",
+      "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+      "skipped_signals_never_replayed": true
+    },
+    "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+    "provider_instrument_type": "CFD_PROXY",
+    "shrinking_retracement_pattern": {
+      "all_pivot_knowledge_times_after_disturbance": true,
+      "long_depths": "D1=H1-L1, D2=H2-L2, D3=H3-L3; require D3 < D2 < D1 and all > 0",
+      "long_progress": "H2.price > H1.price and H3.price > H2.price and L2.price > L1.price and L3.price > L2.price",
+      "long_sequence": "H1,L1,H2,L2,H3,L3 alternating confirmed M15 pivots after disturbance",
+      "pattern_must_complete_before_cycle_deadline": true,
+      "short_depths": "D1=H1-L1, D2=H2-L2, D3=H3-L3; require D3 < D2 < D1 and all > 0",
+      "short_progress": "L2.price < L1.price and L3.price < L2.price and H2.price < H1.price and H3.price < H2.price",
+      "short_sequence": "L1,H1,L2,H2,L3,H3 alternating confirmed M15 pivots after disturbance"
+    },
+    "structure_price": "MID",
+    "trigger": {
+      "knowledge_time": "trigger M15 candle close",
+      "long": "first complete M15 candle after L3 is known whose close is strictly above H3.price",
+      "short": "first complete M15 candle after H3 is known whose close is strictly below L3.price",
+      "trigger_close_must_be_strictly_before_target": true,
+      "trigger_must_precede_frozen_target_touch": true
+    },
+    "weekly_alignment": "Friday"
+  },
+  "evidence_boundary": {
+    "new_first_party_evidence_required": true,
+    "prior_failed_families": ["V3_ARGUMENTS", "V4_SHARP_TURN_FVG", "V5_NO_RESISTANCE_AOO"],
+    "source_recovery_path": "research/profitability/v6_momentum_source_recovery.md",
+    "v5_ledger_mining_permitted": false,
+    "v5_post_result_tuning_permitted": false,
+    "v5_result_sha256": "4474926ae20e67d5e23010a62654d41d2a3f6cefbff835f7c122e011c64d7345"
+  },
+  "family": "MOMENTUM_CYCLE_CONTINUATION",
+  "forward_confirmation_policy": {
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "data_integrity_failures_eq": 0,
+    "economics_access_only_after_historical_pass": true,
+    "historical_pass_alone_is_validated_profitable_edge": false,
+    "minimum_resolved_executed_trades": 50,
+    "net_expectancy_r_gt": 0.0,
+    "pass_classification": "VALIDATED_PROFITABLE_EDGE_V6_MOMENTUM_FORWARD_OOS",
+    "profit_factor_gt": 1.1,
+    "protocol_must_be_frozen_before_historical_result_access": true,
+    "scored_window": ["2024-01-01T00:00:00Z", "2026-08-01T00:00:00Z"],
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.0,
+    "synthetic_fills_eq": 0
+  },
+  "historical_edge_gate": {
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.3,
+    "data_integrity_failures_eq": 0,
+    "independent_trigger_reconstruction_exact": true,
+    "minimum_resolved_executed_trades": 250,
+    "positive_calendar_year_fraction_gte": 0.7,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.05,
+    "synthetic_fills_eq": 0
+  },
+  "issue": 264,
+  "multiple_testing": {
+    "consumed_failed_ledger_mining_permitted": false,
+    "failed_family_post_result_tuning_permitted": false,
+    "family_index_after_v3_v4_v5": 4,
+    "forward_confirmation_required_for_validation": true,
+    "historical_gate_strengthened_for_v6": true
+  },
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "research_question": "Does a causal HTF target plus aligned H1 FVG momentum, followed by an opposing H1 FVG disturbance and three shrinking M15 retracements, identify a profitable symmetric continuation edge on the OANDA NAS100_USD CFD proxy?",
+  "safety": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "schema_version": 1,
+  "source_backed_semantics": {
+    "cycle": "A disturbance can lead to consolidation/retracement and then expansion toward the still-valid target.",
+    "ltf_context": "Best lower-timeframe entries occur when the higher timeframe is ready to expand.",
+    "market_structure": "Use a higher-timeframe directional objective before looking for a lower-timeframe entry.",
+    "momentum": "FVGs are signs of momentum; opposing same-timeframe or one-timeframe-lower FVGs are disturbances.",
+    "order_flow": "Recent FVG/order-flow legs refine where continuation may resume and where price should not retrace.",
+    "target": "ITH/ITL are liquidity magnets; the closest target becomes more compelling as price approaches.",
+    "timing": "Shrinking retracements at consolidation extremes indicate momentum building toward expansion."
+  },
+  "status": "FROZEN_BEFORE_ANY_V6_MARKET_DATA_ACCESS",
+  "trigger_gate": {
+    "independent_reconstruction_exact": true,
+    "m1_access_if_failed": false,
+    "minimum_distinct_knowledge_timestamps_before_m1": 250,
+    "minimum_sealed_triggers_before_m1": 250
+  }
+}
