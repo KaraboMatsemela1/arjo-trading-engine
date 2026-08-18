@@ -1,0 +1,84 @@
+{
+  "as_of_utc": "2026-08-18T13:45:00Z",
+  "audit_id": "ARJO_POST_V4_CANDIDATE_REAUDIT_V1",
+  "audit_sha256": "05ed66db6c433bb3b25f14a7abebf2be9e0bb12f538599fcecdb7932061a30d4",
+  "candidate_registry_git_blob_sha1": "d0f651b37d11f1f4d8e43f39f8cbed0aa4156016",
+  "candidate_registry_path": "research/candidate_predicates.json",
+  "conclusion": "No dependency-satisfied executable unused first-party family exists in the current evidence set after the V4 Sharp Turn result.",
+  "entry_gate": "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+  "newly_recovered_and_tested_family": {
+    "family": "V4_SHARP_TURN_FVG",
+    "post_result_refit_permitted": false,
+    "protocol_sha256": "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd",
+    "result": "EDGE_NOT_ESTABLISHED",
+    "result_sha256": "611cc822dcc5103ed700d245e3ffb95404ca9c41459a43f9b5183aa84aedf6b5",
+    "source_recovery_git_blob_sha1": "df20ded81f339164636927193f4693321c028e1b",
+    "source_recovery_path": "research/v4_sharp_turn_source_recovery.md",
+    "trigger_set_sha256": "1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a"
+  },
+  "phase5_candidate_count": 6,
+  "phase5_candidates": [
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "AOO_FVA_2CR_FVG_LONG_CONTEXT",
+      "reason": "Candidate registry still lacks complete trigger/timeframe/entry/stop/target/invalidation/expiry closure; AoO/FVA/2CR context cannot be promoted to a new independent strategy without semantic invention."
+    },
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "PD_ARRAY_2CR_CONTEXT",
+      "reason": "Evidence supports a 2CR failed-break context and examples, but not a universal deterministic PD-array selector plus complete entry/stop/target/expiry rules."
+    },
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "ORDER_FLOW_TARGET_BIAS",
+      "reason": "Order Flow, Target and Bias are first-party concepts but the exact algorithmic selectors/composition and execution mechanics remain incomplete."
+    },
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "ORDER_BLOCK_MT_HOLD_CONTEXT",
+      "reason": "Order Block and M_T are referenced, but deterministic construction, hold/fail thresholds and a complete executable trade lifecycle remain unresolved."
+    },
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "EQUILIBRIUM_CONTEXT",
+      "reason": "Equilibrium is defined conceptually, but exact range endpoints, tolerance, timeframe binding, directional consequence and execution mechanics are not closed."
+    },
+    {
+      "disposition": "INCOMPLETE_SEMANTICS_NO_EXECUTION",
+      "outcome_access_authorized": false,
+      "predicate_id": "MMBM_LRLR_SHORT_CONTEXT",
+      "reason": "MMBM/MMSM and liquidity concepts have recovered context, but the candidate still lacks a fully deterministic independent entry/stop/target/expiry chain suitable for preregistration."
+    }
+  ],
+  "reentry_conditions": [
+    "New attributable Arjo-authored semantic evidence closes all missing fields for a genuinely independent family before any outcome access.",
+    "A newly recovered first-party family is preregistered with deterministic causal predicates and economics before historical or future outcome access.",
+    "A future untouched validation lane is opened only from a strategy that first satisfies its preregistered historical/development gate; failed V3-C/V4 families are not tuned to qualify."
+  ],
+  "reviewed_concept_count": 36,
+  "schema_version": 1,
+  "semantic_policy": {
+    "generic_ict_smc_backfill_permitted": false,
+    "metadata_only_label_promotion_permitted": false,
+    "post_result_family_tuning_permitted": false,
+    "secondary_source_silent_promotion_to_first_party_permitted": false
+  },
+  "status": "NO_UNUSED_EXECUTABLE_FIRST_PARTY_FAMILY",
+  "unrepresented_operational_cues": [
+    {
+      "concept": "RESISTANCE_LIQUIDITY_RUNS",
+      "disposition": "NOT_EXECUTABLE_FROM_CURRENT_EVIDENCE",
+      "reason": "No complete deterministic lifecycle distinct from already tested/rejected families."
+    },
+    {
+      "concept": "TAPE_READING",
+      "disposition": "NOT_EXECUTABLE_FROM_CURRENT_EVIDENCE",
+      "reason": "No evidence-backed machine rule for trigger, direction, entry, stop, target and expiry."
+    }
+  ]
+}
