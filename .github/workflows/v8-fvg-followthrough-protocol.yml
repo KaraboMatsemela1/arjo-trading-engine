@@ -1,0 +1,32 @@
+name: V8 FVG Follow-Through Protocol Freeze
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v8_fvg_followthrough_source_recovery.md'
+      - 'research/profitability/v8_fvg_followthrough_protocol_v1.json'
+      - 'research/profitability/v8_fvg_followthrough_preoutcome_boundary_v1.json'
+      - 'scripts/check_v8_fvg_followthrough_protocol.py'
+      - '.github/workflows/v8-fvg-followthrough-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile checker
+        run: python -m py_compile scripts/check_v8_fvg_followthrough_protocol.py
+      - name: Verify immutable V8 protocol and pre-data boundary
+        run: python scripts/check_v8_fvg_followthrough_protocol.py
+      - name: Prove V8 outcome access artifacts are absent
+        run: |
+          test ! -e research/profitability/v8_fvg_followthrough_trigger_result_v1.json
+          test ! -e research/profitability/v8_fvg_followthrough_historical_result_v1.json
+          test ! -e research/profitability/V8_FVG_FOLLOWTHROUGH_M1_EXECUTE_LOCK.json
