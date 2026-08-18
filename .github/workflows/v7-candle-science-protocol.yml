@@ -1,0 +1,32 @@
+name: V7 Candle Science Protocol Freeze
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v7_candle_science_source_recovery.md'
+      - 'research/profitability/v7_candle_science_protocol_v1.json'
+      - 'research/profitability/v7_candle_science_preoutcome_boundary_v1.json'
+      - 'scripts/check_v7_candle_science_protocol.py'
+      - '.github/workflows/v7-candle-science-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile checker
+        run: python -m py_compile scripts/check_v7_candle_science_protocol.py
+      - name: Verify immutable protocol and pre-data boundary
+        run: python scripts/check_v7_candle_science_protocol.py
+      - name: Prove V7 outcome access artifacts are absent
+        run: |
+          test ! -e research/profitability/v7_candle_science_trigger_result_v1.json
+          test ! -e research/profitability/v7_candle_science_historical_result_v1.json
+          test ! -e research/profitability/V7_CANDLE_SCIENCE_M1_EXECUTE_LOCK.json
