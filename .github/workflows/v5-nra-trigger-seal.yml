@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
-      OANDA_TOKEN: ${{ secrets.OANDA_TOKEN }}
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
       V5_OUTPUT_DIR: artifacts/v5_nra_trigger_seal
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -31,6 +31,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Require read-only OANDA token
+        run: test -n "$OANDA_TOKEN"
       - name: Verify frozen protocol and transport
         run: python scripts/check_v5_no_resistance_aoo_protocol.py
       - name: Verify exact structure-only authorization sentinel
