@@ -1,0 +1,30 @@
+name: V5 NRA Trigger Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v5_nra_triggers.py'
+      - 'scripts/v5_nra_structure.py'
+      - 'scripts/run_v5_nra_trigger_seal.py'
+      - 'scripts/test_v5_nra_triggers.py'
+      - '.github/workflows/v5-nra-trigger-preflight.yml'
+      - '.github/workflows/v5-nra-trigger-seal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V5 trigger code
+        run: python -m py_compile scripts/v5_nra_triggers.py scripts/v5_nra_structure.py scripts/run_v5_nra_trigger_seal.py scripts/test_v5_nra_triggers.py
+      - name: Verify frozen protocol and transport
+        run: python scripts/check_v5_no_resistance_aoo_protocol.py
+      - name: Run offline trigger regressions
+        run: PYTHONPATH=scripts python scripts/test_v5_nra_triggers.py
