@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "issue": 264,
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "boundary_time_utc": "2026-08-18T17:30:00Z",
+  "v6_market_structure_accessed": false,
+  "v6_h1_accessed": false,
+  "v6_m15_accessed": false,
+  "v6_m1_accessed": false,
+  "v6_bid_ask_accessed": false,
+  "v6_triggers_constructed": false,
+  "v6_pnl_accessed": false,
+  "v6_expectancy_accessed": false,
+  "v6_profit_factor_accessed": false,
+  "v6_bootstrap_outcomes_accessed": false,
+  "v6_forward_confirmation_outcomes_accessed": false,
+  "v5_post_result_tuning_used": false,
+  "v5_consumed_ledger_mining_used": false,
+  "paper_execution": false,
+  "live_execution": false,
+  "broker_mutation": false
+}
