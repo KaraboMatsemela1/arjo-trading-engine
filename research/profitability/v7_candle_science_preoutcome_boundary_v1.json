@@ -2,7 +2,7 @@
   "schema_version": 1,
   "candidate_id": "ARJO_V7_NQ_CANDLE_SCIENCE_H1_FVG_REJECTION_TO_OPPOSING_FVG_SYMMETRIC",
   "issue": 274,
-  "protocol_sha256": "28005dd5cfd6a443ef87e0c5c5a21537113096702600c2f1e2a83b1ce18e14be",
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
   "protocol_commit_sha": "f0f4ede709c59dedeb4f629b48f6383d08a5bd36",
   "v6_result_consulted_before_protocol_freeze": false,
   "v6_ledger_consulted_for_v7_parameters": false,
