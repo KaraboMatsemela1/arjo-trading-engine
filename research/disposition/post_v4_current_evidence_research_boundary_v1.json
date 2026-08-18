@@ -1,0 +1,85 @@
+{
+  "as_of_utc": "2026-08-18T13:45:00Z",
+  "boundary_sha256": "28b8be6ed43a41147736262ae57fd35c89aa51d550dd3d5437e9b3667f992be2",
+  "broker_mutation_enabled": false,
+  "candidate_reaudit": {
+    "audit_sha256": "05ed66db6c433bb3b25f14a7abebf2be9e0bb12f538599fcecdb7932061a30d4",
+    "executable_unused_first_party_family_available": false,
+    "path": "research/disposition/post_v4_candidate_reaudit_v1.json",
+    "phase5_candidate_count": 6,
+    "reviewed_concept_count": 36,
+    "status": "NO_UNUSED_EXECUTABLE_FIRST_PARTY_FAMILY"
+  },
+  "dependency_issue": 247,
+  "disposition_id": "ARJO_POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_V1",
+  "entry_gate": "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+  "forbidden_reentry_paths": [
+    "Tune, weaken, relabel, or mine V3-C after observing its economic result.",
+    "Tune V4 trigger, timeframe, session, stop, target, costs, concurrency, or execution rules after observing its 2010-2023 result.",
+    "Mine consumed V3-C or V4 trade ledgers, winning periods, years, directions, or stress failures to select a replacement rule.",
+    "Promote metadata-only labels or generic ICT/SMC semantics into an Arjo strategy.",
+    "Enable paper, live, or broker mutation without a separately preregistered and validated profitable-edge gate."
+  ],
+  "historical_boundary": {
+    "disposition_id": "ARJO_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_V1",
+    "git_blob_sha1": "1927b17edca70a0970b02759e930c6ccf35b5a64",
+    "path": "research/disposition/current_evidence_research_boundary_v1.json",
+    "preserved_unchanged": true
+  },
+  "issue": 249,
+  "live_execution_enabled": false,
+  "output_gate": "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "paper_execution_enabled": false,
+  "post_result_refit_permitted": false,
+  "reentry_conditions": [
+    "New attributable Arjo-authored semantic evidence closes all missing fields for a genuinely independent family before any outcome access.",
+    "A newly recovered first-party family is preregistered with deterministic causal predicates and economics before historical or future outcome access.",
+    "A future untouched validation lane may open only from a strategy that first satisfies its preregistered development gate; failed V3-C and V4 families cannot be tuned to qualify."
+  ],
+  "schema_version": 1,
+  "sealed_failed_families": {
+    "v3c": {
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V3C_ARGUMENTS_2CR",
+      "post_result_refit_permitted": false,
+      "result_sha256": "e2af05e4fad93def189bedd22cc865ea78be4ac43a1a2e9d5e5822c8b84ff78b"
+    },
+    "v4": {
+      "base": {
+        "bootstrap_95pct_ci_net_expectancy_r": [
+          -0.24246404376698275,
+          0.25455263594850913
+        ],
+        "data_integrity_failures": 0,
+        "net_expectancy_r": 0.0014091677822265101,
+        "profit_factor": 1.0020664176151879,
+        "resolved_executed_trades": 127,
+        "synthetic_fills": 0
+      },
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "execution_lock_sha256": "846e3c106f9f478fe3ef74ad8152431f42bc2d0cac0d314d9a71d6aef8f0ec30",
+      "family": "V4_SHARP_TURN_FVG",
+      "no_refit_performed": true,
+      "parameter_changes_after_first_m1_response": false,
+      "post_2023_m1_requested_or_admitted": false,
+      "protocol_sha256": "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd",
+      "result_path": "research/profitability/v4_sharp_turn_result/result.json",
+      "result_sha256": "611cc822dcc5103ed700d245e3ffb95404ca9c41459a43f9b5183aa84aedf6b5",
+      "stress": {
+        "bootstrap_95pct_ci_net_expectancy_r": [
+          -0.3458839445238532,
+          0.14838828933321035
+        ],
+        "data_integrity_failures": 0,
+        "net_expectancy_r": -0.10639283934312664,
+        "profit_factor": 0.8554420945575948,
+        "resolved_executed_trades": 127,
+        "synthetic_fills": 0
+      },
+      "trigger_readiness_sha256": "6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e1a47a6dba3",
+      "trigger_set_sha256": "1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a"
+    }
+  },
+  "status": "NO_VALIDATED_PROFITABLE_EDGE_CURRENT_EVIDENCE_POST_V4",
+  "validated_profitable_edge": false
+}
