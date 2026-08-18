@@ -1,0 +1,129 @@
+{
+  "candidate_id": "ARJO_V7_NQ_CANDLE_SCIENCE_H1_FVG_REJECTION_TO_OPPOSING_FVG_SYMMETRIC",
+  "engine_conventions": {
+    "alignment_timezone": "America/New_York",
+    "bias_timeframe": "H4",
+    "costs": {
+      "base_adverse_slippage_points_per_side": 0.5,
+      "base_financing_r_per_1440_complete_m1_bars": 0.005,
+      "stress_adverse_slippage_points_per_side": 1.0,
+      "stress_financing_r_per_1440_complete_m1_bars": 0.01
+    },
+    "daily_alignment": 17,
+    "economic_timeframe": "M1_BID_ASK",
+    "entry_stop": {
+      "invalid_if_stop_entry_target_ordering_not_strict": true,
+      "long_entry": "first complete M1 ASK open at or after trigger knowledge time plus adverse entry slippage",
+      "long_stop": "rejection H1 candle low",
+      "minimum_reward_r_filter": null,
+      "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+      "short_entry": "first complete M1 BID open at or after trigger knowledge time minus adverse entry slippage",
+      "short_stop": "rejection H1 candle high",
+      "target": "frozen opposing H1 FVG near boundary"
+    },
+    "forward_confirmation_window_end_exclusive": "2026-08-01T00:00:00Z",
+    "forward_confirmation_window_start_inclusive": "2024-01-01T00:00:00Z",
+    "h1_fvg": {
+      "aligned": "bullish FVG only while H4 bias is bullish; bearish FVG only while H4 bias is bearish",
+      "bearish": "C1.low > C3.high; known at C3 close",
+      "bullish": "C1.high < C3.low; known at C3 close"
+    },
+    "h4_market_structure": {
+      "bearish_break": "first complete H4 close strictly below the latest already-confirmed H4 swing low",
+      "bias": "direction of the most recent causal bullish/bearish break; equal knowledge times resolve lexicographically by event id",
+      "bullish_break": "first complete H4 close strictly above the latest already-confirmed H4 swing high",
+      "no_bias_before_first_break": true,
+      "pivot_radius": 1
+    },
+    "historical_window_end_exclusive": "2024-01-01T00:00:00Z",
+    "historical_window_start_inclusive": "2010-01-01T00:00:00Z",
+    "holding": {
+      "expiry_complete_m1_bars": 1440,
+      "max_elapsed_hours_to_first_eligible_m1": 72,
+      "right_censored_at_window_end_excluded_from_resolved_metrics": true
+    },
+    "instrument": "NAS100_USD",
+    "portfolio": {
+      "long_short_symmetric": true,
+      "one_open_position_maximum": true,
+      "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST",
+      "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+      "skipped_signals_never_replayed": true
+    },
+    "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+    "provider_instrument_type": "CFD_PROXY",
+    "rejection": {
+      "long": "first later complete H1 candle that intersects the bullish FVG and closes strictly above the FVG upper boundary",
+      "must_preserve_same_h4_bias_through_rejection": true,
+      "one_signal_max_per_fvg": true,
+      "search_window_complete_h1_bars_after_fvg": 12,
+      "short": "first later complete H1 candle that intersects the bearish FVG and closes strictly below the FVG lower boundary"
+    },
+    "setup_timeframe": "H1",
+    "structure_price": "MID",
+    "target": {
+      "long": "nearest already-known bearish H1 FVG entirely above rejection close; choose smallest lower boundary then knowledge time/id",
+      "must_be_known_before_trigger": true,
+      "must_remain_untouched_from_its_knowledge_time_through_trigger": true,
+      "short": "nearest already-known bullish H1 FVG entirely below rejection close; choose largest upper boundary then knowledge time/id"
+    },
+    "weekly_alignment": "Friday"
+  },
+  "family": "CANDLE_SCIENCE_PD_ARRAY_REJECTION",
+  "forward_confirmation_policy": {
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "data_integrity_failures_eq": 0,
+    "economics_access_only_after_historical_pass": true,
+    "historical_pass_alone_is_validated_profitable_edge": false,
+    "minimum_resolved_executed_trades": 60,
+    "net_expectancy_r_gt": 0.0,
+    "pass_classification": "VALIDATED_PROFITABLE_EDGE_V7_CANDLE_SCIENCE_FORWARD_OOS",
+    "profit_factor_gt": 1.15,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.05,
+    "synthetic_fills_eq": 0
+  },
+  "historical_edge_gate": {
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.35,
+    "data_integrity_failures_eq": 0,
+    "independent_trigger_reconstruction_exact": true,
+    "minimum_resolved_executed_trades": 300,
+    "positive_calendar_year_fraction_gte": 0.75,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.1,
+    "synthetic_fills_eq": 0
+  },
+  "issue": 274,
+  "multiple_testing": {
+    "failed_family_ledger_mining_permitted": false,
+    "failed_family_post_result_tuning_permitted": false,
+    "family_index_after_v3_v4_v5_v6": 5,
+    "forward_confirmation_required_for_validation": true,
+    "historical_gate_strengthened_for_family_search": true,
+    "v6_result_consulted_before_protocol_freeze": false
+  },
+  "protocol_sha256": "28005dd5cfd6a443ef87e0c5c5a21537113096702600c2f1e2a83b1ce18e14be",
+  "research_question": "Does an H4 market-structure bias followed by an aligned H1 FVG and a same-timeframe H1 rejection after stinging the FVG produce a profitable continuation move toward the nearest already-known opposing H1 FVG on the OANDA NAS100_USD CFD proxy?",
+  "safety": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "schema_version": 1,
+  "source_backed_semantics": {
+    "candle_science": "Price progresses through consolidation, expansion, consolidation; the third higher-timeframe candle can create an FVG that may be stung after that candle closes.",
+    "pd_array_rejection": "When an aligned PD Array is reached, same-timeframe rejection is evidence to get involved toward the next PD Array.",
+    "rejection_examples": "A bullish rejection may be a lower wick stinging the discount array or a strong up-candle; bearish mapping is treated symmetrically as an engine convention.",
+    "stop": "The stop belongs where price should not return; exact machine placement is an engine convention.",
+    "target": "PD Arrays not aligned with the active bias act as resistance and targets."
+  },
+  "status": "FROZEN_BEFORE_ANY_V7_MARKET_DATA_ACCESS",
+  "trigger_gate": {
+    "independent_reconstruction_exact": true,
+    "m1_access_if_failed": false,
+    "minimum_distinct_knowledge_timestamps_before_m1": 300,
+    "minimum_sealed_triggers_before_m1": 300
+  }
+}
