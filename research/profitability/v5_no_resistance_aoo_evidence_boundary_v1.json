@@ -1,0 +1,22 @@
+{
+  "boundary_sha256": "c0e07cad4987223d98141d72d2750375a1abd59a4ba31e456dfdcfc963724d7b",
+  "broker_mutation_authorized": false,
+  "derived_profile_not_exact_arjo_strategy": true,
+  "failed_family_post_result_tuning": false,
+  "historical_window_is_pristine_market_holdout": false,
+  "live_execution_authorized": false,
+  "paper_execution_authorized": false,
+  "prior_evidence_disposition": "EXISTING_MMT_EVIDENCE_PREVIOUSLY_INCOMPLETE_FOR_EXACT_EXECUTION",
+  "protocol_id": "ARJO_V5_NQ_NO_RESISTANCE_AOO_H4_SWING_HIGH_LONG_V1",
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+  "schema_version": 1,
+  "status": "V5_PROTOCOL_PRE_OUTCOME_BOUNDARY",
+  "v3c_outcomes_used_for_rule_selection": false,
+  "v4_outcomes_used_for_rule_selection": false,
+  "v5_economic_outcomes_accessed": false,
+  "v5_m1_bid_ask_requested": false,
+  "v5_market_data_requested": false,
+  "v5_performance_metrics_accessed": false,
+  "v5_structure_reconstructed": false,
+  "v5_triggers_enumerated": false
+}
