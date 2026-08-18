@@ -1,0 +1,81 @@
+name: V4 Sharp Turn Execution Observer
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/v4-sharp-turn-execution-observer.yml'
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Locate sealed marker execution and publish status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          MARKER_SHA: 424bd5683d8dd4a536fe60dc6a606fa59bfd931a
+          BRANCH: validation/issue-247-v4-sharp-turn-economic-execution
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, urllib.request, zipfile, io
+
+          repo=os.environ['REPO']; token=os.environ['GH_TOKEN']; marker=os.environ['MARKER_SHA']; branch=os.environ['BRANCH']
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'arjo-v4-observer'}
+          def get(url):
+              req=urllib.request.Request(url,headers=headers)
+              with urllib.request.urlopen(req,timeout=60) as r: return json.load(r)
+          def get_bytes(url):
+              req=urllib.request.Request(url,headers=headers)
+              with urllib.request.urlopen(req,timeout=120) as r: return r.read()
+          def post(url,payload):
+              req=urllib.request.Request(url,data=json.dumps(payload).encode(),headers={**headers,'Content-Type':'application/json'},method='POST')
+              with urllib.request.urlopen(req,timeout=60) as r: return json.load(r)
+
+          runs=get(f'https://api.github.com/repos/{repo}/actions/workflows/v4-sharp-turn-profitability-execute.yml/runs?branch={branch}&event=push&per_page=20')['workflow_runs']
+          matches=[r for r in runs if r.get('head_sha')==marker]
+          if len(matches)!=1:
+              body=f'V4 execution observer: expected exactly one push run for marker `{marker}`, found **{len(matches)}**. No execution was retriggered.'
+              post(f'https://api.github.com/repos/{repo}/issues/247/comments',{'body':body})
+              raise SystemExit(0)
+          run=matches[0]
+          lines=[
+              '### V4 sealed execution observer',
+              f"- run id: `{run['id']}`",
+              f"- event: `{run['event']}`",
+              f"- head: `{run['head_sha']}`",
+              f"- status: **{run['status']}**",
+              f"- conclusion: **{run.get('conclusion')}**",
+              '- observer retriggered market execution: **false**',
+          ]
+          if run['status']=='completed' and run.get('conclusion')=='success':
+              artifacts=get(f"https://api.github.com/repos/{repo}/actions/runs/{run['id']}/artifacts")['artifacts']
+              target=[a for a in artifacts if a['name']=='v4-sharp-turn-profitability-result']
+              if len(target)==1:
+                  raw=get_bytes(target[0]['archive_download_url'])
+                  with zipfile.ZipFile(io.BytesIO(raw)) as z:
+                      names=set(z.namelist())
+                      if 'profitability-result.json' in names:
+                          result=json.loads(z.read('profitability-result.json'))
+                          b=result['base_metrics']; s=result['stress_metrics']
+                          lines += [
+                              f"- classification: **{result['classification']}**",
+                              f"- result SHA: `{result['result_sha256']}`",
+                              f"- resolved base trades: **{b['resolved_executed_trades']}**",
+                              f"- base expectancy: **{b['net_expectancy_r']} R**",
+                              f"- base PF: **{b['profit_factor']}**",
+                              f"- base win rate: **{b['win_rate']}**",
+                              f"- base bootstrap 95% CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}**",
+                              f"- stress expectancy: **{s['net_expectancy_r']} R**",
+                              f"- stress PF: **{s['profit_factor']}**",
+                              f"- data integrity failures base/stress: **{b['data_integrity_failures']} / {s['data_integrity_failures']}**",
+                              f"- paper/live/broker: **{result['paper_execution_authorized']} / {result['live_execution_authorized']} / {result['broker_mutation_authorized']}**",
+                          ]
+          post(f'https://api.github.com/repos/{repo}/issues/247/comments',{'body':'\n'.join(lines)})
+          print('\n'.join(lines))
+          PY
