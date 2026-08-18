@@ -1,0 +1,149 @@
+name: V7 Candle Science Historical Economics
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v7_candle_science_historical_execution_lock_v1.json'
+      - 'research/profitability/V7_CANDLE_SCIENCE_M1_EXECUTE_LOCK.json'
+      - 'scripts/check_v7_candle_science_historical_lock.py'
+      - 'scripts/run_v7_candle_science_historical_oanda.py'
+      - '.github/workflows/v7-candle-science-historical-economics.yml'
+  push:
+    branches:
+      - research/v7-candle-science-historical-economics
+    paths:
+      - 'research/profitability/V7_CANDLE_SCIENCE_M1_EXECUTE_LOCK.json'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  offline-preflight:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable V7 protocol and historical lock
+        run: |
+          python scripts/check_v7_candle_science_protocol.py
+          python scripts/check_v7_candle_science_historical_lock.py
+      - name: Compile sealed historical runner
+        run: python -m py_compile scripts/run_v7_candle_science_historical_oanda.py scripts/v7_candle_science_backtest_metrics.py scripts/v6_momentum_backtest_mechanics.py scripts/v6_momentum_m1_oanda.py
+      - name: Re-run shared fill and OANDA parser sabotage suites
+        run: |
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+          PYTHONPATH=scripts python scripts/test_v7_candle_science_backtest.py
+      - name: Verify any M1 authorization marker is exact
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/profitability/V7_CANDLE_SCIENCE_M1_EXECUTE_LOCK.json')
+          if p.exists():
+              x=json.loads(p.read_text())
+              assert x == {
+                  'status':'AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT',
+                  'issue':280,
+                  'protocol_sha256':'98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134',
+                  'trigger_set_sha256':'0286fc800d0b20399848945b2ae6b7520a6d314767a4ef8bb043b476bb3d2c98',
+                  'trigger_count':5212,
+                  'distinct_knowledge_timestamps':4972,
+                  'historical_execution_lock_sha256':'56a00ad6a45d926221330acf2c2160ce862752dc93f712c3b35b68cf35194049',
+                  'forward_confirmation_transport_sha256':'83bdd46c80acec241499d5d99e76df22b8c11cdf4edd5983b4f4937582fdbc8e',
+                  'forward_confirmation_access_authorized':False,
+                  'paper_execution_authorized':False,
+                  'live_execution_authorized':False,
+                  'broker_mutation_authorized':False,
+              }
+          PY
+
+  execute-historical:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V7_HIST_OUTPUT_DIR: artifacts/v7_candle_science_historical
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA credential
+        run: test -n "$OANDA_API_TOKEN"
+      - name: Verify all immutable pre-M1 bindings and sabotage suites
+        run: |
+          python scripts/check_v7_candle_science_protocol.py
+          python scripts/check_v7_candle_science_historical_lock.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+          PYTHONPATH=scripts python scripts/test_v7_candle_science_backtest.py
+      - name: Verify exact one-time V7 research M1 authorization
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/V7_CANDLE_SCIENCE_M1_EXECUTE_LOCK.json'))
+          assert x['status']=='AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT'
+          assert x['issue']==280
+          assert x['protocol_sha256']=='98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134'
+          assert x['trigger_set_sha256']=='0286fc800d0b20399848945b2ae6b7520a6d314767a4ef8bb043b476bb3d2c98'
+          assert x['trigger_count']==5212 and x['distinct_knowledge_timestamps']==4972
+          assert x['historical_execution_lock_sha256']=='56a00ad6a45d926221330acf2c2160ce862752dc93f712c3b35b68cf35194049'
+          assert x['forward_confirmation_transport_sha256']=='83bdd46c80acec241499d5d99e76df22b8c11cdf4edd5983b4f4937582fdbc8e'
+          assert x['forward_confirmation_access_authorized'] is False
+          assert x['paper_execution_authorized'] is False and x['live_execution_authorized'] is False and x['broker_mutation_authorized'] is False
+          PY
+      - name: Execute first and only frozen V7 historical M1 BID ASK measurement
+        run: PYTHONPATH=scripts python scripts/run_v7_candle_science_historical_oanda.py
+      - name: Verify result boundary and publish canonical outcome
+        run: |
+          python - <<'PY' > /tmp/v7-historical-comment.md
+          import json,os
+          r=json.load(open('artifacts/v7_candle_science_historical/historical-result.json'))
+          assert r['validated_profitable_edge'] is False
+          assert r['forward_confirmation_outcomes_accessed'] is False
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['cost_changes_after_first_m1_response'] is False
+          assert r['threshold_changes_after_first_m1_response'] is False
+          assert r['target_stop_rule_changes_after_first_m1_response'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False and r['live_execution_authorized'] is False and r['broker_mutation_authorized'] is False
+          b=r['base_metrics'];s=r['stress_metrics']
+          print('<!-- V7_CANDLE_SCIENCE_HISTORICAL_RESULT -->')
+          print('## V7 sealed historical profitability result')
+          print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- historical edge established: **`{r['historical_edge_established']}`**")
+          print(f"- validated profitable edge: **`{r['validated_profitable_edge']}`**")
+          print(f"- forward confirmation authorized: **`{r['forward_confirmation_authorized']}`**")
+          print(f"- resolved trades: **{b['resolved_executed_trades']}**")
+          print(f"- base expectancy: **{b['net_expectancy_r']} R**")
+          print(f"- base PF: **{b['profit_factor']}**")
+          print(f"- base bootstrap 95% CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}**")
+          print(f"- positive calendar-year fraction: **{b['positive_calendar_year_fraction']}**")
+          print(f"- stress expectancy: **{s['net_expectancy_r']} R**")
+          print(f"- stress PF: **{s['profit_factor']}**")
+          print(f"- result SHA: `{r['result_sha256']}`")
+          print(f"- provider provenance SHA: `{r['provider_provenance_sha256']}`")
+          print(f"- base ledger SHA: `{r['base_ledger_sha256']}`")
+          print(f"- stress ledger SHA: `{r['stress_ledger_sha256']}`")
+          PY
+          gh issue comment 280 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v7-historical-comment.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v7-candle-science-historical-profitability
+          path: |
+            artifacts/v7_candle_science_historical/historical-result.json
+            artifacts/v7_candle_science_historical/base-trade-ledger.jsonl
+            artifacts/v7_candle_science_historical/stress-trade-ledger.jsonl
+            artifacts/v7_candle_science_historical/provider-provenance.json
+          if-no-files-found: error
+          retention-days: 90
