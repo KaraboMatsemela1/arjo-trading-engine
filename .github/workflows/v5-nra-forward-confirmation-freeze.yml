@@ -1,0 +1,23 @@
+name: V5 NRA Forward Confirmation Freeze
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v5_nra_forward_confirmation_protocol_v1.json'
+      - 'scripts/check_v5_nra_forward_confirmation_protocol.py'
+      - '.github/workflows/v5-nra-forward-confirmation-freeze.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify pre-result V5 confirmation freeze
+        run: python scripts/check_v5_nra_forward_confirmation_protocol.py
