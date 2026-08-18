@@ -1,142 +1,16 @@
 name: V4 Sharp Turn Profitability Harvest
 
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/v4-sharp-turn-profitability-harvest.yml'
+  workflow_dispatch:
 
 permissions:
-  actions: read
-  contents: write
+  contents: read
 
 jobs:
-  harvest:
+  retired:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    env:
-      GH_TOKEN: ${{ github.token }}
-      SOURCE_HEAD_SHA: 424bd5683d8dd4a536fe60dc6a606fa59bfd931a
-      SOURCE_WORKFLOW: v4-sharp-turn-profitability-execute.yml
-      SOURCE_ARTIFACT: v4-sharp-turn-profitability-result
-      TARGET_BRANCH: validation/issue-247-v4-sharp-turn-economic-execution
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: validation/issue-247-v4-sharp-turn-economic-execution
-          fetch-depth: 1
-
-      - name: Locate and await exact sealed execution run
-        id: locate
-        shell: bash
+      - name: Result already persisted
         run: |
-          set -euo pipefail
-          run_id=''
-          conclusion=''
-          for attempt in $(seq 1 180); do
-            payload=$(gh api --method GET \
-              "repos/${GITHUB_REPOSITORY}/actions/workflows/${SOURCE_WORKFLOW}/runs" \
-              -f head_sha="$SOURCE_HEAD_SHA" -f event=push -f per_page=20)
-            run_id=$(jq -r --arg sha "$SOURCE_HEAD_SHA" \
-              '.workflow_runs | map(select(.head_sha==$sha and .event=="push")) | first | .id // empty' <<<"$payload")
-            if [[ -n "$run_id" ]]; then
-              status=$(jq -r --argjson id "$run_id" \
-                '.workflow_runs | map(select(.id==$id)) | first | .status' <<<"$payload")
-              conclusion=$(jq -r --argjson id "$run_id" \
-                '.workflow_runs | map(select(.id==$id)) | first | .conclusion // ""' <<<"$payload")
-              echo "sealed_run_id=$run_id status=$status conclusion=$conclusion"
-              if [[ "$status" == "completed" ]]; then
-                break
-              fi
-            else
-              echo "sealed execution run not registered yet"
-            fi
-            sleep 20
-          done
-          test -n "$run_id"
-          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
-          echo "conclusion=$conclusion" >> "$GITHUB_OUTPUT"
-          if [[ "$conclusion" != "success" ]]; then
-            gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/jobs" \
-              --jq '.jobs[] | {id,name,status,conclusion,steps:[.steps[]|{name,conclusion}]}' || true
-            exit 1
-          fi
-
-      - name: Download immutable profitability artifact
-        run: |
-          mkdir -p /tmp/v4-result
-          gh run download "${{ steps.locate.outputs.run_id }}" \
-            --repo "$GITHUB_REPOSITORY" \
-            --name "$SOURCE_ARTIFACT" \
-            --dir /tmp/v4-result
-
-      - name: Verify artifact binding before persistence
-        run: |
-          python - <<'PY'
-          import json, pathlib
-          root=pathlib.Path('/tmp/v4-result')
-          r=json.load(open(root/'profitability-result.json'))
-          assert r['status']=='V4_SHARP_TURN_PROFITABILITY_RESULT_READY'
-          assert r['trigger_set_sha256']=='1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a'
-          assert r['trigger_readiness_sha256']=='6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e1a47a6dba3'
-          assert r['execution_protocol_sha256']=='a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd'
-          assert r['profitability_execution_lock_sha256']=='846e3c106f9f478fe3ef74ad8152431f42bc2d0cac0d314d9a71d6aef8f0ec30'
-          assert r['exact_trigger_reconstruction_before_first_m1_response'] is True
-          assert r['first_m1_response_accessed'] is True
-          assert r['parameter_changes_after_first_m1_response'] is False
-          assert r['no_refit_performed'] is True
-          assert r['post_2023_m1_requested_or_admitted'] is False
-          assert r['synthetic_fills']==0
-          assert r['paper_execution_authorized'] is False
-          assert r['live_execution_authorized'] is False
-          assert r['broker_mutation_authorized'] is False
-          for name in ['provider-provenance.json','base-trade-ledger.jsonl','stress-trade-ledger.jsonl','pre-m1-trigger-reconstruction.json']:
-              assert (root/name).is_file() and (root/name).stat().st_size>0, name
-          print(json.dumps({
-              'classification':r['classification'],
-              'base_resolved':r['base_metrics']['resolved_executed_trades'],
-              'base_expectancy_r':r['base_metrics']['net_expectancy_r'],
-              'base_profit_factor':r['base_metrics']['profit_factor'],
-              'stress_expectancy_r':r['stress_metrics']['net_expectancy_r'],
-              'stress_profit_factor':r['stress_metrics']['profit_factor'],
-              'result_sha256':r['result_sha256'],
-          },sort_keys=True))
-          PY
-
-      - name: Persist exact sealed result evidence on implementation branch
-        run: |
-          set -euo pipefail
-          mkdir -p research/profitability/v4_sharp_turn_result
-          cp /tmp/v4-result/profitability-result.json research/profitability/v4_sharp_turn_result/result.json
-          cp /tmp/v4-result/provider-provenance.json research/profitability/v4_sharp_turn_result/provider_provenance.json
-          cp /tmp/v4-result/base-trade-ledger.jsonl research/profitability/v4_sharp_turn_result/base_trade_ledger.jsonl
-          cp /tmp/v4-result/stress-trade-ledger.jsonl research/profitability/v4_sharp_turn_result/stress_trade_ledger.jsonl
-          cp /tmp/v4-result/pre-m1-trigger-reconstruction.json research/profitability/v4_sharp_turn_result/pre_m1_trigger_reconstruction.json
-          python - <<'PY'
-          import hashlib,json,pathlib,os
-          root=pathlib.Path('research/profitability/v4_sharp_turn_result')
-          result=json.load(open(root/'result.json'))
-          manifest={
-            'schema_version':1,
-            'status':'V4_SHARP_TURN_PROFITABILITY_EVIDENCE_PERSISTED',
-            'source_workflow_run_id':int(os.environ['RUN_ID']),
-            'source_head_sha':os.environ['SOURCE_HEAD_SHA'],
-            'result_sha256':result['result_sha256'],
-            'classification':result['classification'],
-            'files':{},
-            'paper_execution_authorized':False,
-            'live_execution_authorized':False,
-            'broker_mutation_authorized':False,
-          }
-          for p in sorted(root.iterdir()):
-              if p.name=='manifest.json': continue
-              manifest['files'][p.name]={'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
-          manifest['manifest_sha256']=hashlib.sha256(json.dumps(manifest,sort_keys=True,separators=(',',':')).encode()).hexdigest()
-          (root/'manifest.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add research/profitability/v4_sharp_turn_result
-          git commit -m 'V4 Sharp Turn: persist sealed historical economic result'
-          git push origin "HEAD:${TARGET_BRANCH}"
-        env:
-          RUN_ID: ${{ steps.locate.outputs.run_id }}
+          echo 'The exact sealed V4 result from workflow run 32142106100 was successfully harvested and persisted.'
+          echo 'Automatic harvesting is retired to prevent duplicate result-persistence attempts.'
