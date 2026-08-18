@@ -1,0 +1,130 @@
+{
+  "candidate_id": "ARJO_V8_NQ_FVG_FOLLOWTHROUGH_H4_H1_SYMMETRIC",
+  "engine_conventions": {
+    "alignment_timezone": "America/New_York",
+    "bias_timeframe": "H4",
+    "costs": {
+      "base_adverse_slippage_points_per_side": 0.5,
+      "base_financing_r_per_1440_complete_m1_bars": 0.005,
+      "stress_adverse_slippage_points_per_side": 1.0,
+      "stress_financing_r_per_1440_complete_m1_bars": 0.01
+    },
+    "daily_alignment": 17,
+    "economic_timeframe": "M1_BID_ASK",
+    "entry_stop_target": {
+      "invalid_if_stop_entry_target_ordering_not_strict": true,
+      "long_entry": "first complete M1 ASK open at or after B knowledge time plus adverse entry slippage",
+      "long_stop": "B bullish FVG lower boundary",
+      "minimum_reward_r_filter": null,
+      "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+      "short_entry": "first complete M1 BID open at or after B knowledge time minus adverse entry slippage",
+      "short_stop": "B bearish FVG upper boundary",
+      "target": "frozen nearest already-confirmed H1 swing target in active direction"
+    },
+    "forward_confirmation_window_end_exclusive": "2026-08-01T00:00:00Z",
+    "forward_confirmation_window_start_inclusive": "2024-01-01T00:00:00Z",
+    "h1_fvg": {
+      "bearish": "C1.low > C3.high; known at C3 close",
+      "bullish": "C1.high < C3.low; known at C3 close"
+    },
+    "h4_market_structure": {
+      "bearish_break": "first complete H4 close strictly below the latest already-confirmed H4 swing low",
+      "bias": "direction of the most recent causal bullish/bearish break; equal knowledge times resolve lexicographically by event id",
+      "bullish_break": "first complete H4 close strictly above the latest already-confirmed H4 swing high",
+      "no_bias_before_first_break": true,
+      "pivot_radius": 1
+    },
+    "historical_window_end_exclusive": "2024-01-01T00:00:00Z",
+    "historical_window_start_inclusive": "2010-01-01T00:00:00Z",
+    "holding": {
+      "expiry_complete_m1_bars": 1440,
+      "max_elapsed_hours_to_first_eligible_m1": 72,
+      "right_censored_at_window_end_excluded_from_resolved_metrics": true
+    },
+    "instrument": "NAS100_USD",
+    "portfolio": {
+      "long_short_symmetric": true,
+      "one_open_position_maximum": true,
+      "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST",
+      "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+      "skipped_signals_never_replayed": true
+    },
+    "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+    "provider_instrument_type": "CFD_PROXY",
+    "setup": {
+      "A": "first aligned H1 FVG under active H4 bias",
+      "B_search_window_complete_h1_bars_after_A": 12,
+      "bias_must_remain_continuously_aligned_from_A_through_B": true,
+      "first_subsequent_h1_fvg_only": true,
+      "opposite_direction_B": "invalidate setup as consolidation",
+      "same_direction_B": "qualifies as follow-through",
+      "trigger": "B knowledge time (B C3 close)",
+      "one_signal_max_per_A": true
+    },
+    "structure_price": "MID",
+    "target": {
+      "confirmation_must_be_strictly_before_B_trigger": true,
+      "h1_swing_radius": 1,
+      "long": "nearest already-confirmed H1 swing high strictly above B trigger close; choose smallest price then confirmation time/id",
+      "must_remain_untaken_from_confirmation_through_B_trigger": true,
+      "short": "nearest already-confirmed H1 swing low strictly below B trigger close; choose largest price then confirmation time/id"
+    },
+    "weekly_alignment": "Friday"
+  },
+  "family": "FVG_FOLLOWTHROUGH_CONTINUATION",
+  "forward_confirmation_policy": {
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "data_integrity_failures_eq": 0,
+    "economics_access_only_after_historical_pass": true,
+    "historical_pass_alone_is_validated_profitable_edge": false,
+    "minimum_resolved_executed_trades": 75,
+    "net_expectancy_r_gt": 0.0,
+    "pass_classification": "VALIDATED_PROFITABLE_EDGE_V8_FVG_FOLLOWTHROUGH_FORWARD_OOS",
+    "profit_factor_gt": 1.2,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.1,
+    "synthetic_fills_eq": 0
+  },
+  "historical_edge_gate": {
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.4,
+    "data_integrity_failures_eq": 0,
+    "independent_trigger_reconstruction_exact": true,
+    "minimum_resolved_executed_trades": 350,
+    "positive_calendar_year_fraction_gte": 0.8,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.15,
+    "synthetic_fills_eq": 0
+  },
+  "issue": 284,
+  "multiple_testing": {
+    "failed_family_ledger_mining_permitted": false,
+    "failed_family_post_result_tuning_permitted": false,
+    "family_index_after_v3_v4_v5_v6_v7": 6,
+    "forward_confirmation_required_for_validation": true,
+    "historical_gate_strengthened_for_family_search": true,
+    "v7_result_consulted_before_protocol_freeze": false
+  },
+  "protocol_sha256": "79c0289293996f02faa6de1ecb5dcc6d6201a7b98bff1be842bab6cc707b547d",
+  "research_question": "Does an aligned H1 FVG under causal H4 bias that follows through by creating the first subsequent same-direction H1 FVG within 12 H1 bars produce a profitable continuation edge toward the nearest already-confirmed H1 swing target on the OANDA NAS100_USD CFD proxy?",
+  "safety": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "schema_version": 1,
+  "source_backed_semantics": {
+    "bias_context": "FVGs can be used to frame bias, narrative and context.",
+    "consolidation_warning": "If the first subsequent FVG is opposing rather than same-direction, the initial FVG did not follow through and the market is treated as consolidating.",
+    "follow_through": "An FVG follows through when price creates a new FVG in the same direction; this restores trust in that directional argument.",
+    "target_context": "The first opposing PD Array can act as a swing point / resistance context; V8 uses a causal H1 swing target as an explicit engine convention rather than claiming the source supplied a machine target rule."
+  },
+  "status": "FROZEN_BEFORE_ANY_V8_MARKET_DATA_ACCESS",
+  "trigger_gate": {
+    "independent_reconstruction_exact": true,
+    "m1_access_if_failed": false,
+    "minimum_distinct_knowledge_timestamps_before_m1": 350,
+    "minimum_sealed_triggers_before_m1": 350
+  }
+}
