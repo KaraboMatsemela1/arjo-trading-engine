@@ -35,8 +35,22 @@ jobs:
         run: python -m py_compile scripts/v6_momentum_primitives.py scripts/v6_momentum_reconstruct.py scripts/v6_momentum_structure.py scripts/run_v6_momentum_trigger_seal.py scripts/test_v6_momentum_logic.py
       - name: Run no-network synthetic regressions
         run: PYTHONPATH=scripts python scripts/test_v6_momentum_logic.py
-      - name: Prove M1 authorization is absent
-        run: test ! -e research/profitability/v6_momentum_trigger_authorization_v1.json
+      - name: Verify any authorization remains structure-only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/profitability/v6_momentum_trigger_authorization_v1.json')
+          if p.exists():
+              x=json.loads(p.read_text())
+              assert x['authorization']=='AUTHORIZE_V6_H1_M15_TRIGGER_SEAL'
+              assert x['issue']==266
+              assert x['protocol_sha256']=='8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab'
+              assert x['m1_authorized'] is False
+              assert x['bid_ask_authorized'] is False
+              assert x['economic_outcomes_authorized'] is False
+              assert x['broker_mutation_authorized'] is False
+          PY
 
   structure-seal:
     if: github.event_name == 'push'
@@ -72,6 +86,7 @@ jobs:
           print('<!-- V6_MOMENTUM_TRIGGER_SEAL_RESULT -->')
           print('## V6 outcome-blind trigger-seal result')
           print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- source head: `{os.environ['GITHUB_SHA']}`")
           print(f"- classification: **`{r['classification']}`**")
           print(f"- triggers: **{r['trigger_count']}**")
           print(f"- distinct knowledge timestamps: **{r['distinct_knowledge_timestamps']}**")
