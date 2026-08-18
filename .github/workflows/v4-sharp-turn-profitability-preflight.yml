@@ -1,0 +1,49 @@
+name: V4 Sharp Turn Profitability Preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/issue-247-v4-sharp-turn-economic-execution]
+    paths:
+      - 'research/profitability/v4_sharp_turn_profitability_execution_lock_v1.json'
+      - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
+      - 'research/profitability/v4_sharp_turn_trigger_readiness_v1.json'
+      - 'scripts/v4_sharp_turn_profitability_engine.py'
+      - 'scripts/test_v4_sharp_turn_profitability_engine.py'
+      - 'scripts/check_v4_sharp_turn_profitability_lock.py'
+      - '.github/workflows/v4-sharp-turn-profitability-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V4 profitability implementation
+        run: >-
+          python -m py_compile
+          scripts/v4_sharp_turn_profitability_engine.py
+          scripts/test_v4_sharp_turn_profitability_engine.py
+          scripts/check_v4_sharp_turn_profitability_lock.py
+      - name: Run execution-engine sabotage tests without provider access
+        run: python scripts/test_v4_sharp_turn_profitability_engine.py
+      - name: Verify immutable pre-M1 lock
+        run: python scripts/check_v4_sharp_turn_profitability_lock.py
+      - name: Prove this workflow cannot authorize provider or execution access
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/v4_sharp_turn_profitability_execution_lock_v1.json'))
+          assert x['status']=='FROZEN_BEFORE_FIRST_V4_M1_RESPONSE'
+          assert x['canonical_structure_must_reproduce_before_first_m1_response'] is True
+          assert x['parameter_changes_after_first_m1_response'] is False
+          assert x['paper_execution_authorized'] is False
+          assert x['live_execution_authorized'] is False
+          assert x['broker_mutation_authorized'] is False
+          print('V4 pre-M1 profitability lane is locked; no OANDA secrets are mapped in this workflow')
+          PY
