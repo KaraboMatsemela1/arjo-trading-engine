@@ -1,0 +1,55 @@
+{
+  "broker_mutation_authorized": false,
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "cost_changes_after_first_m1_response": false,
+  "distinct_knowledge_timestamps": 441,
+  "execution_costs": {
+    "base_adverse_slippage_points_per_side": 0.5,
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "stress_adverse_slippage_points_per_side": 1.0,
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01
+  },
+  "forward_confirmation_access_authorized": false,
+  "forward_confirmation_transport_sha256": "24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6",
+  "historical_gate": {
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.3,
+    "data_integrity_failures_eq": 0,
+    "minimum_resolved_executed_trades": 250,
+    "positive_calendar_year_fraction_gte": 0.7,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.05,
+    "synthetic_fills_eq": 0
+  },
+  "historical_window": {
+    "end_exclusive": "2024-01-01T00:00:00Z",
+    "start_inclusive": "2010-01-01T00:00:00Z"
+  },
+  "issue": 270,
+  "live_execution_authorized": false,
+  "m1_provider_contract": {
+    "environment": "practice",
+    "granularity": "M1",
+    "includeFirst": true,
+    "instrument": "NAS100_USD",
+    "on_demand_by_sealed_signal": true,
+    "price": "BA",
+    "provider": "OANDA_V20",
+    "smooth": false,
+    "synthetic_candles": false,
+    "synthetic_fills": false
+  },
+  "parameter_changes_after_first_m1_response": false,
+  "paper_execution_authorized": false,
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_FIRST_V6_M1_RESPONSE",
+  "structure_manifest_sha256": "4cb58637b433b544865a6a94cdc2b48b344d47824e8ba0f76b9be5f67496dd2c",
+  "target_stop_rule_changes_after_first_m1_response": false,
+  "threshold_changes_after_first_m1_response": false,
+  "trigger_count": 1331,
+  "trigger_readiness_sha256": "f214b9154b3c40fb6cc472fd8858bc4781aedb3c28e7d4f252d0832dbf3b9cad",
+  "trigger_set_sha256": "644edb8b1fe008a053f4fbdc368f6117d1c20ba478b9277bb1fb1f8f5cf9a150",
+  "execution_lock_sha256": "1d883fe81a274aa81437da2ca732d09f887529cea3d07a8d58f0a85ed2c2f779"
+}

@@ -1,0 +1,151 @@
+name: V6 Momentum Historical Economics
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v6_momentum_historical_execution_lock_v1.json'
+      - 'research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json'
+      - 'scripts/check_v6_momentum_historical_lock.py'
+      - 'scripts/v6_momentum_m1_oanda.py'
+      - 'scripts/run_v6_momentum_historical_oanda.py'
+      - 'scripts/test_v6_momentum_m1_oanda.py'
+      - '.github/workflows/v6-momentum-historical-economics.yml'
+  push:
+    branches:
+      - research/v6-momentum-historical-economics
+    paths:
+      - 'research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  offline-preflight:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen strategy and historical execution lock
+        run: |
+          python scripts/check_v6_momentum_protocol.py
+          python scripts/check_v6_momentum_historical_lock.py
+      - name: Compile sealed historical execution modules
+        run: python -m py_compile scripts/v6_momentum_m1_oanda.py scripts/run_v6_momentum_historical_oanda.py scripts/test_v6_momentum_m1_oanda.py scripts/v6_momentum_backtest_mechanics.py scripts/v6_momentum_backtest_metrics.py
+      - name: Re-run frozen fill and provider sabotage suites
+        run: |
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+      - name: Verify any execution marker is exact and cannot authorize forward or broker execution
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json')
+          if p.exists():
+              x=json.loads(p.read_text())
+              assert x == {
+                  'status':'AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT',
+                  'issue':270,
+                  'protocol_sha256':'8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab',
+                  'trigger_set_sha256':'644edb8b1fe008a053f4fbdc368f6117d1c20ba478b9277bb1fb1f8f5cf9a150',
+                  'trigger_count':1331,
+                  'distinct_knowledge_timestamps':441,
+                  'historical_execution_lock_sha256':'1d883fe81a274aa81437da2ca732d09f887529cea3d07a8d58f0a85ed2c2f779',
+                  'forward_confirmation_transport_sha256':'24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6',
+                  'forward_confirmation_access_authorized':False,
+                  'paper_execution_authorized':False,
+                  'live_execution_authorized':False,
+                  'broker_mutation_authorized':False,
+              }
+          PY
+
+  execute-historical:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V6_HIST_OUTPUT_DIR: artifacts/v6_momentum_historical
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA credential
+        run: test -n "$OANDA_API_TOKEN"
+      - name: Verify all immutable pre-M1 bindings
+        run: |
+          python scripts/check_v6_momentum_protocol.py
+          python scripts/check_v6_momentum_historical_lock.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+      - name: Verify exact one-time research M1 authorization
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json'))
+          assert x['status']=='AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT'
+          assert x['issue']==270
+          assert x['protocol_sha256']=='8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab'
+          assert x['trigger_set_sha256']=='644edb8b1fe008a053f4fbdc368f6117d1c20ba478b9277bb1fb1f8f5cf9a150'
+          assert x['trigger_count']==1331 and x['distinct_knowledge_timestamps']==441
+          assert x['historical_execution_lock_sha256']=='1d883fe81a274aa81437da2ca732d09f887529cea3d07a8d58f0a85ed2c2f779'
+          assert x['forward_confirmation_transport_sha256']=='24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6'
+          assert x['forward_confirmation_access_authorized'] is False
+          assert x['paper_execution_authorized'] is False
+          assert x['live_execution_authorized'] is False
+          assert x['broker_mutation_authorized'] is False
+          PY
+      - name: Execute first and only frozen V6 historical M1 BID ASK measurement
+        run: PYTHONPATH=scripts python scripts/run_v6_momentum_historical_oanda.py
+      - name: Verify result boundary and publish canonical outcome
+        run: |
+          python - <<'PY' > /tmp/v6-historical-comment.md
+          import json,os
+          r=json.load(open('artifacts/v6_momentum_historical/historical-result.json'))
+          assert r['validated_profitable_edge'] is False
+          assert r['forward_confirmation_outcomes_accessed'] is False
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['cost_changes_after_first_m1_response'] is False
+          assert r['threshold_changes_after_first_m1_response'] is False
+          assert r['target_stop_rule_changes_after_first_m1_response'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False and r['live_execution_authorized'] is False and r['broker_mutation_authorized'] is False
+          b=r['base_metrics'];s=r['stress_metrics']
+          print('<!-- V6_MOMENTUM_HISTORICAL_RESULT -->')
+          print('## V6 sealed historical profitability result')
+          print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- historical edge established: **`{r['historical_edge_established']}`**")
+          print(f"- validated profitable edge: **`{r['validated_profitable_edge']}`**")
+          print(f"- forward confirmation authorized: **`{r['forward_confirmation_authorized']}`**")
+          print(f"- resolved trades: **{b['resolved_executed_trades']}**")
+          print(f"- base expectancy: **{b['net_expectancy_r']} R**")
+          print(f"- base PF: **{b['profit_factor']}**")
+          print(f"- base bootstrap 95% CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}**")
+          print(f"- positive calendar-year fraction: **{b['positive_calendar_year_fraction']}**")
+          print(f"- stress expectancy: **{s['net_expectancy_r']} R**")
+          print(f"- stress PF: **{s['profit_factor']}**")
+          print(f"- result SHA: `{r['result_sha256']}`")
+          print(f"- provider provenance SHA: `{r['provider_provenance_sha256']}`")
+          print(f"- base ledger SHA: `{r['base_ledger_sha256']}`")
+          print(f"- stress ledger SHA: `{r['stress_ledger_sha256']}`")
+          PY
+          gh issue comment 270 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v6-historical-comment.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v6-momentum-historical-profitability
+          path: |
+            artifacts/v6_momentum_historical/historical-result.json
+            artifacts/v6_momentum_historical/base-trade-ledger.jsonl
+            artifacts/v6_momentum_historical/stress-trade-ledger.jsonl
+            artifacts/v6_momentum_historical/provider-provenance.json
+          if-no-files-found: error
+          retention-days: 90
