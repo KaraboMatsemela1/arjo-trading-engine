@@ -6,6 +6,7 @@ on:
       - agent/v5-nra-trigger-seal
     paths:
       - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - '.github/workflows/v5-nra-trigger-seal.yml'
   pull_request:
     paths:
       - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
@@ -14,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   seal:
@@ -23,6 +25,7 @@ jobs:
     env:
       OANDA_TOKEN: ${{ secrets.OANDA_TOKEN }}
       V5_OUTPUT_DIR: artifacts/v5_nra_trigger_seal
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -48,6 +51,33 @@ jobs:
           PY
       - name: Execute structure-only V5 trigger reconstruction
         run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal.py
+      - name: Publish canonical readiness summary to Issue 254
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          python - <<'PY' > /tmp/v5-readiness-comment.md
+          import json, os
+          from pathlib import Path
+          r=json.loads(Path('artifacts/v5_nra_trigger_seal/v5_trigger_readiness.json').read_text())
+          print('<!-- V5_NRA_TRIGGER_SEAL_RESULT -->')
+          print('## V5 structure-only trigger-seal result')
+          print()
+          print(f"- workflow run: `{os.environ.get('GITHUB_RUN_ID')}`")
+          print(f"- source head: `{os.environ.get('GITHUB_SHA')}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- triggers: **{r['trigger_count']}**")
+          print(f"- distinct causal knowledge timestamps: **{r['distinct_knowledge_timestamps']}**")
+          print(f"- trigger set SHA: `{r['trigger_set_sha256']}`")
+          print(f"- readiness SHA: `{r['readiness_sha256']}`")
+          print(f"- structure manifest SHA: `{r['structure_manifest_sha256']}`")
+          print(f"- H4 structure SHA: `{r['h4_structure_sha256']}`")
+          print(f"- H1 structure SHA: `{r['h1_structure_sha256']}`")
+          print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
+          print(f"- primary stats: `{json.dumps(r['primary_stats'], sort_keys=True)}`")
+          print('- M1 requested: `false`')
+          print('- economic outcomes accessed: `false`')
+          print('- paper/live/broker mutation: `false`')
+          PY
+          gh issue comment 254 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v5-readiness-comment.md
       - name: Upload sealed V5 structure and trigger evidence
         uses: actions/upload-artifact@v4
         with:
