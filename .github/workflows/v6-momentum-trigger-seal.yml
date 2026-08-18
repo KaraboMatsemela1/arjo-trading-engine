@@ -8,6 +8,7 @@ on:
       - 'scripts/v6_momentum_structure.py'
       - 'scripts/run_v6_momentum_trigger_seal.py'
       - 'scripts/test_v6_momentum_logic.py'
+      - 'research/profitability/v6_momentum_trigger_authorization_v1.json'
       - '.github/workflows/v6-momentum-trigger-seal.yml'
   push:
     branches:
@@ -53,7 +54,7 @@ jobs:
           PY
 
   structure-seal:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
@@ -79,6 +80,7 @@ jobs:
       - name: Run H1 M15 MID-only trigger reconstruction
         run: PYTHONPATH=scripts python scripts/run_v6_momentum_trigger_seal.py
       - name: Publish canonical readiness summary
+        if: success()
         run: |
           python - <<'PY' > /tmp/v6-comment.md
           import json,os
@@ -99,7 +101,12 @@ jobs:
           print('- economic outcomes accessed: `false`')
           PY
           gh issue comment 266 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v6-comment.md
+      - name: Publish failure checkpoint
+        if: failure()
+        run: |
+          gh issue comment 266 --repo "$GITHUB_REPOSITORY" --body "<!-- V6_MOMENTUM_TRIGGER_SEAL_FAILURE --> V6 structure-only seal failed in workflow run \`$GITHUB_RUN_ID\` at source \`$GITHUB_SHA\`. M1/BID/ASK/economic authorization remains false."
       - uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: v6-momentum-trigger-seal
           path: artifacts/v6_momentum_trigger_seal
