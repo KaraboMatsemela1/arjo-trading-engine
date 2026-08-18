@@ -11,8 +11,10 @@ on:
       - 'scripts/scan_v4_sharp_turn_triggers_v2.py'
       - 'scripts/test_v4_sharp_turn_trigger_seal.py'
       - 'scripts/test_v4_sharp_turn_strict_end_v2.py'
+      - 'scripts/check_v4_sharp_turn_trigger_readiness.py'
       - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
       - 'research/profitability/v4_sharp_turn_noncanonical_run_32139161882.json'
+      - 'research/profitability/v4_sharp_turn_trigger_readiness_v1.json'
       - '.github/workflows/v4-sharp-turn-trigger-seal.yml'
   push:
     branches:
@@ -22,7 +24,9 @@ on:
       - 'scripts/v4_sharp_turn_candle_boundaries.py'
       - 'scripts/scan_v4_sharp_turn_triggers_v2.py'
       - 'scripts/test_v4_sharp_turn_strict_end_v2.py'
+      - 'scripts/check_v4_sharp_turn_trigger_readiness.py'
       - 'research/profitability/v4_sharp_turn_noncanonical_run_32139161882.json'
+      - 'research/profitability/v4_sharp_turn_trigger_readiness_v1.json'
       - '.github/workflows/v4-sharp-turn-trigger-seal.yml'
 
 permissions:
@@ -52,15 +56,19 @@ jobs:
           scripts/scan_v4_sharp_turn_triggers_v2.py
           scripts/test_v4_sharp_turn_trigger_seal.py
           scripts/test_v4_sharp_turn_strict_end_v2.py
+          scripts/check_v4_sharp_turn_trigger_readiness.py
 
       - name: Run strategy-semantic offline/sabotage preflight
         run: python scripts/test_v4_sharp_turn_trigger_seal.py
 
-      - name: Run strict candle-end boundary regressions
+      - name: Run fully-contained candle boundary regressions
         run: python scripts/test_v4_sharp_turn_strict_end_v2.py
 
       - name: Verify frozen V4 protocol remains pre-outcome
         run: python scripts/check_v4_sharp_turn_execution_protocol.py
+
+      - name: Verify persisted canonical trigger readiness
+        run: python scripts/check_v4_sharp_turn_trigger_readiness.py
 
       - name: Prove first structure run is noncanonical and cannot authorize M1
         run: |
@@ -78,14 +86,14 @@ jobs:
           assert x['broker_mutation_authorized'] is False
           PY
 
-      - name: Acquire strict-end 2010-2023 M/W/D/H1 MID structure only
+      - name: Acquire fully-contained 2010-2023 M/W/D/H1 MID structure only
         run: >-
           python scripts/oanda_v4_sharp_turn_structure_v2.py
           --protocol research/profitability/v4_sharp_turn_execution_protocol_v1.json
           --output-dir /tmp/v4-sharp-turn-structure
           --delay 0.02
 
-      - name: Prove structure transport contains no cross-end candle or economics
+      - name: Prove structure transport contains no boundary-crossing candle or economics
         run: |
           python - <<'PY'
           import json
@@ -95,8 +103,9 @@ jobs:
           assert m['status']=='V4_SHARP_TURN_STRUCTURE_READY'
           assert m['protocol_sha256']=='a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd'
           assert m['boundary_revision']=='V4_STRICT_CANDLE_COVERAGE_END_V2'
+          assert m['all_admitted_candles_fully_contained_in_frozen_window'] is True
           assert m['all_admitted_candles_close_lte_frozen_end'] is True
-          assert m['raw_request_windows_exclude_first_cross_end_candle_start'] is True
+          assert m['raw_request_windows_exclude_partial_start_and_end_candles'] is True
           assert m['noncanonical_run_excluded_from_research_inference'] is True
           assert m['granularities_requested']==['M','W','D','H1']
           assert m['price_component_requested']=='M'
@@ -117,22 +126,24 @@ jobs:
           print('structure_rows=' + str({k:v['rows'] for k,v in m['timeframes'].items()}))
           PY
 
-      - name: Reconstruct and seal V4 Sharp Turn triggers with strict clock
+      - name: Reconstruct V4 Sharp Turn triggers with canonical clock
         run: >-
           python scripts/scan_v4_sharp_turn_triggers_v2.py
           --artifact-dir /tmp/v4-sharp-turn-structure
           --protocol research/profitability/v4_sharp_turn_execution_protocol_v1.json
           --output /tmp/v4-sharp-turn-trigger-set.json
 
-      - name: Verify exact reconstruction and zero economic access
+      - name: Require exact reproduction of sealed canonical result
+        run: >-
+          python scripts/check_v4_sharp_turn_trigger_readiness.py
+          --computed-report /tmp/v4-sharp-turn-trigger-set.json
+          --computed-manifest /tmp/v4-sharp-turn-structure/NAS100_USD.v4-structure-manifest.json
+
+      - name: Verify zero economic access
         run: |
           python - <<'PY'
           import json
           r=json.load(open('/tmp/v4-sharp-turn-trigger-set.json'))
-          assert r['status']=='V4_SHARP_TURN_TRIGGERS_READY'
-          assert r['boundary_revision']=='V4_STRICT_CANDLE_COVERAGE_END_V2'
-          assert r['all_structure_candles_close_lte_frozen_end'] is True
-          assert r['noncanonical_run_excluded_from_research_inference'] is True
           assert r['primary_independent_fvg_exact_match'] is True
           assert r['primary_independent_context_exact_match'] is True
           assert r['primary_independent_trigger_exact_match'] is True
@@ -151,15 +162,6 @@ jobs:
           assert r['paper_execution_authorized'] is False
           assert r['live_execution_authorized'] is False
           assert r['broker_mutation_authorized'] is False
-          print('classification=' + r['classification'])
-          print('selected_daily_contexts=' + str(r['selected_daily_contexts']))
-          print('triggers=' + str(r['trigger_count']))
-          print('long_triggers=' + str(r['long_triggers']))
-          print('short_triggers=' + str(r['short_triggers']))
-          print('distinct_knowledge_times=' + str(r['distinct_trigger_knowledge_times']))
-          print('sample_necessary_condition_met=' + str(r['sample_necessary_condition_met']))
-          print('trigger_set_sha256=' + r['trigger_set_sha256'])
-          print('report_sha256=' + r['report_sha256'])
           PY
 
       - name: Publish trigger-seal summary
@@ -167,14 +169,14 @@ jobs:
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
           import json
           r=json.load(open('/tmp/v4-sharp-turn-trigger-set.json'))
-          print('## V4 Sharp Turn canonical strict-end trigger seal')
+          print('## V4 Sharp Turn canonical fully-contained trigger seal')
           print(f"- classification: `{r['classification']}`")
           print(f"- triggers: **{r['trigger_count']}**")
           print(f"- distinct causal knowledge times: **{r['distinct_trigger_knowledge_times']}**")
           print(f"- long / short: **{r['long_triggers']} / {r['short_triggers']}**")
           print(f"- necessary >=100 trigger condition: **{r['sample_necessary_condition_met']}**")
           print(f"- trigger-set SHA: `{r['trigger_set_sha256']}`")
-          print('- strict candle-end boundary: **true**')
+          print('- full-window candle containment: **true**')
           print('- M1/economic outcome access: **false**')
           PY
 
