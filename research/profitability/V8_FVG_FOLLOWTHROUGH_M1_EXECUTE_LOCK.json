@@ -1,0 +1,16 @@
+{
+  "status": "AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT",
+  "issue": 290,
+  "protocol_sha256": "79c0289293996f02faa6de1ecb5dcc6d6201a7b98bff1be842bab6cc707b547d",
+  "trigger_set_sha256": "bb42a146ed756f8a675a4d861c8c211951de29ccaddd3d642ff72cbf62d74747",
+  "trigger_count": 5482,
+  "distinct_knowledge_timestamps": 5482,
+  "trigger_readiness_sha256": "a13a33c588349c7ec11e33324956dbaf9810ba5fa8f88294f43194d33850b3ed",
+  "structure_manifest_sha256": "a61ef4aa9deb1ed3de36611a12c9afd83ca25aeb8e55cd63004fd2328a39b414",
+  "historical_execution_lock_sha256": "ccf0dcbe4ef084c7fc9251423513f107fa8ada14d9a9303b0353ca91f99cdf4e",
+  "forward_confirmation_transport_sha256": "b72b6f8aaaf6c53c6f957917105feba4078cfd6e37c059c49b912cc4203503e8",
+  "forward_confirmation_access_authorized": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}

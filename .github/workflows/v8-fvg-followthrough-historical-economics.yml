@@ -1,0 +1,163 @@
+name: V8 FVG Follow-Through Historical Economics
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v8_fvg_followthrough_historical_execution_lock_v1.json'
+      - 'research/profitability/V8_FVG_FOLLOWTHROUGH_M1_EXECUTE_LOCK.json'
+      - 'scripts/check_v8_fvg_followthrough_historical_lock.py'
+      - 'scripts/run_v8_fvg_followthrough_historical_oanda.py'
+      - '.github/workflows/v8-fvg-followthrough-historical-economics.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  offline-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      m1_authorized: ${{ steps.authorization-state.outputs.present }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable V8 protocol and historical lock
+        run: |
+          python scripts/check_v8_fvg_followthrough_protocol.py
+          python scripts/check_v8_fvg_followthrough_historical_lock.py
+      - name: Compile sealed historical runner
+        run: |
+          python -m py_compile \
+            scripts/run_v8_fvg_followthrough_historical_oanda.py \
+            scripts/v8_fvg_followthrough_backtest_metrics.py \
+            scripts/v6_momentum_backtest_mechanics.py \
+            scripts/v6_momentum_m1_oanda.py
+      - name: Re-run shared fill, parser and V8 gate sabotage suites
+        run: |
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+          PYTHONPATH=scripts python scripts/test_v8_fvg_followthrough_backtest.py
+          PYTHONPATH=scripts python scripts/test_v8_fvg_followthrough_logic.py
+      - name: Detect one-time M1 authorization marker
+        id: authorization-state
+        run: |
+          if test -e research/profitability/V8_FVG_FOLLOWTHROUGH_M1_EXECUTE_LOCK.json; then
+            echo 'present=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'present=false' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Prove preflight can complete before M1 authorization
+        if: steps.authorization-state.outputs.present == 'false'
+        run: |
+          test ! -e research/profitability/V8_FVG_FOLLOWTHROUGH_M1_EXECUTE_LOCK.json
+          echo 'V8 offline preflight complete; M1 authorization remains closed.'
+      - name: Verify exact M1 authorization marker if present
+        if: steps.authorization-state.outputs.present == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/V8_FVG_FOLLOWTHROUGH_M1_EXECUTE_LOCK.json'))
+          assert x == {
+              'status':'AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT',
+              'issue':290,
+              'protocol_sha256':'79c0289293996f02faa6de1ecb5dcc6d6201a7b98bff1be842bab6cc707b547d',
+              'trigger_set_sha256':'bb42a146ed756f8a675a4d861c8c211951de29ccaddd3d642ff72cbf62d74747',
+              'trigger_count':5482,
+              'distinct_knowledge_timestamps':5482,
+              'trigger_readiness_sha256':'a13a33c588349c7ec11e33324956dbaf9810ba5fa8f88294f43194d33850b3ed',
+              'structure_manifest_sha256':'a61ef4aa9deb1ed3de36611a12c9afd83ca25aeb8e55cd63004fd2328a39b414',
+              'historical_execution_lock_sha256':'ccf0dcbe4ef084c7fc9251423513f107fa8ada14d9a9303b0353ca91f99cdf4e',
+              'forward_confirmation_transport_sha256':'b72b6f8aaaf6c53c6f957917105feba4078cfd6e37c059c49b912cc4203503e8',
+              'forward_confirmation_access_authorized':False,
+              'paper_execution_authorized':False,
+              'live_execution_authorized':False,
+              'broker_mutation_authorized':False,
+          }
+          PY
+
+  execute-historical:
+    if: >-
+      needs.offline-preflight.outputs.m1_authorized == 'true' &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    needs: offline-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V8_HIST_OUTPUT_DIR: artifacts/v8_fvg_followthrough_historical
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA credential
+        run: test -n "$OANDA_API_TOKEN"
+      - name: Verify all immutable pre-M1 bindings and sabotage suites
+        run: |
+          python scripts/check_v8_fvg_followthrough_protocol.py
+          python scripts/check_v8_fvg_followthrough_historical_lock.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+          PYTHONPATH=scripts python scripts/test_v6_momentum_m1_oanda.py
+          PYTHONPATH=scripts python scripts/test_v8_fvg_followthrough_backtest.py
+          PYTHONPATH=scripts python scripts/test_v8_fvg_followthrough_logic.py
+      - name: Verify exact one-time V8 research M1 authorization
+        run: |
+          PYTHONPATH=scripts python - <<'PY'
+          from run_v8_fvg_followthrough_historical_oanda import require_authorization
+          require_authorization()
+          print('v8_m1_authorization=PASS')
+          PY
+      - name: Execute frozen V8 historical M1 BID ASK measurement
+        run: PYTHONPATH=scripts python scripts/run_v8_fvg_followthrough_historical_oanda.py
+      - name: Verify result boundary and publish canonical outcome
+        run: |
+          python - <<'PY' > /tmp/v8-historical-comment.md
+          import json,os
+          r=json.load(open('artifacts/v8_fvg_followthrough_historical/historical-result.json'))
+          assert r['validated_profitable_edge'] is False
+          assert r['forward_confirmation_outcomes_accessed'] is False
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['cost_changes_after_first_m1_response'] is False
+          assert r['threshold_changes_after_first_m1_response'] is False
+          assert r['target_stop_rule_changes_after_first_m1_response'] is False
+          assert r['no_refit_performed'] is True
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          b=r['base_metrics'];s=r['stress_metrics']
+          print('<!-- V8_FVG_FOLLOWTHROUGH_HISTORICAL_RESULT -->')
+          print('## V8 sealed historical profitability result')
+          print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- historical edge established: **`{r['historical_edge_established']}`**")
+          print(f"- validated profitable edge: **`{r['validated_profitable_edge']}`**")
+          print(f"- forward confirmation authorized: **`{r['forward_confirmation_authorized']}`**")
+          print(f"- resolved trades: **{b['resolved_executed_trades']}**")
+          print(f"- base expectancy: **{b['net_expectancy_r']} R**")
+          print(f"- base PF: **{b['profit_factor']}**")
+          print(f"- base bootstrap 95% CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}**")
+          print(f"- positive calendar-year fraction: **{b['positive_calendar_year_fraction']}**")
+          print(f"- stress expectancy: **{s['net_expectancy_r']} R**")
+          print(f"- stress PF: **{s['profit_factor']}**")
+          print(f"- result SHA: `{r['result_sha256']}`")
+          print(f"- provider provenance SHA: `{r['provider_provenance_sha256']}`")
+          print(f"- base ledger SHA: `{r['base_ledger_sha256']}`")
+          print(f"- stress ledger SHA: `{r['stress_ledger_sha256']}`")
+          PY
+          gh issue comment 290 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v8-historical-comment.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v8-fvg-followthrough-historical-profitability
+          path: |
+            artifacts/v8_fvg_followthrough_historical/historical-result.json
+            artifacts/v8_fvg_followthrough_historical/base-trade-ledger.jsonl
+            artifacts/v8_fvg_followthrough_historical/stress-trade-ledger.jsonl
+            artifacts/v8_fvg_followthrough_historical/provider-provenance.json
+          if-no-files-found: error
+          retention-days: 90
