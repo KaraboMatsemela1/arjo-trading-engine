@@ -22,7 +22,7 @@ EXPECTED_READINESS_SHA = "6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e
 EXPECTED_PROTOCOL_SHA = "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd"
 EXPECTED_LOCK_SHA = "846e3c106f9f478fe3ef74ad8152431f42bc2d0cac0d314d9a71d6aef8f0ec30"
 EXPECTED_ARTIFACT_ZIP_SHA = "d9b0423bec7a0f1e483a969b5dc52445814775397a2d44891af52b2a233683c5"
-EXPECTED_MANIFEST_SHA = "d331ac40cad6a6a8d9f22dde0d266bb08267ff3b7e5d5e9b2a185599fe75a405"
+EXPECTED_MANIFEST_SHA = "586b3c1bbd3a850adb02a5a2f21c74cacbe8ab4664e86def8a3ed0bb17af0d12"
 EXPECTED_PROVIDER_SHA = "49613226a15a5837f8bad201b64027a5135cfcd293ad1bf1774d0180343b03eb"
 END = datetime(2024, 1, 1, tzinfo=UTC)
 
@@ -118,6 +118,7 @@ def verify_manifest(r: dict) -> dict:
         "base_trade_ledger.jsonl": BASE_LEDGER,
         "stress_trade_ledger.jsonl": STRESS_LEDGER,
         "pre_m1_trigger_reconstruction.json": TRIGGERS,
+        "sealed_result_index_v1.json": INDEX,
     }.items():
         assert path.is_file() and path.stat().st_size == m["files"][name]["bytes"]
         assert file_sha(path) == m["files"][name]["sha256"], name
@@ -182,6 +183,11 @@ def verify_index(r: dict) -> None:
     assert x["artifact_zip_sha256"] == EXPECTED_ARTIFACT_ZIP_SHA
     assert x["result_sha256"] == r["result_sha256"]
     assert x["classification"] == r["classification"] == "EDGE_NOT_ESTABLISHED"
+    assert x["resolved_base_trades"] == 127
+    assert x["base_expectancy_r"] == r["base_metrics"]["net_expectancy_r"]
+    assert x["base_profit_factor"] == r["base_metrics"]["profit_factor"]
+    assert x["stress_expectancy_r"] == r["stress_metrics"]["net_expectancy_r"]
+    assert x["stress_profit_factor"] == r["stress_metrics"]["profit_factor"]
     assert x["data_integrity_failures"] == 0 and x["synthetic_fills"] == 0
     assert x["no_refit_performed"] is True
     assert x["paper_execution_authorized"] is False
