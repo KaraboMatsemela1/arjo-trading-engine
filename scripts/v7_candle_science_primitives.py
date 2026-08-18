@@ -39,8 +39,7 @@ def h4_break_events(candles:list[dict[str,Any]])->list[dict[str,Any]]:
             seq=by_kind[kind]
             while pointers[kind]<len(seq) and parse_time(seq[pointers[kind]]['knowledge_time_utc'])<=known:
                 latest[kind]=seq[pointers[kind]];pointers[kind]+=1
-        close=price(candle,'close')
-        high=latest['H'];low=latest['L']
+        close=price(candle,'close');high=latest['H'];low=latest['L']
         if high is not None and high['swing_id'] not in broken and close>dec(high['price']):
             broken.add(high['swing_id']);events.append({'event_id':ident('V7BOS','BULL',high['swing_id'],stamp(known)),'direction':'BULL','knowledge_time_utc':stamp(known),'h4_index':index,'broken_swing_id':high['swing_id'],'broken_level':high['price'],'close':dtext(close)})
         if low is not None and low['swing_id'] not in broken and close<dec(low['price']):
@@ -51,6 +50,9 @@ class BiasIndex:
     def __init__(self,events:list[dict[str,Any]]):self.events=events;self.times=[parse_time(row['knowledge_time_utc']) for row in events]
     def at(self,knowledge:datetime)->dict[str,Any]|None:
         i=bisect_right(self.times,knowledge)-1;return None if i<0 else self.events[i]
+    def preserved(self,start:datetime,end:datetime,direction:str)->bool:
+        left=bisect_right(self.times,start);right=bisect_right(self.times,end)
+        return all(self.events[i]['direction']==direction for i in range(left,right))
 
 def h1_fvgs(candles:list[dict[str,Any]])->list[dict[str,Any]]:
     out=[]
