@@ -1,0 +1,139 @@
+{
+  "boundary_sha256": "70962787ae0c55ed83ec9f5f62ee1968a48563b42b7ee19dee7370b5cd9206cb",
+  "broker_mutation_enabled": false,
+  "dependency_issue": 290,
+  "disposition_id": "ARJO_POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_V1",
+  "economic_family_search_count": 6,
+  "entry_gate": "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_RESULT_READY",
+  "family_search_boundary": {
+    "failed_family_ledger_mining_permitted": false,
+    "generic_ict_smc_semantic_backfill_permitted": false,
+    "reactive_v9_creation_permitted": false,
+    "reason": "No independent V9 family was frozen before the V8 result; choosing a replacement from consumed results would increase family-search and overfitting risk.",
+    "v9_frozen_before_v8_result": false
+  },
+  "forbidden_reentry_paths": [
+    "Tune, weaken, relabel, or mine V3-C through V8 after observing economic results.",
+    "Select a replacement rule from failed-family winning/losing periods, years, directions, stops, targets, costs, thresholds, or ledgers.",
+    "Create V9 merely because V8 failed without genuinely independent preregistration and evidence.",
+    "Promote generic ICT/SMC semantics or metadata-only labels into Arjo strategy rules.",
+    "Open V8 forward confirmation because its historical prerequisite failed.",
+    "Enable paper, live, or broker mutation without a separately preregistered validated profitable-edge gate."
+  ],
+  "issue": 292,
+  "live_execution_enabled": false,
+  "outcome_blind_exclusions": {
+    "v2": {
+      "executable_occurrences": 10,
+      "frozen_minimum": 30,
+      "status": "INSUFFICIENT_OCCURRENCES_NO_ECONOMIC_OUTCOME_ACCESS"
+    },
+    "v3a": {
+      "execution_observable_occurrences": 4,
+      "frozen_minimum": 30,
+      "status": "INSUFFICIENT_OCCURRENCES_NO_ECONOMIC_OUTCOME_ACCESS"
+    },
+    "v3b": {
+      "frozen_minimum": 30,
+      "portfolio_executable_occurrences": 1,
+      "status": "INSUFFICIENT_OCCURRENCES_NO_ECONOMIC_OUTCOME_ACCESS"
+    }
+  },
+  "output_gate": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "paper_execution_enabled": false,
+  "post_result_refit_permitted": false,
+  "reentry_conditions": [
+    "New attributable Arjo-authored first-party semantic evidence closes all missing fields for a genuinely independent deterministic family.",
+    "A genuinely independent family is fully preregistered before associated outcome access and is not selected from failed-family ledgers.",
+    "A separately approved research program resets the multiple-testing/family-search design with a fresh holdout and stronger statistical controls before new outcome access."
+  ],
+  "schema_version": 1,
+  "sealed_failed_economic_families": {
+    "v3c": {
+      "base_net_expectancy_r": 0.0013801962818530444,
+      "base_profit_factor": 1.0025647240130293,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V3C_ARGUMENTS_2CR",
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades": 1304,
+      "result_sha256": "e2af05e4fad93def189bedd22cc865ea78be4ac43a1a2e9d5e5822c8b84ff78b",
+      "stress_net_expectancy_r": -0.044683765355838866,
+      "stress_profit_factor": 0.9198829599488039
+    },
+    "v4": {
+      "base_net_expectancy_r": 0.0014091677822265101,
+      "base_profit_factor": 1.0020664176151879,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V4_SHARP_TURN_FVG",
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades": 127,
+      "result_sha256": "611cc822dcc5103ed700d245e3ffb95404ca9c41459a43f9b5183aa84aedf6b5",
+      "stress_net_expectancy_r": -0.10639283934312664,
+      "stress_profit_factor": 0.8554420945575948
+    },
+    "v5": {
+      "base_net_expectancy_r": -0.10331992781007304,
+      "base_profit_factor": 0.43320757448303787,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V5_NO_RESISTANCE_AOO",
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades": 2881,
+      "result_sha256": "4474926ae20e67d5e23010a62654d41d2a3f6cefbff835f7c122e011c64d7345",
+      "stress_net_expectancy_r": -0.15440946199861205,
+      "stress_profit_factor": 0.2707334236384328
+    },
+    "v6": {
+      "base_net_expectancy_r": -0.08146912514545666,
+      "base_profit_factor": 0.8974710205812934,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V6_MOMENTUM_CYCLE_CONTINUATION",
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades": 435,
+      "result_sha256": "4fcf249633f165250a99b602dd1cdd7bd20b07f6fbd27d09d1c8ee632a989fec",
+      "stress_net_expectancy_r": -0.16814178242068242,
+      "stress_profit_factor": 0.7978935530043645
+    },
+    "v7": {
+      "base_net_expectancy_r": -0.2756979385614227,
+      "base_profit_factor": 0.6747873826089907,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V7_CANDLE_SCIENCE_FVG_REJECTION",
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades": 3637,
+      "result_sha256": "9856cb07a6afe9c3d9bf1e611b1f614352c3f95e06b54be6841c5a614a93deaa",
+      "stress_net_expectancy_r": -0.3787545982763427,
+      "stress_profit_factor": 0.5784703099959753
+    },
+    "v8": {
+      "base_bootstrap_95pct_ci_net_expectancy_r": [
+        -0.27691947579039256,
+        -0.1909480729998966
+      ],
+      "base_data_integrity_failures": 2,
+      "base_net_expectancy_r": -0.23440107691220544,
+      "base_profit_factor": 0.637854890965066,
+      "canonical_workflow_run_id": 32180745000,
+      "classification": "EDGE_NOT_ESTABLISHED",
+      "family": "V8_FVG_FOLLOWTHROUGH",
+      "forward_confirmation_authorized": false,
+      "forward_confirmation_outcomes_accessed": false,
+      "positive_calendar_year_fraction": 0.0,
+      "post_result_refit_permitted": false,
+      "resolved_executed_trades_base": 3669,
+      "resolved_executed_trades_stress": 3629,
+      "result_sha256": "0bba2f2feb2f51cad8c89b31ff9102ffe107caafba1159d77151b9043e153f80",
+      "stress_bootstrap_95pct_ci_net_expectancy_r": [
+        -0.34994952454132744,
+        -0.26967025087678825
+      ],
+      "stress_data_integrity_failures": 2,
+      "stress_net_expectancy_r": -0.3104670341746885,
+      "stress_profit_factor": 0.5445883202178201,
+      "synthetic_fills": 0
+    }
+  },
+  "status": "NO_VALIDATED_PROFITABLE_EDGE_CURRENT_EVIDENCE_POST_V8",
+  "v8_forward_confirmation_authorized": false,
+  "v8_forward_confirmation_outcomes_accessed": false,
+  "validated_profitable_edge": false
+}

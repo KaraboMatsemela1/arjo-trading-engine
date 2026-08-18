@@ -1,0 +1,65 @@
+name: Post-V8 Current Evidence Boundary
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/disposition/post_v8_current_evidence_research_boundary_v1.json'
+      - 'scripts/test_post_v8_current_evidence_boundary.py'
+      - 'scripts/test_post_v4_project_state.py'
+      - 'scripts/test_project_state_final.py'
+      - 'scripts/project_state_final.py'
+      - '.github/workflows/post-v8-current-evidence-boundary.yml'
+  push:
+    branches:
+      - governance/post-v8-current-evidence-boundary
+    paths:
+      - 'research/disposition/post_v8_current_evidence_research_boundary_v1.json'
+      - 'scripts/test_post_v8_current_evidence_boundary.py'
+      - 'scripts/test_post_v4_project_state.py'
+      - 'scripts/test_project_state_final.py'
+      - 'scripts/project_state_final.py'
+      - '.github/workflows/post-v8-current-evidence-boundary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile post-V8 governance code
+        run: >-
+          python -m py_compile
+          scripts/project_state_final.py
+          scripts/test_post_v8_current_evidence_boundary.py
+          scripts/test_post_v4_project_state.py
+          scripts/test_project_state_final.py
+      - name: Validate immutable post-V8 evidence boundary
+        run: python scripts/test_post_v8_current_evidence_boundary.py
+      - name: Validate historical post-V4 and terminal post-V8 state
+        run: |
+          PYTHONPATH=scripts python scripts/test_post_v4_project_state.py
+          PYTHONPATH=scripts python scripts/test_project_state_final.py
+      - name: Prove execution permissions and reactive V9 remain disabled
+        run: |
+          python - <<'PY'
+          import json
+          b=json.load(open('research/disposition/post_v8_current_evidence_research_boundary_v1.json'))
+          assert b['validated_profitable_edge'] is False
+          assert b['post_result_refit_permitted'] is False
+          assert b['v8_forward_confirmation_authorized'] is False
+          assert b['v8_forward_confirmation_outcomes_accessed'] is False
+          assert b['paper_execution_enabled'] is False
+          assert b['live_execution_enabled'] is False
+          assert b['broker_mutation_enabled'] is False
+          assert b['family_search_boundary']['v9_frozen_before_v8_result'] is False
+          assert b['family_search_boundary']['reactive_v9_creation_permitted'] is False
+          assert b['family_search_boundary']['failed_family_ledger_mining_permitted'] is False
+          print('Post-V8 no-edge, no-reactive-V9 and execution boundary verified')
+          PY
