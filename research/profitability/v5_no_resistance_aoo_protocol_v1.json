@@ -1,0 +1,222 @@
+{
+  "authorization": {
+    "backtest_execution_for_issue_252": false,
+    "broker_mutation": false,
+    "live_execution": false,
+    "market_data_execution_for_issue_252": false,
+    "paper_execution": false
+  },
+  "classification": "DERIVED_OWNER_OPERATIONAL_MEASUREMENT_PROFILE_USING_SOURCE_GROUNDED_AOO_2CR_PD_ARRAY_CORE_NOT_EXACT_ARJO_EXECUTION",
+  "classification_rules": {
+    "EDGE_NOT_ESTABLISHED": "sample >= 100 and one or more V5_HISTORICAL_EDGE_ESTABLISHED requirements fail",
+    "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED": "resolved_executed_trades < 100",
+    "V5_HISTORICAL_EDGE_ESTABLISHED": {
+      "base_net_expectancy_r_gt": 0.0,
+      "base_profit_factor_gt": 1.2,
+      "bootstrap_95pct_ci_lower_net_expectancy_r_gt": 0.0,
+      "data_integrity_failures_eq": 0,
+      "independent_trigger_reconstruction_exact": true,
+      "resolved_executed_trades_gte": 100,
+      "stress_net_expectancy_r_gt": 0.0,
+      "stress_profit_factor_gt": 1.0,
+      "synthetic_fills_eq": 0
+    },
+    "VALIDATED_PROFITABLE_EDGE": "PROHIBITED_FROM_BACKWARD_HISTORY_ALONE; requires separately frozen protected confirmation lifecycle"
+  },
+  "economics": {
+    "base_slippage_points_per_side": 0.5,
+    "financing_base_r_per_1440_complete_m1_bars": 0.005,
+    "financing_deduction": "rate * complete_m1_bars_held / 1440",
+    "financing_stress_r_per_1440_complete_m1_bars": 0.01,
+    "spread": "historical OANDA ASK entry / BID exit",
+    "stress_slippage_points_per_side": 1.0
+  },
+  "entry": {
+    "base_fill": "ASK open + 0.5 index points adverse slippage",
+    "entry_bar": "first complete OANDA M1 BID/ASK candle whose start is >= signal knowledge time",
+    "max_wait_for_first_m1_elapsed_hours": 72,
+    "missing_entry_data": "DATA_INTEGRITY_FAILURE",
+    "pending_limit_or_retracement": false,
+    "stress_fill": "ASK open + 1.0 index points adverse slippage"
+  },
+  "family": {
+    "candidate_id": "ARJO_V5_NQ_NO_RESISTANCE_AOO_H4_SWING_HIGH_LONG",
+    "existing_evidence_previously_judged_semantically_incomplete": true,
+    "failed_v3c_or_v4_parameters_modified": false,
+    "owner_operational_measurement_conventions_frozen_before_v5_outcome_access": true,
+    "post_v4_boundary_issue": 249,
+    "profitability_execution_issue": 255,
+    "protocol_freeze_issue": 252,
+    "trigger_seal_issue": 254,
+    "v3c_outcomes_used_for_v5_rule_selection": false,
+    "v4_outcomes_used_for_v5_rule_selection": false
+  },
+  "h1_resistance": {
+    "class": "bearish H1 FVG only",
+    "fvg_geometry": "completed c1,c2,c3 with c3.high < c1.low; zone=[c3.high,c1.low]",
+    "fvg_id": "stable SHA-derived id from timeframe,direction,c1,c3,lower,upper",
+    "knowledge_time": "end of complete H1 c3",
+    "simple_price_passage_does_not_equal_disrespect": true
+  },
+  "h4_target": {
+    "ath_proxy_forbidden": true,
+    "confirmation_time": "end of the complete H4 bar immediately after the middle swing bar",
+    "eligible_at_trigger": "confirmation_time <= H1 trigger knowledge time and swing_high > trigger_close",
+    "selector": "lowest-price eligible confirmed H4 swing high strictly above trigger close",
+    "swing_definition": "radius-1 completed H4 Swing High: middle.high > prior.high and middle.high > next.high",
+    "target_must_preexist_trigger": true,
+    "tie_break": "confirmation_time ascending, then swing source timestamp ascending, then stable swing id"
+  },
+  "holding": {
+    "expiry_complete_m1_bars": 1440,
+    "expiry_exit": "BID close of the 1440th eligible complete M1 bar minus adverse exit slippage",
+    "right_censored_dataset_end": "exclude from resolved metrics when fewer than 1440 bars are available and no stop/target occurred"
+  },
+  "interpretation": {
+    "historical_result_can_establish": "V5_HISTORICAL_EDGE_ESTABLISHED for this frozen family on specified backward history",
+    "historical_result_cannot_establish": [
+      "exact Arjo execution semantics",
+      "pristine market holdout profitability",
+      "future profitability",
+      "VALIDATED_PROFITABLE_EDGE",
+      "paper readiness",
+      "live readiness"
+    ],
+    "next_if_historical_edge_fails": "seal failure; no tuning; select a genuinely independent preregistered family",
+    "next_if_historical_edge_passes": "immediately preregister a protected confirmation protocol before accessing its outcomes"
+  },
+  "intrabar_order": {
+    "entry_minute_events": "entry at M1 open; subsequent BID high/low may resolve in same complete M1 bar",
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "synthetic_intrabar_path": false
+  },
+  "market_data": {
+    "environment": "practice",
+    "execution_price": "M1 BID/ASK",
+    "historical_structure_end_exclusive": "2024-01-01T00:00:00Z",
+    "historical_structure_start": "2010-01-01T00:00:00Z",
+    "historical_window_classification": "FAMILY_LEVEL_PREREGISTERED_BACKWARD_HISTORICAL_MEASUREMENT_NOT_PRISTINE_MARKET_HOLDOUT",
+    "include_first": true,
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA US Nas 100 CFD/proxy; not CME NQ futures equivalence",
+    "no_2024_plus_market_data": true,
+    "no_market_request_authorized_by_protocol_freeze_issue": true,
+    "provider": "OANDA_V20",
+    "request_m1_only_after_v5_trigger_set_is_sealed": true,
+    "smooth": false,
+    "structure_granularities": [
+      "H4",
+      "H1"
+    ],
+    "structure_price": "MID"
+  },
+  "metrics": {
+    "bootstrap": {
+      "method": "IID executed-trade bootstrap",
+      "replicates": 10000,
+      "seed": 20260818
+    },
+    "minimum_resolved_executed_trades": 100,
+    "primary_unit": "R",
+    "required": [
+      "resolved_executed_trades",
+      "base_net_expectancy_r",
+      "base_profit_factor",
+      "base_win_rate",
+      "base_max_drawdown_r",
+      "stress_net_expectancy_r",
+      "stress_profit_factor",
+      "bootstrap_95pct_ci_net_expectancy_r",
+      "calendar_year_net_expectancy_r",
+      "positive_calendar_year_fraction",
+      "unique_entry_dates",
+      "data_integrity_failures",
+      "synthetic_fills"
+    ]
+  },
+  "no_resistance_signal": {
+    "condition": "after selected resistance is marked disrespected, zero other formed active bearish H1 FVG zones intersect the open interval",
+    "one_signal_per_resistance": true,
+    "open_interval": "(trigger_close, target_price)",
+    "other_resistance_state": "each other bearish H1 FVG is active until its own first frozen 2CR disrespect knowledge time; FVGs without a qualifying pair/disrespect remain active",
+    "selected_resistance": "a bearish H1 FVG at its own first 2CR disrespect event",
+    "signal_knowledge_time": "selected resistance disrespect H1 close time",
+    "target": "deterministic eligible H4 Swing High selected under h4_target",
+    "target_selection_time": "selected resistance disrespect knowledge time"
+  },
+  "portfolio_policy": {
+    "concurrent_positions": "ONE_OPEN_LONG_MAXIMUM",
+    "same_knowledge_time_dedup": "lexicographic trigger id",
+    "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+    "skipped_signals_never_replayed": true
+  },
+  "protocol_id": "ARJO_V5_NQ_NO_RESISTANCE_AOO_H4_SWING_HIGH_LONG_V1",
+  "risk": {
+    "gap_stop_fill": "use adverse BID open when open is below stop, otherwise stop anchor, then apply adverse exit slippage",
+    "invalid_if_risk_nonpositive": true,
+    "risk_r_points": "slipped entry price - stop anchor",
+    "stop_anchor": "minimum H1 low of frozen 2CR pair for selected resistance",
+    "stop_event": "first eligible M1 BID low <= stop anchor"
+  },
+  "schema_version": 1,
+  "semantic_boundary": {
+    "engine_conventions": [
+      "NAS100_USD long-only test instrument",
+      "H4 radius-1 confirmed Swing High target class and deterministic nearest-overhead selector",
+      "H1 bearish FVG as the sole operational opposing-resistance class",
+      "project FVG geometry reused as an engine convention",
+      "existing V3-C deterministic contiguous-H1 2CR interaction/rejection machinery reused for resistance disrespect",
+      "No-Resistance means no other formed and not-yet-disrespected bearish H1 FVG intersects the open interval between trigger close and selected H4 target",
+      "immediate market entry at first eligible M1 ASK open after trigger knowledge",
+      "stop at minimum low of frozen H1 rejection pair",
+      "1440 complete-M1-bar expiry",
+      "one-open-long concurrency",
+      "base/stress slippage and financing assumptions"
+    ],
+    "engine_conventions_are_not_arjo_semantic_claims": true,
+    "no_generic_ict_smc_semantic_backfill_claimed": true,
+    "source_evidence_repository_refs": [
+      "research/recovery/issue_127_field_assessment.json",
+      "research/recovery/issue_167_field_assessment.json",
+      "research/recovery/issue_167_payloads/web_mmt_2cr_exact_20260817.json",
+      "research/recovery/issue_127_payloads/web_mmt_easiest_instruments_20260817.json"
+    ],
+    "source_grounded_core": [
+      "Area of Opportunity is the price area between a trigger and a target; participation occurs when price trades into that AoO",
+      "opposing PD arrays are resistance to a directional thesis",
+      "2CR respect/disrespect is an argument mechanism and running/closing through a rejection high removes a bearish opposing argument",
+      "Swing High is an admissible PD-array/target concept",
+      "index examples show resistance disrespect followed by lower-timeframe involvement toward the next target"
+    ]
+  },
+  "staged_access": {
+    "no_parameter_selection_after_first_v5_m1_response": true,
+    "no_v5_economic_outcomes_during_protocol_freeze": true,
+    "no_v5_economic_outcomes_during_trigger_seal": true,
+    "stage_1": "freeze this deterministic derived protocol; no V5 market data or economic outcomes",
+    "stage_2": "after protocol merge, reconstruct H4/H1 structure and seal trigger set only",
+    "stage_3": "after trigger-seal merge and exact pre-M1 reconstruction, retrieve only M1 BID/ASK windows required by sealed triggers",
+    "stage_4": "evaluate frozen base/stress historical economics exactly once"
+  },
+  "status": "FROZEN_BEFORE_V5_MARKET_OUTCOME_ACCESS",
+  "target_execution": {
+    "fill": "target anchor minus adverse exit slippage; favorable gap improvement is not credited",
+    "invalid_if_target_not_above_raw_entry": true,
+    "target_anchor": "selected causal H4 Swing High price, frozen at trigger knowledge time",
+    "target_event": "first eligible M1 BID high >= target anchor",
+    "target_never_reselected_after_entry": true
+  },
+  "two_candle_rejection": {
+    "disrespect": "first later complete H1 close strictly above rejection_high",
+    "interaction": "bar high-low interval intersects bearish FVG zone",
+    "knowledge_time": "end of disrespect H1 candle",
+    "multiple_pair_policy": "first causally qualifying pair only per bearish FVG",
+    "pair": "earliest contiguous complete H1 pair at/after FVG knowledge whose bars interact with the FVG zone and for which at least one bar has high >= zone.lower and close < zone.lower",
+    "reject_a": "a interacts and a.high >= zone.lower and a.close < zone.lower",
+    "reject_b": "b interacts and b.high >= zone.lower and b.close < zone.lower",
+    "rejection_high": "selected rejection candle high",
+    "rejection_pair_stop_anchor": "minimum low of pair a,b",
+    "selected_rejection": "b when reject_b is true, otherwise a"
+  },
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff"
+}

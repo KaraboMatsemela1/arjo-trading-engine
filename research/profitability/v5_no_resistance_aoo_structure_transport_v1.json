@@ -1,0 +1,26 @@
+{
+  "alignment_timezone": "America/New_York",
+  "daily_alignment": 17,
+  "h1": {
+    "granularity": "H1",
+    "request_end_exclusive": "2024-01-01T00:00:00Z",
+    "request_start": "2010-01-01T00:00:00Z"
+  },
+  "h4": {
+    "granularity": "H4",
+    "request_end_exclusive": "2023-12-31T22:00:00Z",
+    "request_end_rationale": "17:00 America/New_York anchored H4 candles; this prevents admitting a direct H4 candle whose interval extends into 2024",
+    "request_start": "2010-01-01T00:00:00Z"
+  },
+  "include_first": true,
+  "instrument": "NAS100_USD",
+  "no_candle_interval_may_extend_outside": "[2010-01-01T00:00:00Z,2024-01-01T00:00:00Z)",
+  "price": "M",
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+  "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+  "schema_version": 1,
+  "smooth": false,
+  "status": "FROZEN_BEFORE_V5_STRUCTURE_REQUEST",
+  "weekly_alignment": "Friday",
+  "transport_sha256": "8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0"
+}
