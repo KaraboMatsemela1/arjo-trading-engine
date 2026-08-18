@@ -1,6 +1,6 @@
 {
   "blocked_reasons": [],
-  "completion_basis": "POST_V4_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE",
+  "completion_basis": "POST_V8_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE",
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -40,11 +40,29 @@
     "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
     "V4_SHARP_TURN_TRIGGERS_READY",
     "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
-    "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
+    "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+    "V5_NO_RESISTANCE_AOO_PROTOCOL_FROZEN",
+    "V5_NO_RESISTANCE_AOO_TRIGGERS_READY",
+    "V5_NO_RESISTANCE_AOO_PROFITABILITY_RESULT_READY",
+    "V6_MOMENTUM_PROTOCOL_FROZEN",
+    "V6_MOMENTUM_TRIGGERS_READY",
+    "V6_MOMENTUM_ECONOMIC_ENGINE_READY",
+    "V6_MOMENTUM_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "V7_CANDLE_SCIENCE_PROTOCOL_FROZEN",
+    "V7_CANDLE_SCIENCE_TRIGGERS_READY",
+    "V7_CANDLE_SCIENCE_ECONOMIC_ENGINE_READY",
+    "V7_CANDLE_SCIENCE_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "V8_FVG_FOLLOWTHROUGH_PROTOCOL_FROZEN",
+    "V8_FVG_FOLLOWTHROUGH_TRIGGERS_READY",
+    "V8_FVG_FOLLOWTHROUGH_ECONOMIC_ENGINE_READY",
+    "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
   ],
-  "current_gate": "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "current_gate": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
   "historical_current_evidence_boundary": true,
   "historical_existing_evidence_closure": true,
+  "historical_post_v4_boundary": true,
+  "historical_v8_result_ready": true,
   "issues": [
     {
       "dependencies_satisfied": true,
@@ -2424,6 +2442,428 @@
       "number": 249,
       "title": "Post-V4 governance: seal current-evidence no-profitable-edge boundary",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/249"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          249
+        ],
+        "ENTRY_GATE": "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "ISSUE_ID": "ARJO-V5-NRA-001",
+        "OUTPUT_GATE": "V5_NO_RESISTANCE_AOO_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V5_NO_RESISTANCE_AOO_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 252,
+      "title": "V5 No-Resistance AoO: freeze derived H4-target execution protocol before outcomes",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/252"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          252
+        ],
+        "ENTRY_GATE": "V5_NO_RESISTANCE_AOO_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V5-NRA-002",
+        "OUTPUT_GATE": "V5_NO_RESISTANCE_AOO_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V5_NO_RESISTANCE_AOO_TRIGGER_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 254,
+      "title": "V5 No-Resistance AoO: reconstruct and seal 2010-2023 H4/H1 trigger set",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/254"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          254
+        ],
+        "ENTRY_GATE": "V5_NO_RESISTANCE_AOO_TRIGGERS_READY",
+        "ISSUE_ID": "ARJO-V5-NRA-003",
+        "OUTPUT_GATE": "V5_NO_RESISTANCE_AOO_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V5_NO_RESISTANCE_AOO_PROFITABILITY_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 255,
+      "title": "V5 No-Resistance AoO: execute sealed M1 BID/ASK historical economics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/255"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          254
+        ],
+        "ENTRY_GATE": "V5_NO_RESISTANCE_AOO_TRIGGERS_READY",
+        "ISSUE_ID": "ARJO-V5-NRA-004",
+        "OUTPUT_GATE": "V5_NRA_FORWARD_CONFIRMATION_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V5_NRA_FORWARD_CONFIRMATION_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 260,
+      "title": "V5 validation: freeze forward family-specific OOS confirmation before historical result",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/260"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [
+          260,
+          255
+        ],
+        "ENTRY_GATE": "V5_HISTORICAL_EDGE_ESTABLISHED",
+        "ISSUE_ID": "ARJO-V5-NRA-005",
+        "OUTPUT_GATE": "V5_NRA_FORWARD_CONFIRMATION_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "CANCELLED_PREREQUISITE_FAILED",
+        "TYPE": "V5_NRA_FORWARD_CONFIRMATION_TRIGGER_SEAL"
+      },
+      "metadata_valid": false,
+      "number": 262,
+      "title": "V5 validation: reconstruct and seal 2024-2026 forward OOS trigger set",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/262"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          255
+        ],
+        "ENTRY_GATE": "V5_NO_RESISTANCE_AOO_PROFITABILITY_RESULT_READY",
+        "ISSUE_ID": "ARJO-V6-MOMENTUM-001",
+        "OUTPUT_GATE": "V6_MOMENTUM_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V6_MOMENTUM_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 264,
+      "title": "V6 Momentum: freeze independent momentum-cycle continuation protocol",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/264"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          264
+        ],
+        "ENTRY_GATE": "V6_MOMENTUM_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V6-MOMENTUM-002",
+        "OUTPUT_GATE": "V6_MOMENTUM_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V6_MOMENTUM_TRIGGER_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 266,
+      "title": "V6 Momentum: reconstruct and seal outcome-blind H1/M15 triggers",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/266"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          264,
+          266
+        ],
+        "ENTRY_GATE": "V6_MOMENTUM_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V6-MOMENTUM-003",
+        "OUTPUT_GATE": "V6_MOMENTUM_ECONOMIC_ENGINE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V6_MOMENTUM_ECONOMIC_PREFLIGHT"
+      },
+      "metadata_valid": true,
+      "number": 268,
+      "title": "V6 Momentum: prebuild symmetric historical economics engine",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/268"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [
+          266,
+          268
+        ],
+        "ENTRY_GATE": "V6_MOMENTUM_TRIGGERS_READY_AND_ECONOMIC_ENGINE_READY",
+        "ISSUE_ID": "ARJO-V6-MOMENTUM-004",
+        "OUTPUT_GATE": "V6_MOMENTUM_HISTORICAL_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V6_MOMENTUM_HISTORICAL_PROFITABILITY_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 270,
+      "title": "V6 Momentum: execute sealed 2010\u20132023 M1 BID/ASK historical economics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/270"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [
+          270
+        ],
+        "ENTRY_GATE": "V6_FORWARD_TRANSPORT_FROZEN",
+        "ISSUE_ID": "ARJO-V6-MOMENTUM-005",
+        "OUTPUT_GATE": "V6_FORWARD_CONFIRMATION_HARNESS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE_BUT_PROVIDER_BLOCKED_ON_HISTORICAL_GATE",
+        "TYPE": "V6_MOMENTUM_FORWARD_CONFIRMATION_PREFLIGHT"
+      },
+      "metadata_valid": false,
+      "number": 272,
+      "title": "V6 Momentum: prebuild untouched 2024\u20132026 forward confirmation harness",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/272"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NEW_FIRST_PARTY_SEMANTICS_RECOVERED_PRE_V6_RESULT",
+        "ISSUE_ID": "ARJO-V7-CS-001",
+        "OUTPUT_GATE": "V7_CANDLE_SCIENCE_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V7_CANDLE_SCIENCE_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 274,
+      "title": "V7 fallback: freeze independent Candle Science FVG rejection protocol before V6 result",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/274"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          274
+        ],
+        "ENTRY_GATE": "V7_CANDLE_SCIENCE_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V7-CS-002",
+        "OUTPUT_GATE": "V7_CANDLE_SCIENCE_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V7_CANDLE_SCIENCE_TRIGGER_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 276,
+      "title": "V7 Candle Science: reconstruct and seal outcome-blind H4/H1 triggers",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/276"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          274,
+          276
+        ],
+        "ENTRY_GATE": "V7_CANDLE_SCIENCE_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V7-CS-003",
+        "OUTPUT_GATE": "V7_CANDLE_SCIENCE_ECONOMIC_ENGINE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V7_CANDLE_SCIENCE_ECONOMIC_PREFLIGHT"
+      },
+      "metadata_valid": true,
+      "number": 278,
+      "title": "V7 Candle Science: prebuild historical economics engine",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/278"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [
+          276,
+          278
+        ],
+        "ENTRY_GATE": "V7_CANDLE_SCIENCE_TRIGGERS_READY_AND_ECONOMIC_ENGINE_READY",
+        "ISSUE_ID": "ARJO-V7-CS-004",
+        "OUTPUT_GATE": "V7_CANDLE_SCIENCE_HISTORICAL_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V7_CANDLE_SCIENCE_HISTORICAL_PROFITABILITY_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 280,
+      "title": "V7 Candle Science: execute sealed 2010\u20132023 M1 BID/ASK historical economics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/280"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [
+          280
+        ],
+        "ENTRY_GATE": "V7_FORWARD_TRANSPORT_FROZEN",
+        "ISSUE_ID": "ARJO-V7-CS-005",
+        "OUTPUT_GATE": "V7_FORWARD_CONFIRMATION_HARNESS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE_PROVIDER_BLOCKED_ON_HISTORICAL_GATE",
+        "TYPE": "V7_CANDLE_SCIENCE_FORWARD_CONFIRMATION_PREFLIGHT"
+      },
+      "metadata_valid": false,
+      "number": 282,
+      "title": "V7 Candle Science: prebuild untouched forward confirmation harness",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/282"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": false,
+      "github_state": "CLOSED",
+      "mechanically_ready": false,
+      "meta": {
+        "DEPENDENCIES": [],
+        "ENTRY_GATE": "NEW_FIRST_PARTY_FVG_FOLLOWTHROUGH_SEMANTICS_RECOVERED_PRE_V7_RESULT",
+        "ISSUE_ID": "ARJO-V8-FVG-001",
+        "OUTPUT_GATE": "V8_FVG_FOLLOWTHROUGH_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V8_FVG_FOLLOWTHROUGH_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 284,
+      "title": "V8 fallback: freeze independent FVG follow-through protocol before V7 result",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/284"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          284
+        ],
+        "ENTRY_GATE": "V8_FVG_FOLLOWTHROUGH_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V8-FVG-002",
+        "OUTPUT_GATE": "V8_FVG_FOLLOWTHROUGH_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V8_FVG_FOLLOWTHROUGH_TRIGGER_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 286,
+      "title": "V8 FVG Follow-Through: reconstruct and seal outcome-blind H4/H1 triggers",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/286"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          286
+        ],
+        "ENTRY_GATE": "V8_FVG_FOLLOWTHROUGH_TRIGGERS_READY",
+        "ISSUE_ID": "ARJO-V8-FVG-003",
+        "OUTPUT_GATE": "V8_FVG_FOLLOWTHROUGH_ECONOMIC_ENGINE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V8_FVG_FOLLOWTHROUGH_ECONOMIC_ENGINE_AND_FORWARD_TRANSPORT"
+      },
+      "metadata_valid": true,
+      "number": 288,
+      "title": "V8 FVG Follow-Through: prebuild historical economics and freeze forward transport",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/288"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          286,
+          288
+        ],
+        "ENTRY_GATE": "V8_FVG_FOLLOWTHROUGH_ECONOMIC_ENGINE_READY",
+        "ISSUE_ID": "ARJO-V8-FVG-004",
+        "OUTPUT_GATE": "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 290,
+      "title": "V8 FVG Follow-Through: execute sealed 2010\u20132023 M1 BID/ASK historical economics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/290"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          290
+        ],
+        "ENTRY_GATE": "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_RESULT_READY",
+        "ISSUE_ID": "ARJO-POST-V8-001",
+        "OUTPUT_GATE": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY"
+      },
+      "metadata_valid": true,
+      "number": 292,
+      "title": "Post-V8 governance: seal current-evidence no-edge boundary and close research lifecycle",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/292"
     }
   ],
   "live_execution_enabled": false,
@@ -2451,6 +2891,7 @@
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "POST_V3_TERMINAL_STATE_READY",
     "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+    "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
     "PREDICATE_MATRIX_READY",
     "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
     "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
@@ -2478,7 +2919,23 @@
     "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
     "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
     "V4_SHARP_TURN_SOURCE_RECOVERY_READY",
-    "V4_SHARP_TURN_TRIGGERS_READY"
+    "V4_SHARP_TURN_TRIGGERS_READY",
+    "V5_NO_RESISTANCE_AOO_PROFITABILITY_RESULT_READY",
+    "V5_NO_RESISTANCE_AOO_PROTOCOL_FROZEN",
+    "V5_NO_RESISTANCE_AOO_TRIGGERS_READY",
+    "V5_NRA_FORWARD_CONFIRMATION_PROTOCOL_FROZEN",
+    "V6_MOMENTUM_ECONOMIC_ENGINE_READY",
+    "V6_MOMENTUM_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "V6_MOMENTUM_PROTOCOL_FROZEN",
+    "V6_MOMENTUM_TRIGGERS_READY",
+    "V7_CANDLE_SCIENCE_ECONOMIC_ENGINE_READY",
+    "V7_CANDLE_SCIENCE_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "V7_CANDLE_SCIENCE_PROTOCOL_FROZEN",
+    "V7_CANDLE_SCIENCE_TRIGGERS_READY",
+    "V8_FVG_FOLLOWTHROUGH_ECONOMIC_ENGINE_READY",
+    "V8_FVG_FOLLOWTHROUGH_HISTORICAL_PROFITABILITY_RESULT_READY",
+    "V8_FVG_FOLLOWTHROUGH_PROTOCOL_FROZEN",
+    "V8_FVG_FOLLOWTHROUGH_TRIGGERS_READY"
   ],
   "schema_version": 1,
   "spec_ready": true
