@@ -1,0 +1,122 @@
+name: V4 Sharp Turn Profitability Execute
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [validation/issue-247-v4-sharp-turn-economic-execution]
+    paths:
+      - 'research/profitability/V4_SHARP_TURN_PROFITABILITY_EXECUTE_LOCK.json'
+
+permissions:
+  contents: read
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Re-run no-provider engine and lock preflight
+        run: |
+          python -m py_compile scripts/v4_sharp_turn_profitability_engine.py scripts/run_v4_sharp_turn_profitability_oanda.py
+          python scripts/test_v4_sharp_turn_profitability_engine.py
+          python scripts/check_v4_sharp_turn_profitability_lock.py
+          python scripts/check_v4_sharp_turn_trigger_readiness.py
+
+      - name: Verify one-time historical M1 authorization marker
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/V4_SHARP_TURN_PROFITABILITY_EXECUTE_LOCK.json'))
+          assert x=={
+            'status':'AUTHORIZED_SINGLE_V4_HISTORICAL_M1_READ_AFTER_PREFLIGHT',
+            'issue':247,
+            'protocol_sha256':'a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd',
+            'trigger_readiness_sha256':'6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e1a47a6dba3',
+            'trigger_set_sha256':'1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a',
+            'profitability_lock_sha256':'846e3c106f9f478fe3ef74ad8152431f42bc2d0cac0d314d9a71d6aef8f0ec30',
+            'boundary_revision':'V4_STRICT_CANDLE_COVERAGE_END_V2',
+            'parameter_changes_after_first_m1_response':False,
+            'paper_execution_authorized':False,
+            'live_execution_authorized':False,
+            'broker_mutation_authorized':False,
+          }
+          print('single V4 historical M1 research read authorized; paper/live/broker remain false')
+          PY
+
+      - name: Execute sealed V4 historical BID/ASK measurement once
+        env:
+          OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+          OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+        run: >-
+          python scripts/run_v4_sharp_turn_profitability_oanda.py
+          --output-dir /tmp/v4-profitability
+          --marker research/profitability/V4_SHARP_TURN_PROFITABILITY_EXECUTE_LOCK.json
+
+      - name: Assert post-result safety and frozen classification boundary
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/v4-profitability/profitability-result.json'
+          r=json.load(open(p))
+          assert r['status']=='V4_SHARP_TURN_PROFITABILITY_RESULT_READY'
+          assert r['trigger_set_sha256']=='1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a'
+          assert r['trigger_readiness_sha256']=='6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e1a47a6dba3'
+          assert r['exact_trigger_reconstruction_before_first_m1_response'] is True
+          assert r['first_m1_response_accessed'] is True
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['no_refit_performed'] is True
+          assert r['v3c_outcomes_used_for_v4_execution_selection'] is False
+          assert r['post_2023_m1_requested_or_admitted'] is False
+          assert r['synthetic_fills']==0
+          assert r['historical_window_classification']=='BACKWARD_HISTORICAL_DEVELOPMENT_NOT_UNTOUCHED_FAMILY_HOLDOUT'
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          assert r['classification'] in {
+            'INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED',
+            'EDGE_NOT_ESTABLISHED',
+            'PRELIMINARY_HISTORICAL_EDGE',
+            'STRONG_HISTORICAL_EDGE',
+          }
+          print('classification=' + r['classification'])
+          print('result_sha256=' + r['result_sha256'])
+          print('base_metrics=' + json.dumps(r['base_metrics'],sort_keys=True))
+          print('stress_metrics=' + json.dumps(r['stress_metrics'],sort_keys=True))
+          PY
+
+      - name: Publish V4 economic result summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r=json.load(open('/tmp/v4-profitability/profitability-result.json'))
+          b=r['base_metrics']; s=r['stress_metrics']
+          print('## V4 Sharp Turn historical economic measurement')
+          print(f"- classification: **{r['classification']}**")
+          print(f"- resolved base trades: **{b['resolved_executed_trades']}** ({b['long_trades']} long / {b['short_trades']} short)")
+          print(f"- base expectancy: **{b['net_expectancy_r']} R**")
+          print(f"- base profit factor: **{b['profit_factor']}**")
+          print(f"- base win rate: **{b['win_rate']}**")
+          print(f"- base 95% bootstrap expectancy CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}**")
+          print(f"- stress expectancy: **{s['net_expectancy_r']} R**")
+          print(f"- stress profit factor: **{s['profit_factor']}**")
+          print(f"- provider M1 chunks requested: **{r['provider_chunks_requested']}**")
+          print('- historical classification: backward development, **not untouched OOS**')
+          print('- paper/live/broker authorization: **false / false / false**')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v4-sharp-turn-profitability-result
+          path: |
+            /tmp/v4-profitability/profitability-result.json
+            /tmp/v4-profitability/provider-provenance.json
+            /tmp/v4-profitability/base-trade-ledger.jsonl
+            /tmp/v4-profitability/stress-trade-ledger.jsonl
+            /tmp/v4-profitability/pre-m1-trigger-reconstruction.json
+          if-no-files-found: error
+          retention-days: 90

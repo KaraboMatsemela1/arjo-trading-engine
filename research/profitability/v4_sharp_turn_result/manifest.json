@@ -1,0 +1,38 @@
+{
+  "broker_mutation_authorized": false,
+  "classification": "EDGE_NOT_ESTABLISHED",
+  "files": {
+    "base_trade_ledger.jsonl": {
+      "bytes": 78009,
+      "sha256": "3c91e8de9787cc1194886cb30b4bd98410f0310be0cbcfe9c1299d701cbfcad5"
+    },
+    "pre_m1_trigger_reconstruction.json": {
+      "bytes": 238974,
+      "sha256": "40b371eb875ae5cc9c6be1fd9d968466d3135211f50d399e45c67e90961e17cf"
+    },
+    "provider_provenance.json": {
+      "bytes": 352641,
+      "sha256": "5084e173432efc066bb2d599a9855eb382973cf9078b66399ecd74838d2c22bc"
+    },
+    "result.json": {
+      "bytes": 6049,
+      "sha256": "533e3a2d97d7a5460b6fc5cc99802687659d3cd78e5fe506378bce61b8b560e2"
+    },
+    "sealed_result_index_v1.json": {
+      "bytes": 1073,
+      "sha256": "bf48eb3ffe40d9e40265837cfd8fc305262f2eae38cb6f2735652fc6c7f9203c"
+    },
+    "stress_trade_ledger.jsonl": {
+      "bytes": 77934,
+      "sha256": "c9caf8a4a9247a00d912a356743d1641b84d84b2e6a3c72827cdadc28d9fa65e"
+    }
+  },
+  "live_execution_authorized": false,
+  "manifest_sha256": "586b3c1bbd3a850adb02a5a2f21c74cacbe8ab4664e86def8a3ed0bb17af0d12",
+  "paper_execution_authorized": false,
+  "result_sha256": "611cc822dcc5103ed700d245e3ffb95404ca9c41459a43f9b5183aa84aedf6b5",
+  "schema_version": 1,
+  "source_head_sha": "424bd5683d8dd4a536fe60dc6a606fa59bfd931a",
+  "source_workflow_run_id": 32142106100,
+  "status": "V4_SHARP_TURN_PROFITABILITY_EVIDENCE_PERSISTED"
+}

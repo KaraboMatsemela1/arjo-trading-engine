@@ -1,0 +1,43 @@
+name: V4 Sharp Turn Profitability Result
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v4_sharp_turn_result/**'
+      - 'scripts/check_v4_sharp_turn_profitability_result.py'
+      - '.github/workflows/v4-sharp-turn-profitability-result.yml'
+  push:
+    branches: [validation/issue-247-v4-sharp-turn-economic-execution]
+    paths:
+      - 'research/profitability/v4_sharp_turn_result/**'
+      - 'scripts/check_v4_sharp_turn_profitability_result.py'
+      - '.github/workflows/v4-sharp-turn-profitability-result.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile result verifier
+        run: python -m py_compile scripts/check_v4_sharp_turn_profitability_result.py
+      - name: Verify immutable sealed V4 result and evidence
+        run: python scripts/check_v4_sharp_turn_profitability_result.py
+      - name: Prove negative result cannot authorize execution
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/profitability/v4_sharp_turn_result/result.json'))
+          assert r['classification']=='EDGE_NOT_ESTABLISHED'
+          assert r['validated_historical_edge'] is False
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          assert r['no_refit_performed'] is True
+          print('V4 negative result sealed; execution remains unauthorized')
+          PY
