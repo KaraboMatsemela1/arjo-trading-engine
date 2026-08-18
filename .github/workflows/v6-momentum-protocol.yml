@@ -1,0 +1,32 @@
+name: V6 Momentum Protocol Freeze
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v6_momentum_source_recovery.md'
+      - 'research/profitability/v6_momentum_protocol_v1.json'
+      - 'research/profitability/v6_momentum_pre_outcome_boundary_v1.json'
+      - 'scripts/check_v6_momentum_protocol.py'
+      - '.github/workflows/v6-momentum-protocol.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile protocol checker
+        run: python -m py_compile scripts/check_v6_momentum_protocol.py
+      - name: Verify immutable V6 protocol and pre-outcome boundary
+        run: python scripts/check_v6_momentum_protocol.py
+      - name: Fail if V6 outcome-access artifacts exist before freeze merge
+        run: |
+          test ! -e research/profitability/v6_momentum_trigger_result_v1.json
+          test ! -e research/profitability/v6_momentum_historical_result_v1.json
+          test ! -e research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json
