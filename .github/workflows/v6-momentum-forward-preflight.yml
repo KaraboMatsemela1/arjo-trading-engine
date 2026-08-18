@@ -1,0 +1,44 @@
+name: V6 Momentum Forward Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v6_momentum_forward_structure.py'
+      - 'scripts/v6_momentum_forward_metrics.py'
+      - 'scripts/test_v6_momentum_forward_preflight.py'
+      - '.github/workflows/v6-momentum-forward-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen V6 strategy and forward transport
+        run: |
+          python scripts/check_v6_momentum_protocol.py
+          python - <<'PY'
+          import hashlib,json
+          p='research/profitability/v6_momentum_forward_confirmation_transport_v1.json'
+          x=json.load(open(p)); recorded=x.pop('transport_sha256')
+          raw=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+          assert recorded=='24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6'
+          assert hashlib.sha256(raw).hexdigest()==recorded
+          assert x['status']=='FROZEN_BEFORE_V6_HISTORICAL_M1_RESULT'
+          PY
+      - name: Compile forward harness only
+        run: python -m py_compile scripts/v6_momentum_forward_structure.py scripts/v6_momentum_forward_metrics.py scripts/test_v6_momentum_forward_preflight.py
+      - name: Prove forward provider gate is closed before historical pass
+        run: PYTHONPATH=scripts python scripts/test_v6_momentum_forward_preflight.py
+      - name: Prove no forward authorization or outcome artifacts exist
+        run: |
+          test ! -e research/profitability/V6_MOMENTUM_FORWARD_STRUCTURE_AUTHORIZE.json
+          test ! -e research/profitability/V6_MOMENTUM_FORWARD_M1_AUTHORIZE.json
+          test ! -e research/profitability/v6_momentum_forward_trigger_result_v1.json
+          test ! -e research/profitability/v6_momentum_forward_result_v1.json
