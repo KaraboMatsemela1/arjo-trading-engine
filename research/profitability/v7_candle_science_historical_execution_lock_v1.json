@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V7_NQ_CANDLE_SCIENCE_H1_FVG_REJECTION_TO_OPPOSING_FVG_SYMMETRIC",
+  "issue": 280,
+  "status": "FROZEN_BEFORE_FIRST_V7_M1_RESPONSE",
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
+  "trigger_set_sha256": "0286fc800d0b20399848945b2ae6b7520a6d314767a4ef8bb043b476bb3d2c98",
+  "trigger_count": 5212,
+  "distinct_knowledge_timestamps": 4972,
+  "trigger_readiness_sha256": "5d929529a3c386081cb45042e1fff1041eb795d1cc2ef92a30ad4bc2d8f8dd3b",
+  "structure_manifest_sha256": "a61ef4aa9deb1ed3de36611a12c9afd83ca25aeb8e55cd63004fd2328a39b414",
+  "forward_confirmation_transport_sha256": "83bdd46c80acec241499d5d99e76df22b8c11cdf4edd5983b4f4937582fdbc8e",
+  "historical_window": {
+    "start_inclusive": "2010-01-01T00:00:00Z",
+    "end_exclusive": "2024-01-01T00:00:00Z"
+  },
+  "m1_provider_contract": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "granularity": "M1",
+    "price": "BA",
+    "smooth": false,
+    "includeFirst": true,
+    "on_demand_by_sealed_signal": true,
+    "synthetic_candles": false,
+    "synthetic_fills": false
+  },
+  "execution_costs": {
+    "base_adverse_slippage_points_per_side": 0.5,
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "stress_adverse_slippage_points_per_side": 1.0,
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01
+  },
+  "historical_gate": {
+    "minimum_resolved_executed_trades": 300,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.35,
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.1,
+    "positive_calendar_year_fraction_gte": 0.75,
+    "data_integrity_failures_eq": 0,
+    "synthetic_fills_eq": 0
+  },
+  "parameter_changes_after_first_m1_response": false,
+  "cost_changes_after_first_m1_response": false,
+  "threshold_changes_after_first_m1_response": false,
+  "target_stop_rule_changes_after_first_m1_response": false,
+  "forward_confirmation_access_authorized": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false,
+  "execution_lock_sha256": "56a00ad6a45d926221330acf2c2160ce862752dc93f712c3b35b68cf35194049"
+}
