@@ -1,0 +1,10 @@
+{
+  "authorization": "AUTHORIZE_V5_FORWARD_STRUCTURE_TRIGGER_SEAL",
+  "issue": 262,
+  "confirmation_protocol_sha256": "d86258ba66ba9eba20ed72e57af0368b90512ec24bc8e8a42f82be5cce1910b4",
+  "confirmation_m1_authorized": false,
+  "economic_outcomes_authorized": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
