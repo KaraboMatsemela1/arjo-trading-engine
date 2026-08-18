@@ -14,6 +14,8 @@ There is no remaining dependency-satisfied engineering or research backlog in th
 
 This is a successful project-completion state, but it is **not** a successful profitability result. Using the currently admitted evidence and preregistered execution rules, a validated profitable trading edge has not been established.
 
+Future untouched validation is preserved as an optional scientific follow-up. It is not part of the current completion definition.
+
 ## Scientific disposition
 
 ### V1 — protected validation exposed an integrity defect
@@ -56,6 +58,8 @@ edf42c53bbfd0bf222ff7eb43b85aa8a4b8d2dfd38a443732d1aa1cbecc17eca
 Future-validation harness readiness
 8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79
 ```
+
+`SPEC_READY=true` means the frozen research specification is deterministic and independently reconstructable under the repository's governed evidence/configuration boundaries. It does **not** mean the strategy has been proven profitable.
 
 V2 backward historical occurrence scanning found only 10 executable occurrences from 2010-2023 against a preregistered minimum of 30. The V2 economic-outcome stage therefore remained closed and the result was classified `INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED`.
 
