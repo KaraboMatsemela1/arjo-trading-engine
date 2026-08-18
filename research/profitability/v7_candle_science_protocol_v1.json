@@ -104,7 +104,7 @@
     "historical_gate_strengthened_for_family_search": true,
     "v6_result_consulted_before_protocol_freeze": false
   },
-  "protocol_sha256": "28005dd5cfd6a443ef87e0c5c5a21537113096702600c2f1e2a83b1ce18e14be",
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
   "research_question": "Does an H4 market-structure bias followed by an aligned H1 FVG and a same-timeframe H1 rejection after stinging the FVG produce a profitable continuation move toward the nearest already-known opposing H1 FVG on the OANDA NAS100_USD CFD proxy?",
   "safety": {
     "broker_mutation_authorized": false,
