@@ -73,7 +73,17 @@ def verify() -> dict:
     assert canon(forward) == FORWARD_SHA
     assert forward["protocol_sha256"] == PROTOCOL
     assert forward["status"] == "FROZEN_BEFORE_V8_HISTORICAL_M1_RESULT"
-    assert forward["access_gate"]["historical_gate_must_pass_before_forward_structure_access"] is True
+    access = forward["access_gate"]
+    assert access["historical_gate_must_pass_before_forward_structure_access"] is True
+    assert access["forward_m1_access_before_sealed_forward_triggers"] is False
+    assert access["post_historical_parameter_changes_allowed"] is False
+    assert access["post_historical_cost_changes_allowed"] is False
+    assert access["post_historical_threshold_changes_allowed"] is False
+    assert forward["safety"] == {
+        "paper_execution_authorized": False,
+        "live_execution_authorized": False,
+        "broker_mutation_authorized": False,
+    }
     return lock
 
 
