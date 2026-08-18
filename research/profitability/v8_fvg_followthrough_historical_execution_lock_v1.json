@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V8_NQ_FVG_FOLLOWTHROUGH_H4_H1_SYMMETRIC",
+  "issue": 290,
+  "status": "FROZEN_BEFORE_FIRST_V8_M1_RESPONSE",
+  "protocol_sha256": "79c0289293996f02faa6de1ecb5dcc6d6201a7b98bff1be842bab6cc707b547d",
+  "trigger_set_sha256": "bb42a146ed756f8a675a4d861c8c211951de29ccaddd3d642ff72cbf62d74747",
+  "trigger_count": 5482,
+  "distinct_knowledge_timestamps": 5482,
+  "trigger_readiness_sha256": "a13a33c588349c7ec11e33324956dbaf9810ba5fa8f88294f43194d33850b3ed",
+  "structure_manifest_sha256": "a61ef4aa9deb1ed3de36611a12c9afd83ca25aeb8e55cd63004fd2328a39b414",
+  "forward_confirmation_transport_sha256": "b72b6f8aaaf6c53c6f957917105feba4078cfd6e37c059c49b912cc4203503e8",
+  "historical_window": {
+    "start_inclusive": "2010-01-01T00:00:00Z",
+    "end_exclusive": "2024-01-01T00:00:00Z"
+  },
+  "m1_provider_contract": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "granularity": "M1",
+    "price": "BA",
+    "smooth": false,
+    "includeFirst": true,
+    "on_demand_by_sealed_signal": true,
+    "synthetic_candles": false,
+    "synthetic_fills": false
+  },
+  "execution_costs": {
+    "base_adverse_slippage_points_per_side": 0.5,
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "stress_adverse_slippage_points_per_side": 1.0,
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01
+  },
+  "historical_gate": {
+    "minimum_resolved_executed_trades": 350,
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.4,
+    "base_bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.15,
+    "positive_calendar_year_fraction_gte": 0.8,
+    "data_integrity_failures_eq": 0,
+    "synthetic_fills_eq": 0
+  },
+  "parameter_changes_after_first_m1_response": false,
+  "cost_changes_after_first_m1_response": false,
+  "threshold_changes_after_first_m1_response": false,
+  "target_stop_rule_changes_after_first_m1_response": false,
+  "forward_confirmation_access_authorized": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false,
+  "execution_lock_sha256": "ccf0dcbe4ef084c7fc9251423513f107fa8ada14d9a9303b0353ca91f99cdf4e"
+}
