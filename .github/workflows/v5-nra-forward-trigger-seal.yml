@@ -1,0 +1,62 @@
+name: V5 NRA Forward Trigger Seal
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/profitability/v5_nra_forward_trigger_seal_authorization_v1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
+  V5_CONFIRM_OUTPUT_DIR: artifacts/v5_nra_forward_trigger_seal
+
+jobs:
+  seal:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA token
+        run: test -n "$OANDA_TOKEN"
+      - name: Verify confirmation freeze
+        run: python scripts/check_v5_nra_forward_confirmation_protocol.py
+      - name: Execute MID-only forward confirmation trigger seal
+        run: PYTHONPATH=scripts python scripts/run_v5_nra_forward_trigger_seal.py
+      - name: Publish readiness to Issue 262
+        run: |
+          python - <<'PY' > /tmp/v5-forward-trigger-comment.md
+          import json, os
+          from pathlib import Path
+          r=json.loads(Path('artifacts/v5_nra_forward_trigger_seal/v5_forward_trigger_readiness.json').read_text())
+          print('<!-- V5_NRA_FORWARD_TRIGGER_SEAL_RESULT -->')
+          print('## V5 forward confirmation trigger-seal result')
+          print()
+          print(f"- workflow run: `{os.environ.get('GITHUB_RUN_ID')}`")
+          print(f"- source head: `{os.environ.get('GITHUB_SHA')}`")
+          print(f"- confirmation triggers: **{r['confirmation_trigger_count']}**")
+          print(f"- distinct causal timestamps: **{r['confirmation_distinct_knowledge_timestamps']}**")
+          print(f"- trigger set SHA: `{r['confirmation_trigger_set_sha256']}`")
+          print(f"- readiness SHA: `{r['readiness_sha256']}`")
+          print(f"- structure manifest SHA: `{r['structure_manifest_sha256']}`")
+          print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
+          print('- confirmation M1 requested: `false`')
+          print('- economic outcomes accessed: `false`')
+          print('- paper/live/broker mutation: `false`')
+          PY
+          gh issue comment 262 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v5-forward-trigger-comment.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v5-nra-forward-trigger-seal
+          path: artifacts/v5_nra_forward_trigger_seal
+          if-no-files-found: error
+          retention-days: 90
