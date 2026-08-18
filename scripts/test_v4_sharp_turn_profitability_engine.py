@@ -33,7 +33,7 @@ def trigger(tid: str, direction: str, stop: str, minute: int = 0) -> dict:
 
 def test_long_target_and_cost() -> None:
     t = trigger("L", "LONG", "95")
-    bars = [bar(0), bar(1, bid_o=102, bid_h=114, bid_l=101, bid_c=113, ask_o=103, ask_h=115, ask_l=102, ask_c=114)]
+    bars = [bar(0), bar(1, bid_o=102, bid_h=115, bid_l=101, bid_c=114, ask_o=103, ask_h=116, ask_l=102, ask_c=115)]
     r = e.measure_trade(t, bars, slip_points=Decimal("0.5"), financing_r_per_1440=Decimal("0.005"), dataset_end=END)
     assert r["status"] == "TARGET"
     assert r["entry_price"] == "101.5"
@@ -46,7 +46,7 @@ def test_long_target_and_cost() -> None:
 
 def test_short_target_and_cost() -> None:
     t = trigger("S", "SHORT", "106")
-    bars = [bar(0), bar(1, bid_o=98, bid_h=99, bid_l=87, bid_c=88, ask_o=99, ask_h=100, ask_l=88, ask_c=89)]
+    bars = [bar(0), bar(1, bid_o=98, bid_h=99, bid_l=85, bid_c=86, ask_o=99, ask_h=100, ask_l=86, ask_c=87)]
     r = e.measure_trade(t, bars, slip_points=Decimal("0.5"), financing_r_per_1440=Decimal("0.005"), dataset_end=END)
     assert r["status"] == "TARGET"
     assert r["entry_price"] == "99.5"
@@ -115,7 +115,7 @@ def test_stress_is_never_better_on_same_long_target_path() -> None:
 
 
 def test_classification_thresholds() -> None:
-    def m(n, exp, pf, lo, stress=False):
+    def m(n, exp, pf, lo):
         return {
             "resolved_executed_trades": n,
             "net_expectancy_r": exp,
