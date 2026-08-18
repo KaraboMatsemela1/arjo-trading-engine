@@ -1,0 +1,30 @@
+name: V5 NRA Profitability Execution Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/run_v5_nra_profitability_oanda.py'
+      - 'scripts/test_run_v5_nra_profitability_oanda.py'
+      - '.github/workflows/v5-nra-profitability-execution-preflight.yml'
+      - '.github/workflows/v5-nra-profitability-execute.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V5 execution wrapper
+        run: python -m py_compile scripts/run_v5_nra_profitability_oanda.py scripts/test_run_v5_nra_profitability_oanda.py
+      - name: Re-run frozen economic lock and engine regressions
+        run: |
+          PYTHONPATH=scripts python scripts/check_v5_nra_profitability_lock.py
+          PYTHONPATH=scripts python scripts/test_v5_nra_profitability_engine.py
+      - name: Verify first-M1 fail-closed boundary
+        run: PYTHONPATH=scripts python scripts/test_run_v5_nra_profitability_oanda.py
