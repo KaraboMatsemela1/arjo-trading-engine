@@ -6,6 +6,10 @@ on:
       - agent/v5-nra-trigger-seal
     paths:
       - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+  pull_request:
+    paths:
+      - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - '.github/workflows/v5-nra-trigger-seal.yml'
   workflow_dispatch:
 
 permissions:
@@ -13,6 +17,7 @@ permissions:
 
 jobs:
   seal:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -25,6 +30,22 @@ jobs:
           python-version: '3.12'
       - name: Verify frozen protocol and transport
         run: python scripts/check_v5_no_resistance_aoo_protocol.py
+      - name: Verify exact structure-only authorization sentinel
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('research/profitability/v5_nra_trigger_seal_authorization_v1.json').read_text())
+          assert payload == {
+              'authorization': 'AUTHORIZE_V5_STRUCTURE_TRIGGER_SEAL',
+              'broker_mutation_authorized': False,
+              'economic_outcomes_authorized': False,
+              'issue': 254,
+              'm1_authorized': False,
+              'protocol_sha256': 'f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff',
+              'structure_transport_sha256': '8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0',
+          }
+          PY
       - name: Execute structure-only V5 trigger reconstruction
         run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal.py
       - name: Upload sealed V5 structure and trigger evidence
