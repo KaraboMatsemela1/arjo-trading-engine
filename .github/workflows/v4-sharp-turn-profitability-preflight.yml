@@ -10,6 +10,7 @@ on:
       - 'scripts/v4_sharp_turn_profitability_engine.py'
       - 'scripts/test_v4_sharp_turn_profitability_engine.py'
       - 'scripts/check_v4_sharp_turn_profitability_lock.py'
+      - 'scripts/run_v4_sharp_turn_profitability_oanda.py'
       - '.github/workflows/v4-sharp-turn-profitability-preflight.yml'
   push:
     branches: [validation/issue-247-v4-sharp-turn-economic-execution]
@@ -18,6 +19,7 @@ on:
       - 'scripts/v4_sharp_turn_profitability_engine.py'
       - 'scripts/test_v4_sharp_turn_profitability_engine.py'
       - 'scripts/check_v4_sharp_turn_profitability_lock.py'
+      - 'scripts/run_v4_sharp_turn_profitability_oanda.py'
       - '.github/workflows/v4-sharp-turn-profitability-preflight.yml'
 
 permissions:
@@ -37,6 +39,9 @@ jobs:
           scripts/v4_sharp_turn_profitability_engine.py
           scripts/test_v4_sharp_turn_profitability_engine.py
           scripts/check_v4_sharp_turn_profitability_lock.py
+          scripts/run_v4_sharp_turn_profitability_oanda.py
+      - name: Prove runner imports and CLI parse without provider access
+        run: python scripts/run_v4_sharp_turn_profitability_oanda.py --help >/dev/null
       - name: Run execution-engine sabotage tests without provider access
         run: python scripts/test_v4_sharp_turn_profitability_engine.py
       - name: Verify immutable pre-M1 lock
