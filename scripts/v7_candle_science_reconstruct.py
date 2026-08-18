@@ -2,7 +2,6 @@
 from __future__ import annotations
 from bisect import bisect_left,bisect_right
 from datetime import timedelta
-from decimal import Decimal
 from typing import Any
 from v7_candle_science_primitives import BiasIndex,attach_first_retouch,canon,dec,h1_fvgs,h4_break_events,ident,intersects,parse_time,price,stamp
 
@@ -13,13 +12,13 @@ def _rejections(h4:list[dict[str,Any]],h1:list[dict[str,Any]])->tuple[list[dict[
         if event is None or event['direction']!=fvg['direction']:continue
         stats['aligned_fvgs']+=1;direction=fvg['direction'];end=min(len(h1)-1,int(fvg['c3_index'])+12)
         for index in range(int(fvg['c3_index'])+1,end+1):
-            candle=h1[index]
+            candle=h1[index];known=parse_time(candle['time'])+timedelta(hours=1)
+            if not bias.preserved(fvg_known,known,direction):stats['bias_changed_before_rejection']+=1;break
             if not intersects(candle,fvg):continue
             close=price(candle,'close');qualifies=close>dec(fvg['upper']) if direction=='BULL' else close<dec(fvg['lower'])
             if not qualifies:continue
-            known=parse_time(candle['time'])+timedelta(hours=1);rejection_bias=bias.at(known)
-            if rejection_bias is None or rejection_bias['direction']!=direction:
-                stats['bias_changed_before_rejection']+=1;break
+            rejection_bias=bias.at(known)
+            if rejection_bias is None or rejection_bias['direction']!=direction:raise AssertionError('preserved bias missing at rejection')
             out.append({'setup_fvg':fvg,'direction':'LONG' if direction=='BULL' else 'SHORT','rejection_h1_index':index,'rejection_time_utc':candle['time'],'knowledge_time_utc':stamp(known),'rejection_close':str(close),'rejection_low':str(price(candle,'low')),'rejection_high':str(price(candle,'high')),'bias_event_id':event['event_id'],'rejection_bias_event_id':rejection_bias['event_id']});stats['qualifying_rejections']+=1;break
     return out,fvgs,bias,stats
 
@@ -34,8 +33,11 @@ def _eligible_target(fvg:dict[str,Any],rejection:dict[str,Any])->bool:
 def _target_bruteforce(fvgs:list[dict[str,Any]],rejection:dict[str,Any])->dict[str,Any]|None:
     candidates=[fvg for fvg in fvgs if _eligible_target(fvg,rejection)]
     if not candidates:return None
-    if rejection['direction']=='LONG':return min(candidates,key=lambda x:(dec(x['lower']),parse_time(x['knowledge_time_utc']),x['fvg_id']))
-    return max(candidates,key=lambda x:(dec(x['upper']),-parse_time(x['knowledge_time_utc']).timestamp(),x['fvg_id']))
+    if rejection['direction']=='LONG':
+        boundary=min(dec(x['lower']) for x in candidates);same=[x for x in candidates if dec(x['lower'])==boundary]
+    else:
+        boundary=max(dec(x['upper']) for x in candidates);same=[x for x in candidates if dec(x['upper'])==boundary]
+    return min(same,key=lambda x:(parse_time(x['knowledge_time_utc']),x['fvg_id']))
 
 class TargetIndex:
     def __init__(self,fvgs:list[dict[str,Any]]):
@@ -45,8 +47,11 @@ class TargetIndex:
         close=dec(rejection['rejection_close'])
         if rejection['direction']=='LONG':
             i=bisect_right(self.bear_keys,close)
-            for fvg in self.bear[i:]:
-                if _eligible_target(fvg,rejection):return fvg
+            while i<len(self.bear):
+                boundary=self.bear_keys[i];same=[]
+                while i<len(self.bear) and self.bear_keys[i]==boundary:same.append(self.bear[i]);i+=1
+                eligible=[x for x in same if _eligible_target(x,rejection)]
+                if eligible:return min(eligible,key=lambda x:(parse_time(x['knowledge_time_utc']),x['fvg_id']))
             return None
         i=bisect_left(self.bull_keys,close)-1
         while i>=0:
