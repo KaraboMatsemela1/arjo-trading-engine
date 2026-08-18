@@ -6,6 +6,7 @@ on:
     paths:
       - 'research/profitability/v5_no_resistance_aoo_protocol_v1.json'
       - 'research/profitability/v5_no_resistance_aoo_evidence_boundary_v1.json'
+      - 'research/profitability/v5_no_resistance_aoo_structure_transport_v1.json'
       - 'scripts/check_v5_no_resistance_aoo_protocol.py'
       - 'scripts/test_v5_no_resistance_aoo_protocol.py'
       - '.github/workflows/v5-no-resistance-aoo-protocol.yml'
@@ -15,6 +16,7 @@ on:
     paths:
       - 'research/profitability/v5_no_resistance_aoo_protocol_v1.json'
       - 'research/profitability/v5_no_resistance_aoo_evidence_boundary_v1.json'
+      - 'research/profitability/v5_no_resistance_aoo_structure_transport_v1.json'
       - 'scripts/check_v5_no_resistance_aoo_protocol.py'
       - 'scripts/test_v5_no_resistance_aoo_protocol.py'
       - '.github/workflows/v5-no-resistance-aoo-protocol.yml'
@@ -30,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify immutable V5 protocol
+      - name: Verify immutable V5 protocol and structure transport
         run: python scripts/check_v5_no_resistance_aoo_protocol.py
       - name: Run V5 protocol sabotage regressions
         run: PYTHONPATH=scripts python scripts/test_v5_no_resistance_aoo_protocol.py
