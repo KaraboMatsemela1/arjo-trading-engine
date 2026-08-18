@@ -1,0 +1,36 @@
+name: V5 NRA Trigger Seal
+
+on:
+  push:
+    branches:
+      - agent/v5-nra-trigger-seal
+    paths:
+      - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OANDA_TOKEN: ${{ secrets.OANDA_TOKEN }}
+      V5_OUTPUT_DIR: artifacts/v5_nra_trigger_seal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen protocol and transport
+        run: python scripts/check_v5_no_resistance_aoo_protocol.py
+      - name: Execute structure-only V5 trigger reconstruction
+        run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal.py
+      - name: Upload sealed V5 structure and trigger evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-nra-trigger-seal
+          path: artifacts/v5_nra_trigger_seal
+          if-no-files-found: error
+          retention-days: 90
