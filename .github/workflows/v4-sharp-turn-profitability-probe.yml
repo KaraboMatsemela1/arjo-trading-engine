@@ -1,0 +1,32 @@
+name: V4 Sharp Turn Profitability Probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/v4-sharp-turn-profitability-probe.yml'
+
+permissions:
+  actions: read
+  pull-requests: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_HEAD_SHA: 424bd5683d8dd4a536fe60dc6a606fa59bfd931a
+    steps:
+      - name: Publish exact sealed execution status
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload=$(gh api --method GET \
+            "repos/${GITHUB_REPOSITORY}/actions/workflows/v4-sharp-turn-profitability-execute.yml/runs" \
+            -f head_sha="$SOURCE_HEAD_SHA" -f event=push -f per_page=20)
+          row=$(jq -c --arg sha "$SOURCE_HEAD_SHA" '.workflow_runs | map(select(.head_sha==$sha and .event=="push")) | first // {}' <<<"$payload")
+          run_id=$(jq -r '.id // "not-found"' <<<"$row")
+          status=$(jq -r '.status // "unknown"' <<<"$row")
+          conclusion=$(jq -r '.conclusion // "pending"' <<<"$row")
+          started=$(jq -r '.run_started_at // "unknown"' <<<"$row")
+          gh pr comment 248 --repo "$GITHUB_REPOSITORY" --body \
+            "V4 sealed execution probe: run_id=${run_id}; source_head=${SOURCE_HEAD_SHA}; status=${status}; conclusion=${conclusion}; started_at=${started}. This probe does not execute or alter the measurement."
