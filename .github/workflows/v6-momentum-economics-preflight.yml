@@ -1,0 +1,48 @@
+name: V6 Momentum Economics Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v6_momentum_backtest_mechanics.py'
+      - 'scripts/v6_momentum_backtest_metrics.py'
+      - 'scripts/test_v6_momentum_backtest.py'
+      - 'research/profitability/v6_momentum_forward_confirmation_transport_v1.json'
+      - '.github/workflows/v6-momentum-economics-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable V6 strategy protocol
+        run: python scripts/check_v6_momentum_protocol.py
+      - name: Verify forward confirmation transport was frozen pre-history
+        run: |
+          python - <<'PY'
+          import hashlib,json
+          p='research/profitability/v6_momentum_forward_confirmation_transport_v1.json'
+          x=json.load(open(p)); recorded=x.pop('transport_sha256')
+          raw=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+          assert recorded=='24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6'
+          assert hashlib.sha256(raw).hexdigest()==recorded
+          assert x['status']=='FROZEN_BEFORE_V6_HISTORICAL_M1_RESULT'
+          assert x['access_gate']['historical_gate_must_pass_before_forward_structure_access'] is True
+          assert x['access_gate']['post_historical_parameter_changes_allowed'] is False
+          assert x['structure_provider']['start_inclusive']=='2024-01-01T00:00:00Z'
+          assert x['structure_provider']['end_exclusive']=='2026-08-01T00:00:00Z'
+          assert x['economic_provider']['price']=='BA'
+          assert x['safety']=={'broker_mutation_authorized':False,'live_execution_authorized':False,'paper_execution_authorized':False}
+          PY
+      - name: Compile historical evaluator
+        run: python -m py_compile scripts/v6_momentum_backtest_mechanics.py scripts/v6_momentum_backtest_metrics.py scripts/test_v6_momentum_backtest.py
+      - name: Run symmetric no-network fill regressions
+        run: PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+      - name: Prove no V6 M1 execution lock exists yet
+        run: test ! -e research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json

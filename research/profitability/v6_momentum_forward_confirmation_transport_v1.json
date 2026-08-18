@@ -1,0 +1,73 @@
+{
+  "access_gate": {
+    "forward_m1_access_before_sealed_forward_triggers": false,
+    "historical_classification_must_equal": "V6_MOMENTUM_HISTORICAL_EDGE_ESTABLISHED",
+    "historical_gate_must_pass_before_forward_structure_access": true,
+    "post_historical_cost_changes_allowed": false,
+    "post_historical_parameter_changes_allowed": false,
+    "post_historical_threshold_changes_allowed": false
+  },
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "economic_provider": {
+    "end_exclusive": "2026-08-01T00:00:00Z",
+    "environment": "practice",
+    "granularity": "M1",
+    "includeFirst": true,
+    "instrument": "NAS100_USD",
+    "no_forward_fill": true,
+    "no_synthetic_candles": true,
+    "no_synthetic_fills": true,
+    "on_demand_only_for_sealed_forward_signals": true,
+    "preserve_market_closures_and_gaps": true,
+    "price": "BA",
+    "provider": "OANDA_V20",
+    "smooth": false,
+    "start_inclusive": "2024-01-01T00:00:00Z"
+  },
+  "execution_binding": {
+    "base_adverse_slippage_points_per_side": 0.5,
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "expiry_complete_m1_bars": 1440,
+    "max_elapsed_hours_to_first_eligible_m1": 72,
+    "one_open_position_maximum": true,
+    "same_as_historical_v6_mechanics": true,
+    "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST",
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "stress_adverse_slippage_points_per_side": 1.0,
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01
+  },
+  "forward_pass_gate": {
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "classification": "VALIDATED_PROFITABLE_EDGE_V6_MOMENTUM_FORWARD_OOS",
+    "data_integrity_failures_eq": 0,
+    "minimum_resolved_executed_trades": 50,
+    "net_expectancy_r_gt": 0.0,
+    "profit_factor_gt": 1.1,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.0,
+    "synthetic_fills_eq": 0
+  },
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "safety": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_V6_HISTORICAL_M1_RESULT",
+  "structure_provider": {
+    "alignment_timezone": "America/New_York",
+    "daily_alignment": 17,
+    "end_exclusive": "2026-08-01T00:00:00Z",
+    "granularities": [
+      "H1",
+      "M15"
+    ],
+    "instrument": "NAS100_USD",
+    "price": "M",
+    "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+    "start_inclusive": "2024-01-01T00:00:00Z",
+    "weekly_alignment": "Friday"
+  },
+  "transport_sha256": "24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6"
+}
