@@ -6,10 +6,14 @@ on:
       - agent/v5-nra-trigger-seal
     paths:
       - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - 'scripts/v5_nra_reference_fast.py'
+      - 'scripts/run_v5_nra_trigger_seal_fast.py'
       - '.github/workflows/v5-nra-trigger-seal.yml'
   pull_request:
     paths:
       - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - 'scripts/v5_nra_reference_fast.py'
+      - 'scripts/run_v5_nra_trigger_seal_fast.py'
       - '.github/workflows/v5-nra-trigger-seal.yml'
   workflow_dispatch:
 
@@ -52,7 +56,7 @@ jobs:
           }
           PY
       - name: Execute structure-only V5 trigger reconstruction
-        run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal.py
+        run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal_fast.py
       - name: Publish canonical readiness summary to Issue 254
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
@@ -75,6 +79,7 @@ jobs:
           print(f"- H1 structure SHA: `{r['h1_structure_sha256']}`")
           print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
           print(f"- primary stats: `{json.dumps(r['primary_stats'], sort_keys=True)}`")
+          print(f"- reference algorithm: `{r.get('reference_algorithm', 'BLOCK_INDEX')}`")
           print('- M1 requested: `false`')
           print('- economic outcomes accessed: `false`')
           print('- paper/live/broker mutation: `false`')
