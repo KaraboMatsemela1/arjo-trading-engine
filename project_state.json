@@ -1,6 +1,6 @@
 {
   "blocked_reasons": [],
-  "completion_basis": "CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE",
+  "completion_basis": "POST_V4_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE",
   "critical_path": [
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -36,9 +36,14 @@
     "V3_ARGUMENTS_EXECUTION_PROTOCOL_FROZEN",
     "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
     "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
-    "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
+    "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+    "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
+    "V4_SHARP_TURN_TRIGGERS_READY",
+    "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+    "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
   ],
-  "current_gate": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "current_gate": "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+  "historical_current_evidence_boundary": true,
   "historical_existing_evidence_closure": true,
   "issues": [
     {
@@ -2293,6 +2298,132 @@
       "number": 237,
       "title": "Governance: extend terminal project state through post-V3 evidence boundary",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/237"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          237
+        ],
+        "ENTRY_GATE": "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "ISSUE_ID": "ARJO-V4-ST-001",
+        "OUTPUT_GATE": "V4_SHARP_TURN_SOURCE_RECOVERY_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V4_SHARP_TURN_SOURCE_RECOVERY"
+      },
+      "metadata_valid": true,
+      "number": 239,
+      "title": "V4 research: recover and freeze Sharp Turn / FVG setup semantics from newly accessible Arjo sources",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/239"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          239
+        ],
+        "ENTRY_GATE": "V4_SHARP_TURN_SOURCE_RECOVERY_READY",
+        "ISSUE_ID": "ARJO-V4-ST-002",
+        "OUTPUT_GATE": "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V4_SHARP_TURN_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 242,
+      "title": "V4 Sharp Turn: freeze deterministic Daily\u21921H execution protocol before outcome access",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/242"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          242
+        ],
+        "ENTRY_GATE": "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-V4-ST-003",
+        "OUTPUT_GATE": "V4_SHARP_TURN_TRIGGERS_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V4_SHARP_TURN_TRIGGER_RECONSTRUCTION_SEAL"
+      },
+      "metadata_valid": true,
+      "number": 244,
+      "title": "V4 Sharp Turn: reconstruct and seal 2010-2023 M/W/D/H1 trigger set",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/244"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          244
+        ],
+        "ENTRY_GATE": "NONE",
+        "ISSUE_ID": "ARJO-V4-ST-003-DUPLICATE",
+        "OUTPUT_GATE": "NONE",
+        "OWNER": "UNCLAIMED",
+        "STATE": "COMPLETE",
+        "TYPE": "DUPLICATE"
+      },
+      "metadata_valid": true,
+      "number": 245,
+      "title": "V4 Sharp Turn: reconstruct and seal 2010-2023 M/W/D/H1 trigger set",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/245"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          244
+        ],
+        "ENTRY_GATE": "V4_SHARP_TURN_TRIGGERS_READY",
+        "ISSUE_ID": "ARJO-V4-ST-004",
+        "OUTPUT_GATE": "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "V4_SHARP_TURN_HISTORICAL_ECONOMIC_EXECUTION"
+      },
+      "metadata_valid": true,
+      "number": 247,
+      "title": "V4 Sharp Turn: execute sealed 2010-2023 M1 BID/ASK economic measurement",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/247"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          247
+        ],
+        "ENTRY_GATE": "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+        "ISSUE_ID": "ARJO-POST-V4-001",
+        "OUTPUT_GATE": "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "COMPLETE",
+        "TYPE": "POST_V4_CURRENT_EVIDENCE_BOUNDARY"
+      },
+      "metadata_valid": true,
+      "number": 249,
+      "title": "Post-V4 governance: seal current-evidence no-profitable-edge boundary",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/249"
     }
   ],
   "live_execution_enabled": false,
@@ -2319,6 +2450,7 @@
     "EVIDENCE_REGISTRY_READY",
     "GOVERNANCE_BOOTSTRAP_COMPLETE",
     "POST_V3_TERMINAL_STATE_READY",
+    "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
     "PREDICATE_MATRIX_READY",
     "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
     "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
@@ -2342,7 +2474,11 @@
     "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
     "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
     "V3_COVERAGE_DIAGNOSIS_COMPLETE",
-    "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE"
+    "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE",
+    "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
+    "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+    "V4_SHARP_TURN_SOURCE_RECOVERY_READY",
+    "V4_SHARP_TURN_TRIGGERS_READY"
   ],
   "schema_version": 1,
   "spec_ready": true
