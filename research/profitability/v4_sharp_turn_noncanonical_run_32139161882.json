@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "NONCANONICAL_INVALIDATED_BEFORE_M1_OUTCOME_ACCESS",
+  "workflow_run_id": 32139161882,
+  "artifact_id": 9325194886,
+  "artifact_zip_sha256": "605338751abfb1fec7de755a7b47c52fe68372ba3dc6d0889a8ceaffb1e6e656",
+  "observed_trigger_count": 227,
+  "observed_trigger_set_sha256": "963971de7c7a5cc22cd99f5aa80af88e405fa1efc8980e11b71d7f95229a90f4",
+  "reason": "The first structure transport bounded W/M admission by aligned candle start timestamp only. OANDA aligned weekly/monthly candles can start before 2024-01-01T00:00:00Z while their OHLC coverage extends beyond that frozen end. The run also used an incorrect monthly c3 causal-close calculation. It is therefore excluded from canonical V4 inference and cannot authorize M1 access.",
+  "replacement_boundary_revision": "V4_STRICT_CANDLE_COVERAGE_END_V2",
+  "strategy_parameters_changed": false,
+  "economic_outcomes_accessed": false,
+  "m1_data_requested": false,
+  "bid_ask_data_requested": false,
+  "fill_prices_accessed": false,
+  "pnl_accessed": false,
+  "performance_metrics_accessed": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false,
+  "canonical_use_prohibited": true
+}
