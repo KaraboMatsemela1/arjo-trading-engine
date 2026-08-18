@@ -1,0 +1,9 @@
+{
+  "authorization": "AUTHORIZE_V7_H4_H1_TRIGGER_SEAL",
+  "issue": 276,
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
+  "m1_authorized": false,
+  "bid_ask_authorized": false,
+  "economic_outcomes_authorized": false,
+  "broker_mutation_authorized": false
+}
