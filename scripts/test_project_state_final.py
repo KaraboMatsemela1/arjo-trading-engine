@@ -38,14 +38,14 @@ def main() -> int:
     assert final_path[-len(suffix) :] == suffix
     assert final_path[-1] == project_state_final.TERMINAL_GATE
     assert project_state_final.HISTORICAL_CLOSURE_GATE in final_path
+    assert project_state_final.HISTORICAL_CURRENT_EVIDENCE_GATE in final_path
     assert final_path.index(project_state_final.HISTORICAL_CLOSURE_GATE) < final_path.index(
-        project_state_final.TERMINAL_GATE
-    )
+        project_state_final.HISTORICAL_CURRENT_EVIDENCE_GATE
+    ) < final_path.index(project_state_final.TERMINAL_GATE)
     assert project_state_final.OPTIONAL_FUTURE_EXTENSION not in final_path
     assert len(final_path) == len(set(final_path)), "critical path contains duplicate gates"
 
-    # The previous closure is now only a historical milestone. Once it is
-    # satisfied, the next objective must be profitability preregistration.
+    # The original project closure is historical; profitability research follows it.
     historical = completed_through(final_path, project_state_final.HISTORICAL_CLOSURE_GATE)
     historical_state = project_state.derive_state(historical)
     assert historical_state["historical_existing_evidence_closure"] is True
@@ -53,13 +53,27 @@ def main() -> int:
     assert historical_state["completion_basis"] is None
     assert historical_state["current_gate"] == "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN"
 
-    # After the sealed V3-C economic result, the research boundary itself is
-    # still required before the lifecycle may be called complete.
-    profitability = completed_through(final_path, "V3_ARGUMENTS_PROFITABILITY_RESULT_READY")
-    profitability_state = project_state.derive_state(profitability)
-    assert profitability_state["current_gate"] == project_state_final.TERMINAL_GATE
-    assert profitability_state["project_complete"] is False
-    assert profitability_state["completion_basis"] is None
+    # V3-C's economic result still requires the original current-evidence boundary.
+    v3_result = completed_through(final_path, "V3_ARGUMENTS_PROFITABILITY_RESULT_READY")
+    v3_result_state = project_state.derive_state(v3_result)
+    assert v3_result_state["current_gate"] == project_state_final.HISTORICAL_CURRENT_EVIDENCE_GATE
+    assert v3_result_state["project_complete"] is False
+    assert v3_result_state["completion_basis"] is None
+
+    # The original current-evidence boundary became historical when V4 was opened.
+    old_boundary = completed_through(final_path, project_state_final.HISTORICAL_CURRENT_EVIDENCE_GATE)
+    old_boundary_state = project_state.derive_state(old_boundary)
+    assert old_boundary_state["historical_current_evidence_boundary"] is True
+    assert old_boundary_state["current_gate"] == "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN"
+    assert old_boundary_state["project_complete"] is False
+    assert old_boundary_state["completion_basis"] is None
+
+    # A completed V4 economic result must still advance to the post-V4 boundary.
+    v4_result = completed_through(final_path, "V4_SHARP_TURN_PROFITABILITY_RESULT_READY")
+    v4_result_state = project_state.derive_state(v4_result)
+    assert v4_result_state["current_gate"] == project_state_final.TERMINAL_GATE
+    assert v4_result_state["project_complete"] is False
+    assert v4_result_state["completion_basis"] is None
 
     # An implementing terminal issue must not be treated as a satisfied gate.
     pending = [issue(index + 1, gate) for index, gate in enumerate(final_path[:-1])]
@@ -74,13 +88,14 @@ def main() -> int:
     assert complete_state["current_gate"] == project_state_final.TERMINAL_GATE
     assert complete_state["project_complete"] is True
     assert complete_state["completion_basis"] == project_state_final.COMPLETION_BASIS
-    assert complete_state["completion_basis"] == "CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE"
+    assert complete_state["completion_basis"] == "POST_V4_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE"
     assert complete_state["historical_existing_evidence_closure"] is True
+    assert complete_state["historical_current_evidence_boundary"] is True
     assert complete_state["optional_future_validation_gate"] == "V2_FUTURE_VALIDATION_COMPLETE"
     assert complete_state["spec_ready"] is True
     assert complete_state["paper_execution_enabled"] is False
     assert complete_state["live_execution_enabled"] is False
-    print("project_current_evidence_terminal_boundary=PASS")
+    print("project_post_v4_current_evidence_terminal_boundary=PASS")
     return 0
 
 

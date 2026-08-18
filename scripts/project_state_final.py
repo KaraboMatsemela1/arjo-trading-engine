@@ -3,14 +3,14 @@
 
 The stable ``project_state.py`` parser/renderer is retained. This wrapper
 extends the objective critical path through V1/V2 engineering, backward-OOS
-profitability research, V3 outcome-blind coverage work, the sealed V3-C
-economic result, and the final current-evidence research boundary.
+profitability research, V3 outcome-blind coverage work, the sealed V3-C and
+V4 economic results, and the post-V4 current-evidence research boundary.
 
-The earlier ``PROJECT_CLOSED_EXISTING_EVIDENCE`` gate is retained as a
-historical lifecycle milestone. It is no longer terminal because subsequent
-profitability research was explicitly opened and completed. Untouched future
-V2 validation remains optional future research infrastructure, not a blocker
-for completion of the current-evidence project.
+Earlier closure gates remain historical lifecycle milestones. They are no
+longer terminal because subsequent profitability research was explicitly
+opened and completed. Untouched future validation remains optional future
+research infrastructure, not a blocker for completion of the current-evidence
+project.
 """
 from __future__ import annotations
 
@@ -35,11 +35,16 @@ POST_SPEC_CRITICAL_GATES = [
     "V3_ARGUMENTS_BACKWARD_OOS_TRIGGERS_READY",
     "V3_ARGUMENTS_PROFITABILITY_RESULT_READY",
     "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+    "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
+    "V4_SHARP_TURN_TRIGGERS_READY",
+    "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
+    "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
 ]
 
 HISTORICAL_CLOSURE_GATE = "PROJECT_CLOSED_EXISTING_EVIDENCE"
-TERMINAL_GATE = "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
-COMPLETION_BASIS = "CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE"
+HISTORICAL_CURRENT_EVIDENCE_GATE = "CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
+TERMINAL_GATE = "POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY"
+COMPLETION_BASIS = "POST_V4_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE"
 OPTIONAL_FUTURE_EXTENSION = "V2_FUTURE_VALIDATION_COMPLETE"
 _BASE_DERIVE_STATE = project_state.derive_state
 
@@ -60,12 +65,13 @@ def install_final_critical_path() -> list[str]:
 
 
 def derive_closed_state(issues: list[dict]) -> dict:
-    """Derive state while preserving the explicit current-evidence terminal state."""
+    """Derive state while preserving the explicit post-V4 terminal state."""
     state = _BASE_DERIVE_STATE(issues)
     complete = TERMINAL_GATE in state["satisfied_gates"]
     state["project_complete"] = complete
     state["completion_basis"] = COMPLETION_BASIS if complete else None
     state["historical_existing_evidence_closure"] = HISTORICAL_CLOSURE_GATE in state["satisfied_gates"]
+    state["historical_current_evidence_boundary"] = HISTORICAL_CURRENT_EVIDENCE_GATE in state["satisfied_gates"]
     state["optional_future_validation_gate"] = OPTIONAL_FUTURE_EXTENSION
     if complete:
         # Base state historically falls back to SPEC_READY when every critical

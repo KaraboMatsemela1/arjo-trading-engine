@@ -1,0 +1,61 @@
+name: Post-V4 Current Evidence Boundary
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/disposition/post_v4_candidate_reaudit_v1.json'
+      - 'research/disposition/post_v4_current_evidence_research_boundary_v1.json'
+      - 'research/disposition/current_evidence_research_boundary_v1.json'
+      - 'research/profitability/v4_sharp_turn_result/result.json'
+      - 'scripts/test_post_v4_current_evidence_boundary.py'
+      - 'scripts/test_post_v4_project_state.py'
+      - 'scripts/project_state_final.py'
+      - '.github/workflows/post-v4-current-evidence-boundary.yml'
+  push:
+    branches:
+      - governance/issue-249-post-v4-boundary
+    paths:
+      - 'research/disposition/post_v4_candidate_reaudit_v1.json'
+      - 'research/disposition/post_v4_current_evidence_research_boundary_v1.json'
+      - 'research/disposition/current_evidence_research_boundary_v1.json'
+      - 'research/profitability/v4_sharp_turn_result/result.json'
+      - 'scripts/test_post_v4_current_evidence_boundary.py'
+      - 'scripts/test_post_v4_project_state.py'
+      - 'scripts/project_state_final.py'
+      - '.github/workflows/post-v4-current-evidence-boundary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile post-V4 governance code
+        run: >-
+          python -m py_compile
+          scripts/project_state_final.py
+          scripts/test_post_v4_current_evidence_boundary.py
+          scripts/test_post_v4_project_state.py
+      - name: Validate post-V4 immutable evidence boundary
+        run: python scripts/test_post_v4_current_evidence_boundary.py
+      - name: Validate post-V4 terminal project-state progression
+        run: python scripts/test_post_v4_project_state.py
+      - name: Prove execution permissions remain disabled
+        run: |
+          python - <<'PY'
+          import json
+          b=json.load(open('research/disposition/post_v4_current_evidence_research_boundary_v1.json'))
+          assert b['validated_profitable_edge'] is False
+          assert b['post_result_refit_permitted'] is False
+          assert b['paper_execution_enabled'] is False
+          assert b['live_execution_enabled'] is False
+          assert b['broker_mutation_enabled'] is False
+          assert b['candidate_reaudit']['executable_unused_first_party_family_available'] is False
+          print('Post-V4 no-edge and execution boundary verified')
+          PY
