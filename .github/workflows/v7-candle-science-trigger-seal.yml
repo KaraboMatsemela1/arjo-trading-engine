@@ -1,0 +1,118 @@
+name: V7 Candle Science Trigger Seal
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v7_candle_science_primitives.py'
+      - 'scripts/v7_candle_science_reconstruct.py'
+      - 'scripts/v7_candle_science_structure.py'
+      - 'scripts/run_v7_candle_science_trigger_seal.py'
+      - 'scripts/test_v7_candle_science_logic.py'
+      - 'research/profitability/v7_candle_science_trigger_authorization_v1.json'
+      - '.github/workflows/v7-candle-science-trigger-seal.yml'
+  push:
+    branches:
+      - research/v7-candle-science-trigger-seal
+    paths:
+      - 'research/profitability/v7_candle_science_trigger_authorization_v1.json'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  offline-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen V7 protocol
+        run: python scripts/check_v7_candle_science_protocol.py
+      - name: Compile outcome-blind V7 modules
+        run: python -m py_compile scripts/v7_candle_science_primitives.py scripts/v7_candle_science_reconstruct.py scripts/v7_candle_science_structure.py scripts/run_v7_candle_science_trigger_seal.py scripts/test_v7_candle_science_logic.py
+      - name: Run no-network causal regressions
+        run: PYTHONPATH=scripts python scripts/test_v7_candle_science_logic.py
+      - name: Verify any authorization remains structure-only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/profitability/v7_candle_science_trigger_authorization_v1.json')
+          if p.exists():
+              x=json.loads(p.read_text())
+              assert x == {
+                  'authorization':'AUTHORIZE_V7_H4_H1_TRIGGER_SEAL',
+                  'issue':276,
+                  'protocol_sha256':'98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134',
+                  'm1_authorized':False,
+                  'bid_ask_authorized':False,
+                  'economic_outcomes_authorized':False,
+                  'broker_mutation_authorized':False,
+              }
+          PY
+
+  structure-seal:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    needs: offline-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V7_OUTPUT_DIR: artifacts/v7_candle_science_trigger_seal
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: auth
+        name: Detect structure-only authorization
+        run: |
+          if [ -f research/profitability/v7_candle_science_trigger_authorization_v1.json ]; then echo 'present=true' >> "$GITHUB_OUTPUT"; else echo 'present=false' >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-python@v5
+        if: steps.auth.outputs.present == 'true'
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA token
+        if: steps.auth.outputs.present == 'true'
+        run: test -n "$OANDA_TOKEN"
+      - name: Verify exact structure-only authorization
+        if: steps.auth.outputs.present == 'true'
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/v7_candle_science_trigger_authorization_v1.json'))
+          assert x == {'authorization':'AUTHORIZE_V7_H4_H1_TRIGGER_SEAL','issue':276,'protocol_sha256':'98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134','m1_authorized':False,'bid_ask_authorized':False,'economic_outcomes_authorized':False,'broker_mutation_authorized':False}
+          PY
+      - name: Execute H4 H1 MID-only V7 reconstruction
+        if: steps.auth.outputs.present == 'true'
+        run: PYTHONPATH=scripts python scripts/run_v7_candle_science_trigger_seal.py
+      - name: Publish canonical readiness summary
+        if: steps.auth.outputs.present == 'true' && success()
+        run: |
+          python - <<'PY' > /tmp/v7-comment.md
+          import json,os
+          r=json.load(open('artifacts/v7_candle_science_trigger_seal/v7_trigger_readiness.json'))
+          print('<!-- V7_CANDLE_SCIENCE_TRIGGER_SEAL_RESULT -->')
+          print('## V7 outcome-blind trigger-seal result')
+          print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- source head: `{os.environ['GITHUB_SHA']}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- triggers: **{r['trigger_count']}**")
+          print(f"- distinct knowledge timestamps: **{r['distinct_knowledge_timestamps']}**")
+          print(f"- trigger SHA: `{r['trigger_set_sha256']}`")
+          print(f"- readiness SHA: `{r['readiness_sha256']}`")
+          print(f"- structure manifest SHA: `{r['structure_manifest_sha256']}`")
+          print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
+          print(f"- primary stats: `{json.dumps(r['primary_stats'],sort_keys=True)}`")
+          print('- M1/BID/ASK requested: `false`')
+          print('- economic outcomes accessed: `false`')
+          PY
+          gh issue comment 276 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v7-comment.md
+      - uses: actions/upload-artifact@v4
+        if: steps.auth.outputs.present == 'true' && success()
+        with:
+          name: v7-candle-science-trigger-seal
+          path: artifacts/v7_candle_science_trigger_seal
+          if-no-files-found: error
+          retention-days: 90
