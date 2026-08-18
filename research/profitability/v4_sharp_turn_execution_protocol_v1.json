@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "protocol_id": "ARJO_V4_SHARP_TURN_D1_H1_EXECUTION_V1",
+  "status": "FROZEN_BEFORE_V4_MARKET_OUTCOME_ACCESS",
+  "classification": "SOURCE_GROUNDED_SHARP_TURN_WITH_PREREGISTERED_ENGINE_CONVENTIONS_NOT_EXACT_ARJO_EXECUTION",
+  "family": {
+    "candidate_id": "V4_SHARP_TURN_FVG",
+    "source_recovery_issue": 239,
+    "protocol_freeze_issue": 242,
+    "independent_of_failed_family": "V3_C_ARGUMENTS_2CR",
+    "v3c_outcomes_used_for_rule_selection": false,
+    "family_selected_from_new_source_semantics_before_v4_outcome_access": true
+  },
+  "semantic_boundary": {
+    "source_rules": [
+      "higher-timeframe bias/context precedes lower-timeframe entry",
+      "Daily-to-H1 is a baseline Sharp Turn alignment",
+      "Sharp Turn requires an FVG into the higher-timeframe FVG followed by an FVG out",
+      "participation is on the outbound/second FVG after confirmation",
+      "full swing extreme is an allowed stop reference",
+      "2R is explicit beginner target guidance",
+      "killzone participation is ideal rather than mandatory",
+      "entry style after outbound-FVG confirmation is left to the trader"
+    ],
+    "engine_conventions": [
+      "FVG-only proxy for Monthly/Weekly/Daily directional alignment",
+      "latest completed unmitigated FVG defines active direction before first encounter",
+      "inbound FVG gap interval must intersect the Daily context FVG",
+      "outbound FVG candle-three close must exit the Daily FVG in trade direction",
+      "entry is immediate at first tradable M1 price after outbound H1 candle completion",
+      "stop is full known H1 interval extreme from inbound sequence start through outbound completion",
+      "no session filter",
+      "first qualifying outbound FVG only",
+      "one open position maximum",
+      "no break-even or trailing in baseline"
+    ],
+    "engine_conventions_are_not_arjo_semantic_claims": true
+  },
+  "market_data": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA US Nas 100 CFD/proxy; not CME NQ futures equivalence",
+    "structure_price": "MID",
+    "structure_granularities": ["M", "W", "D", "H1"],
+    "execution_price": "M1 BID/ASK",
+    "smooth": false,
+    "include_first": true,
+    "daily_alignment_hour": 17,
+    "alignment_timezone": "America/New_York",
+    "weekly_alignment": "Friday",
+    "historical_structure_start": "2010-01-01T00:00:00Z",
+    "historical_structure_end_exclusive": "2024-01-01T00:00:00Z",
+    "historical_window_classification": "BACKWARD_HISTORICAL_DEVELOPMENT_NOT_UNTOUCHED_FAMILY_HOLDOUT",
+    "request_m1_only_after_v4_trigger_set_is_sealed": true,
+    "no_market_request_authorized_by_protocol_freeze_issue": true
+  },
+  "fvg": {
+    "bullish": "on completed candles c1,c2,c3: c3.low > c1.high; gap=[c1.high,c3.low]",
+    "bearish": "on completed candles c1,c2,c3: c3.high < c1.low; gap=[c3.high,c1.low]",
+    "knowledge_time": "end/close time of completed candle c3",
+    "active_context": "latest completed FVG not yet intersected by any later complete candle high-low range before the evaluated encounter",
+    "first_intersection_consumes_context": true,
+    "equal_creation_time_tie_break": "lexicographic stable FVG id"
+  },
+  "direction": {
+    "required_timeframes": ["M", "W", "D"],
+    "selector": "latest active FVG direction on each required timeframe immediately before the Daily context first encounter",
+    "long": "M, W and D are all bullish",
+    "short": "M, W and D are all bearish",
+    "conflict": "SKIPPED_DIRECTION_CONFLICT",
+    "missing_required_context": "SKIPPED_MISSING_DIRECTION_CONTEXT"
+  },
+  "daily_context": {
+    "selection": "chronological first encounter of each eligible Daily FVG whose pre-encounter M/W/D directions align",
+    "encounter": "first later complete H1 candle whose high-low range intersects the Daily FVG price interval",
+    "one_use": true,
+    "context_consumed_after_first_encounter": true
+  },
+  "sharp_turn": {
+    "entry_timeframe": "H1",
+    "long": {
+      "inbound": "first bearish H1 FVG after/on Daily encounter whose gap interval intersects the Daily FVG",
+      "outbound": "first later bullish H1 FVG whose c3 close is > Daily FVG upper bound"
+    },
+    "short": {
+      "inbound": "first bullish H1 FVG after/on Daily encounter whose gap interval intersects the Daily FVG",
+      "outbound": "first later bearish H1 FVG whose c3 close is < Daily FVG lower bound"
+    },
+    "outbound_must_complete_before_next_daily_context_encounter": true,
+    "trigger_knowledge_time": "outbound H1 FVG c3 close",
+    "multiple_outbound_policy": "first causally completed qualifying outbound FVG only"
+  },
+  "entry": {
+    "knowledge_time": "Sharp Turn outbound H1 c3 close",
+    "entry_bar": "first complete OANDA M1 BID/ASK candle whose start is >= trigger knowledge time",
+    "long_base_fill": "ASK open plus 0.5 index points adverse slippage",
+    "short_base_fill": "BID open minus 0.5 index points adverse slippage",
+    "long_stress_fill": "ASK open plus 1.0 index points adverse slippage",
+    "short_stress_fill": "BID open minus 1.0 index points adverse slippage",
+    "max_wait_for_first_m1_elapsed_hours": 72,
+    "missing_entry_data": "DATA_INTEGRITY_FAILURE",
+    "pending_retracement": false
+  },
+  "risk": {
+    "stop_anchor": "full H1 known interval extreme from inbound FVG c1 through outbound FVG c3 inclusive",
+    "long_stop": "minimum low of the interval",
+    "short_stop": "maximum high of the interval",
+    "equal_extreme_tie": "same price; preserve earliest timestamp for audit only",
+    "risk_r_points_long": "slipped_entry_price - stop_anchor",
+    "risk_r_points_short": "stop_anchor - slipped_entry_price",
+    "invalid_if_risk_nonpositive": true,
+    "long_stop_event": "first eligible M1 bar with BID low <= stop_anchor",
+    "short_stop_event": "first eligible M1 bar with ASK high >= stop_anchor",
+    "gap_stop_fill": "use adverse M1 open when open is beyond stop, otherwise stop anchor, then apply adverse exit slippage"
+  },
+  "target": {
+    "multiple_r": 2.0,
+    "long_target": "slipped_entry_price + 2 * risk_r_points",
+    "short_target": "slipped_entry_price - 2 * risk_r_points",
+    "long_event": "first eligible M1 bar with BID high >= target",
+    "short_event": "first eligible M1 bar with ASK low <= target",
+    "fill": "target price adjusted by adverse exit slippage; favorable gap improvement is not credited",
+    "context_target_record_only": true
+  },
+  "intrabar_order": {
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "entry_minute_events": "entry occurs at M1 open; subsequent high/low events may resolve trade in same M1 bar",
+    "missing_internal_m1_sequence": "STOP_FIRST_CONSERVATIVE_NOT_SYNTHETIC_PATH"
+  },
+  "holding": {
+    "fixed_expiry": null,
+    "exit_conditions": ["STOP", "TARGET", "RIGHT_CENSORED_DATASET_END"],
+    "right_censored_trade_excluded_from_resolved_metrics": true,
+    "reason": "no source-grounded holding expiry; avoid adding arbitrary timeout before outcome access"
+  },
+  "portfolio_policy": {
+    "concurrent_positions": "ONE_OPEN_POSITION_MAXIMUM",
+    "signal_while_position_open": "SKIPPED_CONCURRENT_POSITION",
+    "skipped_signals_never_replayed": true,
+    "same_trigger_time_dedup": "lexicographic trigger id"
+  },
+  "economics": {
+    "spread": "historical OANDA ASK entry / BID exit for longs and BID entry / ASK exit for shorts",
+    "base_slippage_points_per_side": 0.5,
+    "stress_slippage_points_per_side": 1.0,
+    "financing_base_r_per_1440_complete_m1_bars": 0.005,
+    "financing_stress_r_per_1440_complete_m1_bars": 0.01,
+    "financing_deduction": "rate * (complete_m1_bars_held / 1440)",
+    "classification": "market-microstructure measurement assumptions frozen before V4 outcome access; not Sharp Turn semantic parameters"
+  },
+  "staged_access": {
+    "stage_1": "reconstruct M/W/D/H1 structure and enumerate Sharp Turn triggers only",
+    "stage_2": "seal trigger ids, context ids, directions, stop anchors and knowledge timestamps",
+    "stage_3": "only after stage-2 merge, retrieve M1 BID/ASK windows needed for sealed triggers",
+    "stage_4": "evaluate frozen base/stress economics exactly once",
+    "no_economic_outcomes_during_protocol_freeze": true,
+    "no_parameter_selection_after_stage_1_outcomes": true
+  },
+  "metrics": {
+    "primary_unit": "R",
+    "minimum_resolved_executed_trades": 100,
+    "required": [
+      "resolved_executed_trades",
+      "long_trades",
+      "short_trades",
+      "skipped_direction_conflicts",
+      "skipped_concurrent_signals",
+      "data_integrity_failures",
+      "base_net_expectancy_r",
+      "base_profit_factor",
+      "base_win_rate",
+      "base_max_drawdown_r",
+      "stress_net_expectancy_r",
+      "stress_profit_factor",
+      "bootstrap_95pct_ci_net_expectancy_r",
+      "calendar_year_net_expectancy_r",
+      "unique_entry_dates"
+    ],
+    "bootstrap": {
+      "method": "IID executed-trade bootstrap",
+      "replicates": 10000,
+      "seed": 20260817
+    }
+  },
+  "classification_rules": {
+    "INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED": "resolved_executed_trades < 100",
+    "EDGE_NOT_ESTABLISHED": "sample >=100 and one or more PRELIMINARY_HISTORICAL_EDGE conditions fail",
+    "PRELIMINARY_HISTORICAL_EDGE": {
+      "resolved_executed_trades_gte": 100,
+      "base_net_expectancy_r_gt": 0.0,
+      "base_profit_factor_gt": 1.2,
+      "bootstrap_95pct_ci_lower_net_expectancy_r_gt": 0.0,
+      "stress_net_expectancy_r_gt": 0.0,
+      "stress_profit_factor_gt": 1.0,
+      "data_integrity_failures_eq": 0,
+      "synthetic_fills_eq": 0
+    },
+    "STRONG_HISTORICAL_EDGE": {
+      "resolved_executed_trades_gte": 250,
+      "base_profit_factor_gt": 1.3,
+      "bootstrap_95pct_ci_lower_net_expectancy_r_gt": 0.0,
+      "stress_net_expectancy_r_gt": 0.0,
+      "positive_calendar_year_fraction_gte": 0.7,
+      "data_integrity_failures_eq": 0
+    }
+  },
+  "interpretation": {
+    "historical_result_can_establish": "evidence for or against this frozen V4 measurement family on the specified OANDA historical window",
+    "historical_result_cannot_establish": [
+      "exact Arjo execution semantics",
+      "untouched family-level out-of-sample profitability",
+      "future profitability",
+      "paper readiness",
+      "live readiness"
+    ]
+  },
+  "authorization": {
+    "market_data_execution_for_issue_242": false,
+    "backtest_execution": false,
+    "paper_execution": false,
+    "live_execution": false,
+    "broker_mutation": false
+  },
+  "protocol_sha256": "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd"
+}
