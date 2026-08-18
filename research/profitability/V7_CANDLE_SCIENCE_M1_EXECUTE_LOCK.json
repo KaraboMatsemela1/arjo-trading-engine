@@ -1,0 +1,14 @@
+{
+  "status": "AUTHORIZED_RESEARCH_M1_READ_AFTER_PREFLIGHT",
+  "issue": 280,
+  "protocol_sha256": "98ed03185f93643e1c1b326835bee169e1f72a84d00c5a6aa4e56453a2a57134",
+  "trigger_set_sha256": "0286fc800d0b20399848945b2ae6b7520a6d314767a4ef8bb043b476bb3d2c98",
+  "trigger_count": 5212,
+  "distinct_knowledge_timestamps": 4972,
+  "historical_execution_lock_sha256": "56a00ad6a45d926221330acf2c2160ce862752dc93f712c3b35b68cf35194049",
+  "forward_confirmation_transport_sha256": "83bdd46c80acec241499d5d99e76df22b8c11cdf4edd5983b4f4937582fdbc8e",
+  "forward_confirmation_access_authorized": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
