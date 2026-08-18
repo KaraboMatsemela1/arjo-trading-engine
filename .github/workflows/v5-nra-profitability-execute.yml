@@ -1,0 +1,106 @@
+name: V5 NRA Profitability Execute
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/profitability/V5_NRA_PROFITABILITY_EXECUTE_LOCK.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+  OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  execute:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA credentials
+        run: |
+          test -n "$OANDA_ACCOUNT_ID"
+          test -n "$OANDA_API_TOKEN"
+      - name: Re-run all no-network V5 guards before first M1 access
+        run: |
+          PYTHONPATH=scripts python scripts/check_v5_no_resistance_aoo_protocol.py
+          PYTHONPATH=scripts python scripts/check_v5_nra_profitability_lock.py
+          PYTHONPATH=scripts python scripts/test_v5_nra_profitability_engine.py
+          PYTHONPATH=scripts python scripts/test_run_v5_nra_profitability_oanda.py
+      - name: Verify exact M1 execution marker
+        run: |
+          PYTHONPATH=scripts python - <<'PY'
+          from pathlib import Path
+          import run_v5_nra_profitability_oanda as runner
+          marker=runner.verify_marker(Path('research/profitability/V5_NRA_PROFITABILITY_EXECUTE_LOCK.json'))
+          assert marker['paper_execution_authorized'] is False
+          assert marker['live_execution_authorized'] is False
+          assert marker['broker_mutation_authorized'] is False
+          print('V5 exact research M1 marker verified')
+          PY
+      - name: Execute sealed V5 backward historical BID/ASK measurement
+        run: PYTHONPATH=scripts python scripts/run_v5_nra_profitability_oanda.py --output-dir /tmp/v5-nra-profitability
+      - name: Verify result boundary and publish summary
+        run: |
+          python - <<'PY' > /tmp/v5-result-comment.md
+          import json, os
+          from pathlib import Path
+          r=json.loads(Path('/tmp/v5-nra-profitability/profitability-result.json').read_text())
+          assert r['status']=='V5_NO_RESISTANCE_AOO_PROFITABILITY_RESULT_READY'
+          assert r['first_m1_response_accessed'] is True
+          assert r['parameter_changes_after_first_m1_response'] is False
+          assert r['post_result_tuning_performed'] is False
+          assert r['validated_profitable_edge'] is False
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          print('<!-- V5_NRA_PROFITABILITY_RESULT -->')
+          print('## V5 sealed historical economic result')
+          print()
+          print(f"- workflow run: `{os.environ.get('GITHUB_RUN_ID')}`")
+          print(f"- source head: `{os.environ.get('GITHUB_SHA')}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- historical edge established: **`{r['historical_edge_established']}`**")
+          print('- validated profitable edge: **`false`** — backward history requires separate protected confirmation')
+          b=r['base_metrics']; s=r['stress_metrics']
+          print(f"- base resolved trades: **{b['resolved_executed_trades']}**")
+          print(f"- base expectancy: **{b['net_expectancy_r']}R/trade**")
+          print(f"- base profit factor: **{b['profit_factor']}**")
+          print(f"- base 95% bootstrap CI: **{b['bootstrap_95pct_ci_net_expectancy_r']}R**")
+          print(f"- base win rate: **{b['win_rate']}**")
+          print(f"- base max drawdown: **{b['max_drawdown_r']}R**")
+          print(f"- stress resolved trades: **{s['resolved_executed_trades']}**")
+          print(f"- stress expectancy: **{s['net_expectancy_r']}R/trade**")
+          print(f"- stress profit factor: **{s['profit_factor']}**")
+          print(f"- stress 95% bootstrap CI: **{s['bootstrap_95pct_ci_net_expectancy_r']}R**")
+          print(f"- result SHA: `{r['result_sha256']}`")
+          print(f"- provider provenance SHA: `{r['provider_provenance_sha256']}`")
+          print(f"- base ledger SHA: `{r['base_ledger_sha256']}`")
+          print(f"- stress ledger SHA: `{r['stress_ledger_sha256']}`")
+          print('- post-result tuning: `false`')
+          print('- paper/live/broker mutation: `false`')
+          PY
+          gh issue comment 255 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v5-result-comment.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v5-nra-profitability-result
+          path: |
+            /tmp/v5-nra-profitability/profitability-result.json
+            /tmp/v5-nra-profitability/base-trade-ledger.jsonl
+            /tmp/v5-nra-profitability/stress-trade-ledger.jsonl
+            /tmp/v5-nra-profitability/provider-provenance.json
+          if-no-files-found: error
+          retention-days: 90
+      - name: Delete runner-local provider cache
+        if: always()
+        run: rm -rf /tmp/v5-nra-profitability/m1-cache

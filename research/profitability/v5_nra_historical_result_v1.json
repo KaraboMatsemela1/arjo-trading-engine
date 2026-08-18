@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V5_NQ_NO_RESISTANCE_AOO_H4_SWING_HIGH_LONG",
+  "issue": 255,
+  "workflow_run_id": 32154798217,
+  "classification": "EDGE_NOT_ESTABLISHED",
+  "historical_edge_established": false,
+  "validated_profitable_edge": false,
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+  "structure_transport_sha256": "8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0",
+  "economic_lock_sha256": "7c509c72e290a427d9a44e5ab133e624e766f73450e78ed68790d1b3d51f6b87",
+  "trigger_set_sha256": "b65671c07e811924341a75c8e21434d275c4b6283febd2c45978b59ebfe4bb10",
+  "trigger_count": 4737,
+  "base_metrics": {
+    "resolved_executed_trades": 2881,
+    "net_expectancy_r": -0.10331992781007304,
+    "profit_factor": 0.43320757448303787,
+    "bootstrap_95pct_ci_net_expectancy_r": [-0.12053497529438846, -0.08654881711126848],
+    "win_rate": 0.5525859076709476,
+    "max_drawdown_r": 301.8124834765421
+  },
+  "stress_metrics": {
+    "resolved_executed_trades": 2881,
+    "net_expectancy_r": -0.15440946199861205,
+    "profit_factor": 0.2707334236384328,
+    "bootstrap_95pct_ci_net_expectancy_r": [-0.17142476427277253, -0.13801462035074769]
+  },
+  "result_sha256": "4474926ae20e67d5e23010a62654d41d2a3f6cefbff835f7c122e011c64d7345",
+  "provider_provenance_sha256": "bd162e5a3003ba33c9257b39c9054a79780a943cdd25fe1220ff1aedc2275b75",
+  "base_ledger_sha256": "8c5586ba088927c233783507d9ec7da520c27deaff58817080f60b6ad89b0de5",
+  "stress_ledger_sha256": "101cd9d07b6cfa650149e13c44ef9db31222f6e3a6fcb490381b5818e7d552b8",
+  "post_result_tuning_permitted": false,
+  "forward_confirmation_authorized": false,
+  "paper_execution": false,
+  "live_execution": false,
+  "broker_mutation": false
+}
