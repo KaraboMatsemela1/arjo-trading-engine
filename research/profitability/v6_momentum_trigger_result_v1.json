@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "issue": 266,
+  "workflow_run_id": 32167630142,
+  "source_head": "d33348e249dc45907fc4ede02417552c7f5da64a",
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "classification": "TRIGGER_SAMPLE_NECESSARY_CONDITION_MET",
+  "trigger_count": 1331,
+  "distinct_knowledge_timestamps": 441,
+  "trigger_set_sha256": "644edb8b1fe008a053f4fbdc368f6117d1c20ba478b9277bb1fb1f8f5cf9a150",
+  "readiness_sha256": "f214b9154b3c40fb6cc472fd8858bc4781aedb3c28e7d4f252d0832dbf3b9cad",
+  "structure_manifest_sha256": "4cb58637b433b544865a6a94cdc2b48b344d47824e8ba0f76b9be5f67496dd2c",
+  "independent_reconstruction_exact": true,
+  "primary_stats": {
+    "cycles": 6053,
+    "patterns": 2125,
+    "signals": 1331,
+    "target_touched_before_trigger": 673
+  },
+  "m1_accessed": false,
+  "bid_ask_accessed": false,
+  "fills_evaluated": false,
+  "economic_outcomes_accessed": false,
+  "paper_execution": false,
+  "live_execution": false,
+  "broker_mutation": false
+}

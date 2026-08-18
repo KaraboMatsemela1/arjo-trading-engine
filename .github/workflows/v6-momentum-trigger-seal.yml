@@ -1,0 +1,114 @@
+name: V6 Momentum Trigger Seal
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v6_momentum_primitives.py'
+      - 'scripts/v6_momentum_reconstruct.py'
+      - 'scripts/v6_momentum_structure.py'
+      - 'scripts/run_v6_momentum_trigger_seal.py'
+      - 'scripts/test_v6_momentum_logic.py'
+      - 'research/profitability/v6_momentum_trigger_authorization_v1.json'
+      - '.github/workflows/v6-momentum-trigger-seal.yml'
+  push:
+    branches:
+      - research/v6-momentum-trigger-seal
+    paths:
+      - 'research/profitability/v6_momentum_trigger_authorization_v1.json'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  offline-preflight:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen V6 protocol
+        run: python scripts/check_v6_momentum_protocol.py
+      - name: Compile outcome-blind V6 modules
+        run: python -m py_compile scripts/v6_momentum_primitives.py scripts/v6_momentum_reconstruct.py scripts/v6_momentum_structure.py scripts/run_v6_momentum_trigger_seal.py scripts/test_v6_momentum_logic.py
+      - name: Run no-network synthetic regressions
+        run: PYTHONPATH=scripts python scripts/test_v6_momentum_logic.py
+      - name: Verify any authorization remains structure-only
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/profitability/v6_momentum_trigger_authorization_v1.json')
+          if p.exists():
+              x=json.loads(p.read_text())
+              assert x['authorization']=='AUTHORIZE_V6_H1_M15_TRIGGER_SEAL'
+              assert x['issue']==266
+              assert x['protocol_sha256']=='8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab'
+              assert x['m1_authorized'] is False
+              assert x['bid_ask_authorized'] is False
+              assert x['economic_outcomes_authorized'] is False
+              assert x['broker_mutation_authorized'] is False
+          PY
+
+  structure-seal:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V6_OUTPUT_DIR: artifacts/v6_momentum_trigger_seal
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA token
+        run: test -n "$OANDA_TOKEN"
+      - name: Verify frozen V6 protocol before provider access
+        run: python scripts/check_v6_momentum_protocol.py
+      - name: Verify exact structure-only authorization
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('research/profitability/v6_momentum_trigger_authorization_v1.json'))
+          assert x == {'authorization':'AUTHORIZE_V6_H1_M15_TRIGGER_SEAL','issue':266,'protocol_sha256':'8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab','m1_authorized':False,'bid_ask_authorized':False,'economic_outcomes_authorized':False,'broker_mutation_authorized':False}
+          PY
+      - name: Run H1 M15 MID-only trigger reconstruction
+        run: PYTHONPATH=scripts python scripts/run_v6_momentum_trigger_seal.py
+      - name: Publish canonical readiness summary
+        if: success()
+        run: |
+          python - <<'PY' > /tmp/v6-comment.md
+          import json,os
+          r=json.load(open('artifacts/v6_momentum_trigger_seal/v6_trigger_readiness.json'))
+          print('<!-- V6_MOMENTUM_TRIGGER_SEAL_RESULT -->')
+          print('## V6 outcome-blind trigger-seal result')
+          print(f"- workflow run: `{os.environ['GITHUB_RUN_ID']}`")
+          print(f"- source head: `{os.environ['GITHUB_SHA']}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- triggers: **{r['trigger_count']}**")
+          print(f"- distinct knowledge timestamps: **{r['distinct_knowledge_timestamps']}**")
+          print(f"- trigger SHA: `{r['trigger_set_sha256']}`")
+          print(f"- readiness SHA: `{r['readiness_sha256']}`")
+          print(f"- structure manifest SHA: `{r['structure_manifest_sha256']}`")
+          print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
+          print(f"- primary stats: `{json.dumps(r['primary_stats'],sort_keys=True)}`")
+          print('- M1/BID/ASK requested: `false`')
+          print('- economic outcomes accessed: `false`')
+          PY
+          gh issue comment 266 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v6-comment.md
+      - name: Publish failure checkpoint
+        if: failure()
+        run: |
+          gh issue comment 266 --repo "$GITHUB_REPOSITORY" --body "<!-- V6_MOMENTUM_TRIGGER_SEAL_FAILURE --> V6 structure-only seal failed in workflow run \`$GITHUB_RUN_ID\` at source \`$GITHUB_SHA\`. M1/BID/ASK/economic authorization remains false."
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: v6-momentum-trigger-seal
+          path: artifacts/v6_momentum_trigger_seal
+          if-no-files-found: error
+          retention-days: 90
