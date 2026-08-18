@@ -1,0 +1,30 @@
+name: V6 Momentum Economics Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v6_momentum_backtest_mechanics.py'
+      - 'scripts/v6_momentum_backtest_metrics.py'
+      - 'scripts/test_v6_momentum_backtest.py'
+      - '.github/workflows/v6-momentum-economics-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify immutable V6 strategy protocol
+        run: python scripts/check_v6_momentum_protocol.py
+      - name: Compile historical evaluator
+        run: python -m py_compile scripts/v6_momentum_backtest_mechanics.py scripts/v6_momentum_backtest_metrics.py scripts/test_v6_momentum_backtest.py
+      - name: Run symmetric no-network fill regressions
+        run: PYTHONPATH=scripts python scripts/test_v6_momentum_backtest.py
+      - name: Prove no V6 M1 execution lock exists yet
+        run: test ! -e research/profitability/V6_MOMENTUM_M1_EXECUTE_LOCK.json
