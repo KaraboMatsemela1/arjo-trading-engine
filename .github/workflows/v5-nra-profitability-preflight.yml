@@ -1,0 +1,29 @@
+name: V5 NRA Profitability Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'research/profitability/v5_nra_profitability_execution_lock_v1.json'
+      - 'scripts/v5_nra_profitability_engine.py'
+      - 'scripts/check_v5_nra_profitability_lock.py'
+      - 'scripts/test_v5_nra_profitability_engine.py'
+      - '.github/workflows/v5-nra-profitability-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile V5 profitability code
+        run: python -m py_compile scripts/v5_nra_profitability_engine.py scripts/check_v5_nra_profitability_lock.py scripts/test_v5_nra_profitability_engine.py
+      - name: Verify frozen V5 economic lock
+        run: PYTHONPATH=scripts python scripts/check_v5_nra_profitability_lock.py
+      - name: Run V5 economic mechanics regressions
+        run: PYTHONPATH=scripts python scripts/test_v5_nra_profitability_engine.py
