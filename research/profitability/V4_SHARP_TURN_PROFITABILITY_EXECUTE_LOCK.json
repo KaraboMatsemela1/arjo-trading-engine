@@ -1,0 +1,13 @@
+{
+  "status": "AUTHORIZED_SINGLE_V4_HISTORICAL_M1_READ_AFTER_PREFLIGHT",
+  "issue": 247,
+  "protocol_sha256": "a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd",
+  "trigger_readiness_sha256": "6fb99be106ffa98857693211c5e4814f90a1e874b3255168874a0e1a47a6dba3",
+  "trigger_set_sha256": "1df6eabb176ef85ce203f3eeb7b76007d0114dfb98d1b1ad0f76f703d779847a",
+  "profitability_lock_sha256": "846e3c106f9f478fe3ef74ad8152431f42bc2d0cac0d314d9a71d6aef8f0ec30",
+  "boundary_revision": "V4_STRICT_CANDLE_COVERAGE_END_V2",
+  "parameter_changes_after_first_m1_response": false,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
