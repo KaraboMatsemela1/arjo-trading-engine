@@ -1,0 +1,45 @@
+name: V7 Candle Science Forward Preflight
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/v7_candle_science_forward_structure.py'
+      - 'scripts/v7_candle_science_forward_metrics.py'
+      - 'scripts/run_v7_candle_science_forward_trigger_seal.py'
+      - 'scripts/test_v7_candle_science_forward_preflight.py'
+      - '.github/workflows/v7-candle-science-forward-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify frozen V7 protocol and forward transport
+        run: |
+          python scripts/check_v7_candle_science_protocol.py
+          python - <<'PY'
+          import hashlib,json
+          p='research/profitability/v7_candle_science_forward_confirmation_transport_v1.json'
+          x=json.load(open(p));recorded=x.pop('transport_sha256')
+          raw=json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+          assert recorded=='83bdd46c80acec241499d5d99e76df22b8c11cdf4edd5983b4f4937582fdbc8e'
+          assert hashlib.sha256(raw).hexdigest()==recorded
+          assert x['status']=='FROZEN_BEFORE_V7_HISTORICAL_M1_RESULT'
+          PY
+      - name: Compile forward harness without provider access
+        run: python -m py_compile scripts/v7_candle_science_forward_structure.py scripts/v7_candle_science_forward_metrics.py scripts/run_v7_candle_science_forward_trigger_seal.py scripts/test_v7_candle_science_forward_preflight.py
+      - name: Prove historical-pass provider gate remains closed
+        run: PYTHONPATH=scripts python scripts/test_v7_candle_science_forward_preflight.py
+      - name: Prove all forward authorization and outcome artifacts are absent
+        run: |
+          test ! -e research/profitability/V7_CANDLE_SCIENCE_FORWARD_STRUCTURE_AUTHORIZE.json
+          test ! -e research/profitability/V7_CANDLE_SCIENCE_FORWARD_M1_AUTHORIZE.json
+          test ! -e research/profitability/v7_candle_science_forward_trigger_result_v1.json
+          test ! -e research/profitability/v7_candle_science_forward_result_v1.json
