@@ -1,0 +1,75 @@
+{
+  "candidate_id": "ARJO_V5_NQ_NO_RESISTANCE_AOO_H4_SWING_HIGH_LONG",
+  "conditional_access": {
+    "confirmation_m1_authorized_before_historical_pass": false,
+    "confirmation_m1_requires_historical_classification": "V5_HISTORICAL_EDGE_ESTABLISHED",
+    "confirmation_structure_may_be_reconstructed_outcome_blind": true,
+    "confirmation_trigger_set_must_be_sealed_before_first_confirmation_m1_response": true
+  },
+  "confirmation_window": {
+    "alignment_timezone": "America/New_York",
+    "daily_alignment": 17,
+    "execution_granularity": "M1",
+    "execution_price": "BA",
+    "score_end_exclusive": "2026-08-01T00:00:00Z",
+    "score_start": "2024-01-01T00:00:00Z",
+    "structure_bootstrap_start": "2010-01-01T00:00:00Z",
+    "structure_granularities": [
+      "H4",
+      "H1"
+    ],
+    "structure_price": "MID",
+    "v5_m1_outcomes_accessed_before_freeze": false,
+    "weekly_alignment": "Friday"
+  },
+  "historical_bindings": {
+    "historical_trigger_set_sha256": "b65671c07e811924341a75c8e21434d275c4b6283febd2c45978b59ebfe4bb10",
+    "profitability_lock_sha256": "7c509c72e290a427d9a44e5ab133e624e766f73450e78ed68790d1b3d51f6b87",
+    "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+    "structure_transport_sha256": "8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0"
+  },
+  "interpretation": {
+    "family_specific_forward_oos": true,
+    "future_profitability_guaranteed": false,
+    "project_wide_pristine_market_holdout": false,
+    "universal_market_transfer_claimed": false
+  },
+  "issue": 260,
+  "mechanics": {
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "base_slippage_points_per_side": 0.5,
+    "entry": "first complete M1 ASK open at or after trigger knowledge time",
+    "expiry_complete_m1_bars": 1440,
+    "identical_to_historical_v5": true,
+    "one_open_long_maximum": true,
+    "post_confirmation_m1_tuning_allowed": false,
+    "post_historical_tuning_allowed": false,
+    "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST",
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01,
+    "stress_slippage_points_per_side": 1.0
+  },
+  "protocol_id": "ARJO_V5_NRA_FORWARD_FAMILY_OOS_CONFIRMATION_V1",
+  "protocol_sha256": "d86258ba66ba9eba20ed72e57af0368b90512ec24bc8e8a42f82be5cce1910b4",
+  "safety": {
+    "broker_mutation_authorized": false,
+    "live_execution_authorized": false,
+    "paper_execution_authorized": false
+  },
+  "schema_version": 1,
+  "status": "FROZEN_BEFORE_V5_HISTORICAL_RESULT_VISIBILITY",
+  "validation_gate": {
+    "base_net_expectancy_r_gt": 0.0,
+    "base_profit_factor_gt": 1.2,
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "data_integrity_failures_eq": 0,
+    "historical_v5_must_pass": true,
+    "independent_trigger_reconstruction_exact": true,
+    "minimum_confirmation_resolved_executed_trades": 100,
+    "pass_classification": "VALIDATED_PROFITABLE_EDGE_V5_FAMILY_SPECIFIC_FORWARD_OOS",
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.0,
+    "synthetic_fills_eq": 0,
+    "zero_parameter_changes_historical_to_confirmation": true
+  }
+}
