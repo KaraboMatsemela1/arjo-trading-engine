@@ -1,0 +1,13 @@
+{
+  "status": "AUTHORIZED_V5_RESEARCH_M1_READ_AFTER_TRIGGER_SEAL",
+  "issue": 255,
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+  "structure_transport_sha256": "8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0",
+  "profitability_lock_sha256": "7c509c72e290a427d9a44e5ab133e624e766f73450e78ed68790d1b3d51f6b87",
+  "trigger_set_sha256": "b65671c07e811924341a75c8e21434d275c4b6283febd2c45978b59ebfe4bb10",
+  "trigger_readiness_sha256": "9fcdf27b9fbc2d14bd878d3ebfd73a19fe32282066502e6c3350ea9ca8bb2a28",
+  "trigger_count": 4737,
+  "paper_execution_authorized": false,
+  "live_execution_authorized": false,
+  "broker_mutation_authorized": false
+}
