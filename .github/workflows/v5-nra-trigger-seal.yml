@@ -1,0 +1,94 @@
+name: V5 NRA Trigger Seal
+
+on:
+  push:
+    branches:
+      - agent/v5-nra-trigger-seal
+    paths:
+      - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - 'scripts/v5_nra_reference_fast.py'
+      - 'scripts/run_v5_nra_trigger_seal_fast.py'
+      - '.github/workflows/v5-nra-trigger-seal.yml'
+  pull_request:
+    paths:
+      - 'research/profitability/v5_nra_trigger_seal_authorization_v1.json'
+      - 'scripts/v5_nra_reference_fast.py'
+      - 'scripts/run_v5_nra_trigger_seal_fast.py'
+      - '.github/workflows/v5-nra-trigger-seal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  seal:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OANDA_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+      V5_OUTPUT_DIR: artifacts/v5_nra_trigger_seal
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require read-only OANDA token
+        run: test -n "$OANDA_TOKEN"
+      - name: Verify frozen protocol and transport
+        run: python scripts/check_v5_no_resistance_aoo_protocol.py
+      - name: Verify exact structure-only authorization sentinel
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('research/profitability/v5_nra_trigger_seal_authorization_v1.json').read_text())
+          assert payload == {
+              'authorization': 'AUTHORIZE_V5_STRUCTURE_TRIGGER_SEAL',
+              'broker_mutation_authorized': False,
+              'economic_outcomes_authorized': False,
+              'issue': 254,
+              'm1_authorized': False,
+              'protocol_sha256': 'f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff',
+              'structure_transport_sha256': '8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0',
+          }
+          PY
+      - name: Execute structure-only V5 trigger reconstruction
+        run: PYTHONPATH=scripts python scripts/run_v5_nra_trigger_seal_fast.py
+      - name: Publish canonical readiness summary to Issue 254
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          python - <<'PY' > /tmp/v5-readiness-comment.md
+          import json, os
+          from pathlib import Path
+          r=json.loads(Path('artifacts/v5_nra_trigger_seal/v5_trigger_readiness.json').read_text())
+          print('<!-- V5_NRA_TRIGGER_SEAL_RESULT -->')
+          print('## V5 structure-only trigger-seal result')
+          print()
+          print(f"- workflow run: `{os.environ.get('GITHUB_RUN_ID')}`")
+          print(f"- source head: `{os.environ.get('GITHUB_SHA')}`")
+          print(f"- classification: **`{r['classification']}`**")
+          print(f"- triggers: **{r['trigger_count']}**")
+          print(f"- distinct causal knowledge timestamps: **{r['distinct_knowledge_timestamps']}**")
+          print(f"- trigger set SHA: `{r['trigger_set_sha256']}`")
+          print(f"- readiness SHA: `{r['readiness_sha256']}`")
+          print(f"- structure manifest SHA: `{r['structure_manifest_sha256']}`")
+          print(f"- H4 structure SHA: `{r['h4_structure_sha256']}`")
+          print(f"- H1 structure SHA: `{r['h1_structure_sha256']}`")
+          print(f"- independent reconstruction exact: `{r['independent_reconstruction_exact']}`")
+          print(f"- primary stats: `{json.dumps(r['primary_stats'], sort_keys=True)}`")
+          print(f"- reference algorithm: `{r.get('reference_algorithm', 'BLOCK_INDEX')}`")
+          print('- M1 requested: `false`')
+          print('- economic outcomes accessed: `false`')
+          print('- paper/live/broker mutation: `false`')
+          PY
+          gh issue comment 254 --repo "$GITHUB_REPOSITORY" --body-file /tmp/v5-readiness-comment.md
+      - name: Upload sealed V5 structure and trigger evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v5-nra-trigger-seal
+          path: artifacts/v5_nra_trigger_seal
+          if-no-files-found: error
+          retention-days: 90
