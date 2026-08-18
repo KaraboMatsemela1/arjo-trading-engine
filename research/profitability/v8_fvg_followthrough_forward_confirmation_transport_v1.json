@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V8_NQ_FVG_FOLLOWTHROUGH_H4_H1_SYMMETRIC",
+  "protocol_sha256": "79c0289293996f02faa6de1ecb5dcc6d6201a7b98bff1be842bab6cc707b547d",
+  "status": "FROZEN_BEFORE_V8_HISTORICAL_M1_RESULT",
+  "structure_provider": {
+    "provider": "OANDA_V20_PRACTICE_READ_ONLY",
+    "instrument": "NAS100_USD",
+    "price": "M",
+    "granularities": ["H4", "H1"],
+    "start_inclusive": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-08-01T00:00:00Z",
+    "daily_alignment": 17,
+    "alignment_timezone": "America/New_York",
+    "weekly_alignment": "Friday"
+  },
+  "economic_provider": {
+    "provider": "OANDA_V20",
+    "environment": "practice",
+    "instrument": "NAS100_USD",
+    "granularity": "M1",
+    "price": "BA",
+    "start_inclusive": "2024-01-01T00:00:00Z",
+    "end_exclusive": "2026-08-01T00:00:00Z",
+    "smooth": false,
+    "includeFirst": true,
+    "on_demand_only_for_sealed_forward_signals": true,
+    "no_forward_fill": true,
+    "preserve_market_closures_and_gaps": true,
+    "no_synthetic_candles": true,
+    "no_synthetic_fills": true
+  },
+  "execution_binding": {
+    "same_as_historical_v8_mechanics": true,
+    "base_adverse_slippage_points_per_side": 0.5,
+    "stress_adverse_slippage_points_per_side": 1.0,
+    "base_financing_r_per_1440_complete_m1_bars": 0.005,
+    "stress_financing_r_per_1440_complete_m1_bars": 0.01,
+    "expiry_complete_m1_bars": 1440,
+    "max_elapsed_hours_to_first_eligible_m1": 72,
+    "same_m1_stop_and_target": "STOP_FIRST_CONSERVATIVE",
+    "one_open_position_maximum": true,
+    "same_knowledge_time_dedup": "LEXICOGRAPHIC_ASCENDING_TRIGGER_ID_FIRST"
+  },
+  "forward_pass_gate": {
+    "classification": "VALIDATED_PROFITABLE_EDGE_V8_FVG_FOLLOWTHROUGH_FORWARD_OOS",
+    "minimum_resolved_executed_trades": 75,
+    "net_expectancy_r_gt": 0.0,
+    "profit_factor_gt": 1.2,
+    "bootstrap_95pct_lower_expectancy_r_gt": 0.0,
+    "stress_net_expectancy_r_gt": 0.0,
+    "stress_profit_factor_gt": 1.1,
+    "data_integrity_failures_eq": 0,
+    "synthetic_fills_eq": 0
+  },
+  "access_gate": {
+    "historical_gate_must_pass_before_forward_structure_access": true,
+    "forward_m1_access_before_sealed_forward_triggers": false,
+    "post_historical_parameter_changes_allowed": false,
+    "post_historical_cost_changes_allowed": false,
+    "post_historical_threshold_changes_allowed": false
+  },
+  "safety": {
+    "paper_execution_authorized": false,
+    "live_execution_authorized": false,
+    "broker_mutation_authorized": false
+  },
+  "transport_sha256": "b72b6f8aaaf6c53c6f957917105feba4078cfd6e37c059c49b912cc4203503e8"
+}
