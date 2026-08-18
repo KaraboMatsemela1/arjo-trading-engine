@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "candidate_id": "ARJO_V6_NQ_MOMENTUM_CYCLE_CONTINUATION_H1_M15_SYMMETRIC",
+  "issue": 270,
+  "workflow_run_id": 32168638822,
+  "classification": "EDGE_NOT_ESTABLISHED",
+  "historical_edge_established": false,
+  "validated_profitable_edge": false,
+  "forward_confirmation_authorized": false,
+  "protocol_sha256": "8a4839f9c9c07bec97aa78fe57ea246e8c256ad88c458ce9bf37b9f5b1b892ab",
+  "trigger_set_sha256": "644edb8b1fe008a053f4fbdc368f6117d1c20ba478b9277bb1fb1f8f5cf9a150",
+  "trigger_count": 1331,
+  "distinct_knowledge_timestamps": 441,
+  "trigger_readiness_sha256": "f214b9154b3c40fb6cc472fd8858bc4781aedb3c28e7d4f252d0832dbf3b9cad",
+  "structure_manifest_sha256": "4cb58637b433b544865a6a94cdc2b48b344d47824e8ba0f76b9be5f67496dd2c",
+  "historical_execution_lock_sha256": "1d883fe81a274aa81437da2ca732d09f887529cea3d07a8d58f0a85ed2c2f779",
+  "forward_confirmation_transport_sha256": "24bbcc1c31f1469c45ca70cffdf1fafb4821cada857c9ab04233d90bca601ce6",
+  "base_metrics": {
+    "resolved_executed_trades": 435,
+    "net_expectancy_r": -0.08146912514545666,
+    "profit_factor": 0.8974710205812934,
+    "bootstrap_95pct_ci_net_expectancy_r": [-0.30347105152922754, 0.1636262873597003],
+    "positive_calendar_year_fraction": 0.2857142857142857
+  },
+  "stress_metrics": {
+    "net_expectancy_r": -0.16814178242068242,
+    "profit_factor": 0.7978935530043645
+  },
+  "result_sha256": "4fcf249633f165250a99b602dd1cdd7bd20b07f6fbd27d09d1c8ee632a989fec",
+  "provider_provenance_sha256": "e7d6916083720185efce45e96f31b5c76c245bd09a4017ba7c07ab3bf1797cdc",
+  "base_ledger_sha256": "151e539ad1fe7257067f094b0491abdb230f2b686fc1f6232682ab081a8e7a02",
+  "stress_ledger_sha256": "ca2f34cb07089828558a793d17569538b22c0d32ecdac8994d633446ab0e21d3",
+  "post_result_tuning_permitted": false,
+  "forward_confirmation_outcomes_accessed": false,
+  "paper_execution": false,
+  "live_execution": false,
+  "broker_mutation": false
+}
