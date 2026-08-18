@@ -1,25 +1,47 @@
 # Final Project Disposition
 
-## Status
+## Terminal status
 
-`DEVELOPMENT_COMPLETE_VALIDATION_DEFERRED`
+`POST_V4_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY`
 
-The Arjo Trading Engine is wrapped on the best currently available, frozen V2 research state. All engineering required to discover evidence, construct deterministic rules, calibrate the governed owner-operational profile, independently reconstruct it, expose the V1 execution-integrity defect, remediate that defect in V2, and build deterministic evaluation tooling is complete.
+Completion basis:
 
-The project is **not waiting for a future date in order to be considered complete as an engineering/research build**.
+`POST_V4_CURRENT_EVIDENCE_NO_VALIDATED_PROFITABLE_EDGE`
 
-Future untouched validation is preserved as an optional scientific follow-up. It is not part of the current completion definition.
+The Arjo Trading Engine current research and engineering lifecycle is complete. The repository now records the full governed path from first-party source discovery and evidence extraction through deterministic specification, protected validation, V2 remediation, backward historical profitability research, V3 strategy-family testing, V4 Sharp Turn testing, and the final post-V4 evidence boundary.
 
-## Current retained research artifact
+There is no remaining dependency-satisfied engineering or research backlog in the current lifecycle.
 
-Frozen profile:
+This is a successful project-completion state, but it is **not** a successful profitability result. Using the currently admitted evidence and preregistered execution rules, a validated profitable trading edge has not been established.
+
+## Scientific disposition
+
+### V1 — protected validation exposed an integrity defect
+
+V1 reached `SPEC_READY` and was evaluated once on the protected 2026H1 holdout. The result was `VALIDATION_INTEGRITY_FAILURE` because the frozen `SECOND_STING_TOUCH` event could be semantically qualified while the required touch price was outside the designated second-sting 15-minute bar.
+
+V1 was not refit after observing the protected result and is not execution eligible. The consumed 2026H1 interval remains one-way evidence and must not be reused for tuning or replacement-profile validation.
+
+### V2 — execution observability remediated and frozen
+
+V2 preserved the research semantics while adding fail-closed execution observability:
+
+```text
+second_sting_bar.low <= touch_price <= second_sting_bar.high
+```
+
+- true: `EXECUTABLE_ENTRY`
+- false: `NO_EXECUTABLE_ENTRY`
+- no synthetic or fallback fill when the touch is not observable
+
+Frozen V2 profile:
 
 ```text
 ARJO_DERIVED_OWNER_OPERATIONAL_V2
 87a20345a10efacac287ff0becf0f618b721af745715cbd77c51ca7308aa67d6
 ```
 
-Supporting frozen bindings:
+Supporting bindings remain preserved:
 
 ```text
 Causal future-validation protocol
@@ -35,52 +57,78 @@ Future-validation harness readiness
 8b4640018db1226dae10bd440e5abb20f60958b47882cb7f2cddb69c7f7add79
 ```
 
-`SPEC_READY=true` means the frozen research specification is deterministic and independently reconstructable under the repository's governed evidence/configuration boundaries. It does **not** mean the strategy has been proven profitable or future-validated.
+V2 backward historical occurrence scanning found only 10 executable occurrences from 2010-2023 against a preregistered minimum of 30. The V2 economic-outcome stage therefore remained closed and the result was classified `INSUFFICIENT_SAMPLE_EDGE_NOT_ESTABLISHED`.
 
-## V1 disposition
+### V3 — broader coverage did not establish an edge
 
-V1 reached protected validation and produced `VALIDATION_INTEGRITY_FAILURE`.
+V3-A relaxed only the project-invented geometric overlap condition while preserving the remaining frozen predicates. It produced four execution-observable development occurrences against a minimum of 30 and was rejected outcome-blind.
 
-The defect was structural: `SECOND_STING_TOUCH` could be semantically qualified while the frozen touch price was outside the designated second-sting 15-minute bar. V1 was not refit and is not execution eligible.
+V3-B transferred the unchanged V2 strategy across the fixed NAS100/SPX500/US30 set. It produced one executable portfolio occurrence and was also rejected outcome-blind.
 
-The consumed 2026H1 protected interval remains one-way evidence. It must not be reused as V2 tuning or future-validation evidence.
-
-## V2 remediation retained
-
-V2 preserves the strategy/research specification while adding fail-closed execution observability:
+V3-C tested the independently frozen 4h Swing High -> 1h 2CR-failure family with adequate historical sample size. The sealed 2010-2023 M1 BID/ASK result was `EDGE_NOT_ESTABLISHED`:
 
 ```text
-second_sting_bar.low <= touch_price <= second_sting_bar.high
+Base resolved trades: 1304
+Base expectancy:      +0.0013801963R/trade
+Base profit factor:   1.0025647240
+Base 95% CI:          [-0.0642641976R, +0.0645586741R]
+
+Stress expectancy:    -0.0446837654R/trade
+Stress profit factor: 0.9198829599
 ```
 
-- true: `EXECUTABLE_ENTRY`
-- false: `NO_EXECUTABLE_ENTRY`
-- no synthetic/fallback fill when the touch is not observable
+The result was not tuned after observation.
 
-The frozen M1 sequencing policy then determines observable event order without inventing intrabar OHLC ordering.
+### V4 — Sharp Turn / FVG family also failed the frozen economic gate
 
-## What is usable now
+Materially new public first-party evidence allowed a separate V4 Sharp Turn / FVG family to be recovered and independently preregistered without consulting V3-C outcomes for parameter selection.
 
-The repository may be used now as:
+The frozen V4 historical measurement used the sealed 2010-2023 trigger set and M1 BID/ASK economics. It also returned `EDGE_NOT_ESTABLISHED`:
 
-- a reproducible research implementation of the frozen V2 profile;
-- a deterministic replay/reference implementation on data that is legally permitted for development/reproduction;
-- a code and research baseline for future revisions;
-- a sealed starting point if a later untouched validation is desired.
+```text
+Base resolved trades: 127
+Base expectancy:      +0.0014091678R/trade
+Base profit factor:   1.0020664
+Base win rate:        35.4331%
+Base 95% CI:          [-0.2424640R, +0.2545526R]
+Base max drawdown:    18.1676R
 
-The repository must **not** be represented as having passed untouched V2 future validation.
+Stress expectancy:    -0.1063928393R/trade
+Stress profit factor: 0.8554421
+Stress win rate:      33.8583%
+Stress 95% CI:        [-0.3458839R, +0.1483883R]
+Stress max drawdown:  23.0660R
+```
 
-No claim of profitability, robustness, production readiness, or execution qualification is created by this wrap-up.
+The V4 result SHA is:
 
-## Deferred optional future validation
+```text
+611cc822dcc5103ed700d245e3ffb95404ca9c41459a43f9b5183aa84aedf6b5
+```
 
-The prebuilt workflow remains preserved at:
+No V4 parameter tuning, consumed-ledger mining, predicate weakening, or generic ICT/SMC semantic backfill is permitted from this result.
+
+## Post-V4 evidence boundary
+
+The final outcome-blind candidate re-audit reviewed 36 admitted concepts. The remaining Phase-5 candidates are still semantically incomplete and no unused deterministic executable first-party family is available in the current evidence set.
+
+New strategy research may begin only when at least one of the following is true:
+
+1. genuinely new attributable Arjo first-party semantic evidence closes an incomplete strategy family;
+2. another genuinely independent family is fully preregistered before outcome access;
+3. the preserved untouched V2 future-validation lifecycle is intentionally reopened under its original no-refit and single-shot rules.
+
+Post-result tuning of V3-C or V4, mining their consumed ledgers to create replacement predicates, silently relabelling owner conventions as source semantics, or filling gaps with generic ICT/SMC knowledge are prohibited.
+
+## Optional future V2 validation
+
+The sealed workflow remains preserved at:
 
 ```text
 .github/workflows/v2-future-validation-execution.yml
 ```
 
-Its frozen untouched design is still available if the project is revisited later:
+Its frozen untouched design is not part of the current project critical path:
 
 ```text
 Acquisition:        [2026-09-01, 2027-03-01)
@@ -89,26 +137,29 @@ Scored validation:  [2026-10-01, 2027-03-01)
 Earliest full read: 2027-03-01T00:00:00Z
 ```
 
-The workflow is intentionally not executed as part of current project completion. If it is run in the future, the frozen chronology, SHA bindings, no-refit rule, single-shot data-access rule, and owner authorization remain binding.
+Closing the current lifecycle does not assert `V2_FUTURE_VALIDATION_COMPLETE`.
 
-Closing/defering the old future-validation issue does **not** assert `V2_FUTURE_VALIDATION_COMPLETE`.
-
-## Execution permissions at wrap
+## Execution permissions at closure
 
 ```text
+SPEC_READY              = true
 PAPER_EXECUTION_ENABLED = false
 LIVE_TRADING_AUTHORIZED = false
 BROKER_MUTATION          = false
 ```
 
-Those permissions are outside this research wrap and require separate explicit owner authorization/lifecycle work if ever desired.
+`SPEC_READY=true` means deterministic and independently reconstructable research specification. It does not mean profitable, robust, production-ready, or execution-qualified.
 
-## Re-entry rule
+## What the repository is now
 
-The repository can be reopened later for one of three legitimate reasons:
+The repository is a completed, auditable research system containing:
 
-1. run the preserved untouched future validation;
-2. add genuinely new first-party evidence and intentionally version a new strategy profile;
-3. start a separately authorized paper/execution qualification lifecycle.
+- provenance-bound first-party evidence and semantic boundaries;
+- deterministic strategy specifications and independent reconstruction paths;
+- protected-validation and backward historical research machinery;
+- realistic BID/ASK execution measurement and cost stress;
+- immutable failed-result records that prevent post-hoc rewriting;
+- an optional untouched future-validation harness;
+- explicit fail-closed paper/live/broker authorization gates.
 
-Any such work must create a new bounded issue/lifecycle rather than silently rewriting this final V2 disposition.
+The current Arjo research lifecycle is therefore formally closed at the post-V4 evidence boundary.
