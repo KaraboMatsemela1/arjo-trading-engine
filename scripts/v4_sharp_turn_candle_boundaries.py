@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Frozen time-boundary helpers for V4 Sharp Turn structure.
 
-OANDA aligned W/M candles may have timestamps before the historical end while
-their price coverage extends beyond it. Canonical V4 structure therefore admits
-a candle only when its entire interval closes on or before the frozen UTC end.
+OANDA aligned higher-timeframe candles may have timestamps inside a requested
+window while their OHLC coverage crosses the frozen start or end. Canonical V4
+structure admits only candles whose entire interval is contained in
+[2010-01-01T00:00:00Z, 2024-01-01T00:00:00Z).
 """
 from __future__ import annotations
 
@@ -33,7 +34,6 @@ def candle_end(start: datetime, granularity: str) -> datetime:
         return start + timedelta(hours=1)
     local = start.astimezone(NY)
     if granularity == "D":
-        # Preserve the 17:00 New York aligned wall-clock boundary across DST.
         target = local.date() + timedelta(days=1)
         return datetime(target.year, target.month, target.day, 17, tzinfo=NY).astimezone(UTC)
     if granularity == "W":
@@ -47,46 +47,63 @@ def candle_end(start: datetime, granularity: str) -> datetime:
     raise V4BoundaryError(f"unsupported granularity: {granularity}")
 
 
-def unsafe_start_boundary(granularity: str) -> datetime:
-    """Earliest aligned candle start before END whose coverage crosses END.
+def safe_request_start(granularity: str) -> datetime:
+    """First aligned start whose whole candle is on/after frozen START."""
+    if granularity == "H1":
+        return START
+    if granularity in {"D", "W"}:
+        # First 17:00 New York aligned boundary after UTC START. W is Friday.
+        return datetime(2010, 1, 1, 17, tzinfo=NY).astimezone(UTC)
+    if granularity == "M":
+        # First complete aligned monthly candle fully inside the window begins
+        # at the Jan-31 17:00 New York boundary and covers February 2010.
+        return datetime(2010, 1, 31, 17, tzinfo=NY).astimezone(UTC)
+    raise V4BoundaryError(f"unsupported granularity: {granularity}")
 
-    Requests end immediately before this boundary, so the raw provider response
-    cannot legitimately include a candle that contains any post-END prices.
-    """
+
+def unsafe_end_start_boundary(granularity: str) -> datetime:
+    """First aligned start before END whose candle coverage crosses END."""
     if granularity == "H1":
         return END
     if granularity in {"D", "M"}:
-        # 17:00 America/New_York on 2023-12-31 = 2023-12-31T22:00:00Z.
         return datetime(2023, 12, 31, 17, tzinfo=NY).astimezone(UTC)
     if granularity == "W":
-        # Friday 17:00 New York weekly boundary; the 2023-12-29 candle crosses 2024-01-01.
         return datetime(2023, 12, 29, 17, tzinfo=NY).astimezone(UTC)
     raise V4BoundaryError(f"unsupported granularity: {granularity}")
 
 
 def safe_request_end(granularity: str) -> datetime:
-    # OANDA `to` is kept strictly before the first unsafe candle start even if a
-    # server interprets the endpoint inclusively at exact candle boundaries.
-    return unsafe_start_boundary(granularity) - timedelta(microseconds=1)
+    # Keep `to` strictly before the first cross-END start in case the provider
+    # treats exact time endpoints inclusively.
+    return unsafe_end_start_boundary(granularity) - timedelta(microseconds=1)
 
 
 def candle_is_fully_in_window(start: datetime, granularity: str) -> bool:
+    start = start.astimezone(UTC)
     end = candle_end(start, granularity)
-    return START <= start.astimezone(UTC) < END and end <= END
+    return START <= start < END and end <= END
 
 
 def assert_frozen_boundaries() -> None:
-    expected_unsafe = {
+    expected_start = {
+        "H1": "2010-01-01T00:00:00Z",
+        "D": "2010-01-01T22:00:00Z",
+        "W": "2010-01-01T22:00:00Z",
+        "M": "2010-01-31T22:00:00Z",
+    }
+    expected_unsafe_end = {
         "H1": "2024-01-01T00:00:00Z",
         "D": "2023-12-31T22:00:00Z",
         "W": "2023-12-29T22:00:00Z",
         "M": "2023-12-31T22:00:00Z",
     }
-    for tf, expected in expected_unsafe.items():
-        assert zulu(unsafe_start_boundary(tf)) == expected
-        assert safe_request_end(tf) < unsafe_start_boundary(tf)
+    for tf in GRANULARITIES:
+        assert zulu(safe_request_start(tf)) == expected_start[tf]
+        assert zulu(unsafe_end_start_boundary(tf)) == expected_unsafe_end[tf]
+        assert safe_request_start(tf) < safe_request_end(tf)
+        assert safe_request_end(tf) < unsafe_end_start_boundary(tf)
 
 
 if __name__ == "__main__":
     assert_frozen_boundaries()
-    print("V4 strict candle-coverage boundaries verified")
+    print("V4 fully-contained candle boundaries verified")
