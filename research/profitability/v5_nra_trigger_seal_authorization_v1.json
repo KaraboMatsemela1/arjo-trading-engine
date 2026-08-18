@@ -1,0 +1,9 @@
+{
+  "authorization": "AUTHORIZE_V5_STRUCTURE_TRIGGER_SEAL",
+  "broker_mutation_authorized": false,
+  "economic_outcomes_authorized": false,
+  "issue": 254,
+  "m1_authorized": false,
+  "protocol_sha256": "f01d01ffcb4711f53b86a71c14fec0b6a145fafc9edc140d41d602d29eadb5ff",
+  "structure_transport_sha256": "8a31db889e5105a8a7a351d79ce247cfaf2bc68451e6565ef80aac17d72580f0"
+}
