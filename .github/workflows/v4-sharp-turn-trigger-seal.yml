@@ -1,0 +1,153 @@
+name: V4 Sharp Turn Trigger Seal
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/oanda_v4_sharp_turn_structure.py'
+      - 'scripts/scan_v4_sharp_turn_triggers.py'
+      - 'scripts/test_v4_sharp_turn_trigger_seal.py'
+      - 'research/profitability/v4_sharp_turn_execution_protocol_v1.json'
+      - '.github/workflows/v4-sharp-turn-trigger-seal.yml'
+  push:
+    branches:
+      - validation/issue-244-v4-sharp-turn-trigger-seal
+    paths:
+      - 'scripts/oanda_v4_sharp_turn_structure.py'
+      - 'scripts/scan_v4_sharp_turn_triggers.py'
+      - 'scripts/test_v4_sharp_turn_trigger_seal.py'
+      - '.github/workflows/v4-sharp-turn-trigger-seal.yml'
+
+permissions:
+  contents: read
+
+env:
+  OANDA_ACCOUNT_ID: ${{ secrets.OANDA_ACCOUNT_ID }}
+  OANDA_API_TOKEN: ${{ secrets.OANDA_API_TOKEN }}
+
+jobs:
+  seal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile V4 trigger-seal code
+        run: >-
+          python -m py_compile
+          scripts/oanda_v4_sharp_turn_structure.py
+          scripts/scan_v4_sharp_turn_triggers.py
+          scripts/test_v4_sharp_turn_trigger_seal.py
+
+      - name: Run offline and sabotage preflight before provider access
+        run: python scripts/test_v4_sharp_turn_trigger_seal.py
+
+      - name: Verify frozen V4 protocol remains pre-outcome
+        run: python scripts/check_v4_sharp_turn_execution_protocol.py
+
+      - name: Acquire frozen 2010-2023 M/W/D/H1 MID structure only
+        run: >-
+          python scripts/oanda_v4_sharp_turn_structure.py
+          --protocol research/profitability/v4_sharp_turn_execution_protocol_v1.json
+          --output-dir /tmp/v4-sharp-turn-structure
+          --delay 0.02
+
+      - name: Prove structure transport contains no M1/BID/ASK/economics
+        run: |
+          python - <<'PY'
+          import json
+          p='/tmp/v4-sharp-turn-structure/NAS100_USD.v4-structure-manifest.json'
+          m=json.load(open(p))
+          assert m['status']=='V4_SHARP_TURN_STRUCTURE_READY'
+          assert m['protocol_sha256']=='a3cdb1fbe309ec3aab6bee05a80999d8012fabfee06cf2eedba2d28eb387accd'
+          assert m['granularities_requested']==['M','W','D','H1']
+          assert m['price_component_requested']=='M'
+          assert m['semantic_price_component']=='MID'
+          assert m['requested_end_exclusive']=='2024-01-01T00:00:00Z'
+          assert m['m1_data_requested'] is False
+          assert m['bid_ask_data_requested'] is False
+          assert m['fills_evaluated'] is False
+          assert m['economic_outcomes_evaluated'] is False
+          assert m['performance_metrics_accessed'] is False
+          assert m['mutation_endpoints_used'] is False
+          print('structure_manifest_sha256=' + m['manifest_sha256'])
+          print('structure_retrieval_sha256=' + m['retrieval_sha256'])
+          print('structure_rows=' + str({k:v['rows'] for k,v in m['timeframes'].items()}))
+          PY
+
+      - name: Reconstruct and seal V4 Sharp Turn triggers independently
+        run: >-
+          python scripts/scan_v4_sharp_turn_triggers.py
+          --artifact-dir /tmp/v4-sharp-turn-structure
+          --protocol research/profitability/v4_sharp_turn_execution_protocol_v1.json
+          --output /tmp/v4-sharp-turn-trigger-set.json
+
+      - name: Verify exact reconstruction and zero economic access
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('/tmp/v4-sharp-turn-trigger-set.json'))
+          assert r['status']=='V4_SHARP_TURN_TRIGGERS_READY'
+          assert r['primary_independent_fvg_exact_match'] is True
+          assert r['primary_independent_context_exact_match'] is True
+          assert r['primary_independent_trigger_exact_match'] is True
+          assert r['m1_data_requested'] is False
+          assert r['bid_ask_data_requested'] is False
+          assert r['fill_prices_accessed'] is False
+          assert r['stop_target_traversal_accessed'] is False
+          assert r['pnl_accessed'] is False
+          assert r['expectancy_accessed'] is False
+          assert r['profit_factor_accessed'] is False
+          assert r['win_rate_accessed'] is False
+          assert r['bootstrap_metrics_accessed'] is False
+          assert r['economic_outcomes_accessed'] is False
+          assert r['v3c_trade_ledger_accessed_for_v4_selection'] is False
+          assert r['parameter_refit_performed'] is False
+          assert r['paper_execution_authorized'] is False
+          assert r['live_execution_authorized'] is False
+          assert r['broker_mutation_authorized'] is False
+          print('classification=' + r['classification'])
+          print('selected_daily_contexts=' + str(r['selected_daily_contexts']))
+          print('triggers=' + str(r['trigger_count']))
+          print('long_triggers=' + str(r['long_triggers']))
+          print('short_triggers=' + str(r['short_triggers']))
+          print('distinct_knowledge_times=' + str(r['distinct_trigger_knowledge_times']))
+          print('sample_necessary_condition_met=' + str(r['sample_necessary_condition_met']))
+          print('trigger_set_sha256=' + r['trigger_set_sha256'])
+          print('report_sha256=' + r['report_sha256'])
+          PY
+
+      - name: Publish trigger-seal summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          r=json.load(open('/tmp/v4-sharp-turn-trigger-set.json'))
+          print('## V4 Sharp Turn trigger seal')
+          print(f"- classification: `{r['classification']}`")
+          print(f"- triggers: **{r['trigger_count']}**")
+          print(f"- distinct causal knowledge times: **{r['distinct_trigger_knowledge_times']}**")
+          print(f"- long / short: **{r['long_triggers']} / {r['short_triggers']}**")
+          print(f"- necessary >=100 trigger condition: **{r['sample_necessary_condition_met']}**")
+          print(f"- trigger-set SHA: `{r['trigger_set_sha256']}`")
+          print('- M1/economic outcome access: **false**')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v4-sharp-turn-trigger-seal
+          path: |
+            /tmp/v4-sharp-turn-trigger-set.json
+            /tmp/v4-sharp-turn-structure/NAS100_USD.v4-structure-manifest.json
+            /tmp/v4-sharp-turn-structure/NAS100_USD.M.jsonl
+            /tmp/v4-sharp-turn-structure/NAS100_USD.W.jsonl
+            /tmp/v4-sharp-turn-structure/NAS100_USD.D.jsonl
+            /tmp/v4-sharp-turn-structure/NAS100_USD.H1.jsonl
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Delete runner-local structure payloads
+        if: always()
+        run: rm -rf /tmp/v4-sharp-turn-structure
