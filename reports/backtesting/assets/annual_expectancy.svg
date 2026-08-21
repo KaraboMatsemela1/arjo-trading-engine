@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:13px}.title{font-size:20px;font-weight:600}.series{fill:none;stroke-width:1.7}</style>
+<text class="title" x="85" y="30">Base Calendar-Year Expectancy</text>
+<line x1="85" y1="495" x2="780" y2="495"/><line x1="85" y1="60" x2="85" y2="495"/>
+<text x="75" y="499.0" text-anchor="end">-1.62</text><line x1="80" y1="495.0" x2="85" y2="495.0"/>
+<text x="75" y="412.0" text-anchor="end">-1.00</text><line x1="80" y1="408.0" x2="85" y2="408.0"/>
+<text x="75" y="325.0" text-anchor="end">-0.37</text><line x1="80" y1="321.0" x2="85" y2="321.0"/>
+<text x="75" y="238.0" text-anchor="end">0.25</text><line x1="80" y1="234.0" x2="85" y2="234.0"/>
+<text x="75" y="151.0" text-anchor="end">0.88</text><line x1="80" y1="147.0" x2="85" y2="147.0"/>
+<text x="75" y="64.0" text-anchor="end">1.50</text><line x1="80" y1="60.0" x2="85" y2="60.0"/>
+<line x1="85" y1="269.3" x2="780" y2="269.3" stroke-dasharray="4 4"/>
+<text x="85.0" y="517" text-anchor="middle">2010</text>
+<text x="191.9" y="517" text-anchor="middle">2012</text>
+<text x="298.8" y="517" text-anchor="middle">2014</text>
+<text x="405.8" y="517" text-anchor="middle">2016</text>
+<text x="512.7" y="517" text-anchor="middle">2018</text>
+<text x="619.6" y="517" text-anchor="middle">2020</text>
+<text x="726.5" y="517" text-anchor="middle">2022</text>
+<polyline class="series" points="85.0,306.4 138.5,246.5 191.9,283.2 245.4,295.5 298.8,258.4 352.3,278.1 405.8,281.6 459.2,265.7 512.7,281.2 566.2,254.7 619.6,253.2 673.1,241.5 726.5,266.1 780.0,264.4"/>
+<line x1="800" y1="70" x2="835" y2="70" stroke-width="2"/><text x="845" y="74">V3-C Arguments/2CR</text>
+<polyline class="series" points="85.0,256.6 138.5,326.4 191.9,354.7 245.4,255.6 298.8,301.4 352.3,465.0 405.8,233.2 459.2,219.6 512.7,181.1 566.2,254.8 619.6,203.9 673.1,274.2 726.5,264.5 780.0,285.0" stroke-dasharray="8 4"/>
+<line x1="800" y1="96" x2="835" y2="96" stroke-width="2" stroke-dasharray="8 4"/><text x="845" y="100">V4 Sharp Turn</text>
+<polyline class="series" points="85.0,290.8 138.5,285.1 191.9,285.4 245.4,299.8 298.8,296.1 352.3,296.7 405.8,288.2 459.2,286.4 512.7,273.3 566.2,282.6 619.6,274.3 673.1,275.1 726.5,275.0 780.0,273.1" stroke-dasharray="3 3"/>
+<line x1="800" y1="122" x2="835" y2="122" stroke-width="2" stroke-dasharray="3 3"/><text x="845" y="126">V5 No-Resistance AoO</text>
+<polyline class="series" points="85.0,295.3 138.5,163.3 191.9,347.1 245.4,321.9 298.8,271.7 352.3,357.4 405.8,390.4 459.2,90.0 512.7,235.8 566.2,352.7 619.6,210.6 673.1,273.7 726.5,282.1 780.0,283.2" stroke-dasharray="10 3 2 3"/>
+<line x1="800" y1="148" x2="835" y2="148" stroke-width="2" stroke-dasharray="10 3 2 3"/><text x="845" y="152">V6 Momentum</text>
+<polyline class="series" points="85.0,288.7 138.5,300.5 191.9,333.9 245.4,344.3 298.8,312.8 352.3,319.3 405.8,328.1 459.2,343.6 512.7,293.6 566.2,308.8 619.6,286.5 673.1,236.6 726.5,305.0 780.0,302.7" stroke-dasharray="1 3"/>
+<line x1="800" y1="174" x2="835" y2="174" stroke-width="2" stroke-dasharray="1 3"/><text x="845" y="178">V7 Candle Science</text>
+<polyline class="series" points="85.0,324.4 138.5,283.6 191.9,315.2 245.4,350.2 298.8,323.3 352.3,313.3 405.8,302.7 459.2,312.5 512.7,283.9 566.2,321.2 619.6,278.4 673.1,280.0 726.5,281.5 780.0,271.5" stroke-dasharray="12 4 1 4"/>
+<line x1="800" y1="200" x2="835" y2="200" stroke-width="2" stroke-dasharray="12 4 1 4"/><text x="845" y="204">V8 FVG Follow-Through</text>
+<text x="20" y="280" transform="rotate(-90 20 280)" text-anchor="middle">Mean net R per trade</text></svg>
