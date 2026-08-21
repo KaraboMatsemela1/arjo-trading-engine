@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540">
+<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:13px}.title{font-size:20px;font-weight:600}.axis{stroke-width:1}.bar{fill:none;stroke-width:1.6}</style>
+<text class="title" x="85" y="30">Profit Factor Comparison</text>
+<line class="axis" x1="85" y1="425" x2="950" y2="425"/>
+<line class="axis" x1="85" y1="60" x2="85" y2="425"/>
+<line x1="80" y1="425.0" x2="85" y2="425.0"/>
+<text x="75" y="429.0" text-anchor="end">-0.10</text>
+<line x1="80" y1="352.0" x2="85" y2="352.0"/>
+<text x="75" y="356.0" text-anchor="end">0.14</text>
+<line x1="80" y1="279.0" x2="85" y2="279.0"/>
+<text x="75" y="283.0" text-anchor="end">0.38</text>
+<line x1="80" y1="206.0" x2="85" y2="206.0"/>
+<text x="75" y="210.0" text-anchor="end">0.62</text>
+<line x1="80" y1="133.0" x2="85" y2="133.0"/>
+<text x="75" y="137.0" text-anchor="end">0.86</text>
+<line x1="80" y1="60.0" x2="85" y2="60.0"/>
+<text x="75" y="64.0" text-anchor="end">1.10</text>
+<line x1="85" y1="394.6" x2="950" y2="394.6" stroke-dasharray="4 4"/>
+<line x1="85" y1="91.2" x2="950" y2="91.2" stroke-dasharray="8 4"/>
+<rect class="bar" x="110.7" y="90.4" width="40.4" height="304.2"/>
+<rect class="bar" x="163.1" y="115.5" width="40.4" height="279.1" stroke-dasharray="3 2"/>
+<text x="157.1" y="450" text-anchor="middle">V3-C</text>
+<text x="157.1" y="467" text-anchor="middle">Arguments/2CR</text>
+<rect class="bar" x="254.8" y="90.6" width="40.4" height="304.0"/>
+<rect class="bar" x="307.3" y="135.1" width="40.4" height="259.5" stroke-dasharray="3 2"/>
+<text x="301.2" y="450" text-anchor="middle">V4</text>
+<text x="301.2" y="467" text-anchor="middle">Sharp Turn</text>
+<rect class="bar" x="399.0" y="263.2" width="40.4" height="131.4"/>
+<rect class="bar" x="451.5" y="312.4" width="40.4" height="82.1" stroke-dasharray="3 2"/>
+<text x="445.4" y="450" text-anchor="middle">V5</text>
+<text x="445.4" y="467" text-anchor="middle">No-Resistance AoO</text>
+<rect class="bar" x="543.2" y="122.3" width="40.4" height="272.3"/>
+<rect class="bar" x="595.6" y="152.5" width="40.4" height="242.1" stroke-dasharray="3 2"/>
+<text x="589.6" y="450" text-anchor="middle">V6</text>
+<text x="589.6" y="467" text-anchor="middle">Momentum</text>
+<rect class="bar" x="687.3" y="189.9" width="40.4" height="204.7"/>
+<rect class="bar" x="739.8" y="219.1" width="40.4" height="175.5" stroke-dasharray="3 2"/>
+<text x="733.8" y="450" text-anchor="middle">V7</text>
+<text x="733.8" y="467" text-anchor="middle">Candle Science</text>
+<rect class="bar" x="831.5" y="201.1" width="40.4" height="193.5"/>
+<rect class="bar" x="884.0" y="229.4" width="40.4" height="165.2" stroke-dasharray="3 2"/>
+<text x="877.9" y="450" text-anchor="middle">V8</text>
+<text x="877.9" y="467" text-anchor="middle">FVG Follow-Through</text>
+<text x="20" y="242.5" transform="rotate(-90 20 242.5)" text-anchor="middle">Profit factor</text>
+<rect class="bar" x="810" y="70" width="18" height="12"/><text x="835" y="81">Base</text>
+<rect class="bar" x="810" y="94" width="18" height="12" stroke-dasharray="3 2"/><text x="835" y="105">Stress</text>
+</svg>
