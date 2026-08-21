@@ -1,5 +1,5 @@
 {
-  "protocol_semantic_sha256": "9e9d5603ffe7a2fa06adf174251d2445ed6b23ef0754e35412360b4ebdaa3270",
+  "protocol_semantic_sha256": "7e547785213c1867fe92a65c56bef23eeab5cfc9139858d61d5b9e666e84ea8d",
   "protocol_id": "ARJO_RESET_R1_TORB_CAUSAL_V2",
   "version": 2,
   "status": "FROZEN_BEFORE_R1_ECONOMIC_OUTCOMES",
@@ -39,7 +39,8 @@
     "execution_price": "BID_ASK",
     "granularity": "M1",
     "smooth": false,
-    "include_first": true
+    "include_first": true,
+    "request_price_components": "MBA"
   },
   "session": {
     "timezone": "America/New_York",
@@ -49,9 +50,21 @@
     "valid_days": "US_EQUITY_TRADING_DAYS_WITH_PROVIDER_COVERAGE"
   },
   "configurations": [
-    {"id": "TORB_P1", "probe_start": "09:30:00", "probe_end_exclusive": "09:31:00"},
-    {"id": "TORB_P3", "probe_start": "09:30:00", "probe_end_exclusive": "09:33:00"},
-    {"id": "TORB_P5", "probe_start": "09:30:00", "probe_end_exclusive": "09:35:00"}
+    {
+      "id": "TORB_P1",
+      "probe_start": "09:30:00",
+      "probe_end_exclusive": "09:31:00"
+    },
+    {
+      "id": "TORB_P3",
+      "probe_start": "09:30:00",
+      "probe_end_exclusive": "09:33:00"
+    },
+    {
+      "id": "TORB_P5",
+      "probe_start": "09:30:00",
+      "probe_end_exclusive": "09:35:00"
+    }
   ],
   "trial_budget_consumed_if_outcome_opened": 3,
   "no_additional_probe_widths_after_outcome_access": true,
@@ -65,18 +78,26 @@
     "entry": {
       "when": "FIRST_COMPLETE_M1_AFTER_SIGNAL_KNOWLEDGE_TIME",
       "long_price": "ASK_OPEN_PLUS_ADVERSE_SLIPPAGE",
-      "short_price": "BID_OPEN_MINUS_ADVERSE_SLIPPAGE"
+      "short_price": "BID_OPEN_MINUS_ADVERSE_SLIPPAGE",
+      "required_bar_start": "SIGNAL_KNOWLEDGE_TIME_EXACT",
+      "missing_required_bar": "DATA_INTEGRITY_FAILURE"
     },
     "position_policy": "ONE_POSITION_MAX_PER_DAY_PER_CONFIGURATION_NO_REVERSAL_NO_REENTRY",
     "exit": {
       "when": "FIRST_COMPLETE_M1_AT_OR_AFTER_15_59_AMERICA_NEW_YORK",
       "long_price": "BID_OPEN_MINUS_ADVERSE_SLIPPAGE",
-      "short_price": "ASK_OPEN_PLUS_ADVERSE_SLIPPAGE"
+      "short_price": "ASK_OPEN_PLUS_ADVERSE_SLIPPAGE",
+      "required_bar_start": "15:59:00_AMERICA_NEW_YORK_EXACT",
+      "missing_required_bar": "DATA_INTEGRITY_FAILURE"
     },
     "missing_fill_or_exit": "DATA_INTEGRITY_FAILURE",
     "synthetic_minutes": false,
     "forward_fill": false,
-    "favorable_gap_improvement": false
+    "favorable_gap_improvement": false,
+    "latest_signal_bar_start": "15:58:00_AMERICA_NEW_YORK",
+    "signal_after_latest_signal_bar": "NO_EXECUTABLE_SIGNAL_BEFORE_SESSION_EXIT",
+    "probe_missing_expected_complete_minute": "DATA_INTEGRITY_FAILURE",
+    "mid_price_source": "DIRECT_OANDA_M_COMPONENT_NOT_BID_ASK_AVERAGE"
   },
   "normalization": {
     "unit_name": "ORU",
@@ -91,39 +112,58 @@
     "loss_is_not_claimed_capped_at_one_oru": true
   },
   "cost_scenarios": {
-    "base": {"adverse_slippage_points_per_side": 0.5, "financing": 0.0},
-    "stress": {"adverse_slippage_points_per_side": 1.0, "financing": 0.0},
+    "base": {
+      "adverse_slippage_points_per_side": 0.5,
+      "financing": 0.0
+    },
+    "stress": {
+      "adverse_slippage_points_per_side": 1.0,
+      "financing": 0.0
+    },
     "overnight_position": "DATA_INTEGRITY_FAILURE"
   },
   "chronology": {
-    "discovery": {"start": "2010-01-01T00:00:00Z", "end_exclusive": "2019-01-01T00:00:00Z"},
-    "walk_forward": {"start": "2019-01-01T00:00:00Z", "end_exclusive": "2022-01-01T00:00:00Z"},
-    "sealed_family_confirmation": {"start": "2022-01-01T00:00:00Z", "end_exclusive": "2026-01-01T00:00:00Z"},
+    "discovery": {
+      "start": "2010-01-01T00:00:00Z",
+      "end_exclusive": "2019-01-01T00:00:00Z"
+    },
+    "walk_forward": {
+      "start": "2019-01-01T00:00:00Z",
+      "end_exclusive": "2022-01-01T00:00:00Z"
+    },
+    "sealed_family_confirmation": {
+      "start": "2022-01-01T00:00:00Z",
+      "end_exclusive": "2026-01-01T00:00:00Z"
+    },
     "confirmation_economic_access_before_selection_seal": false,
     "project_wide_pristine_holdout_claim": false
   },
   "selection_gate": {
     "minimum_resolved_discovery_plus_walk_forward": 500,
     "discovery_base_expectancy_gt_oru": 0.0,
-    "discovery_base_profit_factor_gt": 1.10,
+    "discovery_base_profit_factor_gt": 1.1,
     "walk_forward_base_expectancy_gt_oru": 0.0,
-    "walk_forward_base_profit_factor_gt": 1.10,
+    "walk_forward_base_profit_factor_gt": 1.1,
     "walk_forward_stress_expectancy_gt_oru": 0.0,
-    "positive_calendar_year_fraction_2010_2021_gte": 0.60,
+    "positive_calendar_year_fraction_2010_2021_gte": 0.6,
     "data_integrity_failures": 0,
     "synthetic_fills": 0,
     "winner_selection": "MAX_MEDIAN_ANNUAL_STRESS_EXPECTANCY_ORU_2010_2021",
-    "tie_break_order": ["TORB_P1", "TORB_P3", "TORB_P5"]
+    "tie_break_order": [
+      "TORB_P1",
+      "TORB_P3",
+      "TORB_P5"
+    ]
   },
   "confirmation_gate": {
     "classification_on_pass": "HISTORICALLY_PROFITABLE_EDGE_R1_TORB",
     "classification_on_fail": "EDGE_NOT_ESTABLISHED_R1_TORB",
     "minimum_resolved": 500,
     "base_expectancy_gt_oru": 0.05,
-    "base_profit_factor_gt": 1.20,
+    "base_profit_factor_gt": 1.2,
     "bootstrap_95_lower_expectancy_gt_oru": 0.0,
     "stress_expectancy_gt_oru": 0.0,
-    "stress_profit_factor_gt": 1.10,
+    "stress_profit_factor_gt": 1.1,
     "positive_calendar_year_fraction_gte": 0.75,
     "data_integrity_failures": 0,
     "synthetic_fills": 0,
@@ -132,5 +172,9 @@
     "multiple_testing_adjustment_required": true
   },
   "post_confirmation_refit_allowed": false,
-  "permissions": {"paper_execution_enabled": false, "live_trading_authorized": false, "broker_mutation": false}
+  "permissions": {
+    "paper_execution_enabled": false,
+    "live_trading_authorized": false,
+    "broker_mutation": false
+  }
 }
