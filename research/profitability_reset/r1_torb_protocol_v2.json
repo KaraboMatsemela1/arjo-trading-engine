@@ -1,0 +1,136 @@
+{
+  "protocol_semantic_sha256": "9e9d5603ffe7a2fa06adf174251d2445ed6b23ef0754e35412360b4ebdaa3270",
+  "protocol_id": "ARJO_RESET_R1_TORB_CAUSAL_V2",
+  "version": 2,
+  "status": "FROZEN_BEFORE_R1_ECONOMIC_OUTCOMES",
+  "supersedes": {
+    "protocol_id": "ARJO_RESET_R1_TORB_CAUSAL_V1",
+    "reason": "V1 used R-based thresholds without a defined stop/risk denominator; V2 freezes Opening Range Unit normalization before any TORB economic outcome access."
+  },
+  "parent_issue": 303,
+  "reset_protocol_issue": 298,
+  "source_protocol_issue": 300,
+  "independence": {
+    "reactive_v9": false,
+    "v3_v8_outcomes_allowed_for_selection": false,
+    "v3_v8_outcomes_allowed_for_reporting_only": true,
+    "r1_torb_economic_outcomes_accessed_before_v2_freeze": false
+  },
+  "source_basis": {
+    "title": "Assessing the Profitability of Timely Opening Range Breakout on Index Futures Markets",
+    "authors": "Tsai et al.",
+    "venue": "IEEE Access",
+    "year": 2019,
+    "doi": "10.1109/ACCESS.2019.2899177",
+    "bounded_claims": [
+      "opening resistance/support are the highest/lowest prices in an observed opening period",
+      "a subsequent break above/below creates a long/short signal",
+      "the source study exits at the active-session end",
+      "the source reports early probing periods as strongest for US index futures",
+      "source futures evidence is motivation only and does not establish profitability on OANDA NAS100_USD"
+    ]
+  },
+  "provider": {
+    "name": "OANDA v20 practice",
+    "instrument": "NAS100_USD",
+    "instrument_identity": "OANDA Nasdaq-100 CFD proxy",
+    "not_relabelled_as": "CME E-mini Nasdaq-100 futures",
+    "signal_price": "MID",
+    "execution_price": "BID_ASK",
+    "granularity": "M1",
+    "smooth": false,
+    "include_first": true
+  },
+  "session": {
+    "timezone": "America/New_York",
+    "active_start": "09:30:00",
+    "active_end_exclusive": "16:00:00",
+    "exit_clock": "15:59:00",
+    "valid_days": "US_EQUITY_TRADING_DAYS_WITH_PROVIDER_COVERAGE"
+  },
+  "configurations": [
+    {"id": "TORB_P1", "probe_start": "09:30:00", "probe_end_exclusive": "09:31:00"},
+    {"id": "TORB_P3", "probe_start": "09:30:00", "probe_end_exclusive": "09:33:00"},
+    {"id": "TORB_P5", "probe_start": "09:30:00", "probe_end_exclusive": "09:35:00"}
+  ],
+  "trial_budget_consumed_if_outcome_opened": 3,
+  "no_additional_probe_widths_after_outcome_access": true,
+  "causal_rules": {
+    "range_construction": "HIGH_LOW_OF_COMPLETE_M1_MID_BARS_FULLY_CONTAINED_IN_PROBE",
+    "long_signal": "FIRST_COMPLETE_POST_PROBE_M1_MID_CLOSE_STRICTLY_ABOVE_RANGE_HIGH",
+    "short_signal": "FIRST_COMPLETE_POST_PROBE_M1_MID_CLOSE_STRICTLY_BELOW_RANGE_LOW",
+    "signal_knowledge_time": "SIGNAL_M1_CLOSE",
+    "same_bar_fill": false,
+    "ambiguous_same_timestamp": "AMBIGUOUS_SIGNAL_NO_TRADE",
+    "entry": {
+      "when": "FIRST_COMPLETE_M1_AFTER_SIGNAL_KNOWLEDGE_TIME",
+      "long_price": "ASK_OPEN_PLUS_ADVERSE_SLIPPAGE",
+      "short_price": "BID_OPEN_MINUS_ADVERSE_SLIPPAGE"
+    },
+    "position_policy": "ONE_POSITION_MAX_PER_DAY_PER_CONFIGURATION_NO_REVERSAL_NO_REENTRY",
+    "exit": {
+      "when": "FIRST_COMPLETE_M1_AT_OR_AFTER_15_59_AMERICA_NEW_YORK",
+      "long_price": "BID_OPEN_MINUS_ADVERSE_SLIPPAGE",
+      "short_price": "ASK_OPEN_PLUS_ADVERSE_SLIPPAGE"
+    },
+    "missing_fill_or_exit": "DATA_INTEGRITY_FAILURE",
+    "synthetic_minutes": false,
+    "forward_fill": false,
+    "favorable_gap_improvement": false
+  },
+  "normalization": {
+    "unit_name": "ORU",
+    "unit_expansion": "Opening Range Unit",
+    "not_a_stop_loss_risk_unit": true,
+    "opening_range_width_points": "range_high_mid - range_low_mid",
+    "invalid_if_width_lte_zero": "INVALID_OPENING_RANGE_WIDTH",
+    "long_gross_points": "exit_price - entry_price",
+    "short_gross_points": "entry_price - exit_price",
+    "gross_oru": "gross_points / opening_range_width_points",
+    "net_oru": "net_points / opening_range_width_points",
+    "loss_is_not_claimed_capped_at_one_oru": true
+  },
+  "cost_scenarios": {
+    "base": {"adverse_slippage_points_per_side": 0.5, "financing": 0.0},
+    "stress": {"adverse_slippage_points_per_side": 1.0, "financing": 0.0},
+    "overnight_position": "DATA_INTEGRITY_FAILURE"
+  },
+  "chronology": {
+    "discovery": {"start": "2010-01-01T00:00:00Z", "end_exclusive": "2019-01-01T00:00:00Z"},
+    "walk_forward": {"start": "2019-01-01T00:00:00Z", "end_exclusive": "2022-01-01T00:00:00Z"},
+    "sealed_family_confirmation": {"start": "2022-01-01T00:00:00Z", "end_exclusive": "2026-01-01T00:00:00Z"},
+    "confirmation_economic_access_before_selection_seal": false,
+    "project_wide_pristine_holdout_claim": false
+  },
+  "selection_gate": {
+    "minimum_resolved_discovery_plus_walk_forward": 500,
+    "discovery_base_expectancy_gt_oru": 0.0,
+    "discovery_base_profit_factor_gt": 1.10,
+    "walk_forward_base_expectancy_gt_oru": 0.0,
+    "walk_forward_base_profit_factor_gt": 1.10,
+    "walk_forward_stress_expectancy_gt_oru": 0.0,
+    "positive_calendar_year_fraction_2010_2021_gte": 0.60,
+    "data_integrity_failures": 0,
+    "synthetic_fills": 0,
+    "winner_selection": "MAX_MEDIAN_ANNUAL_STRESS_EXPECTANCY_ORU_2010_2021",
+    "tie_break_order": ["TORB_P1", "TORB_P3", "TORB_P5"]
+  },
+  "confirmation_gate": {
+    "classification_on_pass": "HISTORICALLY_PROFITABLE_EDGE_R1_TORB",
+    "classification_on_fail": "EDGE_NOT_ESTABLISHED_R1_TORB",
+    "minimum_resolved": 500,
+    "base_expectancy_gt_oru": 0.05,
+    "base_profit_factor_gt": 1.20,
+    "bootstrap_95_lower_expectancy_gt_oru": 0.0,
+    "stress_expectancy_gt_oru": 0.0,
+    "stress_profit_factor_gt": 1.10,
+    "positive_calendar_year_fraction_gte": 0.75,
+    "data_integrity_failures": 0,
+    "synthetic_fills": 0,
+    "base_max_drawdown_lte_oru": 25.0,
+    "stress_max_drawdown_lte_oru": 35.0,
+    "multiple_testing_adjustment_required": true
+  },
+  "post_confirmation_refit_allowed": false,
+  "permissions": {"paper_execution_enabled": false, "live_trading_authorized": false, "broker_mutation": false}
+}
