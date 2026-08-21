@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540">
+<style>text{font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:13px}.title{font-size:20px;font-weight:600}.axis{stroke-width:1}.box{fill:none;stroke-width:1.5}</style>
+<text class="title" x="85" y="30">Base Trade R Distribution</text>
+<line class="axis" x1="85" y1="425" x2="950" y2="425"/>
+<line class="axis" x1="85" y1="60" x2="85" y2="425"/>
+<text x="75" y="429.0" text-anchor="end">-1.75</text><line x1="80" y1="425.0" x2="85" y2="425.0"/>
+<text x="75" y="356.0" text-anchor="end">-0.55</text><line x1="80" y1="352.0" x2="85" y2="352.0"/>
+<text x="75" y="283.0" text-anchor="end">0.65</text><line x1="80" y1="279.0" x2="85" y2="279.0"/>
+<text x="75" y="210.0" text-anchor="end">1.85</text><line x1="80" y1="206.0" x2="85" y2="206.0"/>
+<text x="75" y="137.0" text-anchor="end">3.05</text><line x1="80" y1="133.0" x2="85" y2="133.0"/>
+<text x="75" y="64.0" text-anchor="end">4.25</text><line x1="80" y1="60.0" x2="85" y2="60.0"/>
+<line x1="85" y1="318.5" x2="950" y2="318.5" stroke-dasharray="4 4"/>
+<line x1="157.1" y1="383.4" x2="157.1" y2="197.5"/>
+<line x1="143.4" y1="383.4" x2="170.8" y2="383.4"/>
+<line x1="143.4" y1="197.5" x2="170.8" y2="197.5"/>
+<rect class="box" x="129.7" y="254.1" width="54.8" height="126.7"/>
+<line x1="129.7" y1="363.2" x2="184.5" y2="363.2" stroke-width="2"/>
+<text x="157.1" y="450" text-anchor="middle">V3-C</text>
+<text x="157.1" y="467" text-anchor="middle">Arguments/2CR</text>
+<line x1="301.2" y1="386.4" x2="301.2" y2="197.9"/>
+<line x1="287.6" y1="386.4" x2="314.9" y2="386.4"/>
+<line x1="287.6" y1="197.9" x2="314.9" y2="197.9"/>
+<rect class="box" x="273.9" y="200.9" width="54.8" height="180.3"/>
+<line x1="273.9" y1="380.2" x2="328.6" y2="380.2" stroke-width="2"/>
+<text x="301.2" y="450" text-anchor="middle">V4</text>
+<text x="301.2" y="467" text-anchor="middle">Sharp Turn</text>
+<line x1="445.4" y1="382.9" x2="445.4" y2="297.0"/>
+<line x1="431.7" y1="382.9" x2="459.1" y2="382.9"/>
+<line x1="431.7" y1="297.0" x2="459.1" y2="297.0"/>
+<rect class="box" x="418.0" y="313.6" width="54.8" height="7.1"/>
+<line x1="418.0" y1="318.0" x2="472.8" y2="318.0" stroke-width="2"/>
+<text x="445.4" y="450" text-anchor="middle">V5</text>
+<text x="445.4" y="467" text-anchor="middle">No-Resistance AoO</text>
+<line x1="589.6" y1="389.0" x2="589.6" y2="90.4"/>
+<line x1="575.9" y1="389.0" x2="603.3" y2="389.0"/>
+<line x1="575.9" y1="90.4" x2="603.3" y2="90.4"/>
+<rect class="box" x="562.2" y="325.3" width="54.8" height="57.8"/>
+<line x1="562.2" y1="381.1" x2="617.0" y2="381.1" stroke-width="2"/>
+<text x="589.6" y="450" text-anchor="middle">V6</text>
+<text x="589.6" y="467" text-anchor="middle">Momentum</text>
+<line x1="733.8" y1="394.6" x2="733.8" y2="108.9"/>
+<line x1="720.1" y1="394.6" x2="747.4" y2="394.6"/>
+<line x1="720.1" y1="108.9" x2="747.4" y2="108.9"/>
+<rect class="box" x="706.4" y="379.8" width="54.8" height="5.3"/>
+<line x1="706.4" y1="381.6" x2="761.1" y2="381.6" stroke-width="2"/>
+<text x="733.8" y="450" text-anchor="middle">V7</text>
+<text x="733.8" y="467" text-anchor="middle">Candle Science</text>
+<line x1="877.9" y1="392.0" x2="877.9" y2="195.6"/>
+<line x1="864.2" y1="392.0" x2="891.6" y2="392.0"/>
+<line x1="864.2" y1="195.6" x2="891.6" y2="195.6"/>
+<rect class="box" x="850.5" y="291.7" width="54.8" height="91.2"/>
+<line x1="850.5" y1="380.2" x2="905.3" y2="380.2" stroke-width="2"/>
+<text x="877.9" y="450" text-anchor="middle">V8</text>
+<text x="877.9" y="467" text-anchor="middle">FVG Follow-Through</text>
+<text x="20" y="280" transform="rotate(-90 20 280)" text-anchor="middle">Net R per trade (5th–95th whiskers)</text>
+</svg>
