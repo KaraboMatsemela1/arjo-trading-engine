@@ -2864,6 +2864,111 @@
       "number": 292,
       "title": "Post-V8 governance: seal current-evidence no-edge boundary and close research lifecycle",
       "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/292"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          292
+        ],
+        "ENTRY_GATE": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "ISSUE_ID": "ARJO-BACKTEST-REPORT-001",
+        "OUTPUT_GATE": "V3_V8_CONSOLIDATED_BACKTEST_REPORT_READY",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "CONSOLIDATED_BACKTEST_REPORT"
+      },
+      "metadata_valid": true,
+      "number": 296,
+      "title": "Backtesting report: consolidate V3-C through V8 canonical economics",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/296"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          292
+        ],
+        "ENTRY_GATE": "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
+        "ISSUE_ID": "ARJO-PROFIT-RESET-001",
+        "OUTPUT_GATE": "PROFITABILITY_RESET_PROTOCOL_FROZEN",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PROFITABILITY_RESEARCH_RESET"
+      },
+      "metadata_valid": true,
+      "number": 298,
+      "title": "Profitability research reset: independent literature-backed edge discovery",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/298"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          298
+        ],
+        "ENTRY_GATE": "PROFITABILITY_RESET_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-PROFIT-R1-TORB-001",
+        "OUTPUT_GATE": "R1_TORB_PROTOCOL_FROZEN",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "PROFITABILITY_RESET_TORB_PROTOCOL_FREEZE"
+      },
+      "metadata_valid": true,
+      "number": 300,
+      "title": "Profit reset R1: freeze causal TORB replication before economic outcomes",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/300"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "CLOSED",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          300
+        ],
+        "ENTRY_GATE": "R1_TORB_PROTOCOL_FROZEN",
+        "ISSUE_ID": "ARJO-PROFIT-R1-TORB-002",
+        "OUTPUT_GATE": "R1_TORB_PROTOCOL_V2_FROZEN",
+        "OWNER": "COMPLETE",
+        "STATE": "COMPLETE",
+        "TYPE": "TORB_PRE_OUTCOME_PROTOCOL_CORRECTION"
+      },
+      "metadata_valid": true,
+      "number": 303,
+      "title": "R1 TORB pre-outcome correction: freeze opening-range normalization unit",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/303"
+    },
+    {
+      "dependencies_satisfied": true,
+      "entry_gate_satisfied": true,
+      "github_state": "OPEN",
+      "mechanically_ready": true,
+      "meta": {
+        "DEPENDENCIES": [
+          303
+        ],
+        "ENTRY_GATE": "R1_TORB_PROTOCOL_V2_FROZEN",
+        "ISSUE_ID": "ARJO-PROFIT-R1-TORB-003",
+        "OUTPUT_GATE": "R1_TORB_DISCOVERY_ENGINE_READY",
+        "OWNER": "CHATGPT",
+        "STATE": "IN_PROGRESS",
+        "TYPE": "TORB_DISCOVERY_ENGINE_PREFLIGHT"
+      },
+      "metadata_valid": false,
+      "number": 305,
+      "title": "R1 TORB: build deterministic discovery/walk-forward engine and offline preflight",
+      "url": "https://github.com/KaraboMatsemela1/arjo-trading-engine/issues/305"
     }
   ],
   "live_execution_enabled": false,
@@ -2894,11 +2999,14 @@
     "POST_V8_CURRENT_EVIDENCE_RESEARCH_BOUNDARY_READY",
     "PREDICATE_MATRIX_READY",
     "PROFITABILITY_BACKWARD_OOS_OCCURRENCES_READY",
+    "PROFITABILITY_RESET_PROTOCOL_FROZEN",
     "PROFITABILITY_VALIDATION_PROTOCOL_FROZEN",
     "PROJECT_CLOSED_EXISTING_EVIDENCE",
     "PROJECT_FINALIZED_AWAITING_VALIDATION",
     "PROTECTED_VALIDATION_COMPLETE",
     "PROTECTED_VALIDATION_PROTOCOL_FROZEN",
+    "R1_TORB_PROTOCOL_FROZEN",
+    "R1_TORB_PROTOCOL_V2_FROZEN",
     "REPO_CREATED",
     "SEMANTIC_SEED_READY",
     "SOURCE_UNIVERSE_DISCOVERED",
@@ -2916,6 +3024,7 @@
     "V3_ARGUMENTS_TRIGGER_COVERAGE_READY",
     "V3_COVERAGE_DIAGNOSIS_COMPLETE",
     "V3_MULTI_INDEX_COVERAGE_DIAGNOSIS_COMPLETE",
+    "V3_V8_CONSOLIDATED_BACKTEST_REPORT_READY",
     "V4_SHARP_TURN_EXECUTION_PROTOCOL_FROZEN",
     "V4_SHARP_TURN_PROFITABILITY_RESULT_READY",
     "V4_SHARP_TURN_SOURCE_RECOVERY_READY",
